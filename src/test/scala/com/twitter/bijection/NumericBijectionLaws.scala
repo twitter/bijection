@@ -28,6 +28,8 @@ import java.lang.{
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 
+import Bijection.biject // get the .as syntax
+
 object NumericBijectionLaws extends Properties("NumericBijections")
 with BaseProperties {
   property("round trips byte -> jbyte") = roundTrips[Byte, JByte]()
@@ -49,4 +51,8 @@ with BaseProperties {
   property("round trips long -> Array[Byte]") = roundTrips[Long, Array[Byte]]()
   property("round trips float -> Array[Byte]") = roundTrips[Float, Array[Byte]]()
   property("round trips double -> Array[Byte]") = roundTrips[Double, Array[Byte]]()
+
+  property("as works") = forAll { (i: Int) =>
+    i.as[String] == i.toString && (i.toString.as[Int] == i)
+  }
 }

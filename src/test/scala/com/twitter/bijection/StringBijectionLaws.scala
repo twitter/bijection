@@ -22,12 +22,12 @@ import org.scalacheck.Prop._
 object StringBijectionLaws extends Properties("StringBijections")
 with BaseProperties {
   implicit val bij: Bijection[String, Array[Byte]] = StringCodec.utf8
+  property("round trips string -> Array[String]") = roundTrips[String, Array[Byte]]()
 
-  property("round trips string -> Array[Byte]") = roundTrips[String, Array[Byte]]()
   property("rts through StringJoinBijection") =
     forAll { (sep: String, xs: List[String]) =>
       val sjBij = StringJoinBijection(sep)
       val iter = xs.toIterable
-      (!iter.exists(_.contains(sep))) ==> (iter == rt(iter)(sjBij))
+      (!iter.exists(_.contains(sep))) ==> (!iter.isEmpty) ==> (iter == rt(iter)(sjBij))
     }
 }

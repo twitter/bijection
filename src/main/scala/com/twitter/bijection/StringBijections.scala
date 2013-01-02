@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.twitter.bijection
 
+import scala.annotation.tailrec
+
 object StringCodec {
   def utf8: Bijection[String, Array[Byte]] = withEncoding("UTF-8")
   def withEncoding(encoding: String): Bijection[String, Array[Byte]] =
@@ -26,12 +28,37 @@ object StringCodec {
  * Bijection for joining together iterables of strings into a single string
  * and splitting them back out. Useful for storing sequences of strings
  * in Config maps.
+ * Note, the empty Iterable gets round-tripped onto the Iterable of one empty string.
+ * There doesn't seem to be a way to easily fix this while keeping the mkString semantics
+ * We could return null for an empty iterable, and make an empty list when given a null, but
+ * null is very dangerous. Maybe Option[String] is the better idea.
  */
 object StringJoinBijection {
+  @tailrec
+  private def countIn(str: String, substr: String, acc: Int = 0): Int = {
+    str.indexOf(substr) match {
+      case -1 => acc
+      case idx: Int =>
+        countIn(str.substring(idx + substr.size), substr, acc + 1)
+    }
+  }
+
   def apply(separator: String = ":") =
     Bijection[Iterable[String], String] { xs =>
     // TODO: Instead of throwing, escape the separator in the encoded string.
       assert(!xs.exists(_.contains(separator)), "Can't encode strings that include the separator.")
       xs.mkString(separator)
-    } { _.split(separator) }
+    } { str =>
+      // split is not reversible:
+      val strings = StringJoinBijection.countIn(str, separator) + 1
+      val parts = str.split(separator)
+      // Pad out to the right size
+      val padSize = strings - parts.size
+      if (padSize > 0) {
+        parts ++ Array.fill(padSize)("")
+      }
+      else {
+        parts
+      }
+    }
 }

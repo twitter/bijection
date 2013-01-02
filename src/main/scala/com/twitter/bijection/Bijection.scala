@@ -56,13 +56,18 @@ trait Bijection[A, B] extends (A => B) {
  * Thanks to
  * [hylotech](https://github.com/hylotech/suits/blob/master/src/main/scala/hylotech/util/Bijection.scala)
  * for the following "as" pattern.
+ * TODO: this should be a value class in scala 2.10
  */
 sealed class Biject[A](a: A) {
-  def as[B](implicit f: Either[Bijection[A, B], Bijection[B, A]]): B = f.fold(_.apply(a), _.invert(a))
+  def as[B](implicit bij: Bijection[A,B]): B = bij(a)
+}
+
+trait LowPriorityBijections {
+  implicit def inverseOf[A,B](implicit bij: Bijection[A,B]): Bijection[B,A] = bij.inverse
 }
 
 object Bijection extends NumericBijections with CollectionBijections
-  with BinaryBijections with GeneratedTupleBijections {
+  with BinaryBijections with GeneratedTupleBijections with LowPriorityBijections {
 
   def apply[A, B](to: A => B)(from: B => A): Bijection[A, B] =
     new Bijection[A, B] { self =>
@@ -81,8 +86,6 @@ object Bijection extends NumericBijections with CollectionBijections
    * Array(1.toByte, 2.toByte).as[String]
    */
   implicit def biject[A](a: A): Biject[A] = new Biject(a)
-  implicit def forwardEither[A, B](implicit a: Bijection[A, B]): Either[Bijection[A, B], Bijection[B, A]] = Left(a)
-  implicit def reverseEither[A, B](implicit b: Bijection[B, A]): Either[Bijection[A, B], Bijection[B, A]] = Right(b)
 
   implicit def identity[A]: Bijection[A, A] = new IdentityBijection[A]
   implicit def class2String[T]: Bijection[Class[T], String] =
@@ -92,23 +95,26 @@ object Bijection extends NumericBijections with CollectionBijections
    * Converts a function that transforms type A into a function that
    * transforms type B.
    */
-  implicit def fnBijection[A, B](implicit bij: Bijection[A, B]): Bijection[A => A, B => B] =
-    Bijection[A => A, B => B] { fn =>
-      { b => bij.apply(fn(bij.invert(b))) }
+  implicit def fnBijection[A, B, C, D](implicit bij1: Bijection[A, B], bij2: Bijection[C, D]):
+    Bijection[A => C, B => D] = Bijection[A => C, B => D] { fn =>
+      { b => bij2.apply(fn(bij1.invert(b))) }
     } { fn =>
-      { a => bij.invert(fn(bij.apply(a))) }
+      { a => bij2.invert(fn(bij1.apply(a))) }
     }
 
   /**
    * Converts a function that combines two arguments of type A into a function that
    * combines two arguments of type B into a single B. Useful for converting
    * input functions to "reduce".
+   * TODO: codegen these up to Function22 if they turn out to be useful.
    */
-  implicit def fn2Bijection[A, B](implicit bij: Bijection[A, B]): Bijection[(A, A) => A, (B, B) => B] =
-    Bijection[(A, A) => A, (B, B) => B] { fn =>
-      { (acc, b) => bij.apply(fn(bij.invert(acc), bij.invert(b))) }
+  implicit def fn2Bijection[A, B, C, D, E, F]
+    (implicit bab: Bijection[A, B], bcd: Bijection[C, D], bef: Bijection[E, F]):
+      Bijection[(A, C) => E, (B, D) => F] =
+      Bijection[(A, C) => E, (B, D) => F] { fn =>
+      { (b, d) => bef.apply(fn(bab.invert(b), bcd.invert(d))) }
     } { fn =>
-      { (acc, a) => bij.invert(fn(bij.apply(acc), bij.apply(a))) }
+      { (a, c) => bef.invert(fn(bab.apply(a), bcd.apply(c))) }
     }
 }
 
