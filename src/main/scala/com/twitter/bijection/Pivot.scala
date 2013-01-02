@@ -120,8 +120,7 @@ trait Pivot[K, K1, K2] extends Bijection[Iterable[K], Map[K1, Iterable[K2]]] {
   lazy val decoder = Pivot.decoder[K, K1, K2](pivot.invert _)
 
   override def apply(pairs: Iterable[K]): Map[K1, Iterable[K2]] = encoder(pairs)
-  override val inverse =
-    Bijection[Map[K1, Iterable[K2]], Iterable[K]] { decoder(_) } { this.apply(_) }
+  override def invert(m: Map[K1, Iterable[K2]]): Iterable[K] = decoder(m)
 
   def split[V](fn: K => V): K1 => K2 => V = decoder.split(fn)
   def unsplit[V](fn: K1 => K2 => V): K => V = encoder.unsplit(fn)
@@ -134,7 +133,7 @@ trait Pivot[K, K1, K2] extends Bijection[Iterable[K], Map[K1, Iterable[K2]]] {
 
   def wrapOuter[T]: Pivot[(K, T), (K1, T), K2] =
     withValue[T] andThenPivot(
-      Bijection[(K1, (K2, T)), ((K1, T), K2)] { pair: (K1, (K2, T)) =>
+      Bijection.build[(K1, (K2, T)), ((K1, T), K2)] { pair: (K1, (K2, T)) =>
         val (k1, (k2, t)) = pair
         ((k1, t), k2)
       } { pair: ((K1, T), K2) =>
@@ -148,7 +147,7 @@ trait Pivot[K, K1, K2] extends Bijection[Iterable[K], Map[K1, Iterable[K2]]] {
    * a single key in some KV store.
    */
   def withValue[V]: Pivot[(K, V), K1, (K2, V)] =
-    Pivot(Bijection[(K, V), (K1, (K2, V))] { case pair@(k, v) =>
+    Pivot(Bijection.build[(K, V), (K1, (K2, V))] { case pair@(k, v) =>
       val (k1, k2) = pivot(k)
       (k1, (k2, v))
     } { pair: (K1, (K2, V)) =>

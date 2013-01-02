@@ -26,24 +26,36 @@ import scala.annotation.implicitNotFound
  */
 
 @implicitNotFound(msg = "Cannot find Bijection type class between ${A} and ${B}")
-trait Bijection[A, B] extends (A => B) {
+trait Bijection[A, B] extends (A => B) { self =>
   def apply(a: A): B
   def invert(b: B): A = inverse(b)
 
-  def inverse: Bijection[B, A]
+  def inverse: Bijection[B, A] =
+    new Bijection[B, A] {
+      override def apply(b: B) = self.invert(b)
+      override def invert(a: A) = self(a)
+    }
 
   /**
    * Composes two instances of Bijection in a new Bijection,
    * with this one applied first.
    */
   def andThen[C](g: Bijection[B, C]): Bijection[A, C] =
-    Bijection[A, C] { a => g(this(a)) } { c => this.invert(g.invert(c)) }
+    Bijection.build[A, C] { a => g(this(a)) } { c => this.invert(g.invert(c)) }
 
   /**
    * Composes two instances of Bijection in a new Bijection,
    * with this one applied last.
    */
   def compose[T](g: Bijection[T, A]): Bijection[T, B] = g andThen this
+}
+
+/**
+ * Abstract class to ease Bijection creation from Java.
+ */
+abstract class BijectionImpl[A, B] extends Bijection[A, B] {
+  override def apply(a: A): B
+  override def invert(b: B): A
 }
 
 /**
@@ -66,10 +78,17 @@ trait LowPriorityBijections {
   implicit def inverseOf[A,B](implicit bij: Bijection[A,B]): Bijection[B,A] = bij.inverse
 }
 
-object Bijection extends NumericBijections with CollectionBijections
-  with BinaryBijections with GeneratedTupleBijections with LowPriorityBijections {
+object Bijection extends NumericBijections
+  with StringBijections
+  with BinaryBijections
+  with GeneratedTupleBijections
+  with CollectionBijections
+  with LowPriorityBijections {
 
-  def apply[A, B](to: A => B)(from: B => A): Bijection[A, B] =
+  def apply[A, B](a: A)(implicit bij: Bijection[A, B]): B = bij(a)
+  def invert[A, B](b: B)(implicit bij: Bijection[A, B]): A = bij.invert(b)
+
+  def build[A, B](to: A => B)(from: B => A): Bijection[A, B] =
     new Bijection[A, B] { self =>
       override def apply(a: A) = to(a)
       override val inverse = new Bijection[B, A] {
@@ -96,7 +115,7 @@ object Bijection extends NumericBijections with CollectionBijections
    * transforms type B.
    */
   implicit def fnBijection[A, B, C, D](implicit bij1: Bijection[A, B], bij2: Bijection[C, D]):
-    Bijection[A => C, B => D] = Bijection[A => C, B => D] { fn =>
+    Bijection[A => C, B => D] = Bijection.build[A => C, B => D] { fn =>
       { b => bij2.apply(fn(bij1.invert(b))) }
     } { fn =>
       { a => bij2.invert(fn(bij1.apply(a))) }
@@ -111,7 +130,7 @@ object Bijection extends NumericBijections with CollectionBijections
   implicit def fn2Bijection[A, B, C, D, E, F]
     (implicit bab: Bijection[A, B], bcd: Bijection[C, D], bef: Bijection[E, F]):
       Bijection[(A, C) => E, (B, D) => F] =
-      Bijection[(A, C) => E, (B, D) => F] { fn =>
+      Bijection.build[(A, C) => E, (B, D) => F] { fn =>
       { (b, d) => bef.apply(fn(bab.invert(b), bcd.invert(d))) }
     } { fn =>
       { (a, c) => bef.invert(fn(bab.apply(a), bcd.apply(c))) }
@@ -130,5 +149,5 @@ class IdentityBijection[A] extends Bijection[A, A] {
  * Bijection that flips the order of items in a Tuple2.
  */
 object SwapBijection {
-  def apply[T, U] = Bijection[(T, U), (U, T)] { _.swap } { _.swap }
+  def apply[T, U] = Bijection.build[(T, U), (U, T)] { _.swap } { _.swap }
 }
