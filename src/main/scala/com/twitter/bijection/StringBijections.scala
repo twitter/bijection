@@ -16,11 +16,13 @@ limitations under the License.
 
 package com.twitter.bijection
 
-object StringCodec {
-  def utf8: Bijection[String, Array[Byte]] = withEncoding("UTF-8")
+trait StringBijections {
+  implicit def utf8: Bijection[String, Array[Byte]] = withEncoding("UTF-8")
   def withEncoding(encoding: String): Bijection[String, Array[Byte]] =
-    Bijection[String, Array[Byte]] { _.getBytes(encoding) } { new String(_, encoding) }
+    Bijection.build[String, Array[Byte]] { _.getBytes(encoding) } { new String(_, encoding) }
 }
+
+object StringCodec extends StringBijections
 
 /**
  * Bijection for joining together iterables of strings into a single string
@@ -29,7 +31,7 @@ object StringCodec {
  */
 object StringJoinBijection {
   def apply(separator: String = ":") =
-    Bijection[Iterable[String], String] { xs =>
+    Bijection.build[Iterable[String], String] { xs =>
     // TODO: Instead of throwing, escape the separator in the encoded string.
       assert(!xs.exists(_.contains(separator)), "Can't encode strings that include the separator.")
       xs.mkString(separator)

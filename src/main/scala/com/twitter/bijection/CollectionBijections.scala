@@ -36,23 +36,23 @@ trait CollectionBijections {
    * Bijections between collection types defined in scala.collection.JavaConverters.
    */
   implicit def iterable2java[T]: Bijection[Iterable[T], JIterable[T]] =
-    Bijection[Iterable[T], JIterable[T]] { _.asJava } { _.asScala }
+    Bijection.build[Iterable[T], JIterable[T]] { _.asJava } { _.asScala }
   implicit def iterator2java[T]: Bijection[Iterator[T], JIterator[T]] =
-    Bijection[Iterator[T], JIterator[T]] { _.asJava } { _.asScala }
+    Bijection.build[Iterator[T], JIterator[T]] { _.asJava } { _.asScala }
   implicit def buffer2java[T]: Bijection[mutable.Buffer[T], JList[T]] =
-    Bijection[mutable.Buffer[T], JList[T]] { _.asJava } { _.asScala }
+    Bijection.build[mutable.Buffer[T], JList[T]] { _.asJava } { _.asScala }
   implicit def set2java[T]: Bijection[mutable.Set[T], JSet[T]] =
-    Bijection[mutable.Set[T], JSet[T]] { _.asJava } { _.asScala }
+    Bijection.build[mutable.Set[T], JSet[T]] { _.asJava } { _.asScala }
   implicit def map2java[K, V]: Bijection[mutable.Map[K,V], JMap[K,V]] =
-    Bijection[mutable.Map[K,V], JMap[K,V]] { _.asJava } { _.asScala }
+    Bijection.build[mutable.Map[K,V], JMap[K,V]] { _.asJava } { _.asScala }
   implicit def concurrentMap2java[K, V]: Bijection[mutable.ConcurrentMap[K,V], JConcurrentMap[K,V]] =
-    Bijection[mutable.ConcurrentMap[K,V], JConcurrentMap[K,V]] { _.asJava } { _.asScala }
+    Bijection.build[mutable.ConcurrentMap[K,V], JConcurrentMap[K,V]] { _.asJava } { _.asScala }
   implicit def iterable2jcollection[T]:  Bijection[Iterable[T], JCollection[T]] =
-    Bijection[Iterable[T], JCollection[T]] { _.asJavaCollection } { _.asScala }
+    Bijection.build[Iterable[T], JCollection[T]] { _.asJavaCollection } { _.asScala }
   implicit def iterator2jenumeration[T]: Bijection[Iterator[T], JEnumeration[T]] =
-    Bijection[Iterator[T], JEnumeration[T]] { _.asJavaEnumeration } { _.asScala }
+    Bijection.build[Iterator[T], JEnumeration[T]] { _.asJavaEnumeration } { _.asScala }
   implicit def map2jdictionary[K, V]: Bijection[mutable.Map[K, V], JDictionary[K, V]] =
-    Bijection[mutable.Map[K, V], JDictionary[K, V]] { _.asJavaDictionary } { _.asScala }
+    Bijection.build[mutable.Map[K, V], JDictionary[K, V]] { _.asJavaDictionary } { _.asScala }
 
   /**
    * Accepts a Bijection[A, B] and returns a bijection that can
@@ -64,7 +64,7 @@ trait CollectionBijections {
    */
   def toContainer[A, B, C <: TraversableOnce[A], D <: TraversableOnce[B]]
   (implicit bij: Bijection[A, B], cd: CanBuildFrom[C, B, D], dc: CanBuildFrom[D, A, C]) =
-    Bijection[C, D] { c: C =>
+    Bijection.build[C, D] { c: C =>
       val builder = cd(c)
       c foreach { builder += bij(_) }
       builder.result()
