@@ -18,7 +18,7 @@ parallelExecution in Test := true
 
 // Publishing options:
 
-publishMavenStyle := false
+publishMavenStyle := true
 
 publishArtifact in Test := false
 
