@@ -30,37 +30,29 @@ object StringCodec extends StringBijections
  * Bijection for joining together iterables of strings into a single string
  * and splitting them back out. Useful for storing sequences of strings
  * in Config maps.
- * Note, the empty Iterable gets round-tripped onto the Iterable of one empty string.
- * There doesn't seem to be a way to easily fix this while keeping the mkString semantics
- * We could return null for an empty iterable, and make an empty list when given a null, but
- * null is very dangerous. Maybe Option[String] is the better idea.
  */
 object StringJoinBijection {
   @tailrec
-  private def countIn(str: String, substr: String, acc: Int = 0): Int = {
-    str.indexOf(substr) match {
-      case -1 => acc
+  private def split(str: String, sep: String, acc: List[String] = Nil): List[String] = {
+    str.indexOf(sep) match {
+      case -1 => (str::acc).reverse
       case idx: Int =>
-        countIn(str.substring(idx + substr.size), substr, acc + 1)
+        split(str.substring(idx + sep.size), sep, str.substring(0, idx) :: acc)
     }
   }
 
   def apply(separator: String = ":") =
-    Bijection.build[Iterable[String], String] { xs =>
+    Bijection.build[Iterable[String], Option[String]] { xs =>
     // TODO: Instead of throwing, escape the separator in the encoded string.
       assert(!xs.exists(_.contains(separator)), "Can't encode strings that include the separator.")
-      xs.mkString(separator)
-    } { str =>
-      // split is not reversible:
-      val strings = StringJoinBijection.countIn(str, separator) + 1
-      val parts = str.split(separator)
-      // Pad out to the right size
-      val padSize = strings - parts.size
-      if (padSize > 0) {
-        parts ++ Array.fill(padSize)("")
-      }
-      else {
-        parts
-      }
+      if (xs.isEmpty)
+        None
+      else
+        Some(xs.mkString(separator))
+    } { strOpt => strOpt match {
+          case None => Iterable.empty[String]
+          // String#split is not reversible, and uses regexs
+          case Some(str) => StringJoinBijection.split(str, separator)
+        }
     }
 }

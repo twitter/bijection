@@ -28,6 +28,6 @@ with BaseProperties {
     forAll { (sep: String, xs: List[String]) =>
       val sjBij = StringJoinBijection(sep)
       val iter = xs.toIterable
-      (!iter.exists(_.contains(sep))) ==> (!iter.isEmpty) ==> (iter == rt(iter)(sjBij))
+      (!iter.exists(_.contains(sep))) ==> (iter == rt(iter)(sjBij))
     }
 }
