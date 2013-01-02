@@ -16,11 +16,13 @@ limitations under the License.
 
 package com.twitter.bijection
 
-object StringCodec {
-  def utf8: Bijection[String, Array[Byte]] = withEncoding("UTF-8")
+trait StringBijections {
+  implicit def utf8: Bijection[String, Array[Byte]] = withEncoding("UTF-8")
   def withEncoding(encoding: String): Bijection[String, Array[Byte]] =
     Bijection[String, Array[Byte]] { _.getBytes(encoding) } { new String(_, encoding) }
 }
+
+object StringCodec extends StringBijections
 
 /**
  * Bijection for joining together iterables of strings into a single string

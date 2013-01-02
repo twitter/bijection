@@ -26,11 +26,15 @@ import scala.annotation.implicitNotFound
  */
 
 @implicitNotFound(msg = "Cannot find Bijection type class between ${A} and ${B}")
-trait Bijection[A, B] extends (A => B) {
+trait Bijection[A, B] extends (A => B) { self =>
   def apply(a: A): B
   def invert(b: B): A = inverse(b)
 
-  def inverse: Bijection[B, A]
+  def inverse: Bijection[B, A] =
+    new Bijection[B, A] {
+      override def apply(b: B) = self.invert(b)
+      override def invert(a: A) = self(a)
+    }
 
   /**
    * Composes two instances of Bijection in a new Bijection,
@@ -44,6 +48,14 @@ trait Bijection[A, B] extends (A => B) {
    * with this one applied last.
    */
   def compose[T](g: Bijection[T, A]): Bijection[T, B] = g andThen this
+}
+
+/**
+ * Abstract class to ease Bijection creation from Java.
+ */
+abstract class BijectionImpl[A, B] extends Bijection[A, B] {
+  override def apply(a: A): B
+  override def invert(b: B): A
 }
 
 /**
@@ -61,8 +73,11 @@ sealed class Biject[A](a: A) {
   def as[B](implicit f: Either[Bijection[A, B], Bijection[B, A]]): B = f.fold(_.apply(a), _.invert(a))
 }
 
-object Bijection extends NumericBijections with CollectionBijections
-  with BinaryBijections with GeneratedTupleBijections {
+object Bijection extends NumericBijections
+  with StringBijections
+  with BinaryBijections
+  with GeneratedTupleBijections
+  with CollectionBijections {
 
   def apply[A, B](to: A => B)(from: B => A): Bijection[A, B] =
     new Bijection[A, B] { self =>
