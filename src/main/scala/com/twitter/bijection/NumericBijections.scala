@@ -31,56 +31,56 @@ trait NumericBijections {
    * Bijections between the numeric types and their java versions.
    */
   implicit val byte2Boxed: Bijection[Byte, JByte] =
-    Bijection[Byte, JByte] { JByte.valueOf(_) } { _.byteValue }
+    Bijection.build[Byte, JByte] { JByte.valueOf(_) } { _.byteValue }
   implicit val short2Boxed: Bijection[Short, JShort] =
-    Bijection[Short, JShort] { JShort.valueOf(_) } { _.shortValue }
+    Bijection.build[Short, JShort] { JShort.valueOf(_) } { _.shortValue }
   implicit val int2Boxed: Bijection[Int, JInt] =
-    Bijection[Int, JInt] { JInt.valueOf(_) } { _.intValue }
+    Bijection.build[Int, JInt] { JInt.valueOf(_) } { _.intValue }
   implicit val long2Boxed: Bijection[Long, JLong] =
-    Bijection[Long, JLong] { JLong.valueOf(_) } { _.longValue }
+    Bijection.build[Long, JLong] { JLong.valueOf(_) } { _.longValue }
   implicit val float2Boxed: Bijection[Float, JFloat] =
-    Bijection[Float, JFloat] { JFloat.valueOf(_) } { _.floatValue }
+    Bijection.build[Float, JFloat] { JFloat.valueOf(_) } { _.floatValue }
   implicit val double2Boxed: Bijection[Double, JDouble] =
-    Bijection[Double, JDouble] { JDouble.valueOf(_) } { _.doubleValue }
+    Bijection.build[Double, JDouble] { JDouble.valueOf(_) } { _.doubleValue }
 
   /**
    * Bijections between the numeric types and string.
    */
   implicit val byte2String: Bijection[Byte, String] =
-    Bijection[Byte, String] { _.toString } { _.toByte }
+    Bijection.build[Byte, String] { _.toString } { _.toByte }
   implicit val short2String: Bijection[Short, String] =
-    Bijection[Short, String] { _.toString } { _.toShort }
+    Bijection.build[Short, String] { _.toString } { _.toShort }
   implicit val int2String: Bijection[Int, String] =
-    Bijection[Int, String] { _.toString } { _.toInt }
+    Bijection.build[Int, String] { _.toString } { _.toInt }
   implicit val long2String: Bijection[Long, String] =
-    Bijection[Long, String] { _.toString } { _.toLong }
+    Bijection.build[Long, String] { _.toString } { _.toLong }
   implicit val float2String: Bijection[Float, String] =
-    Bijection[Float, String] { _.toString } { _.toFloat }
+    Bijection.build[Float, String] { _.toString } { _.toFloat }
   implicit val double2String: Bijection[Double, String] =
-    Bijection[Double, String] { _.toString } { _.toDouble }
+    Bijection.build[Double, String] { _.toString } { _.toDouble }
 
   /**
    * Bijections between the numeric types and Array[Byte].
    */
   val float2IntIEEE754: Bijection[Float, Int] =
-    Bijection[Float, Int] { JFloat.floatToIntBits(_) } { JFloat.intBitsToFloat(_) }
+    Bijection.build[Float, Int] { JFloat.floatToIntBits(_) } { JFloat.intBitsToFloat(_) }
   val double2LongIEEE754: Bijection[Double, Long] =
-    Bijection[Double, Long] { JDouble.doubleToLongBits(_) } { JDouble.longBitsToDouble(_) }
+    Bijection.build[Double, Long] { JDouble.doubleToLongBits(_) } { JDouble.longBitsToDouble(_) }
 
   implicit val short2BigEndian: Bijection[Short, Array[Byte]] =
-    Bijection[Short, Array[Byte]] { value =>
+    Bijection.build[Short, Array[Byte]] { value =>
       val buf = ByteBuffer.allocate(2)
       buf.putShort(value)
       buf.array
     } { ByteBuffer.wrap(_).getShort }
   implicit val int2BigEndian: Bijection[Int, Array[Byte]] =
-    Bijection[Int, Array[Byte]] { value =>
+    Bijection.build[Int, Array[Byte]] { value =>
       val buf = ByteBuffer.allocate(4)
       buf.putInt(value)
       buf.array
     } { ByteBuffer.wrap(_).getInt }
   implicit val long2BigEndian: Bijection[Long, Array[Byte]] =
-    Bijection[Long, Array[Byte]] { value =>
+    Bijection.build[Long, Array[Byte]] { value =>
       val buf = ByteBuffer.allocate(8)
       buf.putLong(value)
       buf.array

@@ -39,7 +39,7 @@ trait BinaryBijections {
    * Bijection between byte array and java.nio.ByteBuffer.
    */
   implicit val bytes2Buffer: Bijection[Array[Byte], ByteBuffer] =
-    Bijection[Array[Byte], ByteBuffer] { ByteBuffer.wrap(_) } { byteBuffer =>
+    Bijection.build[Array[Byte], ByteBuffer] { ByteBuffer.wrap(_) } { byteBuffer =>
       val buf = byteBuffer.duplicate()
       val ret = Array.ofDim[Byte](buf.remaining())
       buf.get(ret)
@@ -60,7 +60,7 @@ trait BinaryBijections {
    * Bijection between byte array and GZippedBytes.
    */
   implicit val bytes2GzippedBytes: Bijection[Array[Byte], GZippedBytes] =
-    Bijection[Array[Byte], GZippedBytes] { bytes =>
+    Bijection.build[Array[Byte], GZippedBytes] { bytes =>
       val baos = new ByteArrayOutputStream
       val gos = new GZIPOutputStream(baos)
       gos.write(bytes)
@@ -80,15 +80,15 @@ trait BinaryBijections {
    * CALL TO TRIM.
    */
   implicit val bytes2Base64: Bijection[Array[Byte], Base64String] =
-    Bijection[Array[Byte], Base64String] { bytes =>
+    Bijection.build[Array[Byte], Base64String] { bytes =>
       Base64String(Base64.encodeBase64String(bytes).trim)
     } { case Base64String(str) => Base64.decodeBase64(str) }
 
   implicit val bytes2GZippedBase64: Bijection[Array[Byte], GZippedBase64String] =
     bytes2GzippedBytes
-      .andThen(Bijection[GZippedBytes, Array[Byte]] { _.bytes } { GZippedBytes(_) })
+      .andThen(Bijection.build[GZippedBytes, Array[Byte]] { _.bytes } { GZippedBytes(_) })
       .andThen(bytes2Base64)
-      .andThen(Bijection[Base64String, GZippedBase64String] { case Base64String(s) =>
+      .andThen(Bijection.build[Base64String, GZippedBase64String] { case Base64String(s) =>
         GZippedBase64String(s) } { case GZippedBase64String(s) =>
         Base64String(s)
       })

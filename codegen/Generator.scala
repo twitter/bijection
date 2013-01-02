@@ -17,7 +17,7 @@ val upperLetters = ('A' to 'Z').toIndexedSeq
 def bijectionParameter(i: Int): String = {
   val l = lowerLetters(i)
   val U = upperLetters(i)
-  "b" + l + ": Bijection[" + U + "1," + U + "2]"
+  "b" + l + ": Bijection.build[" + U + "1," + U + "2]"
 }
 
 def typeList(cnt: Int, suffix: String) =
