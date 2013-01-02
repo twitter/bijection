@@ -41,7 +41,7 @@ trait Bijection[A, B] extends (A => B) { self =>
    * with this one applied first.
    */
   def andThen[C](g: Bijection[B, C]): Bijection[A, C] =
-    Bijection[A, C] { a => g(this(a)) } { c => this.invert(g.invert(c)) }
+    Bijection.build[A, C] { a => g(this(a)) } { c => this.invert(g.invert(c)) }
 
   /**
    * Composes two instances of Bijection in a new Bijection,
@@ -79,7 +79,10 @@ object Bijection extends NumericBijections
   with GeneratedTupleBijections
   with CollectionBijections {
 
-  def apply[A, B](to: A => B)(from: B => A): Bijection[A, B] =
+  def apply[A, B](a: A)(implicit bij: Bijection[A, B]): B = bij(a)
+  def invert[A, B](b: B)(implicit bij: Bijection[A, B]): A = bij.invert(b)
+
+  def build[A, B](to: A => B)(from: B => A): Bijection[A, B] =
     new Bijection[A, B] { self =>
       override def apply(a: A) = to(a)
       override val inverse = new Bijection[B, A] {
@@ -108,7 +111,7 @@ object Bijection extends NumericBijections
    * transforms type B.
    */
   implicit def fnBijection[A, B](implicit bij: Bijection[A, B]): Bijection[A => A, B => B] =
-    Bijection[A => A, B => B] { fn =>
+    Bijection.build[A => A, B => B] { fn =>
       { b => bij.apply(fn(bij.invert(b))) }
     } { fn =>
       { a => bij.invert(fn(bij.apply(a))) }
@@ -120,7 +123,7 @@ object Bijection extends NumericBijections
    * input functions to "reduce".
    */
   implicit def fn2Bijection[A, B](implicit bij: Bijection[A, B]): Bijection[(A, A) => A, (B, B) => B] =
-    Bijection[(A, A) => A, (B, B) => B] { fn =>
+    Bijection.build[(A, A) => A, (B, B) => B] { fn =>
       { (acc, b) => bij.apply(fn(bij.invert(acc), bij.invert(b))) }
     } { fn =>
       { (acc, a) => bij.invert(fn(bij.apply(acc), bij.apply(a))) }
@@ -139,5 +142,5 @@ class IdentityBijection[A] extends Bijection[A, A] {
  * Bijection that flips the order of items in a Tuple2.
  */
 object SwapBijection {
-  def apply[T, U] = Bijection[(T, U), (U, T)] { _.swap } { _.swap }
+  def apply[T, U] = Bijection.build[(T, U), (U, T)] { _.swap } { _.swap }
 }
