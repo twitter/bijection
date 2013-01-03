@@ -1,0 +1,4 @@
+language: scala
+script: sbt ++$SCALA_VERSION ";bijection-core/test;bijection-thrift/test"
+scala:
+  - 2.9.2
