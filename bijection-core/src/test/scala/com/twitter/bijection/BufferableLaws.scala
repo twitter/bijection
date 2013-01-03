@@ -62,6 +62,8 @@ object BufferableLaws extends Properties("Bufferable") with BaseBufferable {
   property("Shorts roundtrip") = roundTrips[Int]()
   property("Longs roundtrip") = roundTrips[Long]()
   property("(Int,Long) roundtrip") = roundTrips[(Int,Long)]()
+  property("(Int,Long,String) roundtrip") = roundTrips[(Int,Long,String)]()
+  property("(Int,Long,String,(Int,Long)) roundtrip") = roundTrips[(Int,Long,String,(Int,Long))]()
   property("Array[Byte] roundtrip") = roundTrips[Array[Byte]] { _.toList == _.toList }
   property("List[Double] roundtrip") = roundTrips[List[Double]]()
   property("Set[Double] roundtrip") = roundTrips[Set[Double]]()

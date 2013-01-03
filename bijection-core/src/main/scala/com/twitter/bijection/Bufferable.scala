@@ -34,12 +34,9 @@ trait Bufferable[T] extends java.io.Serializable {
 }
 
 trait LowPriorityBufferable {
-  // With Bijections:
-  implicit def viaBijection[A,B](implicit buf: Bufferable[B], bij: Bijection[A,B]): Bufferable[A] =
-    Bufferable.build[A] { (bb, a) => buf.put(bb, bij(a)) } { bb => bij.invert(buf.get(bb)) }
 }
 
-object Bufferable extends LowPriorityBufferable with java.io.Serializable {
+object Bufferable extends GeneratedTupleBufferable with LowPriorityBufferable with java.io.Serializable {
   val DEFAULT_SIZE = 1024
   // Type class methods:
   def put[T](into: ByteBuffer, t: T)(implicit buf: Bufferable[T]): ByteBuffer = buf.put(into, t)
@@ -61,6 +58,10 @@ object Bufferable extends LowPriorityBufferable with java.io.Serializable {
       getBytes(put(ByteBuffer.allocateDirect(128), t))
     } { bytes => get[T](ByteBuffer.wrap(bytes)) }
 
+  // With Bijections:
+  def viaBijection[A,B](implicit buf: Bufferable[B], bij: Bijection[A,B]): Bufferable[A] =
+    Bufferable.build[A] { (bb, a) => buf.put(bb, bij(a)) } { bb => bij.invert(buf.get(bb)) }
+
   def reallocate(bb: ByteBuffer): ByteBuffer = {
     // Double the buffer, copy the old one, and put:
     val newCapacity = if (bb.capacity > (DEFAULT_SIZE/2)) bb.capacity * 2 else DEFAULT_SIZE
@@ -78,7 +79,7 @@ object Bufferable extends LowPriorityBufferable with java.io.Serializable {
   }
 
   // This automatically doubles the ByteBuffer if we get a buffer-overflow
-  private def reallocatingPut(bb: ByteBuffer)(putfn: (ByteBuffer) => ByteBuffer): ByteBuffer = {
+  def reallocatingPut(bb: ByteBuffer)(putfn: (ByteBuffer) => ByteBuffer): ByteBuffer = {
     val init = bb.duplicate
     try {
       putfn(init)
@@ -120,16 +121,6 @@ object Bufferable extends LowPriorityBufferable with java.io.Serializable {
       ary
     }
   implicit val stringBufferable : Bufferable[String] = viaBijection[String, Array[Byte]]
-  // Tuples (TODO: autogen these):
-  implicit def tuple2[A,B](implicit ba: Bufferable[A], bb: Bufferable[B]): Bufferable[(A,B)] =
-    build[(A,B)] { (bytebuf, tup) =>
-      val nextBb = reallocatingPut(bytebuf) { ba.put(_, tup._1) }
-      reallocatingPut(nextBb) { bb.put(_, tup._2) }
-    } { bytebuf =>
-      val a = ba.get(bytebuf)
-      val b = bb.get(bytebuf)
-      (a, b)
-    }
 
   // Collections:
   def collection[C<:Traversable[T],T](builder: Builder[T,C])(implicit buf: Bufferable[T]):
