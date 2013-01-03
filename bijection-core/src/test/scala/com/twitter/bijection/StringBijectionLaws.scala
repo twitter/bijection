@@ -17,12 +17,27 @@ limitations under the License.
 package com.twitter.bijection
 
 import org.scalacheck.Properties
+import org.scalacheck.Gen._
+import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
+
+import java.util.UUID
+import java.net.URL
 
 object StringBijectionLaws extends Properties("StringBijections")
 with BaseProperties {
   implicit val bij: Bijection[String, Array[Byte]] = StringCodec.utf8
   property("round trips string -> Array[String]") = roundTrips[String, Array[Byte]]()
+  property("round trips string -> symbol") = roundTrips[String, Symbol]()
+
+  implicit val uuidArb = Arbitrary {
+    for( l <- choose(-100L, 100L);
+         u <- choose(-100L, 100L)) yield (new UUID(l,u))
+  }
+  property("round trip UUID -> String") = roundTrips[UUID, String]()
+  implicit val urlArb = Arbitrary { implicitly[Arbitrary[String]]
+    .arbitrary.map { s => new URL("http://" + s + ".com") } }
+  property("round trip URL -> String") = roundTrips[URL, String]()
 
   property("rts through StringJoinBijection") =
     forAll { (sep: String, xs: List[String]) =>

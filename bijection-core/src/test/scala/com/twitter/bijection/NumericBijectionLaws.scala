@@ -25,6 +25,8 @@ import java.lang.{
   Byte => JByte
 }
 
+import java.util.UUID
+
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 
@@ -51,6 +53,9 @@ with BaseProperties {
   property("round trips long -> Array[Byte]") = roundTrips[Long, Array[Byte]]()
   property("round trips float -> Array[Byte]") = roundTrips[Float, Array[Byte]]()
   property("round trips double -> Array[Byte]") = roundTrips[Double, Array[Byte]]()
+  // Some other types through numbers:
+  property("round trips (Long,Long) -> UUID") = roundTrips[(Long,Long), UUID]()
+  property("round trips Long -> Date") = roundTrips[Long, java.util.Date]()
 
   property("as works") = forAll { (i: Int) =>
     i.as[String] == i.toString && (i.toString.as[Int] == i)

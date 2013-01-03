@@ -16,12 +16,27 @@ limitations under the License.
 
 package com.twitter.bijection
 
+import java.net.URL
+import java.util.UUID
+
 import scala.annotation.tailrec
+
+import Bijection.build
 
 trait StringBijections {
   implicit val utf8: Bijection[String, Array[Byte]] = withEncoding("UTF-8")
   def withEncoding(encoding: String): Bijection[String, Array[Byte]] =
-    Bijection.build[String, Array[Byte]] { _.getBytes(encoding) } { new String(_, encoding) }
+    build[String, Array[Byte]] { _.getBytes(encoding) } { new String(_, encoding) }
+
+  // Some bijections with string from standard java/scala classes:
+  implicit val url2String: Bijection[URL, String] =
+    build[URL, String] { _.toString } { new URL(_) }
+  implicit val symbol2String: Bijection[Symbol, String] =
+    build[Symbol, String] { _.name } { Symbol(_) }
+  implicit val uuid2String: Bijection[UUID, String] =
+    build[UUID, String] { _.toString } { UUID.fromString(_) }
+  implicit def class2String[T]: Bijection[Class[T], String] =
+    CastBijection.of[Class[T], Class[_]] andThen ClassBijection
 }
 
 object StringCodec extends StringBijections
