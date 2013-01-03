@@ -19,3 +19,4 @@
 * `as` casting conversion.
 * `Pivot` trait for packing schemes
 * `BijectionImpl` for easy java implementation
+* Adds ThriftCodecs and `bijection-thrift`

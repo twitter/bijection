@@ -1,17 +1,13 @@
-name := "bijection"
+name := "bijection-core"
 
 version := "0.1.0-SNAPSHOT"
 
-organization := "com.twitter"
-
-scalaVersion := "2.9.2"
-
-// Use ScalaCheck
 resolvers ++= Seq(
   "snapshots" at "http://oss.sonatype.org/content/repositories/snapshots",
   "releases"  at "http://oss.sonatype.org/content/repositories/releases"
 )
 
+// Use ScalaCheck
 libraryDependencies ++= Seq(
   "commons-codec" % "commons-codec" % "1.7",
   "org.scalacheck" %% "scalacheck" % "1.10.0" % "test",
@@ -24,6 +20,10 @@ parallelExecution in Test := true
 
 publishMavenStyle := true
 
+publishArtifact in Test := false
+
+pomIncludeRepository := { x => false }
+
 publishTo <<= version { (v: String) =>
   val nexus = "https://oss.sonatype.org/"
   if (v.trim.endsWith("SNAPSHOT"))
@@ -31,10 +31,6 @@ publishTo <<= version { (v: String) =>
   else
     Some("sonatype-releases"  at nexus + "service/local/staging/deploy/maven2")
 }
-
-publishArtifact in Test := false
-
-pomIncludeRepository := { x => false }
 
 pomExtra := (
   <url>https://github.com/twitter/bijection</url>
