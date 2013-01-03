@@ -20,7 +20,7 @@ import java.nio.{ByteBuffer, BufferOverflowException}
 import java.nio.channels.Channel
 import scala.annotation.implicitNotFound
 import scala.annotation.tailrec
-import scala.collection.mutable.Builder
+import scala.collection.mutable.{Builder, Map => MMap, Set => MSet, Buffer => MBuffer}
 
 /**
  * Bufferable[T] is a typeclass to work with java.nio.ByteBuffer for serialization/bijections to
@@ -33,10 +33,12 @@ trait Bufferable[T] extends java.io.Serializable {
   def get(from: ByteBuffer): T
 }
 
+/* TODO add a lowest priority where T <: java.io.Serializable
 trait LowPriorityBufferable {
-}
 
-object Bufferable extends GeneratedTupleBufferable with LowPriorityBufferable with java.io.Serializable {
+}*/
+
+object Bufferable extends GeneratedTupleBufferable with java.io.Serializable {
   val DEFAULT_SIZE = 1024
   // Type class methods:
   def put[T](into: ByteBuffer, t: T)(implicit buf: Bufferable[T]): ByteBuffer = buf.put(into, t)
@@ -52,15 +54,14 @@ object Bufferable extends GeneratedTupleBufferable with LowPriorityBufferable wi
     fromd.get(result)
     result
   }
+  // With Bijections:
+  def viaBijection[A,B](implicit buf: Bufferable[B], bij: Bijection[A,B]): Bufferable[A] =
+    Bufferable.build[A] { (bb, a) => buf.put(bb, bij(a)) } { bb => bij.invert(buf.get(bb)) }
 
   def bijectionOf[T](implicit buf: Bufferable[T]): Bijection[T, Array[Byte]] =
     Bijection.build[T, Array[Byte]] { t =>
       getBytes(put(ByteBuffer.allocateDirect(128), t))
     } { bytes => get[T](ByteBuffer.wrap(bytes)) }
-
-  // With Bijections:
-  def viaBijection[A,B](implicit buf: Bufferable[B], bij: Bijection[A,B]): Bufferable[A] =
-    Bufferable.build[A] { (bb, a) => buf.put(bb, bij(a)) } { bb => bij.invert(buf.get(bb)) }
 
   def reallocate(bb: ByteBuffer): ByteBuffer = {
     // Double the buffer, copy the old one, and put:
@@ -121,8 +122,39 @@ object Bufferable extends GeneratedTupleBufferable with LowPriorityBufferable wi
       ary
     }
   implicit val stringBufferable : Bufferable[String] = viaBijection[String, Array[Byte]]
+  implicit val symbolBufferable : Bufferable[Symbol] = viaBijection[Symbol, String]
 
   // Collections:
+  implicit def option[T](implicit buf: Bufferable[T]): Bufferable[Option[T]] =
+    build[Option[T]] { (bb, opt) =>
+      opt match {
+        case None => reallocatingPut(bb) { _.put(0 : Byte) }
+        case Some(v) => {
+          val nextBb = reallocatingPut(bb) { _.put(1 : Byte) }
+          reallocatingPut(nextBb) { buf.put(_, opt.get) }
+        }
+      }
+    } { bb =>
+      val byte0 = 0 : Byte
+      if(bb.get == byte0) None else Some(buf.get(bb))
+    }
+  implicit def either[L,R](implicit bufl: Bufferable[L], bufr: Bufferable[R]): Bufferable[Either[L,R]] =
+    build[Either[L,R]] { (bb, eith) =>
+      eith match {
+        case Left(l) => {
+          val nextBb = reallocatingPut(bb) { _.put(0: Byte) }
+          reallocatingPut(nextBb) { bufl.put(_, l) }
+        }
+        case Right(r) => {
+          val nextBb = reallocatingPut(bb) { _.put(1: Byte) }
+          reallocatingPut(nextBb) { bufr.put(_, r) }
+        }
+      }
+    } { bb =>
+      val byte0 = 0 : Byte
+      if (bb.get == byte0) Left(bufl.get(bb)) else Right(bufr.get(bb))
+    }
+
   def collection[C<:Traversable[T],T](builder: Builder[T,C])(implicit buf: Bufferable[T]):
     Bufferable[C] = build[C] { (bb, l) =>
       val size = l.size
@@ -142,4 +174,24 @@ object Bufferable extends GeneratedTupleBufferable with LowPriorityBufferable wi
     collection[Vector[T], T](Vector.newBuilder[T])
   implicit def map[K,V](implicit bufk: Bufferable[K], bufv: Bufferable[V]) =
     collection[Map[K,V], (K,V)](Map.newBuilder[K,V])
+  // Mutable collections
+  implicit def mmap[K,V](implicit bufk: Bufferable[K], bufv: Bufferable[V]) =
+    collection[MMap[K,V], (K,V)](MMap.newBuilder[K,V])
+  implicit def buffer[T](implicit buf: Bufferable[T]) = collection[MBuffer[T], T](MBuffer.newBuilder[T])
+  implicit def mset[T](implicit buf: Bufferable[T]) = collection[MSet[T], T](MSet.newBuilder[T])
+
+  // TODO we could add IntBuffer/FloatBuffer etc.. to have faster implementations Array[Int]
+  implicit def array[T](implicit buf: Bufferable[T], cm: ClassManifest[T]): Bufferable[Array[T]] =
+    build[Array[T]] { (bb, a) =>
+      // Unfortunately, Array is not traverable, otherwise this is just collection
+      val size = a.size
+      val nextBb = reallocatingPut(bb){ _.putInt(size) }
+      a.foldLeft(nextBb) { (oldbb, t) => reallocatingPut(oldbb) { buf.put(_, t) } }
+    } { bb =>
+      val builder = Array.newBuilder[T]
+      val size = bb.getInt
+      builder.clear()
+      (0 until size).foreach { idx => builder += buf.get(bb) }
+      builder.result()
+    }
 }

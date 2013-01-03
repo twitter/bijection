@@ -65,7 +65,14 @@ object BufferableLaws extends Properties("Bufferable") with BaseBufferable {
   property("(Int,Long,String) roundtrip") = roundTrips[(Int,Long,String)]()
   property("(Int,Long,String,(Int,Long)) roundtrip") = roundTrips[(Int,Long,String,(Int,Long))]()
   property("Array[Byte] roundtrip") = roundTrips[Array[Byte]] { _.toList == _.toList }
+  property("Array[Int] roundtrip") = roundTrips[Array[Int]] { _.toList == _.toList }
   property("List[Double] roundtrip") = roundTrips[List[Double]]()
   property("Set[Double] roundtrip") = roundTrips[Set[Double]]()
   property("Map[String, Int] roundtrip") = roundTrips[Map[String, Int]]()
+  property("Option[(Long,Long)] roundtrip") = roundTrips[Option[(Long,Long)]]()
+  property("Either[Long,String] roundtrip") = roundTrips[Either[Long,String]]()
+
+  implicit val symbolArb = Arbitrary { implicitly[Arbitrary[String]]
+    .arbitrary.map { Symbol(_) } }
+  property("Symbol roundtrip") = roundTrips[Symbol]()
 }

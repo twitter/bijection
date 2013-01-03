@@ -35,8 +35,16 @@ with BaseProperties {
          u <- choose(-100L, 100L)) yield (new UUID(l,u))
   }
   property("round trip UUID -> String") = roundTrips[UUID, String]()
+  def toUrl(s: String): Option[URL] =
+    try { Some(new URL("http://" + s + ".com")) }
+    catch { case _ => None }
+
   implicit val urlArb = Arbitrary { implicitly[Arbitrary[String]]
-    .arbitrary.map { s => new URL("http://" + s + ".com") } }
+    .arbitrary
+    .map { toUrl(_) }
+    .filter { _.isDefined }
+    .map { _.get }
+  }
   property("round trip URL -> String") = roundTrips[URL, String]()
 
   property("rts through StringJoinBijection") =
