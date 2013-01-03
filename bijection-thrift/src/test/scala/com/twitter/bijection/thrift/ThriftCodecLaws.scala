@@ -17,18 +17,25 @@
 package com.twitter.bijection.thrift
 
 import com.twitter.bijection.{ BaseProperties, Bijection }
-import org.apache.thrift.TBase
 import org.scalacheck.Properties
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop.forAll
 
 object ThriftCodecLaws extends Properties("ThriftCodecs") with BaseProperties {
-  // Code generator for thrift instances.
-  def roundTripsThrift(bijection: Bijection[TestThriftStructure, Array[Byte]]) =
-    forAll { (i: Int, s: String) =>
-      val thrift = new TestThriftStructure().setANumber(i).setAString(s)
-      thrift == rt(thrift)(bijection)
+  def buildThrift(i: Int, s: String) =
+    new TestThriftStructure().setANumber(i).setAString(s)
+
+  implicit def testThrift: Arbitrary[TestThriftStructure] =
+    Arbitrary[TestThriftStructure] {
+      for (i <- Arbitrary.arbInt.arbitrary;
+           s <- Arbitrary.arbString.arbitrary)
+      yield buildThrift(i, s)
     }
+
+  // Code generator for thrift instances.
+  def roundTripsThrift(bijection: Bijection[TestThriftStructure, Array[Byte]]) = {
+    implicit val b = bijection
+    roundTrips[TestThriftStructure, Array[Byte]]()
+  }
 
   property("round trips thrift -> Array[Byte] through binary") =
     roundTripsThrift(BinaryThriftCodec[TestThriftStructure])
