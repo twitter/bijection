@@ -107,9 +107,6 @@ object Bijection extends NumericBijections
   implicit def biject[A](a: A): Biject[A] = new Biject(a)
 
   implicit def identity[A]: Bijection[A, A] = new IdentityBijection[A]
-  implicit def class2String[T]: Bijection[Class[T], String] =
-    CastBijection.of[Class[T], Class[_]] andThen ClassBijection
-
   /**
    * Converts a function that transforms type A into a function that
    * transforms type B.

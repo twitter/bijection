@@ -25,6 +25,7 @@ import java.lang.{
   Byte => JByte
 }
 import java.nio.ByteBuffer
+import java.util.UUID
 
 trait NumericBijections {
   /**
@@ -89,4 +90,12 @@ trait NumericBijections {
     float2IntIEEE754 andThen int2BigEndian
   implicit val double2BigEndian: Bijection[Double, Array[Byte]] =
     double2LongIEEE754 andThen long2BigEndian
+
+  /* Other types to and from Numeric types */
+  implicit val uid2LongLong: Bijection[UUID, (Long,Long)] =
+    Bijection.build[UUID, (Long,Long)] { uid =>
+      (uid.getMostSignificantBits, uid.getLeastSignificantBits)
+    } { ml => new UUID(ml._1, ml._2) }
+  implicit val date2Long: Bijection[java.util.Date, Long] =
+    Bijection.build[java.util.Date, Long] { _.getTime } { new java.util.Date(_) }
 }
