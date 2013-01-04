@@ -1,7 +1,5 @@
 name := "bijection-core"
 
-version := "0.1.0-SNAPSHOT"
-
 resolvers ++= Seq(
   "snapshots" at "http://oss.sonatype.org/content/repositories/snapshots",
   "releases"  at "http://oss.sonatype.org/content/repositories/releases"

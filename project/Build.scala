@@ -12,4 +12,6 @@ object BijectionBuild extends Build {
   organization in ThisBuild := "com.twitter"
 
   scalaVersion in ThisBuild := "2.9.2"
+
+  version in ThisBuild := "0.1.0-SNAPSHOT"
 }
