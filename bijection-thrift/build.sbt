@@ -1,6 +1,6 @@
 name := "bijection-thrift"
 
-version := "0.1.0-SNAPSHOT"
+version := "0.1.0"
 
 resolvers ++= Seq(
   "snapshots" at "http://oss.sonatype.org/content/repositories/snapshots",

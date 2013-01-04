@@ -58,7 +58,7 @@ Bijection implicitly supplies Bijections between:
 
 ## Maven
 
-Current version is `0.1.0`. groupid=`"com.twitter"` artifact=`"bijection_2.9.2"`.
+Current version is `0.1.0`. groupid=`"com.twitter"` artifact=`"bijection-core_2.9.2"`.
 
 ## Authors
 
