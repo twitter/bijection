@@ -1,6 +1,10 @@
 # Bijection #
 
-### Version 0.1.0 ###
+### 0.1.1
+
+* Added `bijection-json`
+
+### 0.1.0
 
 * Adds Bijection trait with implicits between:
   * all numeric types <-> their boxed java counterparts
