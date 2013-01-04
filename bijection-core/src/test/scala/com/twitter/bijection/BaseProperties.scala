@@ -25,4 +25,9 @@ trait BaseProperties {
   def roundTrips[A, B](eqFn: (A, A) => Boolean = defaultEq _)
   (implicit a: Arbitrary[A], bij: Bijection[A, B]) =
     forAll { a: A => eqFn(a, rt(a)) }
+
+  def arbitraryViaBijection[A,B](implicit bij: Bijection[A,B], arb: Arbitrary[A]): Arbitrary[B] =
+    Arbitrary { arb.arbitrary.map { bij(_) } }
+  def arbitraryViaFn[A,B](fn: A => B)(implicit arb: Arbitrary[A]): Arbitrary[B] =
+    Arbitrary { arb.arbitrary.map { fn(_) } }
 }

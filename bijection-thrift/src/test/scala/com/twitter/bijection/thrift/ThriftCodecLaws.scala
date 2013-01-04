@@ -21,15 +21,10 @@ import org.scalacheck.Properties
 import org.scalacheck.Arbitrary
 
 object ThriftCodecLaws extends Properties("ThriftCodecs") with BaseProperties {
-  def buildThrift(i: Int, s: String) =
-    new TestThriftStructure().setANumber(i).setAString(s)
+  def buildThrift(i: (Int, String)) =
+    new TestThriftStructure().setANumber(i._1).setAString(i._2)
 
-  implicit def testThrift: Arbitrary[TestThriftStructure] =
-    Arbitrary[TestThriftStructure] {
-      for (i <- Arbitrary.arbInt.arbitrary;
-           s <- Arbitrary.arbString.arbitrary)
-      yield buildThrift(i, s)
-    }
+  implicit val testThrift = arbitraryViaFn { is: (Int,String) => buildThrift(is) }
 
   // Code generator for thrift instances.
   def roundTripsThrift(bijection: Bijection[TestThriftStructure, Array[Byte]]) = {
