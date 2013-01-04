@@ -85,6 +85,10 @@ object JsonObject {
     def toJava(v : Long) = java.lang.Long.valueOf(v)
     def fromJava(v : AnyRef) = v.asInstanceOf[java.lang.Number].longValue
   }
+  implicit val shortJson : JsonObject[Short] = new JsonObject[Short] {
+    def toJava(v : Short) = java.lang.Short.valueOf(v)
+    def fromJava(v : AnyRef) = v.asInstanceOf[java.lang.Number].shortValue
+  }
   implicit val intJson : JsonObject[Int] = new JsonObject[Int] {
     def toJava(v : Int) = java.lang.Integer.valueOf(v)
     def fromJava(v : AnyRef) = v.asInstanceOf[java.lang.Number].intValue

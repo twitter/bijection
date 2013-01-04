@@ -21,5 +21,23 @@ import org.scalacheck.Properties
 import org.scalacheck.Arbitrary
 
 object JsonBijectionLaws extends Properties("JsonBijection") with BaseProperties {
-  // TODO: Fill in.
+  def roundTripJson[T: JsonObject : Arbitrary] = {
+    implicit val bij: Bijection[T,String] = new JsonBijection[T]
+    roundTrips[T,String]()
+  }
+
+  property("Short") = roundTripJson[Short]
+  property("Int") = roundTripJson[Int]
+  property("Long") = roundTripJson[Long]
+  property("Double") = roundTripJson[Double]
+  property("String") = roundTripJson[String]
+  // Collections
+  property("Map[String,Int]") = roundTripJson[Map[String,Int]]
+  property("Map[String,Long]") = roundTripJson[Map[String,Long]]
+  property("Map[String,String]") = roundTripJson[Map[String,String]]
+  property("Map[String,Map[String,Int]]") = roundTripJson[Map[String,Map[String,Int]]]
+  property("List[String]") = roundTripJson[List[String]]
+  property("List[Int]") = roundTripJson[List[Int]]
+  property("List[List[String]]") = roundTripJson[List[List[String]]]
+
 }
