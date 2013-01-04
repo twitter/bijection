@@ -1,4 +1,4 @@
-name := "bijection-thrift"
+name := "bijection-json"
 
 version := "0.1.1-SNAPSHOT"
 
@@ -12,10 +12,9 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
-  "org.codehaus.jackson" % "jackson-mapper-asl" % "1.8.1",
+  "com.googlecode.json-simple" % "json-simple" % "1.1",
   "org.scalacheck" %% "scalacheck" % "1.10.0" % "test",
-  "org.scala-tools.testing" % "specs_2.9.0-1" % "1.6.8" % "test"
+  "org.scala-tools.testing" % "specs_2.9.1" % "1.6.9" % "test"
 )
 
 parallelExecution in Test := true
@@ -55,11 +54,6 @@ pomExtra := (
       <id>oscar</id>
       <name>Oscar Boykin</name>
       <url>http://twitter.com/posco</url>
-    </developer>
-    <developer>
-      <id>oscar</id>
-      <name>Marius Eriksen</name>
-      <url>http://twitter.com/marius</url>
     </developer>
     <developer>
       <id>sritchie</id>
