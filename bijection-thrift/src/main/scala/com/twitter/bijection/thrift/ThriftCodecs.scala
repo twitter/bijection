@@ -32,6 +32,13 @@ object ThriftCodec {
     new ThriftCodec[T,P](klass, factory)
 }
 
+trait ThriftImplicits {
+  implicit def thrift2Bytes[T <: TBase[_,_]: Manifest]: Bijection[T, Array[Byte]] = BinaryThriftCodec[T]
+}
+
+// Extends the trait to allow access to thrift2Bytes as a static method.
+object ThriftImplicits extends ThriftImplicits
+
 class ThriftCodec[T <: TBase[_, _], P <: TProtocolFactory](klass: Class[T], factory: P)
 extends Bijection[T, Array[Byte]] {
   protected lazy val prototype = klass.newInstance
