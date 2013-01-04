@@ -97,6 +97,19 @@ object Bijection extends NumericBijections
       }
     }
 
+  /**
+   * The "connect" method allows composition of multiple implicit bijections
+   * into a single bijection. For example,
+   *
+   * val composed = connect[Long, Array[Byte], Base64String]: Bijection[Long, Base64String]
+   */
+  def connect[A, B, C](implicit bij: Bijection[A, B], bij2: Bijection[B, C]): Bijection[A, C] =
+    bij andThen bij2
+  def connect[A, B, C, D](implicit bij: Bijection[A, B], bij2: Bijection[B, C], bij3: Bijection[C, D]): Bijection[A, D] =
+    connect[A, B, C] andThen bij3
+  def connect[A, B, C, D, E](implicit bij: Bijection[A, B], bij2: Bijection[B, C], bij3: Bijection[C, D], bij4: Bijection[D, E]): Bijection[A, E] =
+    connect[A, B, C, D] andThen bij4
+
   /*
    * Implicit conversion to Biject. This allows the user to use bijections as implicit
    * conversions between types.
