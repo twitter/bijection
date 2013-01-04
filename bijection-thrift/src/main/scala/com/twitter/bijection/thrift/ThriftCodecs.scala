@@ -51,24 +51,24 @@ extends Bijection[T, Array[Byte]] {
 }
 
 object BinaryThriftCodec {
-  def apply[T <: TBase[_, _]: Manifest]: BinaryThriftCodec[T] = apply(manifest[T].erasure.asInstanceOf[Class[T]])
-  def apply[T <: TBase[_, _]](klass: Class[T]): BinaryThriftCodec[T] = new BinaryThriftCodec(klass)
+  def apply[T <: TBase[_, _]: Manifest]: BinaryThriftCodec[T] = fromClass(manifest[T].erasure.asInstanceOf[Class[T]])
+  def fromClass[T <: TBase[_, _]](klass: Class[T]): BinaryThriftCodec[T] = new BinaryThriftCodec(klass)
 }
 
 class BinaryThriftCodec[T <: TBase[_, _]](klass: Class[T])
 extends ThriftCodec[T, TBinaryProtocol.Factory](klass, new TBinaryProtocol.Factory)
 
 object CompactThriftCodec {
-  def apply[T <: TBase[_, _]: Manifest]: CompactThriftCodec[T] = apply(manifest[T].erasure.asInstanceOf[Class[T]])
-  def apply[T <: TBase[_, _]](klass: Class[T]): CompactThriftCodec[T] = new CompactThriftCodec(klass)
+  def apply[T <: TBase[_, _]: Manifest]: CompactThriftCodec[T] = fromClass(manifest[T].erasure.asInstanceOf[Class[T]])
+  def fromClass[T <: TBase[_, _]](klass: Class[T]): CompactThriftCodec[T] = new CompactThriftCodec(klass)
 }
 
 class CompactThriftCodec[T <: TBase[_, _]](klass: Class[T])
 extends ThriftCodec[T, TCompactProtocol.Factory](klass, new TCompactProtocol.Factory)
 
 object JsonThriftCodec {
-  def apply[T <: TBase[_, _]: Manifest]: JsonThriftCodec[T] = apply(manifest[T].erasure.asInstanceOf[Class[T]])
-  def apply[T <: TBase[_, _]](klass: Class[T]): JsonThriftCodec[T] = new JsonThriftCodec[T](klass)
+  def apply[T <: TBase[_, _]: Manifest]: JsonThriftCodec[T] = fromClass(manifest[T].erasure.asInstanceOf[Class[T]])
+  def fromClass[T <: TBase[_, _]](klass: Class[T]): JsonThriftCodec[T] = new JsonThriftCodec[T](klass)
 }
 
 class JsonThriftCodec[T <: TBase[_, _]](klass: Class[T])
