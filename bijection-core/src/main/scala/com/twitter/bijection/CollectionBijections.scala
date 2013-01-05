@@ -41,9 +41,9 @@ trait CollectionBijections {
     Bijection.build[Iterator[T], JIterator[T]] { _.asJava } { _.asScala }
   implicit def buffer2java[T]: Bijection[mutable.Buffer[T], JList[T]] =
     Bijection.build[mutable.Buffer[T], JList[T]] { _.asJava } { _.asScala }
-  implicit def set2java[T]: Bijection[mutable.Set[T], JSet[T]] =
+  implicit def mset2java[T]: Bijection[mutable.Set[T], JSet[T]] =
     Bijection.build[mutable.Set[T], JSet[T]] { _.asJava } { _.asScala }
-  implicit def map2java[K, V]: Bijection[mutable.Map[K,V], JMap[K,V]] =
+  implicit def mmap2java[K, V]: Bijection[mutable.Map[K,V], JMap[K,V]] =
     Bijection.build[mutable.Map[K,V], JMap[K,V]] { _.asJava } { _.asScala }
   implicit def concurrentMap2java[K, V]: Bijection[mutable.ConcurrentMap[K,V], JConcurrentMap[K,V]] =
     Bijection.build[mutable.ConcurrentMap[K,V], JConcurrentMap[K,V]] { _.asJava } { _.asScala }
@@ -51,8 +51,22 @@ trait CollectionBijections {
     Bijection.build[Iterable[T], JCollection[T]] { _.asJavaCollection } { _.asScala }
   implicit def iterator2jenumeration[T]: Bijection[Iterator[T], JEnumeration[T]] =
     Bijection.build[Iterator[T], JEnumeration[T]] { _.asJavaEnumeration } { _.asScala }
-  implicit def map2jdictionary[K, V]: Bijection[mutable.Map[K, V], JDictionary[K, V]] =
+  implicit def mmap2jdictionary[K, V]: Bijection[mutable.Map[K, V], JDictionary[K, V]] =
     Bijection.build[mutable.Map[K, V], JDictionary[K, V]] { _.asJavaDictionary } { _.asScala }
+
+  // Here are the immutable ones:
+  implicit def seq2Java[T]: Bijection[Seq[T], JList[T]] = new Bijection[Seq[T], JList[T]] {
+     def apply(s: Seq[T]) = s.asJava
+     override def invert(l: JList[T]) = l.asScala.toSeq
+  }
+  implicit def set2Java[T]: Bijection[Set[T], JSet[T]] = new Bijection[Set[T], JSet[T]] {
+     def apply(s: Set[T]) = s.asJava
+     override def invert(l: JSet[T]) = l.asScala.toSet
+  }
+  implicit def map2Java[K,V]: Bijection[Map[K,V], JMap[K,V]] = new Bijection[Map[K,V], JMap[K,V]] {
+     def apply(s: Map[K,V]) = s.asJava
+     override def invert(l: JMap[K,V]) = l.asScala.toMap
+  }
 
   /**
    * Accepts a Bijection[A, B] and returns a bijection that can
