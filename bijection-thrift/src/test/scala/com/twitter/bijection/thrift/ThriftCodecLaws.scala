@@ -38,6 +38,9 @@ object ThriftCodecLaws extends Properties("ThriftCodecs") with BaseProperties {
   property("round trips thrift -> Array[Byte] through compact") =
     roundTripsThrift(CompactThriftCodec[TestThriftStructure])
 
-  property("round trips thrift -> Array[Byte] through json") =
-    roundTripsThrift(JsonThriftCodec[TestThriftStructure])
+  property("round trips thrift -> String through json") = {
+    implicit val b = JsonThriftCodec[TestThriftStructure]
+    roundTrips[TestThriftStructure, String]()
+  }
+
 }
