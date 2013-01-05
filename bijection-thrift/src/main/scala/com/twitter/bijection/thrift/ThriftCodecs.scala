@@ -30,14 +30,11 @@ object ThriftCodec {
    */
   def apply[T <: TBase[_, _], P <: TProtocolFactory](klass: Class[T], factory: P): Bijection[T, Array[Byte]] =
     new ThriftCodec[T,P](klass, factory)
-}
 
-trait ThriftBijections {
-  implicit def thrift2Bytes[T <: TBase[_,_]: Manifest]: Bijection[T, Array[Byte]] = BinaryThriftCodec[T]
+  implicit def toBinary[T <: TBase[_,_]: Manifest]: Bijection[T, Array[Byte]] = BinaryThriftCodec[T]
+  def toCompact[T <: TBase[_,_]: Manifest]: Bijection[T, Array[Byte]] = CompactThriftCodec[T]
+  def toJson[T <: TBase[_,_]: Manifest]: Bijection[T, String] = JsonThriftCodec[T]
 }
-
-// Extends the trait to allow access to thrift2Bytes as a static method.
-object ThriftBijections extends ThriftBijections
 
 class ThriftCodec[T <: TBase[_, _], P <: TProtocolFactory](klass: Class[T], factory: P)
 extends Bijection[T, Array[Byte]] {
