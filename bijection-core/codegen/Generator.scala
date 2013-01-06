@@ -4,7 +4,7 @@ val pkg = "package com.twitter.bijection"
 
 /* Example of the code generated:
   implicit def tuple2[A1,B1,A2,B2](implicit ba: Bijection[A1,A2], bb: Bijection[B1,B2]):
-    Bijection[(A1,B1),(A2,B2)] = new Bijection.build[(A1,B1),(A2,B2)] {
+    Bijection[(A1,B1),(A2,B2)] = new Bijection[(A1,B1),(A2,B2)] {
       def apply(in: (A1,B1)) = (ba(in._1), bb(in._2))
       def invert(out: (A2,B2)) = (ba.invert(out._1), bb.invert(out._2))
     }
