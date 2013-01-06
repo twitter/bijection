@@ -18,7 +18,7 @@ package com.twitter.bijection
 
 import java.io.Serializable
 
-object Pivot {
+object Pivot extends Serializable {
   /**
    * Returns a new Pivot[K, K1, K2] using the supplied bijection
    * to split each input key.
