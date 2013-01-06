@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.twitter.bijection
 
+import java.io.Serializable
 import scala.annotation.implicitNotFound
 
 /**
@@ -26,7 +27,7 @@ import scala.annotation.implicitNotFound
  */
 
 @implicitNotFound(msg = "Cannot find Bijection type class between ${A} and ${B}")
-trait Bijection[A, B] extends (A => B) { self =>
+trait Bijection[A, B] extends (A => B) with Serializable { self =>
   def apply(a: A): B
   def invert(b: B): A = inverse(b)
 
