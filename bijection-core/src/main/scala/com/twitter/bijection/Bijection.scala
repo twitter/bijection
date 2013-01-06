@@ -71,7 +71,7 @@ abstract class BijectionImpl[A, B] extends Bijection[A, B] {
  * for the following "as" pattern.
  * TODO: this should be a value class in scala 2.10
  */
-sealed class Biject[A](a: A) {
+sealed class Biject[A](a: A) extends Serializable {
   def as[B](implicit bij: Bijection[A,B]): B = bij(a)
 }
 
@@ -84,7 +84,8 @@ object Bijection extends NumericBijections
   with BinaryBijections
   with GeneratedTupleBijections
   with CollectionBijections
-  with LowPriorityBijections {
+  with LowPriorityBijections
+  with Serializable {
 
   def apply[A, B](a: A)(implicit bij: Bijection[A, B]): B = bij(a)
   def invert[A, B](b: B)(implicit bij: Bijection[A, B]): A = bij.invert(b)
