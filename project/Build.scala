@@ -72,6 +72,7 @@ object BijectionBuild extends Build {
     id = "bijection",
     base = file(".")
     ).settings(
+    test := { },
     publish := { } // skip publishing for this root project.
   ).aggregate(bijectionCore,
               bijectionProtobuf,
