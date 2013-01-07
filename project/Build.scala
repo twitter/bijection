@@ -68,6 +68,16 @@ object BijectionBuild extends Build {
       </developers>)
   )
 
+  lazy val bijection = Project(
+    id = "bijection",
+    base = file(".")
+    ).settings(
+    publish := { } // skip publishing for this root project.
+  ).aggregate(bijectionCore,
+              bijectionProtobuf,
+              bijectionThrift,
+              bijectionJson)
+
   lazy val bijectionCore = Project(
     id = "bijection-core",
     base = file("bijection-core"),
