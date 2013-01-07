@@ -43,7 +43,6 @@ object GZippedBase64String {
     }
 }
 
-
 case class Base64String(str: String)
 
 object Base64String {
