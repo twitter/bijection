@@ -83,6 +83,14 @@ object StringJoinBijection {
    * compose with the getOrElse bijection:
    *
    * viaContainer[Int,Set[Int]] andThen Bijection.getOrElse(""): Bijection[Set[Int],String]
+   *
+   * Note that this can be dangerous with empty collections,
+   * as Bijection will try to convert "" -> Int. It's safer to use
+   * an instance of type A with the "as" notation for a default item
+   * in the collection:
+   *
+   * import Bijection.asMethod
+   * viaContainer[Int,Set[Int]] andThen Bijection.getOrElse(0.as[String]): Bijection[Set[Int],String]
    */
   def viaContainer[A, B <: TraversableOnce[A]](separator: String = DEFAULT_SEP)
   (implicit bij: Bijection[A, String], ab: CanBuildFrom[Nothing, A, B]): Bijection[B, Option[String]] =
