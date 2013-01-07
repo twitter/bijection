@@ -49,6 +49,25 @@ scala> bijection.invert(res8)
 res9: Long = 123456789
 ```
 
+When you have bijections between a path of items you can `Bijection.connect` them:
+
+```scala
+scala> import com.twitter.bijection.Bijection.{asMethod, connect}
+import com.twitter.bijection.Bijection.{asMethod, connect}
+
+scala> import com.twitter.bijection.Base64String
+import com.twitter.bijection.Base64String
+
+scala> implicit val string2Long2Bytes2B64 = connect[String,Long,Array[Byte],Base64String]
+string2Long2Bytes2B64: com.twitter.bijection.Bijection[String,com.twitter.bijection.Base64String] = <function1>
+
+scala> "243".as[Base64String]
+res0: com.twitter.bijection.Base64String = Base64String(AAAAAAAAAPM=)
+
+scala> res0.as[String]
+res1: String = 243
+```
+
 ## Supported Bijections
 
 Bijection implicitly supplies Bijections between:
