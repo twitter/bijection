@@ -77,6 +77,17 @@ object StringJoinBijection {
         }
     }
 
+  /** Convert a collection of numbers to and from a string
+   * It's common to have types which we know have at least 1 character in their string
+   * representation. Knowing that the empty string is not allowed we can map that to the empty
+   * collection:
+   */
+  def nonEmptyValues[N, B <: TraversableOnce[N]](separator: String = DEFAULT_SEP)
+  (implicit bij: Bijection[N, String], ab: CanBuildFrom[Nothing, N, B]): Bijection[B, String] =
+    Bijection.toContainer[N, String, B, Iterable[String]]
+      .andThen(apply(separator))
+      .andThen(Bijection.filterDefault("").inverse)
+
   /**
    * Converts between any collection of A and and Option[String],
    * given an implicit Bijection[A,String]. To get the final string out,
