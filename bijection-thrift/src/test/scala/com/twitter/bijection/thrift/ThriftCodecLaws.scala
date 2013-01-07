@@ -19,6 +19,7 @@ package com.twitter.bijection.thrift
 import com.twitter.bijection.{ BaseProperties, Bijection }
 import org.scalacheck.Properties
 import org.scalacheck.Arbitrary
+import org.specs._
 
 object ThriftCodecLaws extends Properties("ThriftCodecs") with BaseProperties {
   def buildThrift(i: (Int, String)) =
@@ -42,5 +43,15 @@ object ThriftCodecLaws extends Properties("ThriftCodecs") with BaseProperties {
     implicit val b = JsonThriftCodec[TestThriftStructure]
     roundTrips[TestThriftStructure, String]()
   }
+}
 
+class TEnumTest extends Specification with BaseProperties {
+  "TEnum should roundtrip through TEnumCodec" in {
+    implicit val b = TEnumCodec[Gender]
+    val male = Gender.findByValue(0)
+    male must_== rt(male)
+
+    val female = Gender.findByValue(1)
+    female must_== rt(female)
+  }
 }

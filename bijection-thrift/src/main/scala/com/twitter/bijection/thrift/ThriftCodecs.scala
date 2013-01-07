@@ -2,7 +2,7 @@ package com.twitter.bijection.thrift
 
 import com.twitter.bijection.Bijection
 import java.io.{ ByteArrayInputStream, ByteArrayOutputStream }
-import org.apache.thrift.TBase
+import org.apache.thrift.{ TBase, TEnum }
 import org.apache.thrift.protocol.{
   TBinaryProtocol,
   TCompactProtocol,
@@ -11,6 +11,7 @@ import org.apache.thrift.protocol.{
 }
 import org.apache.thrift.transport.TIOStreamTransport
 import org.codehaus.jackson.map.MappingJsonFactory
+import java.lang.{ Integer => JInt }
 
 /**
  * Codecs for use in serializing and deserializing Thrift structures.
@@ -80,4 +81,33 @@ extends ThriftCodec[T, TSimpleJSONProtocol.Factory](klass, new TSimpleJSONProtoc
       .createJsonParser(bytes)
       .readValueAs(klass)
       .asInstanceOf[T]
+}
+
+object TEnumCodec {
+  /**
+   * For scala instantiation. Uses reflection.
+   */
+  implicit def apply[T <: TEnum: Manifest]: Bijection[T, JInt] = {
+    val klass = manifest[T].erasure.asInstanceOf[Class[T]]
+    fromClass(klass)
+  }
+    /**
+   * For java instantiation. No reflection, supplied classes only.
+   */
+  def fromClass[T <: TEnum](klass: Class[T]): Bijection[T, JInt] =
+    new TEnumCodec[T](klass)
+
+  /**
+   * Implicit conversions between TEnum and common types.
+   */
+  implicit def toInt[T <: TEnum: Manifest]: Bijection[T, Int] =
+    Bijection.connect[T, JInt, Int]
+  implicit def toBinary[T <: TEnum: Manifest]: Bijection[T, Array[Byte]] =
+    Bijection.connect[T, Int, Array[Byte]]
+}
+
+class TEnumCodec[T <: TEnum](klass: Class[T]) extends Bijection[T, JInt] {
+  val findByValue = klass.getMethod("findByValue", classOf[Int])
+  override def apply(enum: T) = enum.getValue
+  override def invert(i: JInt) = findByValue.invoke(null, i).asInstanceOf[T]
 }
