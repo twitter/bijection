@@ -74,8 +74,17 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-core",
-    libraryDependencies += "commons-codec" % "commons-codec" % "1.7"
+    libraryDependencies += "commons-codec" % "commons-codec" % "1.7" withSources()
   )
+
+  lazy val bijectionProtobuf = Project(
+    id = "bijection-protobuf",
+    base = file("bijection-protobuf"),
+    settings = sharedSettings
+  ).settings(
+    name := "bijection-protobuf",
+    libraryDependencies += "com.google.protobuf" % "protobuf-java" % "2.4.1" withSources()
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   lazy val bijectionThrift = Project(
     id = "bijection-thrift",
@@ -85,7 +94,7 @@ object BijectionBuild extends Build {
     name := "bijection-thrift",
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
-      "org.codehaus.jackson" % "jackson-mapper-asl" % "1.8.1"
+      "org.codehaus.jackson" % "jackson-mapper-asl" % "1.8.1" withSources()
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
@@ -95,6 +104,6 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-json",
-    libraryDependencies += "com.googlecode.json-simple" % "json-simple" % "1.1"
+    libraryDependencies += "com.googlecode.json-simple" % "json-simple" % "1.1" withSources()
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 }

@@ -119,7 +119,7 @@ object Bijection extends NumericBijections
    * For example, with an implicit Bijection[String, Array[Byte]], the following works:
    * Array(1.toByte, 2.toByte).as[String]
    */
-  implicit def biject[A](a: A): Biject[A] = new Biject(a)
+  implicit def asMethod[A](a: A): Biject[A] = new Biject(a)
 
   implicit def identity[A]: Bijection[A, A] = new IdentityBijection[A]
   /**

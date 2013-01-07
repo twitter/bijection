@@ -30,7 +30,7 @@ import java.util.UUID
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 
-import Bijection.biject // get the .as syntax
+import Bijection.asMethod // get the .as syntax
 
 object NumericBijectionLaws extends Properties("NumericBijections")
 with BaseProperties {
