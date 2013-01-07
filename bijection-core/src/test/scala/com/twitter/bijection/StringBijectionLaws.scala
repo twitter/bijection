@@ -53,4 +53,10 @@ with BaseProperties {
       val iter = xs.toIterable
       (!iter.exists(_.contains(sep))) ==> (iter == rt(iter)(sjBij))
     }
+
+  implicit val listOpt = StringJoinBijection.viaContainer[Int, List[Int]]()
+  property("viaCollection List[Int] -> Option[String]") = roundTrips[List[Int], Option[String]]()
+  implicit val listStr = StringJoinBijection.nonEmptyValues[Int, List[Int]]()
+  property("viaCollection List[Int] -> String") = roundTrips[List[Int], String]()
+
 }

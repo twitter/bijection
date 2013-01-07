@@ -125,12 +125,21 @@ object Bijection extends NumericBijections
 
   /**
    * Converts between an Option[A] and the contained A or the supplied
-   * default value.
+   * default value. Note: all inputs are recoverable, not so for filterDefault().inverse
    */
   def getOrElse[A](default: A): Bijection[Option[A], A] =
     new Bijection[Option[A], A] {
       override def apply(opt: Option[A]) = opt.getOrElse(default)
       override def invert(a: A) = Some(a)
+    }
+
+  /** We check for default, and return None, else Some
+   * Note this never returns Some(default) unlike getOrElse
+   */
+  def filterDefault[A](default: A): Bijection[A, Option[A]] =
+    new Bijection[A, Option[A]] {
+      def apply(a: A) = if (a == default) None else Some(a)
+      override def invert(opt: Option[A]) = opt.getOrElse(default)
     }
 
   /**

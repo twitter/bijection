@@ -58,8 +58,7 @@ object StringJoinBijection {
         split(str.substring(idx + sep.size), sep, str.substring(0, idx) :: acc)
     }
   }
-
-  def apply(separator: String = DEFAULT_SEP): Bijection[Iterable[String], Option[String]] =
+def apply(separator: String = DEFAULT_SEP): Bijection[Iterable[String], Option[String]] =
     new Bijection[Iterable[String], Option[String]] {
       override def apply(xs: Iterable[String]) = {
         // TODO: Instead of throwing, escape the separator in the encoded string.
@@ -76,6 +75,16 @@ object StringJoinBijection {
           case Some(str) => StringJoinBijection.split(str, separator)
         }
     }
+
+  /** Convert a collection of numbers to and from a string
+   * It's common to have typeswhich we know have at least 1 character in their
+   * knowing that the empty string is not allowed we can map that to the empty set:
+   */
+  def nonEmptyValues[N, B <: TraversableOnce[N]](separator: String = DEFAULT_SEP)
+  (implicit bij: Bijection[N, String], ab: CanBuildFrom[Nothing, N, B]): Bijection[B, String] =
+    Bijection.toContainer[N, String, B, Iterable[String]]
+      .andThen(apply(separator))
+      .andThen(Bijection.filterDefault("").inverse)
 
   /**
    * Converts between any collection of A and and Option[String],
