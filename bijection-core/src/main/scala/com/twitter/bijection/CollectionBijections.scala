@@ -77,14 +77,17 @@ trait CollectionBijections {
    * no sense.
    */
   def toContainer[A, B, C <: TraversableOnce[A], D <: TraversableOnce[B]]
-  (implicit bij: Bijection[A, B], cd: CanBuildFrom[C, B, D], dc: CanBuildFrom[D, A, C]) =
-    Bijection.build[C, D] { c: C =>
-      val builder = cd(c)
-      c foreach { builder += bij(_) }
-      builder.result()
-    } { d: D =>
-      val builder = dc(d)
-      d foreach { builder += bij.invert(_) }
-      builder.result()
+  (implicit bij: Bijection[A, B], cd: CanBuildFrom[Nothing, B, D], dc: CanBuildFrom[Nothing, A, C]) =
+    new Bijection[C, D] {
+      def apply(c: C) = {
+        val builder = cd()
+        c foreach { builder += bij(_) }
+        builder.result()
+      }
+      override def invert(d: D) = {
+        val builder = dc()
+        d foreach { builder += bij.invert(_) }
+        builder.result()
+      }
     }
 }
