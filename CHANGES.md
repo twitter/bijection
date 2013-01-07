@@ -2,7 +2,9 @@
 
 ### 0.1.1
 
-* Added `bijection-json`
+* Adds `bijection-json`
+* Adds `bijection-protobuf`
+* Adds `TEnumCodec` for conversion of `TEnum` -> `Int`
 
 ### 0.1.0
 
