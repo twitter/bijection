@@ -2,13 +2,15 @@
 
 ### 0.1.1
 
-* Adds `bijection-json`
-* Adds `bijection-protobuf`
-* Adds `TEnumCodec` for conversion of `TEnum` -> `Int`
+* `bijection-json`
+* `bijection-protobuf`
+* `TEnumCodec` for conversion of `TEnum` -> `Int`
 * Change `biject` method in `Bijection` object to `asMethod` for clarity
 * Adds default `unwrap` bijections to value case classes
 * Adds `Bijection.getOrElse` for conversions between `Option[A]` and `A`
 * Fix bug in `toContainer`, add tests
+* `Bufferable`
+* `StringBijection.viaContainer`
 
 ### 0.1.0
 
