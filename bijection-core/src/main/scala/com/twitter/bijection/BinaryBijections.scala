@@ -36,7 +36,7 @@ object GZippedBytes {
 case class GZippedBase64String(str: String)
 
 object GZippedBase64String {
-  implicit val unwrap: Bijection[GZippedBase64String, String] =
+  val unwrap: Bijection[GZippedBase64String, String] =
     new Bijection[GZippedBase64String, String] {
       override def apply(gzbs: GZippedBase64String) = gzbs.str
       override def invert(str: String) = GZippedBase64String(str)
@@ -47,7 +47,7 @@ object GZippedBase64String {
 case class Base64String(str: String)
 
 object Base64String {
-  implicit val unwrap: Bijection[Base64String, String] =
+  val unwrap: Bijection[Base64String, String] =
     new Bijection[Base64String, String] {
       override def apply(bs: Base64String) = bs.str
       override def invert(str: String) = Base64String(str)
