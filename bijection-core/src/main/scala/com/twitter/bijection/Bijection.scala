@@ -122,6 +122,17 @@ object Bijection extends NumericBijections
   implicit def asMethod[A](a: A): Biject[A] = new Biject(a)
 
   implicit def identity[A]: Bijection[A, A] = new IdentityBijection[A]
+
+  /**
+   * Converts between an Option[A] and the contained A or the supplied
+   * default value.
+   */
+  def getOrElse[A](default: A): Bijection[Option[A], A] =
+    new Bijection[Option[A], A] {
+      override def apply(opt: Option[A]) = opt.getOrElse(default)
+      override def invert(a: A) = Some(a)
+    }
+
   /**
    * Converts a function that transforms type A into a function that
    * transforms type B.
