@@ -16,7 +16,9 @@ limitations under the License.
 
 package com.twitter.bijection
 
-object Pivot {
+import java.io.Serializable
+
+object Pivot extends Serializable {
   /**
    * Returns a new Pivot[K, K1, K2] using the supplied bijection
    * to split each input key.
@@ -42,7 +44,7 @@ object Pivot {
     }
 }
 
-trait PivotEncoder[K, K1, K2] extends (Iterable[K] => Map[K1, Iterable[K2]]) {
+trait PivotEncoder[K, K1, K2] extends (Iterable[K] => Map[K1, Iterable[K2]]) with Serializable {
   def enc: (K) => (K1, K2)
   /**
    * Pivots an Iterable[K] into Map[K1, Iterable[K2]] by
@@ -67,7 +69,7 @@ trait PivotEncoder[K, K1, K2] extends (Iterable[K] => Map[K1, Iterable[K2]]) {
   }
 }
 
-trait PivotDecoder[K, K1, K2] extends (Map[K1, Iterable[K2]] => Iterable[K]) {
+trait PivotDecoder[K, K1, K2] extends (Map[K1, Iterable[K2]] => Iterable[K]) with Serializable {
   def dec: ((K1, K2)) => K
 
   /**

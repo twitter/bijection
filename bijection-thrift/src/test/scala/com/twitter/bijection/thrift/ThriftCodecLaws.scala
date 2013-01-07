@@ -19,17 +19,13 @@ package com.twitter.bijection.thrift
 import com.twitter.bijection.{ BaseProperties, Bijection }
 import org.scalacheck.Properties
 import org.scalacheck.Arbitrary
+import org.specs._
 
 object ThriftCodecLaws extends Properties("ThriftCodecs") with BaseProperties {
-  def buildThrift(i: Int, s: String) =
-    new TestThriftStructure().setANumber(i).setAString(s)
+  def buildThrift(i: (Int, String)) =
+    new TestThriftStructure().setANumber(i._1).setAString(i._2)
 
-  implicit def testThrift: Arbitrary[TestThriftStructure] =
-    Arbitrary[TestThriftStructure] {
-      for (i <- Arbitrary.arbInt.arbitrary;
-           s <- Arbitrary.arbString.arbitrary)
-      yield buildThrift(i, s)
-    }
+  implicit val testThrift = arbitraryViaFn { is: (Int,String) => buildThrift(is) }
 
   // Code generator for thrift instances.
   def roundTripsThrift(bijection: Bijection[TestThriftStructure, Array[Byte]]) = {
@@ -43,6 +39,19 @@ object ThriftCodecLaws extends Properties("ThriftCodecs") with BaseProperties {
   property("round trips thrift -> Array[Byte] through compact") =
     roundTripsThrift(CompactThriftCodec[TestThriftStructure])
 
-  property("round trips thrift -> Array[Byte] through json") =
-    roundTripsThrift(JsonThriftCodec[TestThriftStructure])
+  property("round trips thrift -> String through json") = {
+    implicit val b = JsonThriftCodec[TestThriftStructure]
+    roundTrips[TestThriftStructure, String]()
+  }
+}
+
+class TEnumTest extends Specification with BaseProperties {
+  "TEnum should roundtrip through TEnumCodec" in {
+    implicit val b = TEnumCodec[Gender]
+    val male = Gender.findByValue(0)
+    male must_== rt(male)
+
+    val female = Gender.findByValue(1)
+    female must_== rt(female)
+  }
 }

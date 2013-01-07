@@ -24,8 +24,34 @@ import annotation.tailrec
 
 // TODO: Convert to value classes on Scala 2.10 upgrade.
 case class GZippedBytes(bytes: Array[Byte])
+
+object GZippedBytes {
+  val unwrap: Bijection[GZippedBytes, Array[Byte]] =
+    new Bijection[GZippedBytes, Array[Byte]] {
+      override def apply(gzb: GZippedBytes) = gzb.bytes
+      override def invert(bytes: Array[Byte]) = GZippedBytes(bytes)
+    }
+}
+
 case class GZippedBase64String(str: String)
+
+object GZippedBase64String {
+  val unwrap: Bijection[GZippedBase64String, String] =
+    new Bijection[GZippedBase64String, String] {
+      override def apply(gzbs: GZippedBase64String) = gzbs.str
+      override def invert(str: String) = GZippedBase64String(str)
+    }
+}
+
 case class Base64String(str: String)
+
+object Base64String {
+  val unwrap: Bijection[Base64String, String] =
+    new Bijection[Base64String, String] {
+      override def apply(bs: Base64String) = bs.str
+      override def invert(str: String) = Base64String(str)
+    }
+}
 
 /**
  * A collection of utilities for encoding strings and byte arrays to
@@ -86,10 +112,8 @@ trait BinaryBijections {
 
   implicit val bytes2GZippedBase64: Bijection[Array[Byte], GZippedBase64String] =
     bytes2GzippedBytes
-      .andThen(Bijection.build[GZippedBytes, Array[Byte]] { _.bytes } { GZippedBytes(_) })
+      .andThen(GZippedBytes.unwrap)
       .andThen(bytes2Base64)
-      .andThen(Bijection.build[Base64String, GZippedBase64String] { case Base64String(s) =>
-        GZippedBase64String(s) } { case GZippedBase64String(s) =>
-        Base64String(s)
-      })
+      .andThen(Base64String.unwrap)
+      .andThen(GZippedBase64String.unwrap.inverse)
 }

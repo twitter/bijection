@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.twitter.bijection
 
+import java.io.Serializable
 import scala.annotation.implicitNotFound
 
 /**
@@ -26,7 +27,7 @@ import scala.annotation.implicitNotFound
  */
 
 @implicitNotFound(msg = "Cannot find Bijection type class between ${A} and ${B}")
-trait Bijection[A, B] extends (A => B) { self =>
+trait Bijection[A, B] extends (A => B) with Serializable { self =>
   def apply(a: A): B
   def invert(b: B): A = inverse(b)
 
@@ -70,7 +71,7 @@ abstract class BijectionImpl[A, B] extends Bijection[A, B] {
  * for the following "as" pattern.
  * TODO: this should be a value class in scala 2.10
  */
-sealed class Biject[A](a: A) {
+sealed class Biject[A](a: A) extends Serializable {
   def as[B](implicit bij: Bijection[A,B]): B = bij(a)
 }
 
@@ -83,7 +84,8 @@ object Bijection extends NumericBijections
   with BinaryBijections
   with GeneratedTupleBijections
   with CollectionBijections
-  with LowPriorityBijections {
+  with LowPriorityBijections
+  with Serializable {
 
   def apply[A, B](a: A)(implicit bij: Bijection[A, B]): B = bij(a)
   def invert[A, B](b: B)(implicit bij: Bijection[A, B]): A = bij.invert(b)
@@ -97,6 +99,19 @@ object Bijection extends NumericBijections
       }
     }
 
+  /**
+   * The "connect" method allows composition of multiple implicit bijections
+   * into a single bijection. For example,
+   *
+   * val composed = connect[Long, Array[Byte], Base64String]: Bijection[Long, Base64String]
+   */
+  def connect[A, B, C](implicit bij: Bijection[A, B], bij2: Bijection[B, C]): Bijection[A, C] =
+    bij andThen bij2
+  def connect[A, B, C, D](implicit bij: Bijection[A, B], bij2: Bijection[B, C], bij3: Bijection[C, D]): Bijection[A, D] =
+    connect[A, B, C] andThen bij3
+  def connect[A, B, C, D, E](implicit bij: Bijection[A, B], bij2: Bijection[B, C], bij3: Bijection[C, D], bij4: Bijection[D, E]): Bijection[A, E] =
+    connect[A, B, C, D] andThen bij4
+
   /*
    * Implicit conversion to Biject. This allows the user to use bijections as implicit
    * conversions between types.
@@ -104,9 +119,29 @@ object Bijection extends NumericBijections
    * For example, with an implicit Bijection[String, Array[Byte]], the following works:
    * Array(1.toByte, 2.toByte).as[String]
    */
-  implicit def biject[A](a: A): Biject[A] = new Biject(a)
+  implicit def asMethod[A](a: A): Biject[A] = new Biject(a)
 
   implicit def identity[A]: Bijection[A, A] = new IdentityBijection[A]
+
+  /**
+   * Converts between an Option[A] and the contained A or the supplied
+   * default value. Note: all inputs are recoverable, not so for filterDefault().inverse
+   */
+  def getOrElse[A](default: A): Bijection[Option[A], A] =
+    new Bijection[Option[A], A] {
+      override def apply(opt: Option[A]) = opt.getOrElse(default)
+      override def invert(a: A) = Some(a)
+    }
+
+  /** We check for default, and return None, else Some
+   * Note this never returns Some(default) unlike getOrElse
+   */
+  def filterDefault[A](default: A): Bijection[A, Option[A]] =
+    new Bijection[A, Option[A]] {
+      def apply(a: A) = if (a == default) None else Some(a)
+      override def invert(opt: Option[A]) = opt.getOrElse(default)
+    }
+
   /**
    * Converts a function that transforms type A into a function that
    * transforms type B.

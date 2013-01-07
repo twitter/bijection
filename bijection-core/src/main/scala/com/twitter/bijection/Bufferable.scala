@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.twitter.bijection
 
+import java.io.Serializable
 import java.nio.{ByteBuffer, BufferOverflowException}
 import java.nio.channels.Channel
 import scala.annotation.implicitNotFound
@@ -28,7 +29,7 @@ import scala.collection.mutable.{Builder, Map => MMap, Set => MSet, Buffer => MB
  */
 
 @implicitNotFound(msg = "Cannot find Bufferable type class for ${T}")
-trait Bufferable[T] extends java.io.Serializable {
+trait Bufferable[T] extends Serializable {
   def put(into: ByteBuffer, t: T): ByteBuffer
   def get(from: ByteBuffer): T
 }
@@ -38,7 +39,7 @@ trait LowPriorityBufferable {
 
 }*/
 
-object Bufferable extends GeneratedTupleBufferable with java.io.Serializable {
+object Bufferable extends GeneratedTupleBufferable with Serializable {
   val DEFAULT_SIZE = 1024
   // Type class methods:
   def put[T](into: ByteBuffer, t: T)(implicit buf: Bufferable[T]): ByteBuffer = buf.put(into, t)
