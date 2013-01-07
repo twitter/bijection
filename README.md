@@ -89,7 +89,7 @@ Additionally there is a method to generate Bijections between most of Scala's bu
 ```Bijection.toContainer[Int,String,List[Int],Vector[String]``` returns
 ```Bijection[List[Int], Vector[String]```
 
-If you see a reversible conversation that is not here and related to types in the standard library
+If you see a reversible conversion that is not here and related to types in the standard library
 of Java or Scala, please contribute!
 
 ## Maven
