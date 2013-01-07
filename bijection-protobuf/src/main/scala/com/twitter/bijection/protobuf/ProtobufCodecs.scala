@@ -50,7 +50,7 @@ object ProtobufEnumCodec {
 }
 
 class ProtobufEnumCodec[T <: ProtocolMessageEnum](klass: Class[T]) extends Bijection[T, Int] {
-  import Bijection.biject // adds "as" for conversions
+  import Bijection.asMethod // adds "as" for conversions
 
   val valueOf = klass.getMethod("valueOf", classOf[Int])
   val cache = MMap[Int,T]()

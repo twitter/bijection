@@ -106,7 +106,7 @@ object TEnumCodec {
 }
 
 class TEnumCodec[T <: TEnum](klass: Class[T]) extends Bijection[T, Int] {
-  import Bijection.biject // adds "as" for conversions
+  import Bijection.asMethod // adds "as" for conversions
 
   val findByValue = klass.getMethod("findByValue", classOf[Int])
   val cache = MMap[Int,T]()
