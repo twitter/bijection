@@ -8,6 +8,7 @@
 * Change `biject` method in `Bijection` object to `asMethod` for clarity
 * Adds default `unwrap` bijections to value case classes
 * Adds `Bijection.getOrElse` for conversions between `Option[A]` and `A`
+* Fix bug in `toContainer`, add tests
 
 ### 0.1.0
 
