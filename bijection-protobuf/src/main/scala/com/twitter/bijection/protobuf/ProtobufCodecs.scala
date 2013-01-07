@@ -4,6 +4,7 @@ import com.twitter.bijection.Bijection
 import com.google.protobuf.Message
 import com.google.protobuf.ProtocolMessageEnum
 import java.lang.{ Integer => JInt }
+import scala.collection.mutable.{ Map =>MMap }
 
 /**
  * Bijections for use in serializing and deserializing Protobufs.
@@ -33,24 +34,27 @@ object ProtobufEnumCodec {
   /**
    * For scala instantiation. Uses reflection.
    */
-  implicit def apply[T <: ProtocolMessageEnum: Manifest]: Bijection[T, JInt] = {
+  implicit def apply[T <: ProtocolMessageEnum: Manifest]: Bijection[T, Int] = {
     val klass = manifest[T].erasure.asInstanceOf[Class[T]]
     fromClass(klass)
   }
   /**
    * For java instantiation. No reflection, supplied classes only.
    */
-  def fromClass[T <: ProtocolMessageEnum](klass: Class[T]): Bijection[T, JInt] = new ProtobufEnumCodec[T](klass)
+  def fromClass[T <: ProtocolMessageEnum](klass: Class[T]): Bijection[T, Int] = new ProtobufEnumCodec[T](klass)
 
   /**
    * Implicit conversions between ProtocolMessageEnum and common types.
    */
-  implicit def toInt[T <: ProtocolMessageEnum: Manifest]: Bijection[T, Int] = Bijection.connect[T, JInt, Int]
   implicit def toBinary[T <: ProtocolMessageEnum: Manifest]: Bijection[T, Array[Byte]] = Bijection.connect[T, Int, Array[Byte]]
 }
 
-class ProtobufEnumCodec[T <: ProtocolMessageEnum](klass: Class[T]) extends Bijection[T, JInt] {
+class ProtobufEnumCodec[T <: ProtocolMessageEnum](klass: Class[T]) extends Bijection[T, Int] {
+  import Bijection.biject // adds "as" for conversions
+
   val valueOf = klass.getMethod("valueOf", classOf[Int])
+  val cache = MMap[Int,T]()
   override def apply(enum: T) = enum.getNumber
-  override def invert(i: JInt) = valueOf.invoke(null, i).asInstanceOf[T]
+  override def invert(i: Int) =
+    cache.getOrElseUpdate(i, valueOf.invoke(null, i.as[JInt]).asInstanceOf[T])
 }

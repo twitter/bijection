@@ -12,6 +12,7 @@ import org.apache.thrift.protocol.{
 import org.apache.thrift.transport.TIOStreamTransport
 import org.codehaus.jackson.map.MappingJsonFactory
 import java.lang.{ Integer => JInt }
+import scala.collection.mutable.{ Map =>MMap }
 
 /**
  * Codecs for use in serializing and deserializing Thrift structures.
@@ -87,27 +88,29 @@ object TEnumCodec {
   /**
    * For scala instantiation. Uses reflection.
    */
-  implicit def apply[T <: TEnum: Manifest]: Bijection[T, JInt] = {
+  implicit def apply[T <: TEnum: Manifest]: Bijection[T, Int] = {
     val klass = manifest[T].erasure.asInstanceOf[Class[T]]
     fromClass(klass)
   }
     /**
    * For java instantiation. No reflection, supplied classes only.
    */
-  def fromClass[T <: TEnum](klass: Class[T]): Bijection[T, JInt] =
+  def fromClass[T <: TEnum](klass: Class[T]): Bijection[T, Int] =
     new TEnumCodec[T](klass)
 
   /**
    * Implicit conversions between TEnum and common types.
    */
-  implicit def toInt[T <: TEnum: Manifest]: Bijection[T, Int] =
-    Bijection.connect[T, JInt, Int]
   implicit def toBinary[T <: TEnum: Manifest]: Bijection[T, Array[Byte]] =
     Bijection.connect[T, Int, Array[Byte]]
 }
 
-class TEnumCodec[T <: TEnum](klass: Class[T]) extends Bijection[T, JInt] {
+class TEnumCodec[T <: TEnum](klass: Class[T]) extends Bijection[T, Int] {
+  import Bijection.biject // adds "as" for conversions
+
   val findByValue = klass.getMethod("findByValue", classOf[Int])
+  val cache = MMap[Int,T]()
   override def apply(enum: T) = enum.getValue
-  override def invert(i: JInt) = findByValue.invoke(null, i).asInstanceOf[T]
+  override def invert(i: Int) =
+    cache.getOrElseUpdate(i, findByValue.invoke(null, i.as[JInt]).asInstanceOf[T])
 }
