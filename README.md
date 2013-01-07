@@ -24,8 +24,7 @@ scala> Bijection.invert[Int, String](res2)
 res4: Int = 100
 ```
 
-If you ```import Bijection.asMethod``` you can use ```.as[T]``` to do the default bijection to
-```T```:
+If you `import Bijection.asMethod` you can use `.as[T]` to do the default bijection to `T`:
 
 ```scala
 scala> import com.twitter.bijection.Bijection.asMethod
