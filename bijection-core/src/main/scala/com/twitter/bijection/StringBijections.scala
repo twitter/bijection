@@ -79,7 +79,10 @@ object StringJoinBijection {
 
   /**
    * Converts between any collection of A and and Option[String],
-   * given an implicit Bijection[A,String].
+   * given an implicit Bijection[A,String]. To get the final string out,
+   * compose with the getOrElse bijection:
+   *
+   * viaContainer[Int,Set[Int]] andThen Bijection.getOrElse(""): Bijection[Set[Int],String]
    */
   def viaContainer[A, B <: TraversableOnce[A]](separator: String = DEFAULT_SEP)
   (implicit bij: Bijection[A, String], ab: CanBuildFrom[Nothing, A, B]): Bijection[B, Option[String]] =
