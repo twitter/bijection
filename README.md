@@ -24,6 +24,17 @@ scala> Bijection.invert[Int, String](res2)
 res4: Int = 100
 ```
 
+If you ```import Bijection.asMethod``` you can use ```.as[T]``` to do the default bijection to
+```T```:
+
+```scala
+scala> import com.twitter.bijection.Bijection.asMethod
+import com.twitter.bijection.Bijection.asMethod
+
+scala> 1.as[String]
+res0: String = 1
+```
+
 Bijections can also be composed. As with functions, `andThen` composes forward, `compose` composes backward.
 
 This example round-trips a long into a GZipped base64-encoded string:
@@ -55,6 +66,13 @@ Bijection implicitly supplies Bijections between:
 * `Class[T]` <-> String
 * `A => B` <-> `C => D` (function conversion)
 * Bijection builders for all tuples. (`(String,Int)` <-> `(Array[Byte], java.lang.Integer)` is built automatically, for example.)
+
+Additionally there is a method to generate Bijections between most of Scala's built in types:
+```Bijection.toContainer[Int,String,List[Int],Vector[String]``` returns
+```Bijection[List[Int], Vector[String]```
+
+If you see a reversible conversation that is not here and related to types in the standard library
+of Java or Scala, please contribute!
 
 ## Maven
 
