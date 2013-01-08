@@ -4,7 +4,7 @@ import Keys._
 object BijectionBuild extends Build {
   val sharedSettings = Project.defaultSettings ++ Seq(
     organization := "com.twitter",
-    version := "0.1.1",
+    version := "0.1.2",
     scalaVersion := "2.9.2",
     libraryDependencies ++= Seq(
       "org.scalacheck" %% "scalacheck" % "1.10.0" % "test" withSources(),
@@ -85,7 +85,7 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-core",
-    libraryDependencies += "commons-codec" % "commons-codec" % "1.7" withSources()
+    libraryDependencies += "commons-codec" % "commons-codec" % "1.7"
   )
 
   lazy val bijectionProtobuf = Project(
@@ -94,7 +94,7 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-protobuf",
-    libraryDependencies += "com.google.protobuf" % "protobuf-java" % "2.4.1" withSources()
+    libraryDependencies += "com.google.protobuf" % "protobuf-java" % "2.4.1"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   lazy val bijectionThrift = Project(
@@ -105,7 +105,7 @@ object BijectionBuild extends Build {
     name := "bijection-thrift",
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
-      "org.codehaus.jackson" % "jackson-mapper-asl" % "1.8.1" withSources()
+      "org.codehaus.jackson" % "jackson-mapper-asl" % "1.8.1"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
@@ -115,6 +115,6 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-json",
-    libraryDependencies += "com.googlecode.json-simple" % "json-simple" % "1.1" withSources()
+    libraryDependencies += "com.googlecode.json-simple" % "json-simple" % "1.1"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 }
