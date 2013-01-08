@@ -1,5 +1,11 @@
 # Bijection #
 
+### 0.1.2
+
+* Removes simple-json
+* Adds more sophisticated JSON codecs
+* Removes `withSources()` from dependencies
+
 ### 0.1.1
 
 * `bijection-json`
