@@ -42,7 +42,10 @@ trait Bijection[A, B] extends (A => B) with Serializable { self =>
    * with this one applied first.
    */
   def andThen[C](g: Bijection[B, C]): Bijection[A, C] =
-    Bijection.build[A, C] { a => g(this(a)) } { c => this.invert(g.invert(c)) }
+    new Bijection[A,C] {
+      def apply(a: A) = g(self.apply(a))
+      override def invert(c: C) = self.invert(g.invert(c))
+    }
 
   /**
    * Composes two instances of Bijection in a new Bijection,
@@ -90,13 +93,11 @@ object Bijection extends NumericBijections
   def apply[A, B](a: A)(implicit bij: Bijection[A, B]): B = bij(a)
   def invert[A, B](b: B)(implicit bij: Bijection[A, B]): A = bij.invert(b)
 
+  // WARNING: this seems to break Kryo-serialization, if that's important
   def build[A, B](to: A => B)(from: B => A): Bijection[A, B] =
-    new Bijection[A, B] { self =>
-      override def apply(a: A) = to(a)
-      override val inverse = new Bijection[B, A] {
-        override def apply(b: B) = from(b)
-        override val inverse = self
-      }
+    new Bijection[A, B] {
+      def apply(a: A) = to(a)
+      override def invert(b: B) = from(b)
     }
 
   /**
@@ -148,10 +149,9 @@ object Bijection extends NumericBijections
    * transforms type B.
    */
   implicit def fnBijection[A, B, C, D](implicit bij1: Bijection[A, B], bij2: Bijection[C, D]):
-    Bijection[A => C, B => D] = Bijection.build[A => C, B => D] { fn =>
-      { b => bij2.apply(fn(bij1.invert(b))) }
-    } { fn =>
-      { a => bij2.invert(fn(bij1.apply(a))) }
+    Bijection[A => C, B => D] = new Bijection[A => C, B => D] {
+      def apply(fn: A => C) = { b => bij2.apply(fn(bij1.invert(b))) }
+      override def invert(fn: B => D) = { a => bij2.invert(fn(bij1.apply(a))) }
     }
 
   /**
@@ -163,11 +163,12 @@ object Bijection extends NumericBijections
   implicit def fn2Bijection[A, B, C, D, E, F]
     (implicit bab: Bijection[A, B], bcd: Bijection[C, D], bef: Bijection[E, F]):
       Bijection[(A, C) => E, (B, D) => F] =
-      Bijection.build[(A, C) => E, (B, D) => F] { fn =>
-      { (b, d) => bef.apply(fn(bab.invert(b), bcd.invert(d))) }
-    } { fn =>
-      { (a, c) => bef.invert(fn(bab.apply(a), bcd.apply(c))) }
-    }
+      new Bijection[(A, C) => E, (B, D) => F] {
+        def apply(fn: (A, C) => E) =
+          { (b, d) => bef.apply(fn(bab.invert(b), bcd.invert(d))) }
+        override def invert(fn:  (B, D) => F) =
+          { (a, c) => bef.invert(fn(bab.apply(a), bcd.apply(c))) }
+      }
 }
 
 class IdentityBijection[A] extends Bijection[A, A] {
@@ -182,5 +183,8 @@ class IdentityBijection[A] extends Bijection[A, A] {
  * Bijection that flips the order of items in a Tuple2.
  */
 object SwapBijection {
-  def apply[T, U] = Bijection.build[(T, U), (U, T)] { _.swap } { _.swap }
+  def apply[T, U] = new Bijection[(T, U), (U, T)] {
+    def apply(t: (T,U)) = t.swap
+    override def invert(t: (U,T)) = t.swap
+  }
 }

@@ -65,11 +65,14 @@ trait BinaryBijections {
    * Bijection between byte array and java.nio.ByteBuffer.
    */
   implicit val bytes2Buffer: Bijection[Array[Byte], ByteBuffer] =
-    Bijection.build[Array[Byte], ByteBuffer] { ByteBuffer.wrap(_) } { byteBuffer =>
-      val buf = byteBuffer.duplicate()
-      val ret = Array.ofDim[Byte](buf.remaining())
-      buf.get(ret)
-      ret
+    new Bijection[Array[Byte], ByteBuffer] {
+      def apply(b: Array[Byte]) = ByteBuffer.wrap(b)
+      override def invert(byteBuffer: ByteBuffer) = {
+        val buf = byteBuffer.duplicate()
+        val ret = Array.ofDim[Byte](buf.remaining())
+        buf.get(ret)
+        ret
+      }
     }
 
   @tailrec
@@ -86,16 +89,19 @@ trait BinaryBijections {
    * Bijection between byte array and GZippedBytes.
    */
   implicit val bytes2GzippedBytes: Bijection[Array[Byte], GZippedBytes] =
-    Bijection.build[Array[Byte], GZippedBytes] { bytes =>
-      val baos = new ByteArrayOutputStream
-      val gos = new GZIPOutputStream(baos)
-      gos.write(bytes)
-      gos.finish()
-      GZippedBytes(baos.toByteArray)
-    } { case GZippedBytes(bytes) =>
-      val baos = new ByteArrayOutputStream
-      copy(new GZIPInputStream(new ByteArrayInputStream(bytes)), baos)
-      baos.toByteArray
+    new Bijection[Array[Byte], GZippedBytes] {
+      def apply(bytes: Array[Byte]) = {
+        val baos = new ByteArrayOutputStream
+        val gos = new GZIPOutputStream(baos)
+        gos.write(bytes)
+        gos.finish()
+        GZippedBytes(baos.toByteArray)
+      }
+      override def invert(gz: GZippedBytes) = {
+        val baos = new ByteArrayOutputStream
+        copy(new GZIPInputStream(new ByteArrayInputStream(gz.bytes)), baos)
+        baos.toByteArray
+      }
     }
 
   /**
@@ -106,9 +112,10 @@ trait BinaryBijections {
    * CALL TO TRIM.
    */
   implicit val bytes2Base64: Bijection[Array[Byte], Base64String] =
-    Bijection.build[Array[Byte], Base64String] { bytes =>
-      Base64String(Base64.encodeBase64String(bytes).trim)
-    } { case Base64String(str) => Base64.decodeBase64(str) }
+    new Bijection[Array[Byte], Base64String] {
+      def apply(bytes: Array[Byte]) = Base64String(Base64.encodeBase64String(bytes).trim)
+      override def invert(b64: Base64String) = Base64.decodeBase64(b64.str)
+    }
 
   implicit val bytes2GZippedBase64: Bijection[Array[Byte], GZippedBase64String] =
     bytes2GzippedBytes
