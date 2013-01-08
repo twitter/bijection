@@ -28,7 +28,7 @@ object UnparsedJson {
   implicit def bijection[T](implicit json: JsonNodeBijection[T]): Bijection[T, UnparsedJson] =
     json andThen (JsonNodeBijection.unparsed.inverse)
 
-  implicit val unwrap: Bijection[UnparsedJson, String] =
+  val unwrap: Bijection[UnparsedJson, String] =
     new Bijection[UnparsedJson, String] {
       def apply(upj: UnparsedJson) = upj.str
       override def invert(str: String) = UnparsedJson(str)

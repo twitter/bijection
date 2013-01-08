@@ -53,7 +53,6 @@ trait LowPriorityJson {
 }
 
 object JsonNodeBijection extends LowPriorityJson with java.io.Serializable {
-  protected val factory = new JsonFactory
 
   def toJsonNode[T](t: T)(implicit json: JsonNodeBijection[T]): JsonNode =
     json.apply(t)
@@ -186,6 +185,7 @@ object JsonNodeBijection extends LowPriorityJson with java.io.Serializable {
   // Here is where the actual work is being done
   implicit val unparsed: JsonNodeBijection[UnparsedJson] =
     new JsonNodeBijection[UnparsedJson] {
+      val factory = new JsonFactory
       val mapper = new ObjectMapper
       def apply(upjson: UnparsedJson) = {
         mapper.readTree(upjson.str)
