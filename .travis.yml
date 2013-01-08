@@ -1,4 +1,4 @@
 language: scala
-script: sbt ++$SCALA_VERSION bijection/test
+script: sbt bijection/test
 scala:
   - 2.9.2
