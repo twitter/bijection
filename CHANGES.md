@@ -2,6 +2,8 @@
 
 ### 0.1.3
 
+* remove `Bijection.build` uses, as these screw up serialization via Kryo.
+
 ### 0.1.2
 
 * Removes simple-json
