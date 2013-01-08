@@ -73,7 +73,8 @@ object BijectionBuild extends Build {
     base = file(".")
     ).settings(
     test := { },
-    publish := { } // skip publishing for this root project.
+    publish := { }, // skip publishing for this root project.
+    publishLocal := { }
   ).aggregate(bijectionCore,
               bijectionProtobuf,
               bijectionThrift,
