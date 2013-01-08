@@ -29,5 +29,8 @@ object ClassBijection extends Bijection[Class[_], String] {
  *  Note that this uses casting and can fail at runtime.
  */
 object CastBijection {
-  def of[A, B] = Bijection.build[A, B] { _.asInstanceOf[B] } { _.asInstanceOf[A] }
+  def of[A, B]: Bijection[A,B] = new Bijection[A, B] {
+    def apply(a: A) = a.asInstanceOf[B]
+    override def invert(b: B) = b.asInstanceOf[A]
+  }
 }

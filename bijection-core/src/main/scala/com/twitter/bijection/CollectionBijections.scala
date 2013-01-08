@@ -32,28 +32,55 @@ import scala.collection.mutable
 import collection.generic.CanBuildFrom
 
 trait CollectionBijections {
+
   /**
    * Bijections between collection types defined in scala.collection.JavaConverters.
    */
   implicit def iterable2java[T]: Bijection[Iterable[T], JIterable[T]] =
-    Bijection.build[Iterable[T], JIterable[T]] { _.asJava } { _.asScala }
+    new Bijection[Iterable[T], JIterable[T]] {
+      override def apply(t: Iterable[T]) = t.asJava
+      override def invert(t: JIterable[T]) = t.asScala
+    }
   implicit def iterator2java[T]: Bijection[Iterator[T], JIterator[T]] =
-    Bijection.build[Iterator[T], JIterator[T]] { _.asJava } { _.asScala }
+    new Bijection[Iterator[T], JIterator[T]] {
+      override def apply(t: Iterator[T]) = t.asJava
+      override def invert(t: JIterator[T]) = t.asScala
+    }
   implicit def buffer2java[T]: Bijection[mutable.Buffer[T], JList[T]] =
-    Bijection.build[mutable.Buffer[T], JList[T]] { _.asJava } { _.asScala }
+    new Bijection[mutable.Buffer[T], JList[T]] {
+      override def apply(t: mutable.Buffer[T]) = t.asJava
+      override def invert(t: JList[T]) = t.asScala
+    }
   implicit def mset2java[T]: Bijection[mutable.Set[T], JSet[T]] =
-    Bijection.build[mutable.Set[T], JSet[T]] { _.asJava } { _.asScala }
+    new Bijection[mutable.Set[T], JSet[T]] {
+      override def apply(t: mutable.Set[T]) = t.asJava
+      override def invert(t: JSet[T]) = t.asScala
+    }
   implicit def mmap2java[K, V]: Bijection[mutable.Map[K,V], JMap[K,V]] =
-    Bijection.build[mutable.Map[K,V], JMap[K,V]] { _.asJava } { _.asScala }
-  implicit def concurrentMap2java[K, V]: Bijection[mutable.ConcurrentMap[K,V], JConcurrentMap[K,V]] =
-    Bijection.build[mutable.ConcurrentMap[K,V], JConcurrentMap[K,V]] { _.asJava } { _.asScala }
+    new Bijection[mutable.Map[K,V], JMap[K,V]] {
+      override def apply(t: mutable.Map[K, V]) = t.asJava
+      override def invert(t: JMap[K, V]) = t.asScala
+    }
+  implicit def concurrentMap2java[K, V]: Bijection[mutable.ConcurrentMap[K, V], JConcurrentMap[K, V]] =
+    new Bijection[mutable.ConcurrentMap[K,V], JConcurrentMap[K, V]] {
+      override def apply(t: mutable.ConcurrentMap[K, V]) = t.asJava
+      override def invert(t: JConcurrentMap[K,V]) = t.asScala
+    }
   implicit def iterable2jcollection[T]:  Bijection[Iterable[T], JCollection[T]] =
-    Bijection.build[Iterable[T], JCollection[T]] { _.asJavaCollection } { _.asScala }
+    new Bijection[Iterable[T], JCollection[T]] {
+      override def apply(t: Iterable[T]) = t.asJavaCollection
+      override def invert(t: JCollection[T]) = t.asScala
+    }
   implicit def iterator2jenumeration[T]: Bijection[Iterator[T], JEnumeration[T]] =
-    Bijection.build[Iterator[T], JEnumeration[T]] { _.asJavaEnumeration } { _.asScala }
+    new Bijection[Iterator[T], JEnumeration[T]] {
+      override def apply(t: Iterator[T]) = t.asJavaEnumeration
+      override def invert(t: JEnumeration[T]) = t.asScala
+    }
   implicit def mmap2jdictionary[K, V]: Bijection[mutable.Map[K, V], JDictionary[K, V]] =
-    Bijection.build[mutable.Map[K, V], JDictionary[K, V]] { _.asJavaDictionary } { _.asScala }
-
+    new Bijection[mutable.Map[K, V], JDictionary[K, V]] {
+      override def apply(t: mutable.Map[K, V]) = t.asJavaDictionary
+      override def invert(t: JDictionary[K, V]) = t.asScala
+    }
   // Here are the immutable ones:
   implicit def seq2Java[T]: Bijection[Seq[T], JList[T]] = new Bijection[Seq[T], JList[T]] {
      def apply(s: Seq[T]) = s.asJava

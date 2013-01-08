@@ -22,20 +22,33 @@ import java.util.UUID
 import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
 
-import Bijection.build
-
 trait StringBijections {
   implicit val utf8: Bijection[String, Array[Byte]] = withEncoding("UTF-8")
   def withEncoding(encoding: String): Bijection[String, Array[Byte]] =
-    build[String, Array[Byte]] { _.getBytes(encoding) } { new String(_, encoding) }
+    new Bijection[String, Array[Byte]] {
+      def apply(s: String) = s.getBytes(encoding)
+      override def invert(b: Array[Byte]) = new String(b, encoding)
+    }
 
   // Some bijections with string from standard java/scala classes:
   implicit val url2String: Bijection[URL, String] =
-    build[URL, String] { _.toString } { new URL(_) }
+    new Bijection[URL, String] {
+      def apply(u: URL) = u.toString
+      override def invert(s: String) = new URL(s)
+    }
+
   implicit val symbol2String: Bijection[Symbol, String] =
-    build[Symbol, String] { _.name } { Symbol(_) }
+    new Bijection[Symbol, String] {
+      def apply(s: Symbol) = s.name
+      override def invert(s: String) = Symbol(s)
+    }
+
   implicit val uuid2String: Bijection[UUID, String] =
-    build[UUID, String] { _.toString } { UUID.fromString(_) }
+    new Bijection[UUID, String] {
+      def apply(uuid: UUID) = uuid.toString
+      override def invert(s: String) = UUID.fromString(s)
+    }
+
   implicit def class2String[T]: Bijection[Class[T], String] =
     CastBijection.of[Class[T], Class[_]] andThen ClassBijection
 }
