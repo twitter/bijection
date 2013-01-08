@@ -135,12 +135,15 @@ trait Pivot[K, K1, K2] extends Bijection[Iterable[K], Map[K1, Iterable[K2]]] {
 
   def wrapOuter[T]: Pivot[(K, T), (K1, T), K2] =
     withValue[T] andThenPivot(
-      Bijection.build[(K1, (K2, T)), ((K1, T), K2)] { pair: (K1, (K2, T)) =>
-        val (k1, (k2, t)) = pair
-        ((k1, t), k2)
-      } { pair: ((K1, T), K2) =>
-        val ((k1, t), k2) = pair
-        (k1, (k2, t))
+      new Bijection[(K1, (K2, T)), ((K1, T), K2)] {
+        def apply(pair: (K1, (K2, T))) = {
+          val (k1, (k2, t)) = pair
+          ((k1, t), k2)
+        }
+        override def invert(pair: ((K1, T), K2)) = {
+          val ((k1, t), k2) = pair
+          (k1, (k2, t))
+        }
       })
 
   /**
@@ -149,12 +152,16 @@ trait Pivot[K, K1, K2] extends Bijection[Iterable[K], Map[K1, Iterable[K2]]] {
    * a single key in some KV store.
    */
   def withValue[V]: Pivot[(K, V), K1, (K2, V)] =
-    Pivot(Bijection.build[(K, V), (K1, (K2, V))] { case pair@(k, v) =>
-      val (k1, k2) = pivot(k)
-      (k1, (k2, v))
-    } { pair: (K1, (K2, V)) =>
-      val (k1, (k2, v)) = pair
-      val k = pivot.invert((k1, k2))
-      (k, v)
+    Pivot(new Bijection[(K, V), (K1, (K2, V))] {
+      def apply(pair: (K,V)) = {
+        val (k,v) = pair
+        val (k1, k2) = pivot(k)
+        (k1, (k2, v))
+      }
+      override def invert(pair: (K1, (K2, V))) = {
+        val (k1, (k2, v)) = pair
+        val k = pivot.invert((k1, k2))
+        (k, v)
+      }
     })
 }
