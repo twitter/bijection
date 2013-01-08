@@ -105,6 +105,7 @@ object Bijection extends NumericBijections
    *
    * val composed = connect[Long, Array[Byte], Base64String]: Bijection[Long, Base64String]
    */
+  def connect[A, B](implicit bij: Bijection[A, B]): Bijection[A, B] = bij
   def connect[A, B, C](implicit bij: Bijection[A, B], bij2: Bijection[B, C]): Bijection[A, C] =
     bij andThen bij2
   def connect[A, B, C, D](implicit bij: Bijection[A, B], bij2: Bijection[B, C], bij3: Bijection[C, D]): Bijection[A, D] =
