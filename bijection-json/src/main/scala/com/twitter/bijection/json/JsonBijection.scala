@@ -17,9 +17,18 @@ limitations under the License.
 package com.twitter.bijection.json
 
 import com.twitter.bijection.Bijection
-import org.json.simple.JSONValue
-import org.json.simple.parser.JSONParser
 
+import org.codehaus.jackson.{JsonParser, JsonNode, JsonFactory}
+import org.codehaus.jackson.map.ObjectMapper
+import org.codehaus.jackson.node.{
+  BooleanNode,
+  IntNode,
+  JsonNodeFactory,
+  LongNode
+}
+
+import scala.collection.generic.CanBuildFrom
+import scala.collection.mutable.Builder
 import scala.collection.JavaConverters._
 
 /**
@@ -30,79 +39,171 @@ import scala.collection.JavaConverters._
  * types and JSON objects.
  */
 
-trait JsonObject[V] {
-  def toJava(v : V) : AnyRef
-  def fromJava(v : AnyRef) : V
+trait JsonNodeBijection[T] extends Bijection[T, JsonNode] {
+  def accepts(n: JsonNode): Boolean
+}
+
+trait LowPriorityJson {
+  def viaBijection[A,B](implicit bij: Bijection[A,B], json: JsonNodeBijection[B]):
+    JsonNodeBijection[A] = new JsonNodeBijection[A] {
+      def apply(a: A) = json(bij(a))
+      override def invert(j: JsonNode) = bij.invert(json.invert(j))
+      def accepts(n: JsonNode) = json.accepts(n)
+    }
+}
+
+object JsonNodeBijection extends LowPriorityJson with java.io.Serializable {
+  protected val factory = new JsonFactory
+
+  def toJsonNode[T](t: T)(implicit json: JsonNodeBijection[T]): JsonNode =
+    json.apply(t)
+
+  def fromJsonNode[T](node: JsonNode)(implicit json: JsonNodeBijection[T]): T =
+    json.invert(node)
+
+  implicit val identity = new JsonNodeBijection[JsonNode] {
+    def apply(n: JsonNode) = n
+    override def invert(n: JsonNode) = n
+    def accepts(n: JsonNode) = true
+  }
+  implicit val booleanJson = new JsonNodeBijection[Boolean] {
+    def apply(b: Boolean) = JsonNodeFactory.instance.booleanNode(b)
+    override def invert(n: JsonNode) = n.getValueAsBoolean
+    def accepts(n: JsonNode) = n.isBoolean
+  }
+  implicit val shortJson = new JsonNodeBijection[Short] {
+    def apply(i: Short) = JsonNodeFactory.instance.numberNode(i)
+    override def invert(n: JsonNode) = n.getValueAsInt.toShort
+    def accepts(n: JsonNode) = n.isInt
+  }
+  implicit val intJson = new JsonNodeBijection[Int] {
+    def apply(i: Int) = JsonNodeFactory.instance.numberNode(i)
+    override def invert(n: JsonNode) = n.getValueAsInt
+    def accepts(n: JsonNode) = n.isInt
+  }
+  implicit val longJson = new JsonNodeBijection[Long] {
+    def apply(i: Long) = JsonNodeFactory.instance.numberNode(i)
+    override def invert(n: JsonNode) = n.getValueAsLong
+    def accepts(n: JsonNode) = n.isLong
+  }
+  implicit val floatJson = new JsonNodeBijection[Float] {
+    def apply(i: Float) = JsonNodeFactory.instance.numberNode(i)
+    override def invert(n: JsonNode) = n.getValueAsDouble.toFloat
+    def accepts(n: JsonNode) = n.isDouble
+  }
+  implicit val doubleJson = new JsonNodeBijection[Double] {
+    def apply(i: Double) = JsonNodeFactory.instance.numberNode(i)
+    override def invert(n: JsonNode) = n.getValueAsDouble
+    def accepts(n: JsonNode) = n.isDouble
+  }
+  implicit val stringJson = new JsonNodeBijection[String] {
+    def apply(s: String) = JsonNodeFactory.instance.textNode(s)
+    override def invert(n: JsonNode) = n.getValueAsText
+    def accepts(n: JsonNode) = n.isTextual
+  }
+  implicit val byteArray = new JsonNodeBijection[Array[Byte]] {
+    def apply(b: Array[Byte]) = JsonNodeFactory.instance.binaryNode(b)
+    override def invert(n: JsonNode) = n.getBinaryValue
+    def accepts(n: JsonNode) = n.isBinary
+  }
+  implicit def either[L:JsonNodeBijection, R:JsonNodeBijection] = new JsonNodeBijection[Either[L,R]] {
+    def apply(e: Either[L,R]) = e match {
+      case Left(l) => toJsonNode(l)
+      case Right(r) => toJsonNode(r)
+    }
+    override def invert(n: JsonNode) = {
+      if (isR(n))
+        Right(fromJsonNode[R](n))
+      else
+        Left(fromJsonNode[L](n))
+    }
+    private def isL(n: JsonNode) = implicitly[JsonNodeBijection[L]].accepts(n)
+    private def isR(n: JsonNode) = implicitly[JsonNodeBijection[R]].accepts(n)
+
+    def accepts(n: JsonNode) = isR(n) || isL(n)
+  }
+
+  // This causes diverging implicits
+  def collectionJson[T,C <: Traversable[T]](implicit cbf: CanBuildFrom[Nothing, T, C],
+    jbij: JsonNodeBijection[T]): JsonNodeBijection[C] = fromBuilder(cbf())
+
+  def fromBuilder[T,C <: Traversable[T]](builder: Builder[T,C])
+    (implicit jbij: JsonNodeBijection[T]): JsonNodeBijection[C] =
+    new JsonNodeBijection[C] {
+      def apply(l: C) = {
+        val ary = JsonNodeFactory.instance.arrayNode
+        l foreach { t => ary.add(jbij(t)) }
+        ary
+      }
+      override def invert(n: JsonNode) = {
+        builder.clear
+        n.getElements.asScala.foreach { jn => builder += jbij.invert(jn) }
+        builder.result
+      }
+      def accepts(n: JsonNode) = n.isArray && {
+        fromJsonNode[List[JsonNode]](n).forall { it => jbij.accepts(it) }
+      }
+    }
+
+  implicit def listJson[T:JsonNodeBijection]: JsonNodeBijection[List[T]] =
+    fromBuilder(List.newBuilder[T])
+
+  implicit def vectorJson[T:JsonNodeBijection]: JsonNodeBijection[Vector[T]] =
+    fromBuilder(Vector.newBuilder[T])
+
+  implicit def indexedSeqJson[T:JsonNodeBijection]: JsonNodeBijection[IndexedSeq[T]] =
+    fromBuilder(IndexedSeq.newBuilder[T])
+
+  implicit def seqJson[T:JsonNodeBijection]: JsonNodeBijection[Seq[T]] =
+    fromBuilder(Seq.newBuilder[T])
+
+  implicit def setJson[T:JsonNodeBijection]: JsonNodeBijection[Set[T]] =
+    fromBuilder(Set.newBuilder[T])
+
+  implicit def mapJson[V:JsonNodeBijection]: JsonNodeBijection[Map[String,V]] =
+    new JsonNodeBijection[Map[String,V]] {
+      def apply(m: Map[String,V]) = {
+        val obj = JsonNodeFactory.instance.objectNode
+        m.foreach { case (k,v) =>
+          obj.put(k, toJsonNode(v))
+        }
+        obj
+      }
+      override def invert(n: JsonNode) = {
+        val builder = Map.newBuilder[String, V]
+        builder.clear
+        n.getFields.asScala.foreach { kv =>
+          builder += ((kv.getKey, fromJsonNode[V](kv.getValue)))
+        }
+        builder.result
+      }
+      def accepts(n: JsonNode) = n.isObject && {
+        val vbij = implicitly[JsonNodeBijection[V]]
+        fromJsonNode[Map[String, JsonNode]](n).forall { kv => vbij.accepts(kv._2) }
+      }
+    }
+
+  // Here is where the actual work is being done
+  implicit val unparsed: JsonNodeBijection[UnparsedJson] =
+    new JsonNodeBijection[UnparsedJson] {
+      val mapper = new ObjectMapper
+      def apply(upjson: UnparsedJson) = {
+        mapper.readTree(upjson.str)
+      }
+      override def invert(n: JsonNode) = {
+        val writer = new java.io.StringWriter()
+        val gen = factory.createJsonGenerator(writer)
+        mapper.writeTree(gen, n)
+        UnparsedJson(writer.toString)
+      }
+      def accepts(n: JsonNode) = true
+    }
 }
 
 object JsonBijection {
-  def toString[T: JsonObject](obj: T) = new JsonBijection[T].apply(obj)
-  def fromString[T: JsonObject](s: String) = new JsonBijection[T].invert(s)
-}
+  def toString[T](implicit json: JsonNodeBijection[T]): Bijection[T, String] =
+    UnparsedJson.bijection[T] andThen (UnparsedJson.unwrap)
 
-class JsonBijection[T: JsonObject] extends Bijection[T,String] {
-  lazy val parser = new JSONParser
-  override def apply(obj: T) = JSONValue.toJSONString(JsonConverter.toJava(obj))
-  override def invert(s: String) = JsonConverter.fromJava(parser.parse(s))
-}
-
-object JsonConverter {
-  def fromJava[V](v: AnyRef)(implicit json: JsonObject[V]) = json.fromJava(v)
-  def toJava[V](v: V)(implicit json: JsonObject[V]) = json.toJava(v)
-}
-
-object JsonObject {
-  implicit def mapToJsonObject[V:JsonObject]
-  : JsonObject[Map[String,V]] = {
-    new JsonObject[Map[String,V]] {
-      def toJava(v : Map[String,V]) = {
-        val innerKey = implicitly[JsonObject[String]]
-        val innerVal = implicitly[JsonObject[V]]
-        v.map { kv =>
-          (innerKey.toJava(kv._1), innerVal.toJava(kv._2))
-        }.toMap.asJava
-      }
-      def fromJava(v : AnyRef) = {
-        val innerKey = implicitly[JsonObject[String]]
-        val innerVal = implicitly[JsonObject[V]]
-        v.asInstanceOf[java.util.Map[AnyRef,AnyRef]].asScala.map { kv =>
-          (innerKey.fromJava(kv._1), innerVal.fromJava(kv._2))
-        }.toMap
-      }
-    }
-  }
-  implicit def listToJsonObject[V:JsonObject] : JsonObject[List[V]] = new JsonObject[List[V]] {
-    def toJava(v : List[V]) = {
-      val inner = implicitly[JsonObject[V]]
-      v.map { inner.toJava(_) }.asJava
-    }
-    def fromJava(v : AnyRef) = {
-      val inner = implicitly[JsonObject[V]]
-      v.asInstanceOf[java.util.List[AnyRef]].asScala.map { inner.fromJava(_) }.toList
-    }
-  }
-  implicit val longJson : JsonObject[Long] = new JsonObject[Long] {
-    def toJava(v : Long) = java.lang.Long.valueOf(v)
-    def fromJava(v : AnyRef) = v.asInstanceOf[java.lang.Number].longValue
-  }
-  implicit val shortJson : JsonObject[Short] = new JsonObject[Short] {
-    def toJava(v : Short) = java.lang.Short.valueOf(v)
-    def fromJava(v : AnyRef) = v.asInstanceOf[java.lang.Number].shortValue
-  }
-  implicit val intJson : JsonObject[Int] = new JsonObject[Int] {
-    def toJava(v : Int) = java.lang.Integer.valueOf(v)
-    def fromJava(v : AnyRef) = v.asInstanceOf[java.lang.Number].intValue
-  }
-  implicit val doubleJson : JsonObject[Double] = new JsonObject[Double] {
-    def toJava(v : Double) = java.lang.Double.valueOf(v)
-    def fromJava(v : AnyRef) = v.asInstanceOf[java.lang.Number].doubleValue
-  }
-  implicit val boolJson : JsonObject[Boolean] = new JsonObject[Boolean] {
-    def toJava(v : Boolean) = java.lang.Boolean.valueOf(v)
-    def fromJava(v : AnyRef) = v.asInstanceOf[java.lang.Boolean].booleanValue
-  }
-  implicit val stringJson : JsonObject[String] = new JsonObject[String] {
-    def toJava(v : String) = v.asInstanceOf[AnyRef]
-    def fromJava(v : AnyRef) = v.asInstanceOf[String]
-  }
+  def fromString[T](s: String)(implicit json: JsonNodeBijection[T]) =
+    toString.invert(s)
 }
