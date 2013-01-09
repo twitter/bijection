@@ -1,6 +1,13 @@
 ## Bijection [![Build Status](https://secure.travis-ci.org/twitter/bijection.png)](http://travis-ci.org/twitter/bijection)
 
-A Bijection is an invertible function that converts back and forth between two different types, with the contract that a round-trip through the Bijection will bring back the original object.
+A Bijection is an invertible function that converts back and forth between two different types, with
+the contract that a round-trip through the Bijection will bring back the original object. Moreover,
+the inverse has the same property.
+
+For the geeks: note, in a few cases some supplied Bijections in this library are surjective (Int ->
+String, for instance cannot be inverted because not all Strings can be converted to Ints). For now,
+we have accepted that. If this is unacceptable to you, perhaps check
+[Scalaz](http://github.com/scalaz/scalaz).
 
 Many Bijections are supplied by default. Use the `Bijection` object to apply Bijections that are present implicitly:
 
