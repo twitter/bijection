@@ -70,40 +70,40 @@ trait NumericBijections {
   /**
    * Bijections between the numeric types and string.
    */
-  implicit val byte2String: Bijection[Byte, String] =
-    new Bijection[Byte, String] {
-      def apply(b: Byte) = b.toString
-      override def invert(s: String) = s.toByte
+  implicit val byte2String: Bijection[Byte, String @@ Rep[Byte]] =
+    new Bijection[Byte, String @@ Rep[Byte]] {
+      def apply(b: Byte) = Tag(b.toString)
+      override def invert(s: String @@ Rep[Byte]) = s.toByte
     }
 
-  implicit val short2String: Bijection[Short, String] =
-    new Bijection[Short, String] {
-      def apply(s: Short) = s.toString
-      override def invert(s: String) = s.toShort
+  implicit val short2String: Bijection[Short, String @@ Rep[Short]] =
+    new Bijection[Short, String @@ Rep[Short]] {
+      def apply(s: Short) = Tag(s.toString)
+      override def invert(s: String @@ Rep[Short]) = s.toShort
     }
 
-  implicit val int2String: Bijection[Int, String] =
-    new Bijection[Int, String] {
-      def apply(i: Int) = i.toString
-      override def invert(s: String) = s.toInt
+  implicit val int2String: Bijection[Int, String @@ Rep[Int]] =
+    new Bijection[Int, String @@ Rep[Int]] {
+      def apply(i: Int) = Tag(i.toString)
+      override def invert(s: String @@ Rep[Int]) = s.toInt
     }
 
-  implicit val long2String: Bijection[Long, String] =
-    new Bijection[Long, String] {
-      def apply(l: Long) = l.toString
-      override def invert(s: String) = s.toLong
+  implicit val long2String: Bijection[Long, String @@ Rep[Long]] =
+    new Bijection[Long, String @@ Rep[Long]] {
+      def apply(l: Long) = Tag(l.toString)
+      override def invert(s: String @@ Rep[Long]) = s.toLong
     }
 
-  implicit val float2String: Bijection[Float, String] =
-    new Bijection[Float, String] {
-      def apply(f: Float) = f.toString
-      override def invert(s: String) = s.toFloat
+  implicit val float2String: Bijection[Float, String @@ Rep[Float]] =
+    new Bijection[Float, String @@ Rep[Float]] {
+      def apply(f: Float) = Tag(f.toString)
+      override def invert(s: String @@ Rep[Float]) = s.toFloat
     }
 
-  implicit val double2String: Bijection[Double, String] =
-    new Bijection[Double, String] {
-      def apply(d: Double) = d.toString
-      override def invert(s: String) = s.toDouble
+  implicit val double2String: Bijection[Double, String @@ Rep[Double]] =
+    new Bijection[Double, String @@ Rep[Double]] {
+      def apply(d: Double) = Tag(d.toString)
+      override def invert(s: String @@ Rep[Double]) = s.toDouble
     }
 
   /**
