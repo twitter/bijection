@@ -41,12 +41,12 @@ with BaseProperties {
   property("round trips float -> jfloat") = roundTrips[Float, JFloat]()
   property("round trips double -> jdouble") = roundTrips[Double, JDouble]()
 
-  property("round trips byte -> string") = roundTrips[Byte, String]()
-  property("round trips short -> string") = roundTrips[Short, String]()
-  property("round trips int -> string") = roundTrips[Int, String]()
-  property("round trips long -> string") = roundTrips[Long, String]()
-  property("round trips float -> string") = roundTrips[Float, String]()
-  property("round trips double -> string") = roundTrips[Double, String]()
+  property("round trips byte -> string") = roundTrips[Byte, String @@ Rep[Byte]]()
+  property("round trips short -> string") = roundTrips[Short, String @@ Rep[Short]]()
+  property("round trips int -> string") = roundTrips[Int, String @@ Rep[Int]]()
+  property("round trips long -> string") = roundTrips[Long, String @@ Rep[Long]]()
+  property("round trips float -> string") = roundTrips[Float, String @@ Rep[Float]]()
+  property("round trips double -> string") = roundTrips[Double, String @@ Rep[Double]]()
 
   property("round trips short -> Array[Byte]") = roundTrips[Short, Array[Byte]]()
   property("round trips int -> Array[Byte]") = roundTrips[Int, Array[Byte]]()
@@ -58,6 +58,6 @@ with BaseProperties {
   property("round trips Long -> Date") = roundTrips[Long, java.util.Date]()
 
   property("as works") = forAll { (i: Int) =>
-    i.as[String] == i.toString && (i.toString.as[Int] == i)
+    i.as[String @@ Rep[Int]] == Tag[String, Rep[Int]](i.toString) && (Tag[String, Rep[Int]](i.toString).as[Int] == i)
   }
 }
