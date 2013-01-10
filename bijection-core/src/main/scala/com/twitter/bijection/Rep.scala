@@ -24,37 +24,18 @@ object Rep {
       ev.toRep(a)
   }
 
-  implicit val StringHasIntRep = new HasRep[String, Int] {
-    def toRep(s: String) = rep(s) { _.toInt }
-  }
-
-  implicit val StringHasLongRep = new HasRep[String, Long] {
-    def toRep(s: String) = rep(s) { _.toLong }
-  }
-
-  implicit val StringHasByteRep = new HasRep[String, Byte] {
-    def toRep(s: String) = rep(s) { _.toByte }
-  }
-
-  implicit val StringHasShortRep = new HasRep[String, Short]  {
-    def toRep(s: String) = rep(s) { _.toShort }
-  }
-
-  implicit val StringHasFloatRep = new HasRep[String, Float] {
-    def toRep(s: String) = rep(s) { _.toFloat }
-  }
-
-  implicit val StringHasDoubleRep = new HasRep[String, Double]  {
-    def toRep(s: String) = rep(s) { _.toDouble }
-  }
-
-  implicit val StringHasURLRep = new HasRep[String, URL]  {
-    def toRep(s: String) = rep(s) { new URL(_) }
-  }
-
-  implicit val StringHasUUIDRep = new HasRep[String, UUID]  {
-    def toRep(s: String) = rep(s) { UUID.fromString }
-  }
+  sealed class CanonicalStringHasRep[B](f: String => B) extends HasRep[String, B] {
+    final def toRep(s: String) = rep(s)(f)
+  } 
+  
+  implicit val StringHasIntRep = new CanonicalStringHasRep[Int](_.toInt)
+  implicit val StringHasLongRep = new CanonicalStringHasRep[Long](_.toLong)
+  implicit val StringHasByteRep = new CanonicalStringHasRep[Byte](_.toByte)
+  implicit val StringHasShortRep = new CanonicalStringHasRep[Short](_.toShort)
+  implicit val StringHasFloatRep = new CanonicalStringHasRep[Float](_.toFloat)
+  implicit val StringHasDoubleRep = new CanonicalStringHasRep[Double](_.toDouble)
+  implicit val StringHasURLRep = new CanonicalStringHasRep[URL](new URL(_))
+  implicit val StringHasUUIDRep = new CanonicalStringHasRep[UUID](UUID.fromString)
   
   private val catching = 
     scala.util.control.Exception.catching(
@@ -64,8 +45,8 @@ object Rep {
     )
 
   // catch and return option
-  private def rep[A, B](a: A)(partial: A => B): Option[A @@ Rep[B]] =
-    catching.opt(partial(a)) map (_ => Tag(a))
+  private def rep[B](a: String)(partial: String => B): Option[String @@ Rep[B]] =
+    catching.opt(partial(a)) map (b => Tag(b.toString))
 }
 
 /**
