@@ -28,14 +28,14 @@ object Rep {
     final def toRep(s: String) = rep(s)(f)
   } 
   
-  implicit val StringHasIntRep = new CanonicalStringHasRep[Int](_.toInt)
-  implicit val StringHasLongRep = new CanonicalStringHasRep[Long](_.toLong)
-  implicit val StringHasByteRep = new CanonicalStringHasRep[Byte](_.toByte)
-  implicit val StringHasShortRep = new CanonicalStringHasRep[Short](_.toShort)
-  implicit val StringHasFloatRep = new CanonicalStringHasRep[Float](_.toFloat)
-  implicit val StringHasDoubleRep = new CanonicalStringHasRep[Double](_.toDouble)
-  implicit val StringHasURLRep = new CanonicalStringHasRep[URL](new URL(_))
-  implicit val StringHasUUIDRep = new CanonicalStringHasRep[UUID](UUID.fromString)
+  implicit val stringHasRepInt = new CanonicalStringHasRep[Int](_.toInt)
+  implicit val stringHasRepLong = new CanonicalStringHasRep[Long](_.toLong)
+  implicit val stringHasRepByte = new CanonicalStringHasRep[Byte](_.toByte)
+  implicit val stringHasRepShort = new CanonicalStringHasRep[Short](_.toShort)
+  implicit val stringHasRepFloat = new CanonicalStringHasRep[Float](_.toFloat)
+  implicit val stringHasRepDouble = new CanonicalStringHasRep[Double](_.toDouble)
+  implicit val stringHasRepURL = new CanonicalStringHasRep[URL](new URL(_))
+  implicit val stringHasRepUUID = new CanonicalStringHasRep[UUID](UUID.fromString)
   
   private val catching = 
     scala.util.control.Exception.catching(
