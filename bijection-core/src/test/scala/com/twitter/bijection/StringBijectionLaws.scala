@@ -34,7 +34,7 @@ with BaseProperties {
     for( l <- choose(-100L, 100L);
          u <- choose(-100L, 100L)) yield (new UUID(l,u))
   }
-  property("round trip UUID -> String") = roundTrips[UUID, String]()
+  property("round trip UUID -> String") = roundTrips[UUID, String @@ Rep[UUID]]()
   def toUrl(s: String): Option[URL] =
     try { Some(new URL("http://" + s + ".com")) }
     catch { case _ => None }
@@ -45,7 +45,7 @@ with BaseProperties {
     .filter { _.isDefined }
     .map { _.get }
   }
-  property("round trip URL -> String") = roundTrips[URL, String]()
+  property("round trip URL -> String") = roundTrips[URL, String @@ Rep[URL]]()
 
   property("rts through StringJoinBijection") =
     forAll { (sep: String, xs: List[String]) =>
