@@ -23,9 +23,9 @@ import org.scalacheck.Prop._
 
 object CollectionLaws extends Properties("Collections")
 with BaseProperties {
-  implicit val listToVector = Bijection.toContainer[Int, String, List[Int], Vector[String]]
-  property("round trip List[Int] -> Vector[String]") = roundTrips[List[Int], Vector[String]]()
+  implicit val listToVector = Bijection.toContainer[Int, String @@ Rep[Int], List[Int], Vector[String @@ Rep[Int]]]
+  property("round trip List[Int] -> Vector[String @@ Rep[Int]]") = roundTrips[List[Int], Vector[String @@ Rep[Int]]]()
 
-  implicit val setToIter = Bijection.toContainer[Int, String, Set[Int], Iterable[String]]
-  property("round trip Set[Int] -> Iterable[String]") = roundTrips[Set[Int], Iterable[String]]()
+  implicit val setToIter = Bijection.toContainer[Int, String @@ Rep[Int], Set[Int], Iterable[String @@ Rep[Int]]]
+  property("round trip Set[Int] -> Iterable[String @@ Rep[Int]]") = roundTrips[Set[Int], Iterable[String @@ Rep[Int]]]()
 }

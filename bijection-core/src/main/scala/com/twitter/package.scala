@@ -25,4 +25,24 @@ package com.twitter
  * libraries (Bijection[MyTrait, YourTrait]) and many other purposes.
  */
 package object bijection {
+
+  /**
+   * Tagging infrastructure.
+   */
+  type Tagged[T] = { type Tag = T }
+
+  /**
+   * Tag a type `T` with `Tag`. The resulting type is a subtype of `T`.
+   *
+   *  The resulting type is used to discriminate between type class instances.
+   */
+  type @@[T, Tag] = T with Tagged[Tag]
+
+  private[bijection] object Tag {
+    @inline def apply[A, T](a: A): A @@ T = a.asInstanceOf[A @@ T]
+
+    def subst[A, F[_], T](fa: F[A]): F[A @@ T] = fa.asInstanceOf[F[A @@ T]]
+
+    def unsubst[A, F[_], T](fa: F[A @@ T]): F[A] = fa.asInstanceOf[F[A]]
+  }
 }
