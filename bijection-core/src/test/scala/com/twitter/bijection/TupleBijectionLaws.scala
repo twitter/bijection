@@ -30,9 +30,9 @@ import org.scalacheck.Prop.forAll
 
 object TupleBijectionLaws extends Properties("TupleBijections")
 with BaseProperties {
-  property("round trips (Int,Long) -> (String,String)") = roundTrips[(Int,Long), (String,String)]()
+  property("round trips (Int,Long) -> (String,String)") = roundTrips[(Int,Long), (String @@ Rep[Int],String @@ Rep[Long])]()
   property("round trips (Int,Long,String) -> (String,String,String)") =
-    roundTrips[(Int,Long,String), (String,String,String)]()
+    roundTrips[(Int,Long,String), (String @@ Rep[Int],String @@ Rep[Long],String)]()
   property("round trips (Int,Long,String,Long) -> (String,String,String,Array[Byte])") =
-    roundTrips[(Int,Long,String,Long), (String,String,String,Array[Byte])]()
+    roundTrips[(Int,Long,String,Long), (String @@ Rep[Int],String @@ Rep[Long],String,Array[Byte])]()
 }

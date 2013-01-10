@@ -19,11 +19,14 @@ package com.twitter.bijection
 /**
  *  Bijection between Class objects and string.
  */
-object ClassBijection extends Bijection[Class[_], String] {
-  override def apply(k: Class[_]) = k.getName
-  override def invert(s: String) = Class.forName(s)
+class ClassBijection[T] extends Bijection[Class[T], String @@ Rep[Class[T]]] {
+  override def apply(k: Class[T]) = Tag(k.getName)
+  override def invert(s: String @@ Rep[Class[T]]) = Class.forName(s).asInstanceOf[Class[T]]
 }
 
+object ClassBijection {
+  def apply[T](): Bijection[Class[T], String @@ Rep[Class[T]]] = new ClassBijection()
+}
 /**
  *  Bijection to cast back and forth between two types.
  *  Note that this uses casting and can fail at runtime.

@@ -31,26 +31,26 @@ trait StringBijections {
     }
 
   // Some bijections with string from standard java/scala classes:
-  implicit val url2String: Bijection[URL, String] =
-    new Bijection[URL, String] {
-      def apply(u: URL) = u.toString
-      override def invert(s: String) = new URL(s)
+  implicit val url2String: Bijection[URL, String @@ Rep[URL]] =
+    new Bijection[URL, String @@ Rep[URL]] {
+      def apply(u: URL) = Tag(u.toString)
+      override def invert(s: String @@ Rep[URL]) = new URL(s)
     }
 
   implicit val symbol2String: Bijection[Symbol, String] =
     new Bijection[Symbol, String] {
       def apply(s: Symbol) = s.name
-      override def invert(s: String) = Symbol(s)
+      override def invert(s: String ) = Symbol(s)
     }
 
-  implicit val uuid2String: Bijection[UUID, String] =
-    new Bijection[UUID, String] {
-      def apply(uuid: UUID) = uuid.toString
-      override def invert(s: String) = UUID.fromString(s)
+  implicit val uuid2String: Bijection[UUID, String @@ Rep[UUID]] =
+    new Bijection[UUID, String @@ Rep[UUID]] {
+      def apply(uuid: UUID) = Tag(uuid.toString)
+      override def invert(s: String @@ Rep[UUID]) = UUID.fromString(s)
     }
 
-  implicit def class2String[T]: Bijection[Class[T], String] =
-    CastBijection.of[Class[T], Class[_]] andThen ClassBijection
+  implicit def class2String[T]: Bijection[Class[T], String @@ Rep[Class[T]]] =
+    ClassBijection[T]()
 }
 
 object StringCodec extends StringBijections
