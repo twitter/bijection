@@ -25,7 +25,7 @@ object ProtobufCodec {
 }
 
 class ProtobufCodec[T <: Message](klass: Class[T]) extends Bijection[T, Array[Byte]] {
-  val parseFrom = klass.getMethod("parseFrom", classOf[Array[Byte]])
+  lazy val parseFrom = klass.getMethod("parseFrom", classOf[Array[Byte]])
   override def apply(item: T) = item.toByteArray
   override def invert(bytes: Array[Byte]) = parseFrom.invoke(null, bytes).asInstanceOf[T]
 }
