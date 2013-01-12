@@ -24,14 +24,16 @@ public class TestBijectionInJava {
         }
     }
 
+    //TODO include a more complete example using Base64 conversion, and GZip + Base64 version
+    //TODO include a cleaner way to get to the scala Bijections than Bijection$.MODULE$.
     @Test
     public void testBase64Bijection() {
-        Bijection$.MODULE$.bytes2Base64(); //TODO make access to this cleaner from Java
+        Bijection<byte[],Base64String> bytes2Base64 = Bijection$.MODULE$.bytes2Base64();
     }
 
     @Test
     public void testBase64BijectionGzip() {
-
+        Bijection<byte[],GZippedBase64String> bytes2GZippedBase64 = Bijection$.MODULE$.bytes2GZippedBase64();
     }
 
     private <T1, T2> void roundTrip(Bijection<T1,T2> bij, T1 d1, T2 d2) {
