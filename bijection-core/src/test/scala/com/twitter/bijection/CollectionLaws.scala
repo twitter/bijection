@@ -23,9 +23,20 @@ import org.scalacheck.Prop._
 
 object CollectionLaws extends Properties("Collections")
 with BaseProperties {
-  implicit val listToVector = Bijection.toContainer[Int, String @@ Rep[Int], List[Int], Vector[String @@ Rep[Int]]]
-  property("round trip List[Int] -> Vector[String @@ Rep[Int]]") = roundTrips[List[Int], Vector[String @@ Rep[Int]]]()
+  import StringArbs._
 
-  implicit val setToIter = Bijection.toContainer[Int, String @@ Rep[Int], Set[Int], Iterable[String @@ Rep[Int]]]
-  property("round trip Set[Int] -> Iterable[String @@ Rep[Int]]") = roundTrips[Set[Int], Iterable[String @@ Rep[Int]]]()
+  implicit val listToVector =
+    Bijection.toContainer[Int, String @@ Rep[Int], List[Int], Vector[String @@ Rep[Int]]]
+
+  implicit def vectorArb[A](implicit la: Arbitrary[List[A]]) =
+    arbitraryViaFn { (l: List[A]) => Vector(l :_*) }
+
+  property("round trip List[Int] <=> Vector[String @@ Rep[Int]]") =
+    isBijection[List[Int], Vector[String @@ Rep[Int]]]()
+
+  // It is some-kind of crazy dangerous to have this as an implicit in a real project since
+  // lists -> set is surjective (many lists map to the same sets)
+  implicit val setToIter = Bijection.toContainer[Int, String @@ Rep[Int], Set[Int], List[String @@ Rep[Int]]]
+  property("round trip Set[Int] -> List[String @@ Rep[Int]]") =
+    isInjection[Set[Int], List[String @@ Rep[Int]]]()
 }
