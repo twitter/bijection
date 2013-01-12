@@ -57,7 +57,7 @@ trait Bijection[A, B] extends (A => B) with Serializable { self =>
 /**
  * Abstract class to ease Bijection creation from Java.
  */
-abstract class BijectionImpl[A, B] extends Bijection[A, B] {
+abstract class AbstractBijection[A, B] extends Bijection[A, B] {
   override def apply(a: A): B
   override def invert(b: B): A
 
