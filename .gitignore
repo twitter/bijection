@@ -29,6 +29,7 @@
 /.cache
 /.idea
 /.settings
+.idea_modules
 
 # bak files produced by ./cleanup-commit
 *.bak

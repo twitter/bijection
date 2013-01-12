@@ -57,9 +57,16 @@ trait Bijection[A, B] extends (A => B) with Serializable { self =>
 /**
  * Abstract class to ease Bijection creation from Java.
  */
-abstract class BijectionImpl[A, B] extends Bijection[A, B] {
+abstract class AbstractBijection[A, B] extends Bijection[A, B] {
   override def apply(a: A): B
   override def invert(b: B): A
+
+  /**
+   * This is necessary for interop with Java, which is not smart enough to
+   * infer the proper type.
+   */
+  override def compose[T](g: Function1[T,A]): Function1[T,B] = g andThen this
+  override def andThen[T](g: Function1[B,T]): Function1[A,T] = g compose this
 }
 
 /**

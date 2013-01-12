@@ -86,7 +86,11 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-core",
-    libraryDependencies += "commons-codec" % "commons-codec" % "1.7"
+    libraryDependencies ++= Seq(
+        "commons-codec" % "commons-codec" % "1.7",
+        "com.novocode" % "junit-interface" % "0.10-M1" % "test",
+        "org.scalatest" %% "scalatest" % "1.6.1" % "test"
+    )
   )
 
   lazy val bijectionProtobuf = Project(
