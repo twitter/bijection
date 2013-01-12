@@ -94,6 +94,7 @@ object StringJoinBijection {
    * It's common to have types which we know have at least 1 character in their string
    * representation. Knowing that the empty string is not allowed we can map that to the empty
    * collection:
+   * TODO add a Tag appoach to Say that N has no zero-length representations
    */
   def nonEmptyValues[N, B <: TraversableOnce[N]](separator: String = DEFAULT_SEP)
   (implicit bij: Bijection[N, String], ab: CanBuildFrom[Nothing, N, B]): Bijection[B, String] =
@@ -104,7 +105,7 @@ object StringJoinBijection {
   /**
    * Converts between any collection of A and and Option[String],
    * given an implicit Bijection[A,String]. To get the final string out,
-   * compose with the getOrElse bijection:
+   * compose with the getOrElse bijection if there is no zero length valid A
    *
    * viaContainer[Int,Set[Int]] andThen Bijection.getOrElse(""): Bijection[Set[Int],String]
    *

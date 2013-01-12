@@ -20,11 +20,27 @@ import org.scalacheck.{ Arbitrary, Properties }
 import org.scalacheck.Prop.forAll
 
 trait BaseProperties {
-  def rt[A, B](a: A)(implicit bij: Bijection[A, B]): A = bij.invert(bij(a))
+
+  def rt[A, B](a: A)(implicit bij: Bijection[A, B]): A = rtInjective[A,B](a)
+
+  def rtInjective[A, B](a: A)(implicit bij: Bijection[A, B]): A = bij.invert(bij(a))
+
   def defaultEq[A](a1: A, a2: A) = a1 == a2
   def roundTrips[A, B](eqFn: (A, A) => Boolean = defaultEq _)
   (implicit a: Arbitrary[A], bij: Bijection[A, B]) =
     forAll { a: A => eqFn(a, rt(a)) }
+
+  def isInjection[A,B](eqFn: (A,A) => Boolean = defaultEq _)
+    (implicit a: Arbitrary[A], bij: Bijection[A, B]) =
+      forAll { a: A => eqFn(a, rtInjective(a)) }
+
+  def invertIsInjection[A,B](eqFn: (B,B) => Boolean = defaultEq _)
+    (implicit b: Arbitrary[B], bij: Bijection[A, B]) =
+      forAll { b: B => eqFn(b, rtInjective(b)(bij.inverse)) }
+
+  def isBijection[A,B](eqFnA: (A,A) => Boolean = defaultEq _, eqFnB: (B,B) => Boolean = defaultEq _)
+    (implicit arba: Arbitrary[A], arbb: Arbitrary[B], bij: Bijection[A, B]) =
+      isInjection[A,B](eqFnA) && invertIsInjection[A,B](eqFnB)
 
   def arbitraryViaBijection[A,B](implicit bij: Bijection[A,B], arb: Arbitrary[A]): Arbitrary[B] =
     Arbitrary { arb.arbitrary.map { bij(_) } }
