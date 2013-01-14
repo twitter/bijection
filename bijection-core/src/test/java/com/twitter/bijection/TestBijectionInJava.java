@@ -36,6 +36,22 @@ public class TestBijectionInJava {
         Bijection<byte[],GZippedBase64String> bytes2GZippedBase64 = Bijection$.MODULE$.bytes2GZippedBase64();
     }
 
+    // Instantiate a Bijection to String // Looks like the Long is erased
+    @Test
+    public void testStringRep() {
+      Bijection<Long, String> long2String = Bijection$.MODULE$.jlong2String();
+        for (long lv = -1000; lv < 1000; lv++) {
+            Long l = Long.valueOf(lv);
+            String s = l.toString();
+            roundTrip(long2String.inverse(), s, l);
+            roundTrip(long2String, l, s);
+
+            roundTrip(long2String.andThen(long2String.inverse()).inverse(), l, l);
+            roundTrip(long2String.inverse().compose(long2String), l, l);
+            roundTrip(long2String.inverse().compose(long2String).inverse(), l, l);
+        }
+    }
+
     private <T1, T2> void roundTrip(Bijection<T1,T2> bij, T1 d1, T2 d2) {
         Bijection<T2,T1> inv = bij.inverse();
 
