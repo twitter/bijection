@@ -23,7 +23,13 @@ object Pivot extends Serializable {
    * Returns a new Pivot[K, K1, K2] using the supplied bijection
    * to split each input key.
    */
-  def apply[K, K1, K2](bijection: Bijection[K, (K1, K2)]): Pivot[K, K1, K2] =
+  def apply[K, K1, K2](bijection: Bijection[K, (K1, K2)]): Pivot[K, K1, K2] = of(bijection)
+
+  /**
+   * Returns a new Pivot[K, K1, K2] using the supplied bijection
+   * to split each input key. Bijection can be supplied as an implicit.
+   */
+  def of[K, K1, K2](implicit bijection: Bijection[K, (K1, K2)]): Pivot[K, K1, K2] =
     new Pivot[K, K1, K2] {
       override val pivot = bijection
     }
