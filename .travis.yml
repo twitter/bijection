@@ -1,4 +1,6 @@
 language: scala
+before_script:
+  - "export JAVA_OPTS=-Xmx512m"
 script: sbt bijection/test
 scala:
   - 2.9.2
