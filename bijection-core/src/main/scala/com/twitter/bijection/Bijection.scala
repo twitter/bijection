@@ -82,7 +82,7 @@ abstract class AbstractBijection[A, B] extends Bijection[A, B] {
  * TODO: this should be a value class in scala 2.10
  */
 sealed class Biject[A](a: A) extends Serializable {
-  def as[B](implicit bij: Bijection[A,B]): B = bij(a)
+  def as[B](implicit bij: Bijection[A, _ <: B]): B = bij(a)
 }
 
 trait LowPriorityBijections {
