@@ -117,4 +117,11 @@ trait CollectionBijections {
         builder.result()
       }
     }
+
+  implicit def betweenMaps[K1, V1, K2, V2](implicit kBijection: Bijection[K1, K2], vBijection: Bijection[V1, V2]) =
+    toContainer[(K1, V1), (K2, V2), Map[K1, V1], Map[K2, V2]]
+
+  implicit def betweenVectors[T, U](implicit bij: Bijection[T, U]) = toContainer[T, U, Vector[T], Vector[U]]
+
+  implicit def betweenLists[T, U](implicit bij: Bijection[T, U]) = toContainer[T, U, List[T], List[U]]
 }
