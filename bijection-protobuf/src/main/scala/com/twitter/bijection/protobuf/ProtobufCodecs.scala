@@ -52,7 +52,7 @@ object ProtobufEnumCodec {
 class ProtobufEnumCodec[T <: ProtocolMessageEnum](klass: Class[T]) extends Bijection[T, Int] {
   import Bijection.asMethod // adds "as" for conversions
 
-  val valueOf = klass.getMethod("valueOf", classOf[Int])
+  lazy val valueOf = klass.getMethod("valueOf", classOf[Int])
   val cache = MMap[Int,T]()
   override def apply(enum: T) = enum.getNumber
   override def invert(i: Int) =
