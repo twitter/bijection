@@ -1,5 +1,9 @@
 # Bijection #
 
+### 0.1.4
+
+* `bijection-scrooge` for scrooge generated scala thrift code
+
 ### 0.1.3
 
 * remove `Bijection.build` uses, as these screw up serialization via Kryo.
