@@ -79,6 +79,7 @@ object BijectionBuild extends Build {
               // TODO: Add back in once we can figure out how to run the tests for these on travis.
               // bijectionProtobuf,
               // bijectionThrift,
+              bijectionScrooge,
               bijectionJson)
 
   lazy val bijectionCore = Project(
@@ -114,6 +115,20 @@ object BijectionBuild extends Build {
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
       jsonParser
+    )
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  lazy val bijectionScrooge = Project(
+    id = "bijection-scrooge",
+    base = file("bijection-scrooge"),
+    settings = sharedSettings
+  ).settings(
+    name := "bijection-scrooge",
+    resolvers += ("twitter-maven" at "http://maven.twttr.com/"),
+    libraryDependencies ++= Seq(
+      "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
+      // TODO: scrooge runtime cannot be pulled in from sonatype
+      "com.twitter" % "scrooge-runtime" % "3.0.3"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
