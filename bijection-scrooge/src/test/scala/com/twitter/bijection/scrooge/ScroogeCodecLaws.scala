@@ -17,9 +17,9 @@
 package com.twitter.bijection.scrooge
 
 import com.twitter.bijection.{ BaseProperties, Bijection }
+
 import org.scalacheck.Properties
 import org.scalacheck.Arbitrary
-import org.specs._
 
 object ScroogeCodecLaws extends Properties("ScroogeCodecs") with BaseProperties {
   def buildScrooge(i: (Int, String)) =
@@ -34,8 +34,8 @@ object ScroogeCodecLaws extends Properties("ScroogeCodecs") with BaseProperties 
   }
 
   property("round trips thrift -> Array[Byte] through binary") =
-    roundTripsScrooge(BinaryScroogeScalaCodec(TestStruct))
+    roundTripsScrooge(BinaryScalaCodec(TestStruct))
 
   property("round trips thrift -> Array[Byte] through compact") =
-    roundTripsScrooge(CompactScroogeScalaCodec(TestStruct))
+    roundTripsScrooge(CompactScalaCodec(TestStruct))
 }

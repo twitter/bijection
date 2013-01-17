@@ -20,35 +20,34 @@ import com.twitter.bijection.Bijection
 import com.twitter.scrooge.{
   BinaryThriftStructSerializer,
   CompactThriftSerializer,
-  JsonThriftSerializer,
   ThriftEnum,
   ThriftStruct,
   ThriftStructCodec,
   ThriftStructSerializer
 }
 
-class ScroogeScalaCodec[T <: ThriftStruct](ser: ThriftStructSerializer[T])
+class ScalaCodec[T <: ThriftStruct](ser: ThriftStructSerializer[T])
     extends Bijection[T, Array[Byte]] {
   override def apply(item: T) = ser.toBytes(item)
   override def invert(bytes: Array[Byte]) = ser.fromBytes(bytes)
 }
 
-object BinaryScroogeScalaCodec {
+object BinaryScalaCodec {
   def apply[T <: ThriftStruct](c: ThriftStructCodec[T]) =
-    new BinaryScroogeScalaCodec[T](c)
+    new BinaryScalaCodec[T](c)
 }
-class BinaryScroogeScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
-    extends ScroogeScalaCodec(new BinaryThriftStructSerializer[T] {
+class BinaryScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
+    extends ScalaCodec(new BinaryThriftStructSerializer[T] {
       override def codec = c
     }
   )
 
-object CompactScroogeScalaCodec {
+object CompactScalaCodec {
   def apply[T <: ThriftStruct](c: ThriftStructCodec[T]) =
-    new CompactScroogeScalaCodec[T](c)
+    new CompactScalaCodec[T](c)
 }
-class CompactScroogeScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
-    extends ScroogeScalaCodec(new CompactThriftSerializer[T] {
+class CompactScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
+    extends ScalaCodec(new CompactThriftSerializer[T] {
       override def codec = c
     }
   )
