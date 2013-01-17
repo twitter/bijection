@@ -117,6 +117,20 @@ object BijectionBuild extends Build {
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
+  lazy val bijectionScrooge = Project(
+    id = "bijection-scrooge",
+    base = file("bijection-scrooge"),
+    settings = sharedSettings
+  ).settings(
+    name := "bijection-scrooge",
+    libraryDependencies ++= Seq(
+      "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
+      "com.twitter" % "scrooge-runtime" % "3.0.3" exclude("com.twitter", "util-codec"),
+      "com.twitter" % "util-codec_2.9.2" % "6.0.5"
+
+    )
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
+
   lazy val bijectionJson = Project(
     id = "bijection-json",
     base = file("bijection-json"),

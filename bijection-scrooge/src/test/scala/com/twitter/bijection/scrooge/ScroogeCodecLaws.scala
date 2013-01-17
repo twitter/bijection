@@ -1,0 +1,44 @@
+/*
+ * Copyright 2010 Twitter Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License. You may obtain
+ * a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.twitter.bijection.scrooge
+
+import com.twitter.bijection.{ BaseProperties, Bijection }
+import org.scalacheck.Properties
+import org.scalacheck.Arbitrary
+import org.specs._
+
+object ScroogeCodecLaws extends Properties("ScroogeCodecs") with BaseProperties {
+  def buildScrooge(i: (Int, String)) =
+    TestStruct(i._1, Some(i._2))
+
+  implicit val testScrooge = arbitraryViaFn { is: (Int,String) => buildScrooge(is) }
+
+  // Code generator for thrift instances.
+  def roundTripsScrooge(bijection: Bijection[TestStruct, Array[Byte]]) = {
+    implicit val b = bijection
+    roundTrips[TestStruct, Array[Byte]]()
+  }
+
+  property("round trips thrift -> Array[Byte] through binary") =
+    roundTripsScrooge(BinaryScroogeCodec(TestStruct))
+
+  property("round trips thrift -> Array[Byte] through compact") =
+    roundTripsScrooge(CompactScroogeCodec(TestStruct))
+
+  property("round trips thrift -> String through json") =
+    roundTripsScrooge(JsonScroogeCodec(TestStruct))
+}
