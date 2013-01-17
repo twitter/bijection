@@ -21,43 +21,36 @@ import com.twitter.scrooge.{
   BinaryThriftStructSerializer,
   CompactThriftSerializer,
   JsonThriftSerializer,
+  ThriftEnum,
   ThriftStruct,
   ThriftStructCodec,
   ThriftStructSerializer
 }
 
-class ScroogeCodec[T <: ThriftStruct](ser: ThriftStructSerializer[T])
+class ScroogeScalaCodec[T <: ThriftStruct](ser: ThriftStructSerializer[T])
     extends Bijection[T, Array[Byte]] {
   override def apply(item: T) = ser.toBytes(item)
   override def invert(bytes: Array[Byte]) = ser.fromBytes(bytes)
 }
 
-object BinaryScroogeCodec {
+object BinaryScroogeScalaCodec {
   def apply[T <: ThriftStruct](c: ThriftStructCodec[T]) =
-    new BinaryScroogeCodec[T](c)
+    new BinaryScroogeScalaCodec[T](c)
 }
-class BinaryScroogeCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
-  extends ScroogeCodec(new BinaryThriftStructSerializer[T] {
-    override def codec = c
-  }
-)
+class BinaryScroogeScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
+    extends ScroogeScalaCodec(new BinaryThriftStructSerializer[T] {
+      override def codec = c
+    }
+  )
 
-object CompactScroogeCodec {
+object CompactScroogeScalaCodec {
   def apply[T <: ThriftStruct](c: ThriftStructCodec[T]) =
-    new CompactScroogeCodec[T](c)
+    new CompactScroogeScalaCodec[T](c)
 }
-class CompactScroogeCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
-  extends ScroogeCodec(new CompactThriftSerializer[T] {
-    override def codec = c
-  }
-)
+class CompactScroogeScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
+    extends ScroogeScalaCodec(new CompactThriftSerializer[T] {
+      override def codec = c
+    }
+  )
 
-object JsonScroogeCodec {
-  def apply[T <: ThriftStruct](c: ThriftStructCodec[T]) =
-    new JsonScroogeCodec[T](c)
-}
-class JsonScroogeCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
-  extends ScroogeCodec(new JsonThriftSerializer[T] {
-    override def codec = c
-  }
-)
+// TODO: add JSON and ThriftEnum codecs

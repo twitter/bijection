@@ -127,7 +127,6 @@ object BijectionBuild extends Build {
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
       "com.twitter" % "scrooge-runtime" % "3.0.3" exclude("com.twitter", "util-codec"),
       "com.twitter" % "util-codec_2.9.2" % "6.0.5"
-
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 

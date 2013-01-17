@@ -34,11 +34,8 @@ object ScroogeCodecLaws extends Properties("ScroogeCodecs") with BaseProperties 
   }
 
   property("round trips thrift -> Array[Byte] through binary") =
-    roundTripsScrooge(BinaryScroogeCodec(TestStruct))
+    roundTripsScrooge(BinaryScroogeScalaCodec(TestStruct))
 
   property("round trips thrift -> Array[Byte] through compact") =
-    roundTripsScrooge(CompactScroogeCodec(TestStruct))
-
-  property("round trips thrift -> String through json") =
-    roundTripsScrooge(JsonScroogeCodec(TestStruct))
+    roundTripsScrooge(CompactScroogeScalaCodec(TestStruct))
 }
