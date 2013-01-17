@@ -6,6 +6,7 @@
 * Add tagged types, resolved Bijection debate
 * Implicit bijection between `List[T]`, `List[U]`
 * Implicit bijection between `Vector[T]`, `Vector[U]`
+* Implicit bijection between `Set[T]`, `Set[U]`
 * Implicit bijection between `Map[K1, V1]`, `Map[K2, V2]`
 
 ### 0.1.3

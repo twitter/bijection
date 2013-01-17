@@ -123,5 +123,7 @@ trait CollectionBijections {
 
   implicit def betweenVectors[T, U](implicit bij: Bijection[T, U]) = toContainer[T, U, Vector[T], Vector[U]]
 
+  implicit def betweenSets[T, U](implicit bij: Bijection[T, U]) = toContainer[T, U, Set[T], Set[U]]
+
   implicit def betweenLists[T, U](implicit bij: Bijection[T, U]) = toContainer[T, U, List[T], List[U]]
 }

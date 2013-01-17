@@ -40,6 +40,9 @@ with BaseProperties {
   property("round trip Vector[Double] <=> Vector[String @@ Rep[Double]]") =
     isBijection[Vector[Double], Vector[String @@ Rep[Double]]]()
 
+  property("round trip Set[Double] <=> Set[String @@ Rep[Double]]") =
+    isBijection[Set[Double], Set[String @@ Rep[Double]]]()
+
   property("round trip Map[Long,Double] <=> Map[String @@ Rep[Long], String @@ Rep[Double]]") =
     isBijection[Map[Long, Double], Map[String @@ Rep[Long], String @@ Rep[Double]]]()
 
