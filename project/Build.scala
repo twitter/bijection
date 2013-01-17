@@ -79,6 +79,7 @@ object BijectionBuild extends Build {
               // TODO: Add back in once we can figure out how to run the tests for these on travis.
               // bijectionProtobuf,
               // bijectionThrift,
+              bijectionScrooge,
               bijectionJson)
 
   lazy val bijectionCore = Project(

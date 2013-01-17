@@ -20,7 +20,6 @@ import com.twitter.bijection.Bijection
 import com.twitter.scrooge.{
   BinaryThriftStructSerializer,
   CompactThriftSerializer,
-  ThriftEnum,
   ThriftStruct,
   ThriftStructCodec,
   ThriftStructSerializer
