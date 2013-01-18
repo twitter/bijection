@@ -4,7 +4,7 @@ import Keys._
 object BijectionBuild extends Build {
   val sharedSettings = Project.defaultSettings ++ Seq(
     organization := "com.twitter",
-    version := "0.2.0",
+    version := "0.2.1-SNAPSHOT",
     scalaVersion := "2.9.2",
     libraryDependencies ++= Seq(
       "org.scalacheck" %% "scalacheck" % "1.10.0" % "test" withSources(),

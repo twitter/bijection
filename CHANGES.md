@@ -1,5 +1,7 @@
 # Bijection #
 
+### 0.2.1
+
 ### 0.2.0
 
 * `bijection-scrooge` for scrooge generated scala thrift code
