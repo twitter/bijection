@@ -1,6 +1,6 @@
 # Bijection #
 
-### 0.1.4
+### 0.2.0
 
 * `bijection-scrooge` for scrooge generated scala thrift code
 * Add tagged types, resolved Bijection debate
