@@ -4,7 +4,7 @@ import Keys._
 object BijectionBuild extends Build {
   val sharedSettings = Project.defaultSettings ++ Seq(
     organization := "com.twitter",
-    version := "0.1.3",
+    version := "0.2.0",
     scalaVersion := "2.9.2",
     libraryDependencies ++= Seq(
       "org.scalacheck" %% "scalacheck" % "1.10.0" % "test" withSources(),
@@ -73,10 +73,13 @@ object BijectionBuild extends Build {
     base = file(".")
     ).settings(
     test := { },
-    publish := { } // skip publishing for this root project.
+    publish := { }, // skip publishing for this root project.
+    publishLocal := { }
   ).aggregate(bijectionCore,
-              bijectionProtobuf,
-              bijectionThrift,
+              // TODO: Add back in once we can figure out how to run the tests for these on travis.
+              // bijectionProtobuf,
+              // bijectionThrift,
+              bijectionScrooge,
               bijectionJson)
 
   lazy val bijectionCore = Project(
@@ -85,7 +88,11 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-core",
-    libraryDependencies += "commons-codec" % "commons-codec" % "1.7"
+    libraryDependencies ++= Seq(
+        "commons-codec" % "commons-codec" % "1.7",
+        "com.novocode" % "junit-interface" % "0.10-M1" % "test",
+        "org.scalatest" %% "scalatest" % "1.6.1" % "test"
+    )
   )
 
   lazy val bijectionProtobuf = Project(
@@ -108,6 +115,20 @@ object BijectionBuild extends Build {
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
       jsonParser
+    )
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  lazy val bijectionScrooge = Project(
+    id = "bijection-scrooge",
+    base = file("bijection-scrooge"),
+    settings = sharedSettings
+  ).settings(
+    name := "bijection-scrooge",
+    resolvers += ("twitter-maven" at "http://maven.twttr.com/"),
+    libraryDependencies ++= Seq(
+      "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
+      // TODO: scrooge runtime cannot be pulled in from sonatype
+      "com.twitter" % "scrooge-runtime" % "3.0.3"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 

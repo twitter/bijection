@@ -31,26 +31,26 @@ trait StringBijections {
     }
 
   // Some bijections with string from standard java/scala classes:
-  implicit val url2String: Bijection[URL, String] =
-    new Bijection[URL, String] {
-      def apply(u: URL) = u.toString
-      override def invert(s: String) = new URL(s)
+  implicit val url2String: Bijection[URL, String @@ Rep[URL]] =
+    new Bijection[URL, String @@ Rep[URL]] {
+      def apply(u: URL) = Tag(u.toString)
+      override def invert(s: String @@ Rep[URL]) = new URL(s)
     }
 
   implicit val symbol2String: Bijection[Symbol, String] =
     new Bijection[Symbol, String] {
       def apply(s: Symbol) = s.name
-      override def invert(s: String) = Symbol(s)
+      override def invert(s: String ) = Symbol(s)
     }
 
-  implicit val uuid2String: Bijection[UUID, String] =
-    new Bijection[UUID, String] {
-      def apply(uuid: UUID) = uuid.toString
-      override def invert(s: String) = UUID.fromString(s)
+  implicit val uuid2String: Bijection[UUID, String @@ Rep[UUID]] =
+    new Bijection[UUID, String @@ Rep[UUID]] {
+      def apply(uuid: UUID) = Tag(uuid.toString)
+      override def invert(s: String @@ Rep[UUID]) = UUID.fromString(s)
     }
 
-  implicit def class2String[T]: Bijection[Class[T], String] =
-    CastBijection.of[Class[T], Class[_]] andThen ClassBijection
+  implicit def class2String[T]: Bijection[Class[T], String @@ Rep[Class[T]]] =
+    ClassBijection[T]()
 }
 
 object StringCodec extends StringBijections
@@ -94,6 +94,7 @@ object StringJoinBijection {
    * It's common to have types which we know have at least 1 character in their string
    * representation. Knowing that the empty string is not allowed we can map that to the empty
    * collection:
+   * TODO add a Tag appoach to Say that N has no zero-length representations
    */
   def nonEmptyValues[N, B <: TraversableOnce[N]](separator: String = DEFAULT_SEP)
   (implicit bij: Bijection[N, String], ab: CanBuildFrom[Nothing, N, B]): Bijection[B, String] =
@@ -104,7 +105,7 @@ object StringJoinBijection {
   /**
    * Converts between any collection of A and and Option[String],
    * given an implicit Bijection[A,String]. To get the final string out,
-   * compose with the getOrElse bijection:
+   * compose with the getOrElse bijection if there is no zero length valid A
    *
    * viaContainer[Int,Set[Int]] andThen Bijection.getOrElse(""): Bijection[Set[Int],String]
    *

@@ -108,7 +108,7 @@ object TEnumCodec {
 class TEnumCodec[T <: TEnum](klass: Class[T]) extends Bijection[T, Int] {
   import Bijection.asMethod // adds "as" for conversions
 
-  val findByValue = klass.getMethod("findByValue", classOf[Int])
+  lazy val findByValue = klass.getMethod("findByValue", classOf[Int])
   val cache = MMap[Int,T]()
   override def apply(enum: T) = enum.getValue
   override def invert(i: Int) =

@@ -25,7 +25,7 @@ object ProtobufCodec {
 }
 
 class ProtobufCodec[T <: Message](klass: Class[T]) extends Bijection[T, Array[Byte]] {
-  val parseFrom = klass.getMethod("parseFrom", classOf[Array[Byte]])
+  lazy val parseFrom = klass.getMethod("parseFrom", classOf[Array[Byte]])
   override def apply(item: T) = item.toByteArray
   override def invert(bytes: Array[Byte]) = parseFrom.invoke(null, bytes).asInstanceOf[T]
 }
@@ -52,7 +52,7 @@ object ProtobufEnumCodec {
 class ProtobufEnumCodec[T <: ProtocolMessageEnum](klass: Class[T]) extends Bijection[T, Int] {
   import Bijection.asMethod // adds "as" for conversions
 
-  val valueOf = klass.getMethod("valueOf", classOf[Int])
+  lazy val valueOf = klass.getMethod("valueOf", classOf[Int])
   val cache = MMap[Int,T]()
   override def apply(enum: T) = enum.getNumber
   override def invert(i: Int) =

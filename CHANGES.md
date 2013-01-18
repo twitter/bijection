@@ -1,5 +1,14 @@
 # Bijection #
 
+### 0.2.0
+
+* `bijection-scrooge` for scrooge generated scala thrift code
+* Add tagged types, resolved Bijection debate
+* Implicit bijection between `List[T]`, `List[U]`
+* Implicit bijection between `Vector[T]`, `Vector[U]`
+* Implicit bijection between `Set[T]`, `Set[U]`
+* Implicit bijection between `Map[K1, V1]`, `Map[K2, V2]`
+
 ### 0.1.3
 
 * remove `Bijection.build` uses, as these screw up serialization via Kryo.

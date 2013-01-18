@@ -25,12 +25,17 @@ object BinaryBijectionLaws extends Properties("BinaryBijections")
 with BaseProperties {
   def barrEq(a1: Array[Byte], a2: Array[Byte]) = Arrays.equals(a1, a2)
 
-  property("rts Array[Byte] -> ByteBuffer") =
-    roundTrips[Array[Byte], ByteBuffer](barrEq)
+  implicit val arbBB = arbitraryViaFn[Array[Byte], ByteBuffer] { ByteBuffer.wrap(_) }
+
+  // TODO: These are all bijections,
+  property("Array[Byte] <=> ByteBuffer") =
+    isBijection[Array[Byte], ByteBuffer](barrEq)
+
+  // These are trivially bijecitons because the right-side is only defined as the image of the left:
   property("rts Array[Byte] -> GZippedBytes") =
-    roundTrips[Array[Byte], GZippedBytes](barrEq)
+    isInjection[Array[Byte], GZippedBytes](barrEq)
   property("rts Array[Byte] -> Base64String") =
-    roundTrips[Array[Byte], Base64String](barrEq)
+    isInjection[Array[Byte], Base64String](barrEq)
   property("rts Array[Byte] -> GZippedBase64String") =
-    roundTrips[Array[Byte], GZippedBase64String](barrEq)
+    isInjection[Array[Byte], GZippedBase64String](barrEq)
 }

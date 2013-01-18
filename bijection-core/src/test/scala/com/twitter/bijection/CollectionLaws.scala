@@ -23,9 +23,32 @@ import org.scalacheck.Prop._
 
 object CollectionLaws extends Properties("Collections")
 with BaseProperties {
-  implicit val listToVector = Bijection.toContainer[Int, String, List[Int], Vector[String]]
-  property("round trip List[Int] -> Vector[String]") = roundTrips[List[Int], Vector[String]]()
+  import StringArbs._
 
-  implicit val setToIter = Bijection.toContainer[Int, String, Set[Int], Iterable[String]]
-  property("round trip Set[Int] -> Iterable[String]") = roundTrips[Set[Int], Iterable[String]]()
+  implicit val listToVector =
+    Bijection.toContainer[Int, String @@ Rep[Int], List[Int], Vector[String @@ Rep[Int]]]
+
+  implicit def vectorArb[A](implicit la: Arbitrary[List[A]]) =
+    arbitraryViaFn { (l: List[A]) => Vector(l :_*) }
+
+  property("round trip List[Int] <=> Vector[String @@ Rep[Int]]") =
+    isBijection[List[Int], Vector[String @@ Rep[Int]]]()
+
+  property("round trip List[long] <=> List[String @@ Rep[Int]]") =
+    isBijection[List[Long], List[String @@ Rep[Long]]]()
+
+  property("round trip Vector[Double] <=> Vector[String @@ Rep[Double]]") =
+    isBijection[Vector[Double], Vector[String @@ Rep[Double]]]()
+
+  property("round trip Set[Double] <=> Set[String @@ Rep[Double]]") =
+    isBijection[Set[Double], Set[String @@ Rep[Double]]]()
+
+  property("round trip Map[Long,Double] <=> Map[String @@ Rep[Long], String @@ Rep[Double]]") =
+    isBijection[Map[Long, Double], Map[String @@ Rep[Long], String @@ Rep[Double]]]()
+
+  // It is some-kind of crazy dangerous to have this as an implicit in a real project since
+  // lists -> set is surjective (many lists map to the same sets)
+  implicit val setToIter = Bijection.toContainer[Int, String @@ Rep[Int], Set[Int], List[String @@ Rep[Int]]]
+  property("round trip Set[Int] -> List[String @@ Rep[Int]]") =
+    isInjection[Set[Int], List[String @@ Rep[Int]]]()
 }
