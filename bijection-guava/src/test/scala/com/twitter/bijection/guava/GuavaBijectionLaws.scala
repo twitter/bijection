@@ -17,20 +17,32 @@
 package com.twitter.bijection.guava
 
 import com.google.common.base.Optional
+import com.google.common.base.{ Function => GFn }
 import com.twitter.bijection.{ @@, BaseProperties, Bijection, Rep }
 import com.twitter.bijection.Rep._
 
-import org.scalacheck.Properties
 import org.scalacheck.Arbitrary
-
-import java.lang.{ Long => JLong }
+import org.scalacheck.Properties
+import org.scalacheck.Prop.forAll
 
 object GuavaBijectionLaws extends Properties("GuavaBijections") with BaseProperties {
   import GuavaBijections._
 
-  property("round trips Option[Int] -> Optional[String @@ Rep[Int]]") =
-    roundTrips[Option[Int], Optional[String @@ Rep[Int]]]()
+  implicit def arbOptional[T: Arbitrary] =
+    arbitraryViaFn[T, Optional[T]] { Optional.of(_) }
 
-  property("round trips Option[Long] -> Optional[JLong]") =
-    roundTrips[Option[Long], Optional[JLong]]()
+  property("round trips Option[Int] -> Optional[Int]") =
+    isBijection[Option[Int], Optional[Int]]()
+
+  property("round trips Option[Long] -> Optional[Long]") =
+    isBijection[Option[Long], Optional[Long]]()
+
+  def roundTripsFn[A, B](eqFn: (B, B) => Boolean = defaultEq _)(fn: A => B)
+  (implicit arb: Arbitrary[A], bij: Bijection[A => B, GFn[A, B]]) = {
+    val rtFn = bij(fn)
+    forAll { a: A => eqFn(fn(a), rtFn.apply(a)) }
+  }
+
+  property("round trips Int => Long -> GuavaFn[Int, Long]") =
+    roundTripsFn[Int, Long]() { x => (x * x).toLong }
 }
