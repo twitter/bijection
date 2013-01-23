@@ -17,14 +17,20 @@
 package com.twitter.bijection.guava
 
 import com.google.common.base.Optional
-import com.twitter.bijection.{ BaseProperties, Bijection }
+import com.twitter.bijection.{ @@, BaseProperties, Bijection, Rep }
+import com.twitter.bijection.Rep._
 
 import org.scalacheck.Properties
 import org.scalacheck.Arbitrary
 
-object GuavaBijectionLaws extends Properties("ScroogeCodecs") with BaseProperties {
+import java.lang.{ Long => JLong }
+
+object GuavaBijectionLaws extends Properties("GuavaBijections") with BaseProperties {
   import GuavaBijections._
 
-  property("round trips Option[T] -> Optional[T]") =
-    roundTrips[Option[T], Optional[T]]()
+  property("round trips Option[Int] -> Optional[String @@ Rep[Int]]") =
+    roundTrips[Option[Int], Optional[String @@ Rep[Int]]]()
+
+  property("round trips Option[Long] -> Optional[JLong]") =
+    roundTrips[Option[Long], Optional[JLong]]()
 }

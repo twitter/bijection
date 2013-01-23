@@ -24,8 +24,8 @@ import com.twitter.bijection.Bijection
  */
 
 object GuavaBijections {
-  implicit def optional2Option[T]: Bijection[Optional[T], Option[T]] =
-    Bijection.build[Optional[T], Option[T]]
-      { opt => if (opt.isPresent) Some(opt.get) else None }
-      { opt => if (opt.isDefined) Optional.of[T](opt.get) else Optional.absent[T] }
+  implicit def optional2Option[T,U](implicit bij: Bijection[T, U]): Bijection[Optional[T], Option[U]] =
+    Bijection.build[Optional[T], Option[U]]
+      { opt => if (opt.isPresent) Some(bij(opt.get)) else None }
+      { opt => if (opt.isDefined) Optional.of[T](bij.invert(opt.get)) else Optional.absent[T] }
 }
