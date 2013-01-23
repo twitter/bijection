@@ -1,5 +1,9 @@
 # Bijection #
 
+### 0.2.1
+
+* `bijection-guava` for Guava interop.
+
 ### 0.2.0
 
 * `bijection-scrooge` for scrooge generated scala thrift code

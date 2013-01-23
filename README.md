@@ -116,7 +116,7 @@ of Java or Scala, please contribute!
 
 ## Maven
 
-Current version is `0.1.3`. groupid=`"com.twitter"` artifact=`"bijection-core_2.9.2"`.
+Current version is `0.2.1`. groupid=`"com.twitter"` artifact=`"bijection-core_2.9.2"`.
 
 ## Authors
 
