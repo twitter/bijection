@@ -79,6 +79,7 @@ object BijectionBuild extends Build {
               // TODO: Add back in once we can figure out how to run the tests for these on travis.
               // bijectionProtobuf,
               // bijectionThrift,
+              bijectionGuava,
               bijectionScrooge,
               bijectionJson)
 
@@ -115,6 +116,20 @@ object BijectionBuild extends Build {
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
       jsonParser
+    )
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  lazy val bijectionGuava = Project(
+    id = "bijection-guava",
+    base = file("bijection-guava"),
+    settings = sharedSettings
+  ).settings(
+    name := "bijection-guava",
+    libraryDependencies ++= Seq(
+      // This dependency is required due to a bug with guava 13.0, detailed here:
+      // http://code.google.com/p/guava-libraries/issues/detail?id=1095
+      "com.google.code.findbugs" % "jsr305" % "1.3.+",
+      "com.google.guava" % "guava" % "13.0"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
