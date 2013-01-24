@@ -23,7 +23,9 @@ import java.io.{OutputStream, InputStream, ByteArrayInputStream, ByteArrayOutput
 import annotation.tailrec
 
 // TODO: Convert to value classes on Scala 2.10 upgrade.
-case class GZippedBytes(bytes: Array[Byte])
+case class GZippedBytes(bytes: Array[Byte]) {
+  override def toString = bytes.mkString("GZippedBytes(", ", ", ")")
+}
 
 object GZippedBytes {
   val unwrap: Bijection[GZippedBytes, Array[Byte]] =
