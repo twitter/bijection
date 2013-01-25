@@ -139,11 +139,9 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-scrooge",
-    resolvers += ("twitter-maven" at "http://maven.twttr.com/"),
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
-      // TODO: scrooge runtime cannot be pulled in from sonatype
-      "com.twitter" % "scrooge-runtime" % "3.0.3"
+      "com.twitter" % "scrooge-runtime" % "3.0.4"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
