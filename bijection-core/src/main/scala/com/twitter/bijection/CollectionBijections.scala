@@ -126,4 +126,10 @@ trait CollectionBijections {
   implicit def betweenSets[T, U](implicit bij: Bijection[T, U]) = toContainer[T, U, Set[T], Set[U]]
 
   implicit def betweenLists[T, U](implicit bij: Bijection[T, U]) = toContainer[T, U, List[T], List[U]]
+
+  implicit def option[T, U](implicit bij: Bijection[T, U]): Bijection[Option[T], Option[U]] =
+    new AbstractBijection[Option[T], Option[U]] {
+      override def apply(optt: Option[T]) = optt.map(bij)
+      override def invert(optu: Option[U]) = optu.map(bij.inverse)
+    }
 }
