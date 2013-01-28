@@ -27,13 +27,10 @@ import org.codehaus.jackson.JsonNode
 import com.twitter.bijection.json.JsonNodeInjection.{fromJsonNode, toJsonNode}
 
 object JsonInjectionLaws extends Properties("JsonInjection") with BaseProperties {
-  def roundTripJson[T: JsonNodeInjection : Arbitrary] = {
+
+  def roundTripJson[T: JsonNodeInjection : Arbitrary: Equiv] = {
     implicit val bij: Injection[T,String] = JsonInjection.toString[T]
-    isInjection[T,String]()
-  }
-  def roundTripJsonEq[T: JsonNodeInjection : Arbitrary](eq: (T,T) => Boolean) = {
-    implicit val bij: Injection[T,String] = JsonInjection.toString[T]
-    isInjection[T,String](eq)
+    isLooseInjection[T,String]
   }
 
   property("Short") = roundTripJson[Short]
@@ -42,7 +39,7 @@ object JsonInjectionLaws extends Properties("JsonInjection") with BaseProperties
   property("Float") = roundTripJson[Float]
   property("Double") = roundTripJson[Double]
   property("String") = roundTripJson[String]
-  property("Array[Byte]") = roundTripJsonEq[Array[Byte]]({(l,r) => (l.toList == r.toList)})
+  property("Array[Byte]") = roundTripJson[Array[Byte]]
   // Collections
   property("Either[String,Int]") = roundTripJson[Either[String,Int]]
   property("Map[String, Either[String,Int]]") = roundTripJson[Map[String, Either[String,Int]]]

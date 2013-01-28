@@ -17,25 +17,22 @@ limitations under the License.
 package com.twitter.bijection
 
 import java.nio.ByteBuffer
-import java.util.Arrays
 import org.scalacheck.Properties
 import org.scalacheck.Prop._
 
 object BinaryBijectionLaws extends Properties("BinaryBijections")
 with BaseProperties {
-  def barrEq(a1: Array[Byte], a2: Array[Byte]) = Arrays.equals(a1, a2)
-
   implicit val arbBB = arbitraryViaFn[Array[Byte], ByteBuffer] { ByteBuffer.wrap(_) }
 
   // TODO: These are all bijections,
   property("Array[Byte] <=> ByteBuffer") =
-    isBijection[Array[Byte], ByteBuffer](barrEq)
+    isBijection[Array[Byte], ByteBuffer]
 
   // These are trivially bijecitons because the right-side is only defined as the image of the left:
   property("rts Array[Byte] -> GZippedBytes") =
-    isInjective[Array[Byte], GZippedBytes](barrEq)
+    isInjective[Array[Byte], GZippedBytes]
   property("rts Array[Byte] -> Base64String") =
-    isInjective[Array[Byte], Base64String](barrEq)
+    isInjective[Array[Byte], Base64String]
   property("rts Array[Byte] -> GZippedBase64String") =
-    isInjective[Array[Byte], GZippedBase64String](barrEq)
+    isInjective[Array[Byte], GZippedBase64String]
 }

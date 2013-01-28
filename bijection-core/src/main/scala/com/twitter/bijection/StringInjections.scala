@@ -30,7 +30,8 @@ trait StringInjections extends NumericInjections {
   def withEncoding(encoding: String): Injection[String, Array[Byte]] =
     new AbstractInjection[String, Array[Byte]] {
       def apply(s: String) = s.getBytes(encoding)
-      override def invert(b: Array[Byte]) = allCatch.opt(new String(b, encoding))
+      override def invert(b: Array[Byte]) =
+        allCatch.opt { new String(b, encoding) }
     }
 
   // Some bijections with string from standard java/scala classes:

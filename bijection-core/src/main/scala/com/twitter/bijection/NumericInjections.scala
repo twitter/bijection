@@ -35,17 +35,28 @@ trait NumericInjections extends GeneratedTupleInjections {
   implicit val byte2Short: Injection[Byte, Short] = new AbstractInjection[Byte, Short] {
     def apply(i: Byte) = i.toShort
     def invert(l: Short) =
-      if (l <= Byte.MaxValue && l >= Byte.MinValue) Some(l.toByte) else None
+      if (l.isValidByte) Some(l.toByte) else None
   }
   implicit val short2Int: Injection[Short, Int] = new AbstractInjection[Short, Int] {
     def apply(i: Short) = i.toInt
     def invert(l: Int) =
-      if (l <= Short.MaxValue && l >= Short.MinValue) Some(l.toShort) else None
+      if (l.isValidShort) Some(l.toShort) else None
   }
   implicit val int2Long: Injection[Int, Long] = new AbstractInjection[Int,Long] {
     def apply(i: Int) = i.toLong
     def invert(l: Long) =
-      if (l <= Int.MaxValue && l >= Int.MinValue) Some(l.toInt) else None
+      if (l.isValidInt) Some(l.toInt) else None
+  }
+  // This is a loose injection
+  implicit val float2Double: Injection[Float, Double] = new AbstractInjection[Float, Double] {
+    def apply(i: Float) = i.toDouble
+    def invert(l: Double) =
+      if (l <= Float.MaxValue && l >= Float.MinValue) Some(l.toFloat) else None
+  }
+  // This is a loose injection
+  implicit val int2Double: Injection[Int, Double] = new AbstractInjection[Int, Double] {
+    def apply(i: Int) = i.toDouble
+    def invert(l: Double) = Some(l.toInt)
   }
 
   implicit val byte2String: Injection[Byte, String] =
@@ -116,36 +127,44 @@ trait NumericInjections extends GeneratedTupleInjections {
 
   implicit val short2BigEndian: Injection[Short, Array[Byte]] =
     new AbstractInjection[Short, Array[Byte]] {
+      val size = 2
       def apply(value: Short) = {
-        val buf = ByteBuffer.allocate(2)
+        val buf = ByteBuffer.allocate(size)
         buf.putShort(value)
         buf.array
       }
-      override def invert(b: Array[Byte]) = allCatch.opt(ByteBuffer.wrap(b).getShort)
+      override def invert(b: Array[Byte]) =
+        allCatch.opt(ByteBuffer.wrap(b).getShort)
     }
 
   implicit val int2BigEndian: Injection[Int, Array[Byte]] =
     new AbstractInjection[Int, Array[Byte]] { value =>
+      val size = 4
       def apply(value: Int) = {
-        val buf = ByteBuffer.allocate(4)
+        val buf = ByteBuffer.allocate(size)
         buf.putInt(value)
         buf.array
       }
-      override def invert(b: Array[Byte]) = allCatch.opt(ByteBuffer.wrap(b).getInt)
+      override def invert(b: Array[Byte]) =
+        allCatch.opt(ByteBuffer.wrap(b).getInt)
     }
 
   implicit val long2BigEndian: Injection[Long, Array[Byte]] =
     new AbstractInjection[Long, Array[Byte]] {
+      val size = 8
       def apply(value: Long) = {
-        val buf = ByteBuffer.allocate(8)
+        val buf = ByteBuffer.allocate(size)
         buf.putLong(value)
         buf.array
       }
-      override def invert(b: Array[Byte]) = allCatch.opt(ByteBuffer.wrap(b).getLong)
+      override def invert(b: Array[Byte]) =
+        allCatch.opt(ByteBuffer.wrap(b).getLong)
     }
 
-  implicit val float2BigEndian: Injection[Float, Array[Byte]] =
+  // Lazy to deal with the fact that int2BigEndian od Bijection may not be init yet
+  // there seemed to be some null pointer exceptions in the tests that this fixed
+  implicit lazy val float2BigEndian: Injection[Float, Array[Byte]] =
     Injection.fromBijection(Bijection.float2IntIEEE754) andThen int2BigEndian
-  implicit val double2BigEndian: Injection[Double, Array[Byte]] =
+  implicit lazy val double2BigEndian: Injection[Double, Array[Byte]] =
     Injection.fromBijection(Bijection.double2LongIEEE754) andThen long2BigEndian
 }

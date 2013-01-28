@@ -27,30 +27,28 @@ import java.net.URL
 object StringArbs extends BaseProperties {
   import Rep._
 
-  implicit val strByte = arbitraryViaFn { (b: Byte) => b.toString.toRep[Byte].get }
-  implicit val strShort = arbitraryViaFn { (b: Short) => b.toString.toRep[Short].get }
-  implicit val strInt: Arbitrary[String @@ Rep[Int]] =
-    arbitraryViaFn { (b: Int) => b.toString.toRep[Int].get }
-  implicit val strLong = arbitraryViaFn { (b: Long) => b.toString.toRep[Long].get }
-  implicit val strFloat = arbitraryViaFn { (b: Float) => b.toString.toRep[Float].get }
-  implicit val strDouble = arbitraryViaFn { (b: Double) => b.toString.toRep[Double].get }
+  implicit val strByte = arbitraryViaBijection[Byte, String @@ Rep[Byte]]
+  implicit val strShort = arbitraryViaBijection[Short, String @@ Rep[Short]]
+  implicit val strInt = arbitraryViaBijection[Int, String @@ Rep[Int]]
+  implicit val strLong = arbitraryViaBijection[Long, String @@ Rep[Long]]
+  implicit val strFloat = arbitraryViaBijection[Float, String @@ Rep[Float]]
+  implicit val strDouble = arbitraryViaBijection[Double, String @@ Rep[Double]]
 }
 
 object StringBijectionLaws extends Properties("StringBijections")
 with BaseProperties {
   import StringArbs._
 
-  // TODO: add Array[Byte] @@ Rep[Utf8] and make it a bijection
-  property("round trips string -> Array[String]") = isInjection[String, Array[Byte]]()
+  property("round trips string -> Array[String]") = isLooseInjection[String, Array[Byte]]
   implicit val symbol = arbitraryViaFn { (s: String) => Symbol(s) }
-  property("round trips string -> symbol") = isBijection[String, Symbol]()
+  property("round trips string -> symbol") = isBijection[String, Symbol]
 
   implicit val uuidArb = Arbitrary {
     for( l <- choose(-100L, 100L);
          u <- choose(-100L, 100L)) yield (new UUID(l,u))
   }
 
-  property("UUID -> String") = isInjection[UUID, String]()
+  property("UUID -> String") = isInjection[UUID, String]
   //property("UUID <-> String @@ Rep[UUID]") = isBijection[UUID, String @@ Rep[UUID]]()
 
   def toUrl(s: String): Option[URL] =
@@ -65,7 +63,7 @@ with BaseProperties {
   }
 
   // This is trivially a bijection if it injective
-  property("URL -> String") = isInjection[URL, String]()
+  property("URL -> String") = isInjection[URL, String]
 
   property("rts through StringJoinBijection") =
     forAll { (sep: String, xs: List[String]) =>

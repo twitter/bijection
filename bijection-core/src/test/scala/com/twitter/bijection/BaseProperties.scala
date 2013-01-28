@@ -19,36 +19,58 @@ package com.twitter.bijection
 import org.scalacheck.{ Arbitrary, Properties }
 import org.scalacheck.Prop.forAll
 
+import scala.math.Equiv
+import java.util.Arrays
+
 trait BaseProperties {
+  implicit def barrEq[T](implicit eqt: Equiv[T]): Equiv[Array[T]] = new Equiv[Array[T]] {
+    def equiv(a1: Array[T], a2: Array[T]) =
+      a1.zip(a2).forall { tup: (T,T) => eqt.equiv(tup._1, tup._2) }
+  }
 
   def rt[A, B](a: A)(implicit bij: Bijection[A, B]): A = rtInjective[A,B](a)
 
   def rtInjective[A, B](a: A)(implicit bij: Bijection[A, B]): A = bij.invert(bij(a))
 
-  def defaultEq[A](a1: A, a2: A) = a1 == a2
-  def roundTrips[A, B](eqFn: (A, A) => Boolean = defaultEq _)
-  (implicit a: Arbitrary[A], bij: Bijection[A, B]) =
-    forAll { a: A => eqFn(a, rt(a)) }
+  /** Checks that we can always invert all A
+   * does not requires that all B that return Some[A] return to exact same B
+   */
+  def isLooseInjection[A,B](implicit arba: Arbitrary[A],
+    inj: Injection[A, B], eqa: Equiv[A]) =
+    forAll { (a: A) =>
+      val b = inj(a)
+        b != null &&
+        { val bofa = inj.invert(b)
+          bofa != null &&
+          bofa.isDefined &&
+          eqa.equiv(bofa.get, a)
+        }
+    }
 
-  def isInjection[A,B](eqFn: (A,A) => Boolean = defaultEq _)
-    (implicit a: Arbitrary[A], inj: Injection[A, B]) =
-      forAll { a: A =>
-        val b = inj.invert(inj(a))
-        b.isDefined && eqFn(a, b.get)
-      }
+ def invertIsStrict[A,B](implicit arbb: Arbitrary[B], inj: Injection[A,B], eqb: Equiv[B]) =
+   forAll { (b: B) =>
+     inj.invert(b)
+       .map { aofb =>
+         assert(aofb != null, "aofb was null")
+         eqb.equiv(b, inj(aofb))
+       }
+       .getOrElse(true)
+     }
 
-  def isInjective[A,B](eqFn: (A,A) => Boolean = defaultEq _)
-    (implicit a: Arbitrary[A], bij: Bijection[A, B]) =
-      forAll { (a: A) => eqFn(a, bij.invert(bij(a))) }
+  def isInjection[A,B](implicit a: Arbitrary[A],
+    inj: Injection[A, B], barb: Arbitrary[B], eqa: Equiv[A], eqb: Equiv[B]) =
+    isLooseInjection[A,B] && invertIsStrict[A,B]
 
-  def invertIsInjection[A,B](eqFn: (B,B) => Boolean = defaultEq _)
-    (implicit b: Arbitrary[B], bij: Bijection[A, B]) =
-      forAll { b: B => eqFn(b, rtInjective(b)(bij.inverse)) }
+  def isInjective[A,B](implicit a: Arbitrary[A], bij: Bijection[A, B], eqa: Equiv[A]) =
+      forAll { (a: A) => eqa.equiv(a, rt(a)) }
 
-  def isBijection[A,B](eqFnA: (A,A) => Boolean = defaultEq _, eqFnB: (B,B) => Boolean = defaultEq _)
-    (implicit arba: Arbitrary[A], arbb: Arbitrary[B], bij: Bijection[A, B]) = {
+  def invertIsInjection[A,B](implicit b: Arbitrary[B], bij: Bijection[A, B], eqb: Equiv[B]) =
+      forAll { b: B => eqb.equiv(b, rtInjective(b)(bij.inverse)) }
+
+  def isBijection[A,B](implicit arba: Arbitrary[A],
+    arbb: Arbitrary[B], bij: Bijection[A, B], eqa: Equiv[A], eqb: Equiv[B]) = {
       implicit val inj = Injection.fromBijection(bij)
-      isInjective[A,B](eqFnA) && invertIsInjection[A,B](eqFnB)
+      isInjective[A,B] && invertIsInjection[A,B]
     }
 
   def arbitraryViaBijection[A,B](implicit bij: Bijection[A,B], arb: Arbitrary[A]): Arbitrary[B] =

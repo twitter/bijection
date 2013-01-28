@@ -33,10 +33,10 @@ with BaseProperties {
   import StringArbs._
 
   property("round trips (Int,Long) -> (String,String)") =
-    isBijection[(Int,Long), (String @@ Rep[Int],String @@ Rep[Long])]()
+    isBijection[(Int,Long), (String @@ Rep[Int],String @@ Rep[Long])]
   property("round trips (Int,Long,String) -> (String,String,String)") =
-    isBijection[(Int,Long,String), (String @@ Rep[Int],String @@ Rep[Long],String)]()
+    isBijection[(Int,Long,String), (String @@ Rep[Int],String @@ Rep[Long],String)]
   property("round trips (Int,Long,String,Long) -> (String,String,String,Array[Byte])") =
     //This needs a tag on Array[Byte] @@ Rep[Long]
-    isInjection[(Int,Long,String,Long), (String,String,String,Array[Byte])]()
+    isInjection[(Int,Long,String,Long), (String,String,String,Array[Byte])]
 }

@@ -111,13 +111,13 @@ trait NumericBijections extends GeneratedTupleBijections {
    * Bijections between the numeric types and Array[Byte].
    */
   val float2IntIEEE754: Bijection[Float, Int] =
-    new Bijection[Float, Int] {
+    new AbstractBijection[Float, Int] {
       def apply(f: Float) = JFloat.floatToIntBits(f)
       override def invert(i: Int) = JFloat.intBitsToFloat(i)
     }
 
   val double2LongIEEE754: Bijection[Double, Long] =
-    new Bijection[Double, Long] {
+    new AbstractBijection[Double, Long] {
       def apply(d: Double) = JDouble.doubleToLongBits(d)
       override def invert(l: Long) = JDouble.longBitsToDouble(l)
     }

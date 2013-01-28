@@ -32,29 +32,29 @@ with BaseProperties {
     arbitraryViaFn { (l: List[A]) => Vector(l :_*) }
 
   property("round trip List[Int] <=> Vector[String @@ Rep[Int]]") =
-    isBijection[List[Int], Vector[String @@ Rep[Int]]]()
+    isBijection[List[Int], Vector[String @@ Rep[Int]]]
 
   property("round trip List[long] <=> List[String @@ Rep[Int]]") =
-    isBijection[List[Long], List[String @@ Rep[Long]]]()
+    isBijection[List[Long], List[String @@ Rep[Long]]]
 
   property("round trip Vector[Double] <=> Vector[String @@ Rep[Double]]") =
-    isBijection[Vector[Double], Vector[String @@ Rep[Double]]]()
+    isBijection[Vector[Double], Vector[String @@ Rep[Double]]]
 
   property("round trip Set[Double] <=> Set[String @@ Rep[Double]]") =
-    isBijection[Set[Double], Set[String @@ Rep[Double]]]()
+    isBijection[Set[Double], Set[String @@ Rep[Double]]]
 
   property("round trip Map[Long,Double] <=> Map[String @@ Rep[Long], String @@ Rep[Double]]") =
-    isBijection[Map[Long, Double], Map[String @@ Rep[Long], String @@ Rep[Double]]]()
+    isBijection[Map[Long, Double], Map[String @@ Rep[Long], String @@ Rep[Double]]]
 
   property("Option[Long] <=> Option[String @@ Rep[Long]]") =
-    isBijection[Option[Long], Option[String @@ Rep[Long]]]()
+    isBijection[Option[Long], Option[String @@ Rep[Long]]]
 
   property("Option[Int] <=> Option[Long]") =
-    isInjection[Option[Int], Option[Long]]()
+    isInjection[Option[Int], Option[Long]]
 
   property("Map[Int, Short] -> Set[(Int, Short)]") =
-    isInjection[Map[Int, Short], Set[(Int, Short)]]()
+    isInjection[Map[Int, Short], Set[(Int, Short)]]
 
   property("round trip Set[Int] -> List[String]") =
-    isInjection[Set[Int], List[String]]()
+    isInjection[Set[Int], List[String]]
 }
