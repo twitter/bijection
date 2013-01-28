@@ -4,13 +4,13 @@ import java.net.{ MalformedURLException, URL }
 import java.util.UUID
 
 /**
- * Type tag used to indicate that an instance of a type such as String 
+ * Type tag used to indicate that an instance of a type such as String
  * contains a valid representation of another type, such as Int or URL.
  */
 trait Rep[A]
 
 /**
- * Useful HasRep 
+ * Useful HasRep
  */
 object Rep {
   // TODO make implicit class in 2.10
@@ -26,8 +26,8 @@ object Rep {
 
   sealed class CanonicalStringHasRep[B](f: String => B) extends HasRep[String, B] {
     final def toRep(s: String) = rep(s)(f)
-  } 
-  
+  }
+
   implicit val stringHasRepInt = new CanonicalStringHasRep[Int](_.toInt)
   implicit val stringHasRepLong = new CanonicalStringHasRep[Long](_.toLong)
   implicit val stringHasRepByte = new CanonicalStringHasRep[Byte](_.toByte)
@@ -36,8 +36,8 @@ object Rep {
   implicit val stringHasRepDouble = new CanonicalStringHasRep[Double](_.toDouble)
   implicit val stringHasRepURL = new CanonicalStringHasRep[URL](new URL(_))
   implicit val stringHasRepUUID = new CanonicalStringHasRep[UUID](UUID.fromString)
-  
-  private val catching = 
+
+  private val catching =
     scala.util.control.Exception.catching(
       classOf[NumberFormatException]
     , classOf[MalformedURLException]

@@ -49,9 +49,12 @@ with BaseProperties {
   property("Option[Long] <=> Option[String @@ Rep[Long]]") =
     isBijection[Option[Long], Option[String @@ Rep[Long]]]()
 
-  // It is some-kind of crazy dangerous to have this as an implicit in a real project since
-  // lists -> set is surjective (many lists map to the same sets)
-  implicit val setToIter = Bijection.toContainer[Int, String @@ Rep[Int], Set[Int], List[String @@ Rep[Int]]]
-  property("round trip Set[Int] -> List[String @@ Rep[Int]]") =
-    isInjection[Set[Int], List[String @@ Rep[Int]]]()
+  property("Option[Int] <=> Option[Long]") =
+    isInjection[Option[Int], Option[Long]]()
+
+  property("Map[Int, Short] -> Set[(Int, Short)]") =
+    isInjection[Map[Int, Short], Set[(Int, Short)]]()
+
+  property("round trip Set[Int] -> List[String]") =
+    isInjection[Set[Int], List[String]]()
 }

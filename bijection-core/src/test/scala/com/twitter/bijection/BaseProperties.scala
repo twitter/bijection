@@ -31,19 +31,30 @@ trait BaseProperties {
     forAll { a: A => eqFn(a, rt(a)) }
 
   def isInjection[A,B](eqFn: (A,A) => Boolean = defaultEq _)
+    (implicit a: Arbitrary[A], inj: Injection[A, B]) =
+      forAll { a: A =>
+        val b = inj.invert(inj(a))
+        b.isDefined && eqFn(a, b.get)
+      }
+
+  def isInjective[A,B](eqFn: (A,A) => Boolean = defaultEq _)
     (implicit a: Arbitrary[A], bij: Bijection[A, B]) =
-      forAll { a: A => eqFn(a, rtInjective(a)) }
+      forAll { (a: A) => eqFn(a, bij.invert(bij(a))) }
 
   def invertIsInjection[A,B](eqFn: (B,B) => Boolean = defaultEq _)
     (implicit b: Arbitrary[B], bij: Bijection[A, B]) =
       forAll { b: B => eqFn(b, rtInjective(b)(bij.inverse)) }
 
   def isBijection[A,B](eqFnA: (A,A) => Boolean = defaultEq _, eqFnB: (B,B) => Boolean = defaultEq _)
-    (implicit arba: Arbitrary[A], arbb: Arbitrary[B], bij: Bijection[A, B]) =
-      isInjection[A,B](eqFnA) && invertIsInjection[A,B](eqFnB)
+    (implicit arba: Arbitrary[A], arbb: Arbitrary[B], bij: Bijection[A, B]) = {
+      implicit val inj = Injection.fromBijection(bij)
+      isInjective[A,B](eqFnA) && invertIsInjection[A,B](eqFnB)
+    }
 
   def arbitraryViaBijection[A,B](implicit bij: Bijection[A,B], arb: Arbitrary[A]): Arbitrary[B] =
     Arbitrary { arb.arbitrary.map { bij(_) } }
   def arbitraryViaFn[A,B](fn: A => B)(implicit arb: Arbitrary[A]): Arbitrary[B] =
     Arbitrary { arb.arbitrary.map { fn(_) } }
+  def arbitraryViaInjection[A,B](implicit inj: Injection[A,B], arb: Arbitrary[A]): Arbitrary[B] =
+    Arbitrary { arb.arbitrary.map { inj(_) } }
 }

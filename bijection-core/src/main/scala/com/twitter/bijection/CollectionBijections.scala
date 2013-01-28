@@ -31,7 +31,7 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable
 import collection.generic.CanBuildFrom
 
-trait CollectionBijections {
+trait CollectionBijections extends BinaryBijections {
 
   /**
    * Bijections between collection types defined in scala.collection.JavaConverters.
@@ -132,4 +132,10 @@ trait CollectionBijections {
       override def apply(optt: Option[T]) = optt.map(bij)
       override def invert(optu: Option[U]) = optu.map(bij.inverse)
     }
+  implicit def seq2List[A,B](implicit bij: Bijection[A,B]): Bijection[Seq[A], List[B]]
+    = toContainer[A, B, Seq[A], List[B]]
+  implicit def vector2List[A,B](implicit bij: Bijection[A,B]): Bijection[Vector[A], List[B]]
+    = toContainer[A, B, Vector[A], List[B]]
+  implicit def indexedSeq2List[A,B](implicit bij: Bijection[A,B]): Bijection[IndexedSeq[A], List[B]]
+    = toContainer[A, B, IndexedSeq[A], List[B]]
 }

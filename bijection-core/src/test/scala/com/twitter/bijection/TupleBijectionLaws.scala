@@ -38,5 +38,5 @@ with BaseProperties {
     isBijection[(Int,Long,String), (String @@ Rep[Int],String @@ Rep[Long],String)]()
   property("round trips (Int,Long,String,Long) -> (String,String,String,Array[Byte])") =
     //This needs a tag on Array[Byte] @@ Rep[Long]
-    isInjection[(Int,Long,String,Long), (String @@ Rep[Int],String @@ Rep[Long],String,Array[Byte])]()
+    isInjection[(Int,Long,String,Long), (String,String,String,Array[Byte])]()
 }

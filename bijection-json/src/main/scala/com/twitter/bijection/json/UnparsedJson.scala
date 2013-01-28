@@ -16,7 +16,10 @@ limitations under the License.
 
 package com.twitter.bijection.json
 
-import com.twitter.bijection.Bijection
+import com.twitter.bijection.{Bijection, AbstractBijection, AbstractInjection, Injection}
+import JsonNodeInjection.{fromJsonNode, toJsonNode}
+
+import org.codehaus.jackson.JsonNode
 
 /** Value class representing unparsed Json text
  * TODO in scala 2.10 this should be a value class
@@ -25,12 +28,25 @@ case class UnparsedJson(str: String)
 
 object UnparsedJson {
 
-  implicit def bijection[T](implicit json: JsonNodeBijection[T]): Bijection[T, UnparsedJson] =
-    json andThen (JsonNodeBijection.unparsed.inverse)
+  implicit def injection[T](implicit json: JsonNodeInjection[T]): Injection[T, UnparsedJson] =
+    new AbstractInjection[T, UnparsedJson] {
+      def apply(t: T) = (json andThen { n: JsonNode => JsonNodeInjection.unparsed.invert(n).get })(t)
+      override def invert(up: UnparsedJson) = fromJsonNode[T](toJsonNode(up))
+    }
 
-  val unwrap: Bijection[UnparsedJson, String] =
-    new Bijection[UnparsedJson, String] {
+  implicit val unwrap: Injection[UnparsedJson, String] =
+    new AbstractInjection[UnparsedJson, String] {
       def apply(upj: UnparsedJson) = upj.str
-      override def invert(str: String) = UnparsedJson(str)
+      def invert(str: String) = {
+        try {
+          val res = UnparsedJson(str)
+          JsonNodeInjection.unparsed.apply(res)
+          // If we get here, it parsed:
+          Some(res)
+        }
+        catch {
+          case _ => None
+        }
+      }
     }
 }

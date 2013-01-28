@@ -40,7 +40,6 @@ object StringBijectionLaws extends Properties("StringBijections")
 with BaseProperties {
   import StringArbs._
 
-  implicit val bij: Bijection[String, Array[Byte]] = StringCodec.utf8
   // TODO: add Array[Byte] @@ Rep[Utf8] and make it a bijection
   property("round trips string -> Array[String]") = isInjection[String, Array[Byte]]()
   implicit val symbol = arbitraryViaFn { (s: String) => Symbol(s) }
@@ -50,7 +49,10 @@ with BaseProperties {
     for( l <- choose(-100L, 100L);
          u <- choose(-100L, 100L)) yield (new UUID(l,u))
   }
-  property("round trip UUID -> String") = roundTrips[UUID, String @@ Rep[UUID]]()
+
+  property("UUID -> String") = isInjection[UUID, String]()
+  //property("UUID <-> String @@ Rep[UUID]") = isBijection[UUID, String @@ Rep[UUID]]()
+
   def toUrl(s: String): Option[URL] =
     try { Some(new URL("http://" + s + ".com")) }
     catch { case _ => None }
@@ -61,8 +63,9 @@ with BaseProperties {
     .filter { _.isDefined }
     .map { _.get }
   }
+
   // This is trivially a bijection if it injective
-  property("round trip URL -> String") = isInjection[URL, String @@ Rep[URL]]()
+  property("URL -> String") = isInjection[URL, String]()
 
   property("rts through StringJoinBijection") =
     forAll { (sep: String, xs: List[String]) =>

@@ -33,9 +33,9 @@ with BaseProperties {
 
   // These are trivially bijecitons because the right-side is only defined as the image of the left:
   property("rts Array[Byte] -> GZippedBytes") =
-    isInjection[Array[Byte], GZippedBytes](barrEq)
+    isInjective[Array[Byte], GZippedBytes](barrEq)
   property("rts Array[Byte] -> Base64String") =
-    isInjection[Array[Byte], Base64String](barrEq)
+    isInjective[Array[Byte], Base64String](barrEq)
   property("rts Array[Byte] -> GZippedBase64String") =
-    isInjection[Array[Byte], GZippedBase64String](barrEq)
+    isInjective[Array[Byte], GZippedBase64String](barrEq)
 }
