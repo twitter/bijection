@@ -153,4 +153,13 @@ object BijectionBuild extends Build {
     name := "bijection-json",
     libraryDependencies += jsonParser
   ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  lazy val bijectionAlgebird = Project(
+    id = "bijection-algebird",
+    base = file("bijection-algebird"),
+    settings = sharedSettings
+  ).settings(
+    name := "bijection-algebird",
+    libraryDependencies += "com.twitter" %% "algebird" % "0.1.6"
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
 }

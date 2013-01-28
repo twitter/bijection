@@ -3,6 +3,7 @@
 ### 0.2.1
 
 * `bijection-guava` for Guava interop.
+* `bijection-algebird` for bijections on classes in twitter's [Algebird](https://github.com/twitter/algebird).
 
 ### 0.2.0
 
