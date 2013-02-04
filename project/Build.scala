@@ -162,4 +162,13 @@ object BijectionBuild extends Build {
     name := "bijection-algebird",
     libraryDependencies += "com.twitter" %% "algebird" % "0.1.6"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  lazy val bijectionUtil = Project(
+    id = "bijection-util",
+    base = file("bijection-util"),
+    settings = sharedSettings
+  ).settings(
+    name := "bijection-util",
+    libraryDependencies += "com.twitter" % "util-core" % "5.3.15"
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
 }
