@@ -4,6 +4,11 @@
 
 * `bijection-guava` for Guava interop.
 * `bijection-algebird` for bijections on classes in twitter's [Algebird](https://github.com/twitter/algebird).
+* `bijection-guava` for Guava interop, with
+  * Function1 <-> Guava Function
+  * () => T <-> Supplier[T]
+  * Function[T, Boolean] <-> Predicate[T]
+  * Optional[T] <-> Option[T]
 * `bijection-util` with bijections on [twitter-util](https://github.com/twitter/util)'s "Try" and "Future".
 
 ### 0.2.0
