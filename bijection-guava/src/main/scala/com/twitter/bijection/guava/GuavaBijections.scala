@@ -57,7 +57,7 @@ object GuavaBijections {
     }
 
   /**
-   * Converts a scala Function0 into a Guava Supplier.
+   * Converts a scala Function1[T, Boolean] into a Guava Predicate.
    */
   implicit def fn2Predicate[T, U](implicit bij: Bijection[T, U]): Bijection[T => Boolean, Predicate[U]] =
     new AbstractBijection[T => Boolean, Predicate[U]] {
