@@ -28,24 +28,20 @@ import Bijection.asMethod // "as" syntax
  *  @author Sam Ritchie
  */
 
-class BijectedSemigroup[T, U](sg: Semigroup[T])(implicit bij: Bijection[T, U])
-extends Semigroup[U] {
+class BijectedSemigroup[T, U](implicit sg: Semigroup[T], bij: Bijection[T, U]) extends Semigroup[U] {
   override def plus(l: U, r: U): U = sg.plus(l.as[T], r.as[T]).as[U]
 }
 
-class BijectedMonoid[T, U](monoid: Monoid[T])(implicit bij: Bijection[T, U])
-extends BijectedSemigroup[T, U](monoid) with Monoid[U] {
+class BijectedMonoid[T, U](implicit monoid: Monoid[T], bij: Bijection[T, U]) extends BijectedSemigroup[T, U] with Monoid[U] {
   override def zero: U = monoid.zero.as[U]
 }
 
-class BijectedGroup[T, U](group: Group[T])(implicit bij: Bijection[T, U])
-extends BijectedMonoid[T, U](group) with Group[U] {
+class BijectedGroup[T, U](implicit group: Group[T], bij: Bijection[T, U]) extends BijectedMonoid[T, U] with Group[U] {
   override def negate(u: U): U = group.negate(u.as[T]).as[U]
   override def minus(l: U, r: U): U = group.minus(l.as[T], r.as[T]).as[U]
 }
 
-class BijectedRing[T, U](ring: Ring[T])(implicit bij: Bijection[T, U])
-extends BijectedGroup[T, U](ring) with Ring[U] {
+class BijectedRing[T, U](implicit ring: Ring[T], bij: Bijection[T, U]) extends BijectedGroup[T, U] with Ring[U] {
   override def one: U = ring.one
   override def times(l: U, r: U): U = ring.times(l.as[T], r.as[T]).as[U]
   override def product(iter: TraversableOnce[U]): U =
@@ -53,32 +49,32 @@ extends BijectedGroup[T, U](ring) with Ring[U] {
 }
 
 trait AlgebirdBijections {
-  def semigroupBijection[T, U](implicit bij: Bijection[T, U])
+  implicit def semigroupBijection[T, U](implicit bij: Bijection[T, U])
   : Bijection[Semigroup[T], Semigroup[U]] =
     new AbstractBijection[Semigroup[T], Semigroup[U]] {
-      override def apply(sg: Semigroup[T]) = new BijectedSemigroup[T, U](sg)
-      override def invert(sg: Semigroup[U]) = new BijectedSemigroup[U, T](sg)
+      override def apply(sg: Semigroup[T]) = new BijectedSemigroup[T, U]()(sg, bij)
+      override def invert(sg: Semigroup[U]) = new BijectedSemigroup[U, T]()(sg, bij.inverse)
     }
 
-  def monoidBijection[T, U](implicit bij: Bijection[T, U])
+  implicit def monoidBijection[T, U](implicit bij: Bijection[T, U])
   : Bijection[Monoid[T], Monoid[U]] =
     new AbstractBijection[Monoid[T], Monoid[U]] {
-      override def apply(mon: Monoid[T]) = new BijectedMonoid[T, U](mon)
-      override def invert(mon: Monoid[U]) = new BijectedMonoid[U, T](mon)
+      override def apply(mon: Monoid[T]) = new BijectedMonoid[T, U]()(mon, bij)
+      override def invert(mon: Monoid[U]) = new BijectedMonoid[U, T]()(mon, bij.inverse)
     }
 
-  def groupBijection[T, U](implicit bij: Bijection[T, U])
+  implicit def groupBijection[T, U](implicit bij: Bijection[T, U])
   : Bijection[Group[T], Group[U]] =
     new AbstractBijection[Group[T], Group[U]] {
-      override def apply(group: Group[T]) = new BijectedGroup[T, U](group)
-      override def invert(group: Group[U]) = new BijectedGroup[U, T](group)
+      override def apply(group: Group[T]) = new BijectedGroup[T, U]()(group, bij)
+      override def invert(group: Group[U]) = new BijectedGroup[U, T]()(group, bij.inverse)
     }
 
-  def ringBijection[T, U](implicit bij: Bijection[T, U])
+  implicit def ringBijection[T, U](implicit bij: Bijection[T, U])
   : Bijection[Ring[T], Ring[U]] =
     new AbstractBijection[Ring[T], Ring[U]] {
-      override def apply(ring: Ring[T]) = new BijectedRing[T, U](ring)
-      override def invert(ring: Ring[U]) = new BijectedRing[U, T](ring)
+      override def apply(ring: Ring[T]) = new BijectedRing[T, U]()(ring, bij)
+      override def invert(ring: Ring[U]) = new BijectedRing[U, T]()(ring, bij.inverse)
     }
 }
 
