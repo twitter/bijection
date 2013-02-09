@@ -57,7 +57,7 @@ object StringJoinBijection {
   }
 
   def apply(separator: String = DEFAULT_SEP): Bijection[Iterable[String], Option[String]] =
-    new Bijection[Iterable[String], Option[String]] {
+    new AbstractBijection[Iterable[String], Option[String]] {
       override def apply(xs: Iterable[String]) = {
         // TODO: Instead of throwing, escape the separator in the encoded string.
         assert(!xs.exists(_.contains(separator)), "Can't encode strings that include the separator.")

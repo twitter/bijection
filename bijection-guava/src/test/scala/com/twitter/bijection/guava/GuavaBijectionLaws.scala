@@ -17,13 +17,17 @@
 package com.twitter.bijection.guava
 
 import com.google.common.base.Optional
-import com.google.common.base.{ Function => GFn }
+import com.google.common.base.{ Function => GFn, Predicate, Supplier }
 import com.twitter.bijection.{ @@, BaseProperties, Bijection, Rep }
 import com.twitter.bijection.Rep._
 
 import org.scalacheck.Arbitrary
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
+
+import java.lang.{ Long => JLong }
+
+import Bijection.{ asMethod, connect }
 
 object GuavaBijectionLaws extends Properties("GuavaBijections") with BaseProperties {
   import GuavaBijections._
@@ -44,5 +48,17 @@ object GuavaBijectionLaws extends Properties("GuavaBijections") with BasePropert
   }
 
   property("round trips Int => Long -> GuavaFn[Int, Long]") =
-    roundTripsFn[Int, Long] { x => (x * x).toLong }
+    roundTripsFn[Int, Long]() { x => (x * x).toLong }
+
+  property("round trips () => Long -> Supplier[JLong]") =
+    forAll { l: Long =>
+      val fn = { () => l }
+      fn() == fn.as[Supplier[JLong]].get.as[Long]
+    }
+
+  property("round trips Long => Boolean -> Predicate[JLong]") =
+    forAll { l: Long =>
+      val isEven = { l: Long => l % 2 == 0 }
+      isEven(l) == isEven.as[Predicate[JLong]].apply(l.as[JLong])
+    }
 }
