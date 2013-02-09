@@ -29,7 +29,6 @@ with BaseProperties {
     Prop.forAll(x)({
       i =>
       ct += 1
-      println( ct + ":" + i + " => " + i.as[EnglishInt])
       i.as[EnglishInt].as[Int] == i
     })
   }

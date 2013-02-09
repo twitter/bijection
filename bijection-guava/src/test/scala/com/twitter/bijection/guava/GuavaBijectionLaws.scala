@@ -48,7 +48,7 @@ object GuavaBijectionLaws extends Properties("GuavaBijections") with BasePropert
   }
 
   property("round trips Int => Long -> GuavaFn[Int, Long]") =
-    roundTripsFn[Int, Long]() { x => (x * x).toLong }
+    roundTripsFn[Int, Long] { x => (x * x).toLong }
 
   property("round trips () => Long -> Supplier[JLong]") =
     forAll { l: Long =>
