@@ -18,7 +18,6 @@ object BijectionBuild extends Build {
 
     parallelExecution in Test := true,
 
-    //scalacOptions ++= Seq("-unchecked", "-deprecation", "-Xlog-implicits"),
     scalacOptions ++= Seq("-unchecked", "-deprecation"),
 
     // Publishing options:
