@@ -36,19 +36,19 @@ object GuavaBijectionLaws extends Properties("GuavaBijections") with BasePropert
     arbitraryViaFn[T, Optional[T]] { Optional.of(_) }
 
   property("round trips Option[Int] -> Optional[Int]") =
-    isBijection[Option[Int], Optional[Int]]()
+    isBijection[Option[Int], Optional[Int]]
 
   property("round trips Option[Long] -> Optional[Long]") =
-    isBijection[Option[Long], Optional[Long]]()
+    isBijection[Option[Long], Optional[Long]]
 
-  def roundTripsFn[A, B](eqFn: (B, B) => Boolean = defaultEq _)(fn: A => B)
-  (implicit arb: Arbitrary[A], bij: Bijection[A => B, GFn[A, B]]) = {
+  def roundTripsFn[A, B](fn: A => B)
+  (implicit arb: Arbitrary[A], bij: Bijection[A => B, GFn[A, B]], eqb: Equiv[B]) = {
     val rtFn = bij(fn)
-    forAll { a: A => eqFn(fn(a), rtFn.apply(a)) }
+    forAll { a: A => eqb.equiv(fn(a), rtFn.apply(a)) }
   }
 
   property("round trips Int => Long -> GuavaFn[Int, Long]") =
-    roundTripsFn[Int, Long]() { x => (x * x).toLong }
+    roundTripsFn[Int, Long] { x => (x * x).toLong }
 
   property("round trips () => Long -> Supplier[JLong]") =
     forAll { l: Long =>

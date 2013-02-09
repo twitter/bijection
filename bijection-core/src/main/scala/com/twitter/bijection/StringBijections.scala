@@ -22,7 +22,7 @@ import java.util.UUID
 import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
 
-trait StringBijections {
+trait StringBijections extends NumericBijections {
   implicit val utf8: Bijection[String, Array[Byte]] = withEncoding("UTF-8")
   def withEncoding(encoding: String): Bijection[String, Array[Byte]] =
     new Bijection[String, Array[Byte]] {
@@ -30,27 +30,11 @@ trait StringBijections {
       override def invert(b: Array[Byte]) = new String(b, encoding)
     }
 
-  // Some bijections with string from standard java/scala classes:
-  implicit val url2String: Bijection[URL, String @@ Rep[URL]] =
-    new Bijection[URL, String @@ Rep[URL]] {
-      def apply(u: URL) = Tag(u.toString)
-      override def invert(s: String @@ Rep[URL]) = new URL(s)
-    }
-
   implicit val symbol2String: Bijection[Symbol, String] =
     new Bijection[Symbol, String] {
       def apply(s: Symbol) = s.name
       override def invert(s: String ) = Symbol(s)
     }
-
-  implicit val uuid2String: Bijection[UUID, String @@ Rep[UUID]] =
-    new Bijection[UUID, String @@ Rep[UUID]] {
-      def apply(uuid: UUID) = Tag(uuid.toString)
-      override def invert(s: String @@ Rep[UUID]) = UUID.fromString(s)
-    }
-
-  implicit def class2String[T]: Bijection[Class[T], String @@ Rep[Class[T]]] =
-    ClassBijection[T]()
 }
 
 object StringCodec extends StringBijections

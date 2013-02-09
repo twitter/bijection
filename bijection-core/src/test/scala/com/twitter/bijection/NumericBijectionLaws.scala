@@ -48,31 +48,37 @@ with BaseProperties {
   import StringArbs._
   import JavaNumArbs._
 
-  property("round trips byte -> jbyte") = isBijection[Byte, JByte]()
-  property("round trips short -> jshort") = isBijection[Short, JShort]()
-  property("round trips int -> jint") = isBijection[Int, JInt]()
-  property("round trips long -> jlong") = isBijection[Long, JLong]()
-  property("round trips float -> jfloat") = isBijection[Float, JFloat]()
-  property("round trips double -> jdouble") = isBijection[Double, JDouble]()
+  property("round trips byte -> jbyte") = isBijection[Byte, JByte]
+  property("round trips short -> jshort") = isBijection[Short, JShort]
+  property("round trips int -> jint") = isBijection[Int, JInt]
+  property("round trips long -> jlong") = isBijection[Long, JLong]
+  property("round trips float -> jfloat") = isBijection[Float, JFloat]
+  property("round trips double -> jdouble") = isBijection[Double, JDouble]
 
-  property("round trips byte -> string") = isBijection[Byte, String @@ Rep[Byte]]()
-  property("round trips short -> string") = isBijection[Short, String @@ Rep[Short]]()
-  property("round trips int -> string") = isBijection[Int, String @@ Rep[Int]]()
-  property("round trips long -> string") = isBijection[Long, String @@ Rep[Long]]()
-  property("round trips float -> string") = isBijection[Float, String @@ Rep[Float]]()
-  property("round trips double -> string") = isBijection[Double, String @@ Rep[Double]]()
+  property("round trips byte -> string") = isBijection[Byte, String @@ Rep[Byte]]
+  property("round trips short -> string") = isBijection[Short, String @@ Rep[Short]]
+  property("round trips int -> string") = isBijection[Int, String @@ Rep[Int]]
+  property("round trips long -> string") = isBijection[Long, String @@ Rep[Long]]
+  property("round trips float -> string") = isBijection[Float, String @@ Rep[Float]]
+  property("round trips double -> string") = isBijection[Double, String @@ Rep[Double]]
+  // Upcasting:
+  property("byte -> short") = isInjection[Byte, Short]
+  property("short -> int") = isInjection[Short, Int]
+  property("int -> long") = isInjection[Int, Long]
+  property("int -> double") = isLooseInjection[Int, Double]
+  property("float -> double") = isLooseInjection[Float, Double]
 
   // TODO need Rep[Int], etc... on the Array[Byte]
-  property("round trips short -> Array[Byte]") = roundTrips[Short, Array[Byte]]()
-  property("round trips int -> Array[Byte]") = roundTrips[Int, Array[Byte]]()
-  property("round trips long -> Array[Byte]") = roundTrips[Long, Array[Byte]]()
-  property("round trips float -> Array[Byte]") = roundTrips[Float, Array[Byte]]()
-  property("round trips double -> Array[Byte]") = roundTrips[Double, Array[Byte]]()
+  property("round trips short -> Array[Byte]") = isLooseInjection[Short, Array[Byte]]
+  property("round trips int -> Array[Byte]") = isLooseInjection[Int, Array[Byte]]
+  property("round trips long -> Array[Byte]") = isLooseInjection[Long, Array[Byte]]
+  property("round trips float -> Array[Byte]") = isLooseInjection[Float, Array[Byte]]
+  property("round trips double -> Array[Byte]") = isLooseInjection[Double, Array[Byte]]
   // Some other types through numbers:
   implicit val uuid = arbitraryViaFn { (uplow: (Long,Long)) => new UUID(uplow._1, uplow._2) }
   implicit val date = arbitraryViaFn { (dtime: Long) => new java.util.Date(dtime) }
-  property("round trips (Long,Long) -> UUID") = isBijection[(Long,Long), UUID]()
-  property("round trips Long -> Date") = isBijection[Long, java.util.Date]()
+  property("round trips (Long,Long) -> UUID") = isBijection[(Long,Long), UUID]
+  property("round trips Long -> Date") = isBijection[Long, java.util.Date]
 
   property("as works") = forAll { (i: Int) =>
     // TODO: once we have the .as fix, i.as[String] should work:
