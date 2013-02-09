@@ -16,23 +16,21 @@ limitations under the License.
 
 package com.twitter.bijection
 
-import org.scalacheck.{Prop,Gen,Properties}
-import org.scalacheck.Prop.forAll
+import scala.util.control.Exception.allCatch
+/**
+ *  Injection between Class objects and string.
+ */
+class ClassInjection[T] extends AbstractInjection[Class[T], String] {
+  override def apply(k: Class[T]) = k.getName
+  override def invert(s: String) = allCatch.opt(Class.forName(s).asInstanceOf[Class[T]])
+}
 
-import Bijection.asMethod // get the .as syntax
-
-object EnglishIntLaws extends Properties("EnglishIntBijections")
-with BaseProperties {
-  var ct = 0
-
-  def test(x:Gen[Int]) = {
-    Prop.forAll(x)({
-      i =>
-      ct += 1
-      i.as[EnglishInt].as[Int] == i
-    })
+/**
+ *  Injection to cast back and forth between two types.
+ */
+object CastInjection {
+  def of[A, B <: A]: Injection[A, B] = new AbstractInjection[A, B] {
+    def apply(a: A) = a.asInstanceOf[B] // Always succeeds
+    override def invert(b: B) = allCatch.opt(b.asInstanceOf[A])
   }
-
-  val (tiny, small, medium, large) = (Gen.choose(0,100), Gen.choose(100,1000), Gen.choose(1000,100*1000), Gen.choose(100*1000,1000*1000*1000))
-  property("as works") =  List(tiny,small,medium,large).map(test).reduceLeft((a,b)=> a && b )
 }

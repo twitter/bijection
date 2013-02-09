@@ -69,44 +69,28 @@ abstract class AbstractBijection[A, B] extends Bijection[A, B] {
   override def andThen[T](g: Function1[B,T]): Function1[A,T] = g compose this
 }
 
-/**
- * Biject allows the user to convert an instance of type A to type B given an implicit bijection
- * that goes either way between the two.
- *
- * For example, with an implicit Bijection[String,Array[Byte]], the following works:
- * Array(1.toByte, 2.toByte).as[String]
- *
- * Thanks to
- * [hylotech](https://github.com/hylotech/suits/blob/master/src/main/scala/hylotech/util/Bijection.scala)
- * for the following "as" pattern.
- * TODO: this should be a value class in scala 2.10
- */
-sealed class Biject[A](a: A) extends Serializable {
-  // Not clear to me why this fails on the String @@ Rep[T] pattern, but it seems to:
-  // TODO: fix this?
-  //def as[B](implicit bij: Bijection[A, _ <: B]): B = bij(a)
-  def as[B](implicit bij: Bijection[A, B]): B = bij(a)
-}
-
 trait LowPriorityBijections {
   implicit def inverseOf[A,B](implicit bij: Bijection[A,B]): Bijection[B,A] = bij.inverse
+  /** Encoding half of the Cantor–Bernstein–Schroeder theorem
+   * http://en.wikipedia.org/wiki/Cantor%E2%80%93Bernstein%E2%80%93Schroeder_theorem
+   */
+  def fromInjection[A, B](implicit inj: Injection[A, B]): Bijection[A, B @@ Rep[A]] =
+    new AbstractBijection[A, B @@ Rep[A]] {
+      override def apply(a: A): B @@ Rep[A] = Tag(inj.apply(a))
+      // This tag promises the Option will return something:
+      override def invert(b: B @@ Rep[A]): A = inj.invert(b).get
+    }
 }
 
-object Bijection extends NumericBijections
-  with StringBijections
-  with BinaryBijections
-  with GeneratedTupleBijections
-  with CollectionBijections
-  with LowPriorityBijections
+object Bijection extends CollectionBijections
   with Serializable {
 
   def apply[A, B](a: A)(implicit bij: Bijection[A, B]): B = bij(a)
   def invert[A, B](b: B)(implicit bij: Bijection[A, B]): A = bij.invert(b)
 
-  // WARNING: this seems to break Kryo-serialization, if that's important
   def build[A, B](to: A => B)(from: B => A): Bijection[A, B] =
-    new Bijection[A, B] {
-      def apply(a: A) = to(a)
+    new AbstractBijection[A, B] {
+      override def apply(a: A) = to(a)
       override def invert(b: B) = from(b)
     }
 
@@ -131,7 +115,7 @@ object Bijection extends NumericBijections
    * For example, with an implicit Bijection[String, Array[Byte]], the following works:
    * Array(1.toByte, 2.toByte).as[String]
    */
-  implicit def asMethod[A](a: A): Biject[A] = new Biject(a)
+  implicit def asMethod[A](a: A): Inject[A] = new Inject(a)
 
   implicit def identity[A]: Bijection[A, A] = new IdentityBijection[A]
 

@@ -62,7 +62,7 @@ object Base64String {
  * This object is thread-safe because there are no streams shared
  * outside of method scope, and therefore no contention for shared byte arrays.
  */
-trait BinaryBijections {
+trait BinaryBijections extends StringBijections {
   /**
    * Bijection between byte array and java.nio.ByteBuffer.
    */

@@ -30,7 +30,7 @@ object ScroogeCodecLaws extends Properties("ScroogeCodecs") with BaseProperties 
   // Code generator for thrift instances.
   def roundTripsScrooge(bijection: Bijection[TestStruct, Array[Byte]]) = {
     implicit val b = bijection
-    roundTrips[TestStruct, Array[Byte]]()
+    isInjective[TestStruct, Array[Byte]]
   }
 
   property("round trips thrift -> Array[Byte] through binary") =
