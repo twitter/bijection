@@ -61,10 +61,15 @@ with BaseProperties {
   property("round trips long -> string") = isBijection[Long, String @@ Rep[Long]]
   property("round trips float -> string") = isBijection[Float, String @@ Rep[Float]]
   property("round trips double -> string") = isBijection[Double, String @@ Rep[Double]]
+  // Embedding in larger numbers:
+  property("round trips Short <-> (Byte,Byte)") = isBijection[Short,(Byte,Byte)]
+  property("round trips Int <-> (Short,Short)") = isBijection[Int,(Short,Short)]
+  property("round trips Long <-> (Int,Int)") = isBijection[Long,(Int,Int)]
   // Upcasting:
   property("byte -> short") = isInjection[Byte, Short]
   property("short -> int") = isInjection[Short, Int]
   property("int -> long") = isInjection[Int, Long]
+  property("long -> BigIng") = isInjection[Long, BigInt]
   property("int -> double") = isLooseInjection[Int, Double]
   property("float -> double") = isLooseInjection[Float, Double]
 

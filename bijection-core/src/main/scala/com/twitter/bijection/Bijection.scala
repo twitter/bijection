@@ -32,7 +32,7 @@ trait Bijection[A, B] extends (A => B) with Serializable { self =>
   def invert(b: B): A = inverse(b)
 
   def inverse: Bijection[B, A] =
-    new Bijection[B, A] {
+    new AbstractBijection[B, A] {
       override def apply(b: B) = self.invert(b)
       override def invert(a: A) = self(a)
     }
@@ -42,16 +42,18 @@ trait Bijection[A, B] extends (A => B) with Serializable { self =>
    * with this one applied first.
    */
   def andThen[C](g: Bijection[B, C]): Bijection[A, C] =
-    new Bijection[A,C] {
+    new AbstractBijection[A,C] {
       def apply(a: A) = g(self.apply(a))
       override def invert(c: C) = self.invert(g.invert(c))
     }
+  def andThen[C](g: Injection[B, C]): Injection[A, C] = g compose this
 
   /**
    * Composes two instances of Bijection in a new Bijection,
    * with this one applied last.
    */
   def compose[T](g: Bijection[T, A]): Bijection[T, B] = g andThen this
+  def compose[T](g: Injection[T, A]): Injection[T, B] = g andThen this
 }
 
 /**
@@ -119,18 +121,8 @@ object Bijection extends CollectionBijections
 
   implicit def identity[A]: Bijection[A, A] = new IdentityBijection[A]
 
-  /**
-   * Converts between an Option[A] and the contained A or the supplied
-   * default value. Note: all inputs are recoverable, not so for filterDefault().inverse
-   */
-  def getOrElse[A](default: A): Bijection[Option[A], A] =
-    new Bijection[Option[A], A] {
-      override def apply(opt: Option[A]) = opt.getOrElse(default)
-      override def invert(a: A) = Some(a)
-    }
-
   /** We check for default, and return None, else Some
-   * Note this never returns Some(default) unlike getOrElse
+   * Note this never returns Some(default)
    */
   def filterDefault[A](default: A): Bijection[A, Option[A]] =
     new Bijection[A, Option[A]] {

@@ -104,7 +104,7 @@ import Bijection.asMethod
    * Accepts a Bijection[A, B] and returns a bijection that can
    * transform traversable containers of A into traversable containers of B.
    *
-   * Be careful going from ordered to unordered containers;
+   * Do not go from ordered to unordered containers;
    * Bijection[Iterable[A], Set[B]] is inaccurate, and really makes
    * no sense.
    */
@@ -143,4 +143,12 @@ import Bijection.asMethod
     = toContainer[A, B, Vector[A], List[B]]
   implicit def indexedSeq2List[A,B](implicit bij: Bijection[A,B]): Bijection[IndexedSeq[A], List[B]]
     = toContainer[A, B, IndexedSeq[A], List[B]]
+
+  /** This doesn't actually copy the Array, only wraps/unwraps with WrappedArray
+   */
+  implicit def array2Traversable[T:ClassManifest]: Bijection[Array[T], Traversable[T]] =
+    new AbstractBijection[Array[T], Traversable[T]] {
+      override def apply(a: Array[T]) = a.toTraversable
+      override def invert(t: Traversable[T]) = t.toArray
+    }
 }

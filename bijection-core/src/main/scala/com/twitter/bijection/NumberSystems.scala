@@ -23,7 +23,8 @@ object NumberSystems {
       def apply(num: Int) = OctalString(Integer.toString(num,8))
       override def invert(s: OctalString) = Integer.parseInt(s.get,8)
   }
-  implicit def arbitbase(base:Int): Bijection[Int, ArbitBaseString] = new Bijection[Int, ArbitBaseString] {
+  // Can't be implicit due to the base parameter:
+  def arbitbase(base:Int): Bijection[Int, ArbitBaseString] = new Bijection[Int, ArbitBaseString] {
       def apply(num: Int) = ArbitBaseString(Integer.toString(num,base),base)
       override def invert(s: ArbitBaseString) = Integer.parseInt(s.get,s.base)
   }
