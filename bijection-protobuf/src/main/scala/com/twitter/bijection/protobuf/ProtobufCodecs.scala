@@ -1,10 +1,12 @@
 package com.twitter.bijection.protobuf
 
-import com.twitter.bijection.Bijection
+import com.twitter.bijection.{Bijection, Injection}
 import com.google.protobuf.Message
 import com.google.protobuf.ProtocolMessageEnum
 import java.lang.{ Integer => JInt }
 import scala.collection.mutable.{ Map =>MMap }
+
+import scala.util.control.Exception.allCatch
 
 /**
  * Bijections for use in serializing and deserializing Protobufs.
@@ -13,7 +15,7 @@ object ProtobufCodec {
   /**
    * For scala instantiation. Uses reflection.
    */
-  implicit def apply[T <: Message: Manifest]: Bijection[T, Array[Byte]] = {
+  implicit def apply[T <: Message: Manifest]: Injection[T, Array[Byte]] = {
     val klass = manifest[T].erasure.asInstanceOf[Class[T]]
     fromClass(klass)
   }
@@ -21,40 +23,44 @@ object ProtobufCodec {
   /**
    * For java instantiation. No reflection, supplied classes only.
    */
-  def fromClass[T <: Message](klass: Class[T]): Bijection[T, Array[Byte]] = new ProtobufCodec[T](klass)
+  def fromClass[T <: Message](klass: Class[T]): Injection[T, Array[Byte]] = new ProtobufCodec[T](klass)
 }
 
-class ProtobufCodec[T <: Message](klass: Class[T]) extends Bijection[T, Array[Byte]] {
+class ProtobufCodec[T <: Message](klass: Class[T]) extends Injection[T, Array[Byte]] {
   lazy val parseFrom = klass.getMethod("parseFrom", classOf[Array[Byte]])
   override def apply(item: T) = item.toByteArray
-  override def invert(bytes: Array[Byte]) = parseFrom.invoke(null, bytes).asInstanceOf[T]
+  override def invert(bytes: Array[Byte]) = allCatch.opt {
+    parseFrom.invoke(null, bytes).asInstanceOf[T]
+  }
 }
 
 object ProtobufEnumCodec {
   /**
    * For scala instantiation. Uses reflection.
    */
-  implicit def apply[T <: ProtocolMessageEnum: Manifest]: Bijection[T, Int] = {
+  implicit def apply[T <: ProtocolMessageEnum: Manifest]: Injection[T, Int] = {
     val klass = manifest[T].erasure.asInstanceOf[Class[T]]
     fromClass(klass)
   }
   /**
    * For java instantiation. No reflection, supplied classes only.
    */
-  def fromClass[T <: ProtocolMessageEnum](klass: Class[T]): Bijection[T, Int] = new ProtobufEnumCodec[T](klass)
+  def fromClass[T <: ProtocolMessageEnum](klass: Class[T]): Injection[T, Int] = new ProtobufEnumCodec[T](klass)
 
   /**
    * Implicit conversions between ProtocolMessageEnum and common types.
    */
-  implicit def toBinary[T <: ProtocolMessageEnum: Manifest]: Bijection[T, Array[Byte]] = Bijection.connect[T, Int, Array[Byte]]
+  implicit def toBinary[T <: ProtocolMessageEnum: Manifest]: Injection[T, Array[Byte]] =
+    Injection.connect[T, Int, Array[Byte]]
 }
 
-class ProtobufEnumCodec[T <: ProtocolMessageEnum](klass: Class[T]) extends Bijection[T, Int] {
+class ProtobufEnumCodec[T <: ProtocolMessageEnum](klass: Class[T]) extends Injection[T, Int] {
   import Bijection.asMethod // adds "as" for conversions
 
   lazy val valueOf = klass.getMethod("valueOf", classOf[Int])
   val cache = MMap[Int,T]()
   override def apply(enum: T) = enum.getNumber
-  override def invert(i: Int) =
+  override def invert(i: Int) = Option {
     cache.getOrElseUpdate(i, valueOf.invoke(null, i.as[JInt]).asInstanceOf[T])
+  }
 }

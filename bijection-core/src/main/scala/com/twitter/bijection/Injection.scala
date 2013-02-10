@@ -127,6 +127,7 @@ object Injection extends CollectionInjections
 
   def apply[A, B](a: A)(implicit inj: Injection[A, B]): B = inj(a)
   def invert[A, B](b: B)(implicit inj: Injection[A, B]): Option[A] = inj.invert(b)
+  def on[A, B](implicit inj: Injection[A, B]): Injection[A, B] = inj
 
   def build[A, B](to: A => B)(from: B => Option[A]): Injection[A, B] =
     new AbstractInjection[A, B] {

@@ -35,7 +35,7 @@ object ProtobufCodecLaws extends Properties("ProtobufCodec") with BaseProperties
 
   property("round trips protobuf -> Array[Byte]") = {
     implicit val b = ProtobufCodec[FatigueCount]
-    roundTrips[FatigueCount, Array[Byte]]()
+    isLooseInjection[FatigueCount, Array[Byte]]
   }
 }
 
@@ -47,5 +47,7 @@ class ProtobufEnumTest extends Specification with BaseProperties {
 
     val female = Gender.valueOf(1)
     female must_== rt(female)
+
+    b.invert(2) must_== None
   }
 }

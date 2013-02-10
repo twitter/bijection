@@ -16,7 +16,7 @@
 
 package com.twitter.bijection.thrift
 
-import com.twitter.bijection.{ BaseProperties, Bijection }
+import com.twitter.bijection.{ BaseProperties, Bijection, Injection }
 import org.scalacheck.Properties
 import org.scalacheck.Arbitrary
 import org.specs._
@@ -28,9 +28,8 @@ object ThriftCodecLaws extends Properties("ThriftCodecs") with BaseProperties {
   implicit val testThrift = arbitraryViaFn { is: (Int,String) => buildThrift(is) }
 
   // Code generator for thrift instances.
-  def roundTripsThrift(bijection: Bijection[TestThriftStructure, Array[Byte]]) = {
-    implicit val b = bijection
-    roundTrips[TestThriftStructure, Array[Byte]]()
+  def roundTripsThrift(implicit injection: Injection[TestThriftStructure, Array[Byte]]) = {
+    isLooseInjection[TestThriftStructure, Array[Byte]]
   }
 
   property("round trips thrift -> Array[Byte] through binary") =
@@ -41,7 +40,7 @@ object ThriftCodecLaws extends Properties("ThriftCodecs") with BaseProperties {
 
   property("round trips thrift -> String through json") = {
     implicit val b = JsonThriftCodec[TestThriftStructure]
-    roundTrips[TestThriftStructure, String]()
+    isLooseInjection[TestThriftStructure, String]
   }
 }
 
@@ -53,5 +52,7 @@ class TEnumTest extends Specification with BaseProperties {
 
     val female = Gender.findByValue(1)
     female must_== rt(female)
+
+    b.invert(2) must_== None
   }
 }
