@@ -47,3 +47,5 @@ trait StringInjections extends NumericInjections {
       override def invert(s: String) = allCatch.opt(UUID.fromString(s))
     }
 }
+
+object StringCodec extends StringInjections

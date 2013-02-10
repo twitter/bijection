@@ -47,6 +47,12 @@ trait NumericInjections extends GeneratedTupleInjections {
     def invert(l: Long) =
       if (l.isValidInt) Some(l.toInt) else None
   }
+  implicit val long2BigInt: Injection[Long, BigInt] = new AbstractInjection[Long,BigInt] {
+    def apply(l: Long) = BigInt(l)
+    def invert(bi: BigInt) =
+      if (bi <= Long.MaxValue && Long.MinValue <= bi) Some(bi.toLong) else None
+  }
+
   // This is a loose injection
   implicit val float2Double: Injection[Float, Double] = new AbstractInjection[Float, Double] {
     def apply(i: Float) = i.toDouble
