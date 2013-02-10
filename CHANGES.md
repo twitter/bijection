@@ -2,6 +2,8 @@
 
 ### 0.2.1
 
+* `bijection-guava` for Guava interop.
+* `bijection-algebird` for bijections on classes in twitter's [Algebird](https://github.com/twitter/algebird).
 * `bijection-guava` for Guava interop, with
   * Function1 <-> Guava Function
   * () => T <-> Supplier[T]
