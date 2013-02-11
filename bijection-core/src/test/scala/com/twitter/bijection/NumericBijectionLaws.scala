@@ -30,7 +30,7 @@ import java.util.UUID
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 
-import Bijection.asMethod // get the .as syntax
+import Conversion.asMethod // get the .as syntax
 
 object JavaNumArbs {
   import NumericBijectionLaws.{arbitraryViaFn => viaFn}

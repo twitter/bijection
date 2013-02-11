@@ -110,15 +110,6 @@ object Bijection extends CollectionBijections
   def connect[A, B, C, D, E](implicit bij: Bijection[A, B], bij2: Bijection[B, C], bij3: Bijection[C, D], bij4: Bijection[D, E]): Bijection[A, E] =
     connect[A, B, C, D] andThen bij4
 
-  /*
-   * Implicit conversion to Biject. This allows the user to use bijections as implicit
-   * conversions between types.
-   *
-   * For example, with an implicit Bijection[String, Array[Byte]], the following works:
-   * Array(1.toByte, 2.toByte).as[String]
-   */
-  implicit def asMethod[A](a: A): Inject[A] = new Inject(a)
-
   implicit def identity[A]: Bijection[A, A] = new IdentityBijection[A]
 
   /** We check for default, and return None, else Some

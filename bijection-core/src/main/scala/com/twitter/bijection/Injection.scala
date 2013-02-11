@@ -84,44 +84,6 @@ trait LowPriorityInjections {
     }
 }
 
-/**
- * Biject allows the user to convert an instance of type A to type B given an implicit bijection
- * that goes either way between the two.
- *
- * For example, with an implicit Bijection[String,Array[Byte]], the following works:
- * Array(1.toByte, 2.toByte).as[String]
- *
- * Thanks to
- * [hylotech](https://github.com/hylotech/suits/blob/master/src/main/scala/hylotech/util/Bijection.scala)
- * for the following "as" pattern.
- * TODO: this should be a value class in scala 2.10
- */
-
-sealed class Inject[A](a: A) extends Serializable {
-  // Not clear to me why this fails on the String @@ Rep[T] pattern, but it seems to:
-  // TODO: fix this?
-  //def as[B](implicit bij: Bijection[A, _ <: B]): B = bij(a)
-  def as[B](implicit conv: Conversion[A, B]): B = conv(a)
-  def asOption[B](implicit inj: Injection[B,A]): Option[B] = inj.invert(a)
-}
-
-abstract class Conversion[A, B] extends (A => B)
-
-trait LowPriorityConversion {
-  implicit def fromInjection[A,B](implicit inj: Injection[A,B]) = new Conversion[A,B] {
-    def apply(a: A) = inj(a)
-  }
-  implicit def fromBijection[A,B](implicit bij: Bijection[A,B]) = new Conversion[A,B] {
-    def apply(a: A) = bij(a)
-  }
-}
-
-object Conversion extends LowPriorityConversion {
-  implicit def fromFunction[A,B](implicit fn: Function1[A,B]) = new Conversion[A,B] {
-    def apply(a: A) = fn(a)
-  }
-}
-
 object Injection extends CollectionInjections
   with Serializable {
 
@@ -143,7 +105,6 @@ object Injection extends CollectionInjections
       override def invert(b: B) = allCatch.opt(from(b))
     }
 
-  implicit def asMethod[A](a: A): Inject[A] = new Inject(a)
   /**
    * The "connect" method allows composition of multiple implicit Injections
    * into a single Injection. For example,

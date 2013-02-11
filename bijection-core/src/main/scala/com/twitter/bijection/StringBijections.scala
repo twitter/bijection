@@ -89,7 +89,6 @@ object StringJoinBijection {
    * an instance of type A with the "as" notation for a default item
    * in the collection:
    *
-   * import Bijection.asMethod
    * viaContainer[Int,Set[Int]] andThen Bijection.getOrElse(0.as[String]): Bijection[Set[Int],String]
    */
   def viaContainer[A, B <: TraversableOnce[A]](separator: String = DEFAULT_SEP)
