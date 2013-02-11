@@ -16,7 +16,7 @@
 
 package com.twitter.bijection.scrooge
 
-import com.twitter.bijection.Bijection
+import com.twitter.bijection.{Bijection, Injection}
 import com.twitter.scrooge.{
   BinaryThriftStructSerializer,
   CompactThriftSerializer,
@@ -24,11 +24,12 @@ import com.twitter.scrooge.{
   ThriftStructCodec,
   ThriftStructSerializer
 }
+import scala.util.control.Exception.allCatch
 
 class ScalaCodec[T <: ThriftStruct](ser: ThriftStructSerializer[T])
-    extends Bijection[T, Array[Byte]] {
+    extends Injection[T, Array[Byte]] {
   override def apply(item: T) = ser.toBytes(item)
-  override def invert(bytes: Array[Byte]) = ser.fromBytes(bytes)
+  override def invert(bytes: Array[Byte]) = allCatch.opt(ser.fromBytes(bytes))
 }
 
 object BinaryScalaCodec {
