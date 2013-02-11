@@ -170,6 +170,7 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-util",
-    libraryDependencies += "com.twitter" % "util-core" % "5.3.15"
+    libraryDependencies += "com.twitter" % "util-core" % "5.3.15",
+    resolvers += "Twitter Maven" at "http://maven.twttr.com"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 }
