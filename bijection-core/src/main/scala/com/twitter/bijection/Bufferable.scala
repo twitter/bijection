@@ -24,7 +24,7 @@ import scala.annotation.tailrec
 import scala.collection.mutable.{Builder, Map => MMap, Set => MSet, Buffer => MBuffer}
 
 /**
- * Bufferable[T] is a typeclass to work with java.nio.ByteBuffer for serialization/bijections to
+ * Bufferable[T] is a typeclass to work with java.nio.ByteBuffer for serialization/injections to
  * Array[Byte]
  */
 
@@ -58,9 +58,12 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
   // With Bijections:
   def viaBijection[A,B](implicit buf: Bufferable[B], bij: Bijection[A,B]): Bufferable[A] =
     Bufferable.build[A] { (bb, a) => buf.put(bb, bij(a)) } { bb => bij.invert(buf.get(bb)) }
+  // TODO Bufferable should integrate with injection
+  def viaInjection[A,B](implicit buf: Bufferable[B], inj: Injection[A, B]): Bufferable[A] =
+    Bufferable.build[A] { (bb, a) => buf.put(bb, inj(a)) } { bb => inj.invert(buf.get(bb)).get }
 
-  def bijectionOf[T](implicit buf: Bufferable[T]): Bijection[T, Array[Byte]] =
-    Bijection.build[T, Array[Byte]] { t =>
+  def injectionOf[T](implicit buf: Bufferable[T]): Injection[T, Array[Byte]] =
+    Injection.buildCatchInvert[T, Array[Byte]] { t =>
       getBytes(put(ByteBuffer.allocateDirect(128), t))
     } { bytes => get[T](ByteBuffer.wrap(bytes)) }
 
@@ -122,7 +125,7 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
       bb.get(ary)
       ary
     }
-  implicit val stringBufferable : Bufferable[String] = viaBijection[String, Array[Byte]]
+  implicit val stringBufferable : Bufferable[String] = viaInjection[String, Array[Byte]]
   implicit val symbolBufferable : Bufferable[Symbol] = viaBijection[Symbol, String]
 
   // Collections:
@@ -156,17 +159,27 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
       if (bb.get == byte0) Left(bufl.get(bb)) else Right(bufr.get(bb))
     }
 
+  private def putCollection[C<:Traversable[T],T](bb: ByteBuffer, l: C, buf: Bufferable[T]): ByteBuffer = {
+    val size = l.size
+    val nextBb = reallocatingPut(bb){ _.putInt(size) }
+    l.foldLeft(nextBb) { (oldbb, t) => reallocatingPut(oldbb) { buf.put(_, t) } }
+  }
+  private def getCollection[T,C](bb: ByteBuffer, builder: Builder[T,C], buf: Bufferable[T]): C = {
+    val size = bb.getInt
+    // We can't mutate the builder while calling other functions (not safe)
+    // so we write into this array:
+    val ary = new Array[Any](size)
+    (0 until size).foreach { idx => ary(idx) = buf.get(bb) }
+    // Now use the builder:
+    builder.clear()
+    builder.sizeHint(size)
+    ary.foreach { item => builder += item.asInstanceOf[T] }
+    builder.result()
+  }
   def collection[C<:Traversable[T],T](builder: Builder[T,C])(implicit buf: Bufferable[T]):
-    Bufferable[C] = build[C] { (bb, l) =>
-      val size = l.size
-      val nextBb = reallocatingPut(bb){ _.putInt(size) }
-      l.foldLeft(nextBb) { (oldbb, t) => reallocatingPut(oldbb) { buf.put(_, t) } }
-    } { bb =>
-      val size = bb.getInt
-      builder.clear()
-      (0 until size).foreach { idx => builder += buf.get(bb) }
-      builder.result()
-    }
+    Bufferable[C] = build[C] { (bb, l) => putCollection(bb, l, buf) }
+      { bb => getCollection(bb, builder, buf) }
+
   implicit def list[T](implicit buf: Bufferable[T]) = collection[List[T], T](List.newBuilder[T])
   implicit def set[T](implicit buf: Bufferable[T]) = collection[Set[T], T](Set.newBuilder[T])
   implicit def indexedSeq[T](implicit buf: Bufferable[T]) =
@@ -183,16 +196,7 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
 
   // TODO we could add IntBuffer/FloatBuffer etc.. to have faster implementations Array[Int]
   implicit def array[T](implicit buf: Bufferable[T], cm: ClassManifest[T]): Bufferable[Array[T]] =
-    build[Array[T]] { (bb, a) =>
-      // Unfortunately, Array is not traverable, otherwise this is just collection
-      val size = a.size
-      val nextBb = reallocatingPut(bb){ _.putInt(size) }
-      a.foldLeft(nextBb) { (oldbb, t) => reallocatingPut(oldbb) { buf.put(_, t) } }
-    } { bb =>
-      val builder = Array.newBuilder[T]
-      val size = bb.getInt
-      builder.clear()
-      (0 until size).foreach { idx => builder += buf.get(bb) }
-      builder.result()
-    }
+    build[Array[T]] { (bb, l) =>
+      putCollection(bb, l.toTraversable, buf)
+    } { bb => getCollection(bb, Array.newBuilder[T], buf) }
 }

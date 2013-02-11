@@ -23,21 +23,12 @@ import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
 
 trait StringBijections extends NumericBijections {
-  implicit val utf8: Bijection[String, Array[Byte]] = withEncoding("UTF-8")
-  def withEncoding(encoding: String): Bijection[String, Array[Byte]] =
-    new Bijection[String, Array[Byte]] {
-      def apply(s: String) = s.getBytes(encoding)
-      override def invert(b: Array[Byte]) = new String(b, encoding)
-    }
-
   implicit val symbol2String: Bijection[Symbol, String] =
     new Bijection[Symbol, String] {
       def apply(s: Symbol) = s.name
       override def invert(s: String ) = Symbol(s)
     }
 }
-
-object StringCodec extends StringBijections
 
 /**
  * Bijection for joining together iterables of strings into a single string
@@ -48,7 +39,7 @@ object StringJoinBijection {
   val DEFAULT_SEP = ":"
 
   @tailrec
-  private def split(str: String, sep: String, acc: List[String] = Nil): List[String] = {
+  private[bijection] def split(str: String, sep: String, acc: List[String] = Nil): List[String] = {
     str.indexOf(sep) match {
       case -1 => (str::acc).reverse
       case idx: Int =>

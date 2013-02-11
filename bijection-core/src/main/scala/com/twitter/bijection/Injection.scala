@@ -35,16 +35,28 @@ trait Injection[A, B] extends (A => B) with Serializable { self =>
    * with this one applied first.
    */
   def andThen[C](g: Injection[B, C]): Injection[A, C] =
-    new AbstractInjection[A,C] {
+    new AbstractInjection[A, C] {
       override def apply(a: A) = g(self.apply(a))
       override def invert(c: C) = g.invert(c).flatMap { b => self.invert(b) }
     }
+  /** Follow the Injection with a Bijection
+   */
+  def andThen[C](bij: Bijection[B, C]): Injection[A, B] =
+    new AbstractInjection[A, C] {
+      override def apply(a: A) = bij(self.apply(a))
+      override def invert(c: C) = self.invert(bij.invert(c))
+    }
 
   /**
-   * Composes two instances of Bijection in a new Bijection,
+   * Composes two instances of Injection in a new Injection,
    * with this one applied last.
    */
   def compose[T](g: Injection[T, A]): Injection[T, B] = g andThen this
+  def compose[T](bij: Bijection[T, A]): Injection[T, B] =
+    new AbstractInjection[T, B] {
+      override def apply(t: T) = self.apply(bij(t))
+      override def invert(b: B) = self.invert(b).map { a => bij.invert(a) }
+    }
 }
 
 /**
@@ -122,6 +134,15 @@ object Injection extends CollectionInjections
       override def invert(b: B) = from(b)
     }
 
+  /** Like build, but you give a function from B => A which may throw
+   * If you never expect from to throw, use Bijection.build
+   */
+  def buildCatchInvert[A, B](to: A => B)(from: B => A): Injection[A, B] =
+    new AbstractInjection[A, B] {
+      override def apply(a: A) = to(a)
+      override def invert(b: B) = allCatch.opt(from(b))
+    }
+
   implicit def asMethod[A](a: A): Inject[A] = new Inject(a)
   /**
    * The "connect" method allows composition of multiple implicit Injections
@@ -158,5 +179,13 @@ object Injection extends CollectionInjections
     PartialFunction[B, D] = new PartialFunction[B, D] {
       override def isDefinedAt(b: B) = inj1.invert(b).isDefined
       override def apply(b: B): D = inj2.apply(fn(inj1.invert(b).get))
+    }
+
+  /** Use of this implies you want exceptions when the inverse is undefined
+   */
+  def unsafeToBijection[A,B](implicit inj: Injection[A,B]): Bijection[A,B] =
+    new AbstractBijection[A,B] {
+      def apply(a: A) = inj(a)
+      override def invert(b: B) = inj.invert(b).get
     }
 }

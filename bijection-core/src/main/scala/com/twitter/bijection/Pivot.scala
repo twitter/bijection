@@ -30,9 +30,7 @@ object Pivot extends Serializable {
    * to split each input key. Bijection can be supplied as an implicit.
    */
   def of[K, K1, K2](implicit bijection: Bijection[K, (K1, K2)]): Pivot[K, K1, K2] =
-    new Pivot[K, K1, K2] {
-      override val pivot = bijection
-    }
+    new PivotImpl[K, K1, K2](bijection)
 
   /**
    * Returns a new Pivot[(K, V), V, K] -- this Pivot can be used to
@@ -171,3 +169,6 @@ trait Pivot[K, K1, K2] extends Bijection[Iterable[K], Map[K1, Iterable[K2]]] {
       }
     })
 }
+
+// For use with java, avoiding trait bloat.
+class PivotImpl[K, K1, K2](override val pivot: Bijection[K, (K1,K2)]) extends Pivot[K, K1, K2]
