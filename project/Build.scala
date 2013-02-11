@@ -171,4 +171,13 @@ object BijectionBuild extends Build {
     name := "bijection-util",
     libraryDependencies += "com.twitter" % "util-core" % "5.3.15"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  lazy val bijectionClojure = Project(
+    id = "bijection-clojure",
+    base = file("bijection-clojure"),
+    settings = sharedSettings
+  ).settings(
+    name := "bijection-clojure",
+    libraryDependencies += "org.clojure" % "clojure" % "1.4.0"
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
 }
