@@ -1,6 +1,6 @@
 import sbt._
 import Keys._
-import sbtrelease.ReleasePlugin._
+import sbtgitflow.ReleasePlugin._
 
 object BijectionBuild extends Build {
   val sharedSettings = Project.defaultSettings ++ releaseSettings ++ Seq(
@@ -71,7 +71,8 @@ object BijectionBuild extends Build {
 
   lazy val bijection = Project(
     id = "bijection",
-    base = file(".")
+    base = file("."),
+    settings = sharedSettings
     ).settings(
     test := { },
     publish := { }, // skip publishing for this root project.
