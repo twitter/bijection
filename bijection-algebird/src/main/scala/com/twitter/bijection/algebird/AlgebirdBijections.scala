@@ -17,9 +17,9 @@ limitations under the License.
 package com.twitter.bijection.algebird
 
 import com.twitter.algebird.{ Field, Group, Monoid, Ring, Semigroup }
-import com.twitter.bijection.{ AbstractBijection, Bijection }
+import com.twitter.bijection.{ AbstractBijection, Bijection, Conversion }
 
-import Bijection.asMethod // "as" syntax
+import Conversion.asMethod // "as" syntax
 
 /**
  * Bijections on Algebird's abstract algebra datatypes.

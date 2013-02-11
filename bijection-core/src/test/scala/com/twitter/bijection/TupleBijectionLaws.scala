@@ -39,4 +39,6 @@ with BaseProperties {
   property("round trips (Int,Long,String,Long) -> (String,String,String,Array[Byte])") =
     //This needs a tag on Array[Byte] @@ Rep[Long]
     isInjection[(Int,Long,String,Long), (String,String,String,Array[Byte])]
+  property("Tuple to list") =
+    isLooseInjection[(Int, Long, String), List[Array[Byte]]]
 }

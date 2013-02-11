@@ -32,7 +32,7 @@ import scala.collection.mutable
 import collection.generic.CanBuildFrom
 
 trait CollectionBijections extends BinaryBijections {
-import Bijection.asMethod
+import Conversion.asMethod
 
   /**
    * Bijections between collection types defined in scala.collection.JavaConverters.

@@ -18,7 +18,7 @@ package com.twitter.bijection.guava
 
 import com.google.common.base.Optional
 import com.google.common.base.{ Function => GFn, Predicate, Supplier }
-import com.twitter.bijection.{ @@, BaseProperties, Bijection, Rep }
+import com.twitter.bijection.{ @@, BaseProperties, Bijection, Rep, Conversion }
 import com.twitter.bijection.Rep._
 
 import org.scalacheck.Arbitrary
@@ -27,7 +27,8 @@ import org.scalacheck.Prop.forAll
 
 import java.lang.{ Long => JLong }
 
-import Bijection.{ asMethod, connect }
+import Bijection.connect
+import Conversion.asMethod
 
 object GuavaBijectionLaws extends Properties("GuavaBijections") with BaseProperties {
   import GuavaBijections._
