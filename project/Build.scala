@@ -1,10 +1,10 @@
 import sbt._
 import Keys._
+import sbtgitflow.ReleasePlugin._
 
 object BijectionBuild extends Build {
-  val sharedSettings = Project.defaultSettings ++ Seq(
+  val sharedSettings = Project.defaultSettings ++ releaseSettings ++ Seq(
     organization := "com.twitter",
-    version := "0.2.2-SNAPSHOT",
     scalaVersion := "2.9.2",
     libraryDependencies ++= Seq(
       "org.scalacheck" %% "scalacheck" % "1.10.0" % "test" withSources(),
@@ -70,7 +70,8 @@ object BijectionBuild extends Build {
 
   lazy val bijection = Project(
     id = "bijection",
-    base = file(".")
+    base = file("."),
+    settings = sharedSettings
     ).settings(
     test := { },
     publish := { }, // skip publishing for this root project.
@@ -152,6 +153,15 @@ object BijectionBuild extends Build {
   ).settings(
     name := "bijection-json",
     libraryDependencies += jsonParser
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  lazy val bijectionAlgebird = Project(
+    id = "bijection-algebird",
+    base = file("bijection-algebird"),
+    settings = sharedSettings
+  ).settings(
+    name := "bijection-algebird",
+    libraryDependencies += "com.twitter" %% "algebird" % "0.1.6"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   lazy val bijectionUtil = Project(
