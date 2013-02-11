@@ -89,7 +89,6 @@ object Bijection extends CollectionBijections
 
   def apply[A, B](a: A)(implicit bij: Bijection[A, B]): B = bij(a)
   def invert[A, B](b: B)(implicit bij: Bijection[A, B]): A = bij.invert(b)
-  def on[A, B](implicit bij: Bijection[A, B]): Bijection[A, B] = bij
 
   def build[A, B](to: A => B)(from: B => A): Bijection[A, B] =
     new AbstractBijection[A, B] {
