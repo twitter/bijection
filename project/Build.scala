@@ -1,8 +1,9 @@
 import sbt._
 import Keys._
+import sbtrelease.ReleasePlugin._
 
 object BijectionBuild extends Build {
-  val sharedSettings = Project.defaultSettings ++ Seq(
+  val sharedSettings = Project.defaultSettings ++ releaseSettings ++ Seq(
     organization := "com.twitter",
     version := "0.2.2-SNAPSHOT",
     scalaVersion := "2.9.2",
