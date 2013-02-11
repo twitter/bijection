@@ -16,7 +16,7 @@
 
 package com.twitter.bijection.scrooge
 
-import com.twitter.bijection.{ BaseProperties, Bijection }
+import com.twitter.bijection.{ BaseProperties, Bijection, Injection }
 
 import org.scalacheck.Properties
 import org.scalacheck.Arbitrary
@@ -28,9 +28,9 @@ object ScroogeCodecLaws extends Properties("ScroogeCodecs") with BaseProperties 
   implicit val testScrooge = arbitraryViaFn { is: (Int,String) => buildScrooge(is) }
 
   // Code generator for thrift instances.
-  def roundTripsScrooge(bijection: Bijection[TestStruct, Array[Byte]]) = {
+  def roundTripsScrooge(bijection: Injection[TestStruct, Array[Byte]]) = {
     implicit val b = bijection
-    isInjective[TestStruct, Array[Byte]]
+    isLooseInjection[TestStruct, Array[Byte]]
   }
 
   property("round trips thrift -> Array[Byte] through binary") =
