@@ -34,6 +34,8 @@ sealed class Convert[A](a: A) extends Serializable {
   // TODO: fix this?
   //def as[B](implicit bij: Bijection[A, _ <: B]): B = bij(a)
   def as[B](implicit conv: Conversion[A, B]): B = conv(a)
+  // Syntax to reverse an Injection:
+  def asOption[B](implicit inj: Injection[B, A]): Option[B] = inj.invert(a)
 }
 
 // Looks like a function, but we don't want a subclass relationship

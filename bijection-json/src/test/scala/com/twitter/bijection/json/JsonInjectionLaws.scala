@@ -16,7 +16,7 @@
 
 package com.twitter.bijection.json
 
-import com.twitter.bijection.Bijection.asMethod
+import com.twitter.bijection.Conversion.asMethod
 
 import com.twitter.bijection.{ BaseProperties, Bijection, Injection }
 import org.scalacheck.Properties

@@ -17,10 +17,10 @@
 package com.twitter.bijection.guava
 
 import com.google.common.base.Optional
-import com.twitter.bijection.{ AbstractBijection,  Bijection }
+import com.twitter.bijection.{ AbstractBijection,  Bijection, Conversion }
 import com.google.common.base.{ Function => GFn, Predicate, Supplier }
 
-import Bijection.asMethod
+import Conversion.asMethod
 
 /**
  * Bijections between Scala and Guava.
