@@ -39,6 +39,7 @@ public class TestBijectionInJava {
         }
       };
       assertEquals(Long.valueOf("123"), l2s.invert("123").get());
+      assertEquals(true, l2s.invert("hello").isEmpty());
     }
 
     //TODO include a more complete example using Base64 conversion, and GZip + Base64 version
