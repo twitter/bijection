@@ -51,7 +51,7 @@ trait BinaryBijections extends StringBijections {
    * Bijection between byte array and java.nio.ByteBuffer.
    */
   implicit val bytes2Buffer: Bijection[Array[Byte], ByteBuffer] =
-    new Bijection[Array[Byte], ByteBuffer] {
+    new AbstractBijection[Array[Byte], ByteBuffer] {
       def apply(b: Array[Byte]) = ByteBuffer.wrap(b)
       override def invert(byteBuffer: ByteBuffer) = {
         val buf = byteBuffer.duplicate()
@@ -75,7 +75,7 @@ trait BinaryBijections extends StringBijections {
    * Bijection between byte array and GZippedBytes.
    */
   implicit lazy val bytes2GzippedBytes: Bijection[Array[Byte], GZippedBytes] =
-    new Bijection[Array[Byte], GZippedBytes] {
+    new AbstractBijection[Array[Byte], GZippedBytes] {
       def apply(bytes: Array[Byte]) = {
         val baos = new ByteArrayOutputStream
         val gos = new GZIPOutputStream(baos)
@@ -98,7 +98,7 @@ trait BinaryBijections extends StringBijections {
    * CALL TO TRIM.
    */
   implicit lazy val bytes2Base64: Bijection[Array[Byte], Base64String] =
-    new Bijection[Array[Byte], Base64String] {
+    new AbstractBijection[Array[Byte], Base64String] {
       def apply(bytes: Array[Byte]) = Base64String(Base64.encodeBase64String(bytes).trim)
       override def invert(b64: Base64String) = Base64.decodeBase64(b64.str)
     }
