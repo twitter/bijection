@@ -147,6 +147,11 @@ object Bijection extends CollectionBijections
       }
 
   implicit def swap[T, U]: Bijection[(T, U), (U, T)] = SwapBijection[T, U]
+
+  def subclass[A, B <: A](afn: A => B)(implicit mf: ClassManifest[B]): Bijection[A, B] =
+    new SubclassBijection[A, B](mf.erasure.asInstanceOf[Class[B]]) {
+      def applyfn(a: A) = afn(a)
+    }
 }
 
 class IdentityBijection[A] extends Bijection[A, A] {
@@ -155,6 +160,23 @@ class IdentityBijection[A] extends Bijection[A, A] {
 
   override def andThen[T](g: Bijection[A, T]) = g
   override def compose[T](g: Bijection[T, A]) = g
+}
+
+/** When you have conversion between A and B where B is a subclass of A, which is often
+ * free, i.e. A is already an instance of A, then this can be faster
+ */
+abstract class SubclassBijection[A, B <: A](clb: Class[B]) extends Bijection[A, B] {
+  protected def applyfn(a: A): B
+  def apply(a: A) = {
+    if (clb.isAssignableFrom(a.getClass)) {
+      // This a is legit:
+      a.asInstanceOf[B]
+    }
+    else {
+      applyfn(a)
+    }
+  }
+  override def invert(b : B): A = b
 }
 
 /**

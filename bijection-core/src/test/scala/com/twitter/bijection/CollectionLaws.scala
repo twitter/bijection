@@ -25,11 +25,14 @@ object CollectionLaws extends Properties("Collections")
 with BaseProperties {
   import StringArbs._
 
-  implicit val listToVector =
-    Bijection.toContainer[Int, String @@ Rep[Int], List[Int], Vector[String @@ Rep[Int]]]
-
   implicit def vectorArb[A](implicit la: Arbitrary[List[A]]) =
     arbitraryViaFn { (l: List[A]) => Vector(l :_*) }
+  implicit def seqArb[A](implicit la: Arbitrary[List[A]]) =
+    arbitraryViaFn { (l: List[A]) => Seq(l :_*) }
+  implicit def indexedSeqArb[A](implicit la: Arbitrary[List[A]]) =
+    arbitraryViaFn { (l: List[A]) => IndexedSeq(l :_*) }
+  implicit def traversableArb[A](implicit la: Arbitrary[List[A]]) =
+    arbitraryViaFn { (l: List[A]) => l.toTraversable }
 
   property("round trip List[Int] <=> Vector[String @@ Rep[Int]]") =
     isBijection[List[Int], Vector[String @@ Rep[Int]]]
@@ -43,11 +46,25 @@ with BaseProperties {
   property("round trip Set[Double] <=> Set[String @@ Rep[Double]]") =
     isBijection[Set[Double], Set[String @@ Rep[Double]]]
 
+  property("round trip Seq[Double] <=> Seq[String @@ Rep[Double]]") =
+    isBijection[Seq[Double], Seq[String @@ Rep[Double]]]
+
   property("round trip Map[Long,Double] <=> Map[String @@ Rep[Long], String @@ Rep[Double]]") =
     isBijection[Map[Long, Double], Map[String @@ Rep[Long], String @@ Rep[Double]]]
 
   property("Option[Long] <=> Option[String @@ Rep[Long]]") =
     isBijection[Option[Long], Option[String @@ Rep[Long]]]
+
+  property("Array[Int] <=> Seq[Int]") = isBijection[Array[Int], Seq[Int]]
+  property("Array[Int] <=> Traversable[Int]") = isBijection[Array[Int], Traversable[Int]]
+  property("Vector[Int] <=> Seq[Int]") = isBijection[Vector[Int], Seq[Int]]
+  property("Vector[Int] <=> IndexedSeq[Int]") = isBijection[Vector[Int], IndexedSeq[Int]]
+
+  property("List[Int] <=> IndexedSeq[String @@ Rep[Int]]") =
+    isBijection[List[Int], IndexedSeq[String @@ Rep[Int]]]
+
+  property("List[Int] <=> Vector[String @@ Rep[Int]]") =
+    isBijection[List[Int], Vector[String @@ Rep[Int]]]
 
   property("Option[Int] <=> Option[Long]") =
     isInjection[Option[Int], Option[Long]]
