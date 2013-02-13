@@ -1,6 +1,6 @@
 package com.twitter.bijection.thrift
 
-import com.twitter.bijection.{Bijection, Injection, StringCodec}
+import com.twitter.bijection.{Bijection, Conversion, Injection, StringCodec}
 import java.io.{ ByteArrayInputStream, ByteArrayOutputStream }
 import org.apache.thrift.{ TBase, TEnum }
 import org.apache.thrift.protocol.{
@@ -112,7 +112,7 @@ object TEnumCodec {
 }
 
 class TEnumCodec[T <: TEnum](klass: Class[T]) extends Injection[T, Int] {
-  import Bijection.asMethod // adds "as" for conversions
+  import Conversion.asMethod // adds "as" for conversions
 
   lazy val findByValue = klass.getMethod("findByValue", classOf[Int])
   val cache = MMap[Int,T]()

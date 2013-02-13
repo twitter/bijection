@@ -1,6 +1,6 @@
 package com.twitter.bijection.protobuf
 
-import com.twitter.bijection.{Bijection, Injection}
+import com.twitter.bijection.{Bijection, Conversion, Injection}
 import com.google.protobuf.Message
 import com.google.protobuf.ProtocolMessageEnum
 import java.lang.{ Integer => JInt }
@@ -55,7 +55,7 @@ object ProtobufEnumCodec {
 }
 
 class ProtobufEnumCodec[T <: ProtocolMessageEnum](klass: Class[T]) extends Injection[T, Int] {
-  import Bijection.asMethod // adds "as" for conversions
+  import Conversion.asMethod // adds "as" for conversions
 
   lazy val valueOf = klass.getMethod("valueOf", classOf[Int])
   val cache = MMap[Int,T]()
