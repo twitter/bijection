@@ -23,6 +23,23 @@ public class TestBijectionInJava {
             roundTrip(s2l.inverse().compose(s2l).inverse(), s, s);
         }
     }
+    @Test
+    public void testBasicInjection() {
+      Injection<Long, String> l2s = new AbstractInjection<Long, String>() {
+        @Override
+        public String apply(Long in) { return in.toString(); }
+        @Override
+        public scala.Option<Long> invert(String in) {
+          try {
+            return scala.Option.apply(Long.valueOf(in));
+          }
+          catch(NumberFormatException nfe) {
+            return scala.Option.apply(null);
+          }
+        }
+      };
+      assertEquals(Long.valueOf("123"), l2s.invert("123").get());
+    }
 
     //TODO include a more complete example using Base64 conversion, and GZip + Base64 version
     //TODO include a cleaner way to get to the scala Bijections than Bijection$.MODULE$.
