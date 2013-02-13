@@ -82,7 +82,10 @@ object BijectionBuild extends Build {
               // bijectionThrift,
               bijectionGuava,
               bijectionScrooge,
-              bijectionJson)
+              bijectionJson,
+              bijectionAlgebird,
+              bijectionUtil,
+              bijectionClojure)
 
   lazy val bijectionCore = Project(
     id = "bijection-core",
