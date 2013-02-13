@@ -72,11 +72,10 @@ abstract class AbstractBijection[A, B] extends Bijection[A, B] {
 }
 
 trait LowPriorityBijections {
-  implicit def inverseOf[A,B](implicit bij: Bijection[A,B]): Bijection[B,A] = bij.inverse
   /** Encoding half of the Cantor–Bernstein–Schroeder theorem
    * http://en.wikipedia.org/wiki/Cantor%E2%80%93Bernstein%E2%80%93Schroeder_theorem
    */
-  def fromInjection[A, B](implicit inj: Injection[A, B]): Bijection[A, B @@ Rep[A]] =
+  implicit def fromInjection[A, B](implicit inj: Injection[A, B]): Bijection[A, B @@ Rep[A]] =
     new AbstractBijection[A, B @@ Rep[A]] {
       override def apply(a: A): B @@ Rep[A] = Tag(inj.apply(a))
       // This tag promises the Option will return something:
@@ -87,8 +86,8 @@ trait LowPriorityBijections {
 object Bijection extends CollectionBijections
   with Serializable {
 
-  def apply[A, B](a: A)(implicit bij: Bijection[A, B]): B = bij(a)
-  def invert[A, B](b: B)(implicit bij: Bijection[A, B]): A = bij.invert(b)
+  def apply[A, B](a: A)(implicit bij: ImplicitBijection[A, B]): B = bij.bijection(a)
+  def invert[A, B](b: B)(implicit bij: ImplicitBijection[A, B]): A = bij.bijection.invert(b)
 
   def build[A, B](to: A => B)(from: B => A): Bijection[A, B] =
     new AbstractBijection[A, B] {
@@ -102,13 +101,13 @@ object Bijection extends CollectionBijections
    *
    * val composed = connect[Long, Array[Byte], Base64String]: Bijection[Long, Base64String]
    */
-  def connect[A, B](implicit bij: Bijection[A, B]): Bijection[A, B] = bij
-  def connect[A, B, C](implicit bij: Bijection[A, B], bij2: Bijection[B, C]): Bijection[A, C] =
-    bij andThen bij2
-  def connect[A, B, C, D](implicit bij: Bijection[A, B], bij2: Bijection[B, C], bij3: Bijection[C, D]): Bijection[A, D] =
-    connect[A, B, C] andThen bij3
-  def connect[A, B, C, D, E](implicit bij: Bijection[A, B], bij2: Bijection[B, C], bij3: Bijection[C, D], bij4: Bijection[D, E]): Bijection[A, E] =
-    connect[A, B, C, D] andThen bij4
+  def connect[A, B](implicit bij: ImplicitBijection[A, B]): Bijection[A, B] = bij.bijection
+  def connect[A, B, C](implicit bij: ImplicitBijection[A, B], bij2: ImplicitBijection[B, C]): Bijection[A, C] =
+    (bij.bijection) andThen (bij2.bijection)
+  def connect[A, B, C, D](implicit bij1: ImplicitBijection[A, B], bij2: ImplicitBijection[B, C], bij3: ImplicitBijection[C, D]): Bijection[A, D] =
+    connect[A, B, C] andThen (bij3.bijection)
+  def connect[A, B, C, D, E](implicit bij1: ImplicitBijection[A, B], bij2: ImplicitBijection[B, C], bij3: ImplicitBijection[C, D], bij4: ImplicitBijection[D, E]): Bijection[A, E] =
+    connect[A, B, C, D] andThen (bij4.bijection)
 
   implicit def identity[A]: Bijection[A, A] = new IdentityBijection[A]
 
@@ -125,7 +124,7 @@ object Bijection extends CollectionBijections
    * Converts a function that transforms type A into a function that
    * transforms type B.
    */
-  implicit def fnBijection[A, B, C, D](implicit bij1: Bijection[A, B], bij2: Bijection[C, D]):
+  implicit def fnBijection[A, B, C, D](implicit bij1: ImplicitBijection[A, B], bij2: ImplicitBijection[C, D]):
     Bijection[A => C, B => D] = new Bijection[A => C, B => D] {
       def apply(fn: A => C) = { b => bij2.apply(fn(bij1.invert(b))) }
       override def invert(fn: B => D) = { a => bij2.invert(fn(bij1.apply(a))) }
@@ -138,7 +137,7 @@ object Bijection extends CollectionBijections
    * TODO: codegen these up to Function22 if they turn out to be useful.
    */
   implicit def fn2Bijection[A, B, C, D, E, F]
-    (implicit bab: Bijection[A, B], bcd: Bijection[C, D], bef: Bijection[E, F]):
+    (implicit bab: ImplicitBijection[A, B], bcd: ImplicitBijection[C, D], bef: ImplicitBijection[E, F]):
       Bijection[(A, C) => E, (B, D) => F] =
       new Bijection[(A, C) => E, (B, D) => F] {
         def apply(fn: (A, C) => E) =
@@ -146,6 +145,8 @@ object Bijection extends CollectionBijections
         override def invert(fn:  (B, D) => F) =
           { (a, c) => bef.invert(fn(bab.apply(a), bcd.apply(c))) }
       }
+
+  implicit def swap[T, U]: Bijection[(T, U), (U, T)] = SwapBijection[T, U]
 }
 
 class IdentityBijection[A] extends Bijection[A, A] {
@@ -160,7 +161,7 @@ class IdentityBijection[A] extends Bijection[A, A] {
  * Bijection that flips the order of items in a Tuple2.
  */
 object SwapBijection {
-  def apply[T, U] = new Bijection[(T, U), (U, T)] {
+  def apply[T, U] = new AbstractBijection[(T, U), (U, T)] {
     def apply(t: (T,U)) = t.swap
     override def invert(t: (U,T)) = t.swap
   }

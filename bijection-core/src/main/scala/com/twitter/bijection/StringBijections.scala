@@ -72,7 +72,7 @@ object StringJoinBijection {
    * TODO add a Tag appoach to Say that N has no zero-length representations
    */
   def nonEmptyValues[N, B <: TraversableOnce[N]](separator: String = DEFAULT_SEP)
-  (implicit bij: Bijection[N, String], ab: CanBuildFrom[Nothing, N, B]): Bijection[B, String] =
+  (implicit bij: ImplicitBijection[N, String], ab: CanBuildFrom[Nothing, N, B]): Bijection[B, String] =
     Bijection.toContainer[N, String, B, Iterable[String]]
       .andThen(apply(separator))
       .andThen(Bijection.filterDefault("").inverse)

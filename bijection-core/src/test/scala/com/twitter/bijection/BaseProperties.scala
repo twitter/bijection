@@ -61,15 +61,15 @@ trait BaseProperties {
     inj: Injection[A, B], barb: Arbitrary[B], eqa: Equiv[A], eqb: Equiv[B]) =
     isLooseInjection[A,B] && invertIsStrict[A,B]
 
-  def isInjective[A,B](implicit a: Arbitrary[A], bij: Bijection[A, B], eqa: Equiv[A]) =
-      forAll { (a: A) => eqa.equiv(a, rt(a)) }
+  def isInjective[A,B](implicit a: Arbitrary[A], bij: ImplicitBijection[A, B], eqa: Equiv[A]) =
+      forAll { (a: A) => eqa.equiv(a, rt(a)(bij.bijection)) }
 
-  def invertIsInjection[A,B](implicit b: Arbitrary[B], bij: Bijection[A, B], eqb: Equiv[B]) =
-      forAll { b: B => eqb.equiv(b, rtInjective(b)(bij.inverse)) }
+  def invertIsInjection[A,B](implicit b: Arbitrary[B], bij: ImplicitBijection[A, B], eqb: Equiv[B]) =
+      forAll { b: B => eqb.equiv(b, rtInjective(b)(bij.bijection.inverse)) }
 
   def isBijection[A,B](implicit arba: Arbitrary[A],
-    arbb: Arbitrary[B], bij: Bijection[A, B], eqa: Equiv[A], eqb: Equiv[B]) = {
-      implicit val inj = Injection.fromBijection(bij)
+    arbb: Arbitrary[B], bij: ImplicitBijection[A, B], eqa: Equiv[A], eqb: Equiv[B]) = {
+      implicit val inj = Injection.fromBijection(bij.bijection)
       isInjective[A,B] && invertIsInjection[A,B]
     }
 
