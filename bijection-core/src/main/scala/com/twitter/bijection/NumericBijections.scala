@@ -94,7 +94,6 @@ trait NumericBijections extends GeneratedTupleBijections {
 
   /**
    * Bijections between the numeric types and string.
-   */
   implicit val byte2String: Bijection[Byte, String @@ Rep[Byte]] =
     fromInjection[Byte, String]
 
@@ -130,6 +129,7 @@ trait NumericBijections extends GeneratedTupleBijections {
 
   implicit val jdouble2String: Bijection[JDouble, String @@ Rep[JDouble]] =
     fromInjection[JDouble, String]
+   */
 
   val float2IntIEEE754: Bijection[Float, Int] =
     new AbstractBijection[Float, Int] {

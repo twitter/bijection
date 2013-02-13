@@ -71,7 +71,7 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     result
   }
   // With Bijections:
-  def viaBijection[A,B](implicit buf: Bufferable[B], bij: Bijection[A,B]): Bufferable[A] =
+  def viaBijection[A,B](implicit buf: Bufferable[B], bij: ImplicitBijection[A,B]): Bufferable[A] =
     Bufferable.build[A] { (bb, a) =>
       buf.put(bb, bij(a))
     } { bb =>

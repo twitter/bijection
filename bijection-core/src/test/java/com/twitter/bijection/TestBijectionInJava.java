@@ -39,16 +39,11 @@ public class TestBijectionInJava {
     // Instantiate a Bijection to String // Looks like the Long is erased
     @Test
     public void testStringRep() {
-      Bijection<Long, String> long2String = Bijection$.MODULE$.jlong2String();
+      Injection<Long, String> long2String = Injection$.MODULE$.jlong2String();
         for (long lv = -1000; lv < 1000; lv++) {
             Long l = Long.valueOf(lv);
             String s = l.toString();
-            roundTrip(long2String.inverse(), s, l);
-            roundTrip(long2String, l, s);
-
-            roundTrip(long2String.andThen(long2String.inverse()).inverse(), l, l);
-            roundTrip(long2String.inverse().compose(long2String), l, l);
-            roundTrip(long2String.inverse().compose(long2String).inverse(), l, l);
+            assertEquals(s, long2String.apply(l));
         }
     }
 

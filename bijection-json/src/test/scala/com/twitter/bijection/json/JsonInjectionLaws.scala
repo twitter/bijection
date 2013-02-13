@@ -72,7 +72,7 @@ object JsonInjectionLaws extends Properties("JsonInjection") with BaseProperties
 
     val jsonMixed = mixedMap.as[UnparsedJson]
 
-    jsonMixed.asOption[Map[String, JsonNode]].get.map { kup : (String, JsonNode) =>
+    jsonMixed.as[Option[Map[String, JsonNode]]].get.map { kup : (String, JsonNode) =>
       val (k, up) = kup
       if (k.endsWith("i")) {
         fromJsonNode[Int](up).get == fromJsonNode[Int](mixedMap(k)).get
