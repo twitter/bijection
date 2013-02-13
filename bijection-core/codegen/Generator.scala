@@ -70,7 +70,7 @@ def invertMethod(cnt: Int) =
 // Here we put it all together:
 def implicitTuple(cnt: Int): String =
   "  implicit def tuple" + cnt + "[" + typeList(cnt,"1") + "," + typeList(cnt,"2") +
-    "](implicit " + ((0 until cnt) map { bijectionParameter(_) } mkString(", ") ) + "):\n    " +
+    "](implicit " + ((0 until cnt) map { bijectionParameter(_, "ImplicitBijection") } mkString(", ") ) + "):\n    " +
     tupleBijectionType(cnt) + " = new Abstract" + tupleBijectionType(cnt) + " {\n" +
 "      " + applyMethod(cnt) +"\n" +
 "      " + invertMethod(cnt) + "\n" +

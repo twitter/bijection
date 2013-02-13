@@ -76,8 +76,8 @@ abstract class AbstractInjection[A, B] extends Injection[A, B] {
 }
 
 trait LowPriorityInjections {
-  // All Bijections are injections but marking this implicit seems to give "diverging implicits"
-  def fromBijection[A,B](implicit bij: Bijection[A, B]): Injection[A,B] =
+  // All Bijections are Injections
+  implicit def fromImplicitBijection[A,B](implicit bij: ImplicitBijection[A, B]): Injection[A,B] =
     new AbstractInjection[A, B] {
       override def apply(a: A) = bij(a)
       override def invert(b: B) = Some(bij.invert(b))
@@ -131,6 +131,14 @@ object Injection extends CollectionInjections
     }
 
   implicit def class2String[T]: Injection[Class[T], String] = new ClassInjection[T]
+
+  // Build an injection from a Bijection
+  def fromBijection[A,B](bij: Bijection[A, B]): Injection[A,B] =
+    new AbstractInjection[A, B] {
+      override def apply(a: A) = bij(a)
+      override def invert(b: B) = Some(bij.invert(b))
+    }
+
   implicit def subclass[A, B <: A]: Injection[A, B] = CastInjection.of[A, B]
 
   /**

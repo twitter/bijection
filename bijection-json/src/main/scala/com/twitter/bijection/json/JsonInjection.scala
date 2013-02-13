@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.twitter.bijection.json
 
-import com.twitter.bijection.{Bijection, Injection}
+import com.twitter.bijection.{Bijection, Injection, ImplicitBijection}
 
 import org.codehaus.jackson.{JsonParser, JsonNode, JsonFactory}
 import org.codehaus.jackson.map.ObjectMapper

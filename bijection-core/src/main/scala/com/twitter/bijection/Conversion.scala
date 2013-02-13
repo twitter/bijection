@@ -34,8 +34,6 @@ sealed class Convert[A](a: A) extends Serializable {
   // TODO: fix this?
   //def as[B](implicit bij: Bijection[A, _ <: B]): B = bij(a)
   def as[B](implicit conv: Conversion[A, B]): B = conv(a)
-  // Syntax to reverse an Injection:
-  def asOption[B](implicit inj: Injection[B, A]): Option[B] = inj.invert(a)
 }
 
 // Looks like a function, but we don't want a subclass relationship
@@ -44,20 +42,25 @@ trait Conversion[A, B] extends Serializable {
 }
 
 trait CrazyLowPriorityConversion extends Serializable {
-
+  // If you want to an Option[B]
+  implicit def fromInjectionInverse[A,B](implicit inj: Injection[B,A]): Conversion[A,Option[B]] =
+  new Conversion[A,Option[B]] {
+    def apply(a: A) = inj.invert(a)
+  }
+  implicit def fromBijectionInv[A,B](implicit fn: ImplicitBijection[B,A]) = new Conversion[A,B] {
+    def apply(a: A) = fn.bijection.invert(a)
+  }
 }
 
 trait SuperLowPriorityConversion extends CrazyLowPriorityConversion {
-  // Due to Bijection.inverseOf, Bijection resolutions diverge if they can't be found.
-  // This needs to be lower priority than fromInjection
-  implicit def fromBijection[A,B](implicit fn: Bijection[A,B]) = new Conversion[A,B] {
+  implicit def fromInjection[A,B](implicit fn: Injection[A,B]) = new Conversion[A,B] {
     def apply(a: A) = fn(a)
   }
 }
 
 trait LowPriorityConversion extends SuperLowPriorityConversion {
-  implicit def fromInjection[A,B](implicit fn: Injection[A,B]) = new Conversion[A,B] {
-    def apply(a: A) = fn(a)
+  implicit def fromBijection[A,B](implicit fn: ImplicitBijection[A,B]) = new Conversion[A,B] {
+    def apply(a: A) = fn.bijection.apply(a)
   }
 }
 
