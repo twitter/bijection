@@ -41,7 +41,7 @@ trait Injection[A, B] extends (A => B) with Serializable { self =>
     }
   /** Follow the Injection with a Bijection
    */
-  def andThen[C](bij: Bijection[B, C]): Injection[A, B] =
+  def andThen[C](bij: Bijection[B, C]): Injection[A, C] =
     new AbstractInjection[A, C] {
       override def apply(a: A) = bij(self.apply(a))
       override def invert(c: C) = self.invert(bij.invert(c))
