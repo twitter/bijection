@@ -34,13 +34,13 @@ trait NumericBijections extends GeneratedTupleBijections {
    * Bijections between the numeric types and their java versions.
    */
   implicit val byte2Boxed: Bijection[Byte, JByte] =
-    new Bijection[Byte, JByte] {
+    new AbstractBijection[Byte, JByte] {
       def apply(b: Byte) = JByte.valueOf(b)
       override def invert(b: JByte) = b.byteValue
     }
 
   implicit val short2Boxed: Bijection[Short, JShort] =
-    new Bijection[Short, JShort] {
+    new AbstractBijection[Short, JShort] {
       def apply(s: Short) = JShort.valueOf(s)
       override def invert(s: JShort) = s.shortValue
     }
@@ -55,7 +55,7 @@ trait NumericBijections extends GeneratedTupleBijections {
     }
 
   implicit val int2Boxed: Bijection[Int, JInt] =
-    new Bijection[Int, JInt] {
+    new AbstractBijection[Int, JInt] {
       def apply(i: Int) = JInt.valueOf(i)
       override def invert(i: JInt) =  i.intValue
     }
@@ -68,7 +68,7 @@ trait NumericBijections extends GeneratedTupleBijections {
     }
 
   implicit val long2Boxed: Bijection[Long, JLong] =
-    new Bijection[Long, JLong] {
+    new AbstractBijection[Long, JLong] {
       def apply(l: Long) = JLong.valueOf(l)
       override def invert(l: JLong) = l.longValue
     }
@@ -81,55 +81,16 @@ trait NumericBijections extends GeneratedTupleBijections {
     }
 
   implicit val float2Boxed: Bijection[Float, JFloat] =
-    new Bijection[Float, JFloat] {
+    new AbstractBijection[Float, JFloat] {
       def apply(f: Float) = JFloat.valueOf(f)
       override def invert(f: JFloat) = f.floatValue
     }
 
   implicit val double2Boxed: Bijection[Double, JDouble] =
-    new Bijection[Double, JDouble] {
+    new AbstractBijection[Double, JDouble] {
       def apply(d: Double) = JDouble.valueOf(d)
       override def invert(d: JDouble) = d.doubleValue
     }
-
-  /**
-   * Bijections between the numeric types and string.
-  implicit val byte2String: Bijection[Byte, String @@ Rep[Byte]] =
-    fromInjection[Byte, String]
-
-  implicit val jbyte2String: Bijection[JByte, String @@ Rep[JByte]] =
-    fromInjection[JByte, String]
-
-  implicit val short2String: Bijection[Short, String @@ Rep[Short]] =
-    fromInjection[Short, String]
-
-  implicit val jshort2String: Bijection[JShort, String @@ Rep[JShort]] =
-    fromInjection[JShort, String]
-
-  implicit val int2String: Bijection[Int, String @@ Rep[Int]] =
-    fromInjection[Int, String]
-
-  implicit val jint2String: Bijection[JInt, String @@ Rep[JInt]] =
-    fromInjection[JInt, String]
-
-  implicit val long2String: Bijection[Long, String @@ Rep[Long]] =
-    fromInjection[Long, String]
-
-  implicit val jlong2String: Bijection[JLong, String @@ Rep[JLong]] =
-    fromInjection[JLong, String]
-
-  implicit val float2String: Bijection[Float, String @@ Rep[Float]] =
-    fromInjection[Float, String]
-
-  implicit val jfloat2String: Bijection[JFloat, String @@ Rep[JFloat]] =
-    fromInjection[JFloat, String]
-
-  implicit val double2String: Bijection[Double, String @@ Rep[Double]] =
-    fromInjection[Double, String]
-
-  implicit val jdouble2String: Bijection[JDouble, String @@ Rep[JDouble]] =
-    fromInjection[JDouble, String]
-   */
 
   val float2IntIEEE754: Bijection[Float, Int] =
     new AbstractBijection[Float, Int] {
@@ -145,14 +106,14 @@ trait NumericBijections extends GeneratedTupleBijections {
 
   /* Other types to and from Numeric types */
   implicit val uid2LongLong: Bijection[UUID, (Long,Long)] =
-    new Bijection[UUID, (Long,Long)] { uid =>
+    new AbstractBijection[UUID, (Long,Long)] { uid =>
       def apply(uid: UUID) =
         (uid.getMostSignificantBits, uid.getLeastSignificantBits)
       override def invert(ml: (Long,Long)) = new UUID(ml._1, ml._2)
     }
 
   implicit val date2Long: Bijection[java.util.Date, Long] =
-    new Bijection[java.util.Date, Long] {
+    new AbstractBijection[java.util.Date, Long] {
       def apply(d: java.util.Date) = d.getTime
       override def invert(l: Long) = new java.util.Date(l)
     }

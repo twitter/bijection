@@ -16,7 +16,7 @@ package com.twitter.bijection
 case class EnglishInt(get: String)
 
 object EnglishInt {
-  implicit val bijectionToInt: Bijection[Int, EnglishInt] = new Bijection[Int, EnglishInt] {
+  implicit val bijectionToInt: Bijection[Int, EnglishInt] = new AbstractBijection[Int, EnglishInt] {
       def apply(num: Int):EnglishInt = EnglishInt(toEnglish(num).get)
       override def invert(s: EnglishInt):Int = fromEnglish(s.get).get
   }
