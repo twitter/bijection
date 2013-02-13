@@ -24,7 +24,7 @@ import scala.collection.generic.CanBuildFrom
 
 trait StringBijections extends NumericBijections {
   implicit val symbol2String: Bijection[Symbol, String] =
-    new Bijection[Symbol, String] {
+    new AbstractBijection[Symbol, String] {
       def apply(s: Symbol) = s.name
       override def invert(s: String ) = Symbol(s)
     }

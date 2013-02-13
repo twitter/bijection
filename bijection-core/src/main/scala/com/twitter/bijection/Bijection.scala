@@ -115,7 +115,7 @@ object Bijection extends CollectionBijections
    * Note this never returns Some(default)
    */
   def filterDefault[A](default: A): Bijection[A, Option[A]] =
-    new Bijection[A, Option[A]] {
+    new AbstractBijection[A, Option[A]] {
       def apply(a: A) = if (a == default) None else Some(a)
       override def invert(opt: Option[A]) = opt.getOrElse(default)
     }
@@ -125,7 +125,7 @@ object Bijection extends CollectionBijections
    * transforms type B.
    */
   implicit def fnBijection[A, B, C, D](implicit bij1: ImplicitBijection[A, B], bij2: ImplicitBijection[C, D]):
-    Bijection[A => C, B => D] = new Bijection[A => C, B => D] {
+    Bijection[A => C, B => D] = new AbstractBijection[A => C, B => D] {
       def apply(fn: A => C) = { b => bij2.apply(fn(bij1.invert(b))) }
       override def invert(fn: B => D) = { a => bij2.invert(fn(bij1.apply(a))) }
     }
@@ -139,7 +139,7 @@ object Bijection extends CollectionBijections
   implicit def fn2Bijection[A, B, C, D, E, F]
     (implicit bab: ImplicitBijection[A, B], bcd: ImplicitBijection[C, D], bef: ImplicitBijection[E, F]):
       Bijection[(A, C) => E, (B, D) => F] =
-      new Bijection[(A, C) => E, (B, D) => F] {
+      new AbstractBijection[(A, C) => E, (B, D) => F] {
         def apply(fn: (A, C) => E) =
           { (b, d) => bef.apply(fn(bab.invert(b), bcd.invert(d))) }
         override def invert(fn:  (B, D) => F) =

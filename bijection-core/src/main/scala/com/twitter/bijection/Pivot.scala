@@ -139,7 +139,7 @@ trait Pivot[K, K1, K2] extends Bijection[Iterable[K], Map[K1, Iterable[K2]]] {
 
   def wrapOuter[T]: Pivot[(K, T), (K1, T), K2] =
     withValue[T] andThenPivot(
-      new Bijection[(K1, (K2, T)), ((K1, T), K2)] {
+      new AbstractBijection[(K1, (K2, T)), ((K1, T), K2)] {
         def apply(pair: (K1, (K2, T))) = {
           val (k1, (k2, t)) = pair
           ((k1, t), k2)
@@ -156,7 +156,7 @@ trait Pivot[K, K1, K2] extends Bijection[Iterable[K], Map[K1, Iterable[K2]]] {
    * a single key in some KV store.
    */
   def withValue[V]: Pivot[(K, V), K1, (K2, V)] =
-    Pivot(new Bijection[(K, V), (K1, (K2, V))] {
+    Pivot(new AbstractBijection[(K, V), (K1, (K2, V))] {
       def apply(pair: (K,V)) = {
         val (k,v) = pair
         val (k1, k2) = pivot(k)
