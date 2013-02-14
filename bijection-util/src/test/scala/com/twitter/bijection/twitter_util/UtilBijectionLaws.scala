@@ -25,19 +25,23 @@ import org.scalacheck.Prop.forAll
 object UtilBijectionLaws extends Properties("UtilBijection") with BaseProperties {
   import UtilBijections._
 
+  protected def toOption[T](f: Future[T]): Option[T] = if (f.isReturn) Some(f.get) else None
+
   implicit def futureArb[T: Arbitrary] = arbitraryViaFn[T, Future[T]] { Future.value(_) }
   implicit def tryArb[T: Arbitrary] = arbitraryViaFn[T, Try[T]] { Try(_) }
   implicit val jIntArb = arbitraryViaBijection[Int, JInt]
   implicit val jLongArb = arbitraryViaBijection[Long, JLong]
 
-  def futureEq[T](a: Future[T], b: Future[T]): Boolean = a.willEqual(b).get
+  implicit protected def futureEq[T:Equiv]: Equiv[Future[T]] = Equiv.fromFunction { (f1, f2) =>
+    Equiv[Option[T]].equiv(toOption(f1), toOption(f2))
+  }
 
   type FromMap = Map[Int, Long]
   type ToMap = Map[JInt, JLong]
 
   property("round trips Future[Map[Int, String]] -> Future[JInt, JLong]") =
-    isBijection[Future[FromMap], Future[ToMap]](futureEq, futureEq)
+    isBijection[Future[FromMap], Future[ToMap]]
 
   property("round trips Try[Map[Int, String]] -> Try[Map[JInt, JLong]]") =
-    isBijection[Try[FromMap], Try[ToMap]]()
+    isBijection[Try[FromMap], Try[ToMap]]
 }
