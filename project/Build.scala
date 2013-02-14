@@ -5,10 +5,10 @@ import sbtgitflow.ReleasePlugin._
 object BijectionBuild extends Build {
   val sharedSettings = Project.defaultSettings ++ releaseSettings ++ Seq(
     organization := "com.twitter",
-    scalaVersion := "2.9.2",
+    crossScalaVersions := Seq("2.9.2", "2.10.0"),
     libraryDependencies ++= Seq(
       "org.scalacheck" %% "scalacheck" % "1.10.0" % "test" withSources(),
-      "org.scala-tools.testing" % "specs_2.9.1" % "1.6.9" % "test" withSources()
+      "org.scala-tools.testing" %% "specs" % "1.6.9" % "test" withSources()
     ),
 
     resolvers ++= Seq(
@@ -72,14 +72,13 @@ object BijectionBuild extends Build {
     id = "bijection",
     base = file("."),
     settings = sharedSettings
-    ).settings(
+  ).settings(
     test := { },
     publish := { }, // skip publishing for this root project.
     publishLocal := { }
   ).aggregate(bijectionCore,
-              // TODO: Add back in once we can figure out how to run the tests for these on travis.
-              // bijectionProtobuf,
-              // bijectionThrift,
+              bijectionProtobuf,
+              bijectionThrift,
               bijectionGuava,
               bijectionScrooge,
               bijectionJson,
@@ -96,7 +95,7 @@ object BijectionBuild extends Build {
     libraryDependencies ++= Seq(
         "commons-codec" % "commons-codec" % "1.7",
         "com.novocode" % "junit-interface" % "0.10-M1" % "test",
-        "org.scalatest" %% "scalatest" % "1.6.1" % "test"
+        "org.scalatest" %% "scalatest" % "1.9.1" % "test"
     )
   )
 
@@ -164,7 +163,8 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-algebird",
-    libraryDependencies += "com.twitter" %% "algebird" % "0.1.6"
+    // TODO: Update to %% "algebird-core" once 0.1.9 comes out.
+    libraryDependencies += "com.twitter" % "algebird-core_2.9.2" % "0.1.8"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   lazy val bijectionUtil = Project(
@@ -173,8 +173,7 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-util",
-    libraryDependencies += "com.twitter" % "util-core" % "5.3.15",
-    resolvers += "Twitter Maven" at "http://maven.twttr.com"
+    libraryDependencies += "com.twitter" %% "util-core" % "6.2.0"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   lazy val bijectionClojure = Project(

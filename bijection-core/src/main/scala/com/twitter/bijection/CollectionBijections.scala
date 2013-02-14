@@ -63,11 +63,6 @@ import Conversion.asMethod
       override def apply(t: mutable.Map[K, V]) = t.asJava
       override def invert(t: JMap[K, V]) = t.asScala
     }
-  implicit def concurrentMap2java[K, V]: Bijection[mutable.ConcurrentMap[K, V], JConcurrentMap[K, V]] =
-    new AbstractBijection[mutable.ConcurrentMap[K, V], JConcurrentMap[K, V]] {
-      override def apply(t: mutable.ConcurrentMap[K, V]) = t.asJava
-      override def invert(t: JConcurrentMap[K, V]) = t.asScala
-    }
   implicit def iterable2jcollection[T]:  Bijection[Iterable[T], JCollection[T]] =
     new AbstractBijection[Iterable[T], JCollection[T]] {
       override def apply(t: Iterable[T]) = t.asJavaCollection
