@@ -4,6 +4,8 @@ A Bijection is an invertible function that converts back and forth between two t
 the contract that a round-trip through the Bijection will bring back the original object. Moreover,
 the inverse has the same property.
 
+See the [current API documentation](http://twitter.github.com/bijection) for more information.
+
 ## Maven
 
 Current version is `0.2.1`. groupid=`"com.twitter"` artifact=`"bijection-core_2.9.2"`.
