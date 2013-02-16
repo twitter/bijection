@@ -165,8 +165,7 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-algebird",
-    // TODO: Update to %% "algebird-core" once 0.1.9 comes out.
-    libraryDependencies += "com.twitter" % "algebird-core_2.9.2" % "0.1.8"
+    libraryDependencies += "com.twitter" %% "algebird-core" % "0.1.9"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   lazy val bijectionUtil = Project(
