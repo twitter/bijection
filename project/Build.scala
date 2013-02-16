@@ -1,3 +1,5 @@
+package bijection
+
 import sbt._
 import Keys._
 import sbtgitflow.ReleasePlugin._
@@ -71,7 +73,7 @@ object BijectionBuild extends Build {
   lazy val bijection = Project(
     id = "bijection",
     base = file("."),
-    settings = sharedSettings
+    settings = sharedSettings ++ DocGen.publishSettings
   ).settings(
     test := { },
     publish := { }, // skip publishing for this root project.
