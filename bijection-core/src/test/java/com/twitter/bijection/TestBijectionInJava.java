@@ -23,6 +23,24 @@ public class TestBijectionInJava {
             roundTrip(s2l.inverse().compose(s2l).inverse(), s, s);
         }
     }
+    @Test
+    public void testBasicInjection() {
+      Injection<Long, String> l2s = new AbstractInjection<Long, String>() {
+        @Override
+        public String apply(Long in) { return in.toString(); }
+        @Override
+        public scala.Option<Long> invert(String in) {
+          try {
+            return scala.Option.apply(Long.valueOf(in));
+          }
+          catch(NumberFormatException nfe) {
+            return scala.Option.apply(null);
+          }
+        }
+      };
+      assertEquals(Long.valueOf("123"), l2s.invert("123").get());
+      assertEquals(true, l2s.invert("hello").isEmpty());
+    }
 
     //TODO include a more complete example using Base64 conversion, and GZip + Base64 version
     //TODO include a cleaner way to get to the scala Bijections than Bijection$.MODULE$.
@@ -39,16 +57,11 @@ public class TestBijectionInJava {
     // Instantiate a Bijection to String // Looks like the Long is erased
     @Test
     public void testStringRep() {
-      Bijection<Long, String> long2String = Bijection$.MODULE$.jlong2String();
+      Injection<Long, String> long2String = Injection$.MODULE$.jlong2String();
         for (long lv = -1000; lv < 1000; lv++) {
             Long l = Long.valueOf(lv);
             String s = l.toString();
-            roundTrip(long2String.inverse(), s, l);
-            roundTrip(long2String, l, s);
-
-            roundTrip(long2String.andThen(long2String.inverse()).inverse(), l, l);
-            roundTrip(long2String.inverse().compose(long2String), l, l);
-            roundTrip(long2String.inverse().compose(long2String).inverse(), l, l);
+            assertEquals(s, long2String.apply(l));
         }
     }
 

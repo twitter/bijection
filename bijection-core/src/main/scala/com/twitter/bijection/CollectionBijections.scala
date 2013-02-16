@@ -31,81 +31,121 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable
 import collection.generic.CanBuildFrom
 
-trait CollectionBijections {
+trait CollectionBijections extends BinaryBijections {
+import Conversion.asMethod
 
   /**
    * Bijections between collection types defined in scala.collection.JavaConverters.
    */
   implicit def iterable2java[T]: Bijection[Iterable[T], JIterable[T]] =
-    new Bijection[Iterable[T], JIterable[T]] {
+    new AbstractBijection[Iterable[T], JIterable[T]] {
       override def apply(t: Iterable[T]) = t.asJava
-      override def invert(t: JIterable[T]) = t.asScala
+      override def invert(u: JIterable[T]) = u.asScala
     }
+
   implicit def iterator2java[T]: Bijection[Iterator[T], JIterator[T]] =
-    new Bijection[Iterator[T], JIterator[T]] {
+    new AbstractBijection[Iterator[T], JIterator[T]] {
       override def apply(t: Iterator[T]) = t.asJava
-      override def invert(t: JIterator[T]) = t.asScala
+      override def invert(u: JIterator[T]) = u.asScala
     }
   implicit def buffer2java[T]: Bijection[mutable.Buffer[T], JList[T]] =
-    new Bijection[mutable.Buffer[T], JList[T]] {
+    new AbstractBijection[mutable.Buffer[T], JList[T]] {
       override def apply(t: mutable.Buffer[T]) = t.asJava
-      override def invert(t: JList[T]) = t.asScala
+      override def invert(u: JList[T]) = u.asScala
     }
   implicit def mset2java[T]: Bijection[mutable.Set[T], JSet[T]] =
-    new Bijection[mutable.Set[T], JSet[T]] {
+    new AbstractBijection[mutable.Set[T], JSet[T]] {
       override def apply(t: mutable.Set[T]) = t.asJava
-      override def invert(t: JSet[T]) = t.asScala
+      override def invert(u: JSet[T]) = u.asScala
     }
-  implicit def mmap2java[K, V]: Bijection[mutable.Map[K,V], JMap[K,V]] =
-    new Bijection[mutable.Map[K,V], JMap[K,V]] {
+  implicit def mmap2java[K, V]: Bijection[mutable.Map[K, V], JMap[K, V]] =
+    new AbstractBijection[mutable.Map[K, V], JMap[K, V]] {
       override def apply(t: mutable.Map[K, V]) = t.asJava
       override def invert(t: JMap[K, V]) = t.asScala
     }
-  implicit def concurrentMap2java[K, V]: Bijection[mutable.ConcurrentMap[K, V], JConcurrentMap[K, V]] =
-    new Bijection[mutable.ConcurrentMap[K,V], JConcurrentMap[K, V]] {
-      override def apply(t: mutable.ConcurrentMap[K, V]) = t.asJava
-      override def invert(t: JConcurrentMap[K,V]) = t.asScala
-    }
   implicit def iterable2jcollection[T]:  Bijection[Iterable[T], JCollection[T]] =
-    new Bijection[Iterable[T], JCollection[T]] {
+    new AbstractBijection[Iterable[T], JCollection[T]] {
       override def apply(t: Iterable[T]) = t.asJavaCollection
-      override def invert(t: JCollection[T]) = t.asScala
+      override def invert(u: JCollection[T]) = u.asScala
     }
   implicit def iterator2jenumeration[T]: Bijection[Iterator[T], JEnumeration[T]] =
-    new Bijection[Iterator[T], JEnumeration[T]] {
+    new AbstractBijection[Iterator[T], JEnumeration[T]] {
       override def apply(t: Iterator[T]) = t.asJavaEnumeration
-      override def invert(t: JEnumeration[T]) = t.asScala
+      override def invert(u: JEnumeration[T]) = u.asScala
     }
   implicit def mmap2jdictionary[K, V]: Bijection[mutable.Map[K, V], JDictionary[K, V]] =
-    new Bijection[mutable.Map[K, V], JDictionary[K, V]] {
+    new AbstractBijection[mutable.Map[K, V], JDictionary[K, V]] {
       override def apply(t: mutable.Map[K, V]) = t.asJavaDictionary
       override def invert(t: JDictionary[K, V]) = t.asScala
     }
-  // Here are the immutable ones:
-  implicit def seq2Java[T]: Bijection[Seq[T], JList[T]] = new Bijection[Seq[T], JList[T]] {
-     def apply(s: Seq[T]) = s.asJava
-     override def invert(l: JList[T]) = l.asScala.toSeq
-  }
-  implicit def set2Java[T]: Bijection[Set[T], JSet[T]] = new Bijection[Set[T], JSet[T]] {
-     def apply(s: Set[T]) = s.asJava
-     override def invert(l: JSet[T]) = l.asScala.toSet
-  }
-  implicit def map2Java[K,V]: Bijection[Map[K,V], JMap[K,V]] = new Bijection[Map[K,V], JMap[K,V]] {
-     def apply(s: Map[K,V]) = s.asJava
-     override def invert(l: JMap[K,V]) = l.asScala.toMap
-  }
+  // Immutable objects (they copy from java to scala):
+  implicit def seq2Java[T]: Bijection[Seq[T], JList[T]] =
+    new AbstractBijection[Seq[T], JList[T]] {
+      def apply(s: Seq[T]) = s.asJava
+      override def invert(l: JList[T]) = l.asScala.toSeq
+    }
+  implicit def set2Java[T]: Bijection[Set[T], JSet[T]] =
+    new AbstractBijection[Set[T], JSet[T]] {
+      def apply(s: Set[T]) = s.asJava
+      override def invert(l: JSet[T]) = l.asScala.toSet
+    }
+  implicit def map2Java[K, V]: Bijection[Map[K, V], JMap[K, V]] =
+    new AbstractBijection[Map[K, V], JMap[K, V]] {
+      def apply(s: Map[K, V]) = s.asJava
+      override def invert(l: JMap[K, V]) = l.asScala.toMap
+    }
+
+  /*
+   * For transformations that may not require a copy, we don't biject on types
+   * which would require a copy. To change inner type also, use connect[Seq[T], List[T], List[U]]
+   */
+
+  implicit def seq2List[A]: Bijection[Seq[A], List[A]] =
+    new AbstractBijection[Seq[A], List[A]] {
+      def apply(s: Seq[A]) = s.toList
+      override def invert(l: List[A]) = l
+    }
+  implicit def seq2IndexedSeq[A]: Bijection[Seq[A], IndexedSeq[A]] =
+    new AbstractBijection[Seq[A], IndexedSeq[A]] {
+      def apply(s: Seq[A]) = s.toIndexedSeq
+      override def invert(l: IndexedSeq[A]) = l
+    }
+  // This doesn't require a copy from Map -> Seq
+  implicit def seq2Map[K, V]: Bijection[Seq[(K, V)], Map[K, V]] =
+    new AbstractBijection[Seq[(K, V)], Map[K, V]] {
+      def apply(s: Seq[(K, V)]) = s.toMap
+      override def invert(l: Map[K, V]) = l.toSeq
+    }
+  // This doesn't require a copy from Set -> Seq
+  implicit def seq2Set[T]: Bijection[Seq[T], Set[T]] =
+    new AbstractBijection[Seq[T], Set[T]] {
+      def apply(s: Seq[T]) = s.toSet
+      override def invert(l: Set[T]) = l.toSeq
+    }
+
+  protected def trav2Vector[T, C >: Vector[T] <: Traversable[T]]: Bijection[C, Vector[T]] =
+    new SubclassBijection[C, Vector[T]](classOf[Vector[T]]) {
+      def applyfn(s: C) = {
+        // Just build one:
+        val bldr = new scala.collection.immutable.VectorBuilder[T]
+        bldr ++= s
+        bldr.result
+      }
+    }
+  implicit def seq2Vector[T]: Bijection[Seq[T], Vector[T]] = trav2Vector[T, Seq[T]]
+  implicit def indexedSeq2Vector[T]: Bijection[IndexedSeq[T], Vector[T]] = trav2Vector[T, IndexedSeq[T]]
 
   /**
    * Accepts a Bijection[A, B] and returns a bijection that can
    * transform traversable containers of A into traversable containers of B.
    *
-   * Be careful going from ordered to unordered containers;
+   * Do not go from ordered to unordered containers;
    * Bijection[Iterable[A], Set[B]] is inaccurate, and really makes
    * no sense.
    */
   def toContainer[A, B, C <: TraversableOnce[A], D <: TraversableOnce[B]]
-  (implicit bij: Bijection[A, B], cd: CanBuildFrom[Nothing, B, D], dc: CanBuildFrom[Nothing, A, C]) =
-    new Bijection[C, D] {
+  (implicit bij: ImplicitBijection[A, B], cd: CanBuildFrom[Nothing, B, D], dc: CanBuildFrom[Nothing, A, C]): Bijection[C, D] =
+    new AbstractBijection[C, D] {
       def apply(c: C) = {
         val builder = cd()
         c foreach { builder += bij(_) }
@@ -118,12 +158,45 @@ trait CollectionBijections {
       }
     }
 
-  implicit def betweenMaps[K1, V1, K2, V2](implicit kBijection: Bijection[K1, K2], vBijection: Bijection[V1, V2]) =
+  implicit def betweenMaps[K1, V1, K2, V2](implicit kBijection: ImplicitBijection[K1, K2], vBijection: ImplicitBijection[V1, V2]) =
     toContainer[(K1, V1), (K2, V2), Map[K1, V1], Map[K2, V2]]
 
-  implicit def betweenVectors[T, U](implicit bij: Bijection[T, U]) = toContainer[T, U, Vector[T], Vector[U]]
+  implicit def betweenVectors[T, U](implicit bij: ImplicitBijection[T, U]) = toContainer[T, U, Vector[T], Vector[U]]
 
-  implicit def betweenSets[T, U](implicit bij: Bijection[T, U]) = toContainer[T, U, Set[T], Set[U]]
+  implicit def betweenIndexedSeqs[T, U](implicit bij: ImplicitBijection[T, U]) =
+    toContainer[T, U, IndexedSeq[T], IndexedSeq[U]]
 
-  implicit def betweenLists[T, U](implicit bij: Bijection[T, U]) = toContainer[T, U, List[T], List[U]]
+  implicit def betweenSets[T, U](implicit bij: ImplicitBijection[T, U]) = toContainer[T, U, Set[T], Set[U]]
+
+  implicit def betweenSeqs[T, U](implicit bij: ImplicitBijection[T, U]) = toContainer[T, U, Seq[T], Seq[U]]
+
+  implicit def betweenLists[T, U](implicit bij: ImplicitBijection[T, U]) = toContainer[T, U, List[T], List[U]]
+
+  implicit def option[T, U](implicit bij: ImplicitBijection[T, U]): Bijection[Option[T], Option[U]] =
+    new AbstractBijection[Option[T], Option[U]] {
+      override def apply(optt: Option[T]) = optt.map(bij)
+      override def invert(optu: Option[U]) = optu.map(bij.invert(_))
+    }
+  // Always requires a copy
+  implicit def vector2List[A,B](implicit bij: ImplicitBijection[A,B]): Bijection[Vector[A], List[B]]
+    = toContainer[A, B, Vector[A], List[B]]
+
+  implicit def indexedSeq2List[A,B](implicit bij: ImplicitBijection[A,B]): Bijection[IndexedSeq[A], List[B]]
+    = toContainer[A, B, IndexedSeq[A], List[B]]
+
+  /** This doesn't actually copy the Array, only wraps/unwraps with WrappedArray
+   */
+  implicit def array2Traversable[T:ClassManifest]: Bijection[Array[T], Traversable[T]] =
+    new AbstractBijection[Array[T], Traversable[T]] {
+      override def apply(a: Array[T]) = a.toTraversable
+      override def invert(t: Traversable[T]) = t.toArray
+    }
+
+  /** This doesn't actually copy the Array, only wraps/unwraps with WrappedArray
+   */
+  implicit def array2Seq[T:ClassManifest]: Bijection[Array[T], Seq[T]] =
+    new AbstractBijection[Array[T], Seq[T]] {
+      override def apply(a: Array[T]) = a.toSeq
+      override def invert(t: Seq[T]) = t.toArray
+    }
 }

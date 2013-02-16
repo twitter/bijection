@@ -27,166 +27,93 @@ import java.lang.{
 import java.nio.ByteBuffer
 import java.util.UUID
 
-import Bijection.build
+import Bijection.{build, fromInjection}
 
-trait NumericBijections {
+trait NumericBijections extends GeneratedTupleBijections {
   /**
    * Bijections between the numeric types and their java versions.
    */
   implicit val byte2Boxed: Bijection[Byte, JByte] =
-    new Bijection[Byte, JByte] {
+    new AbstractBijection[Byte, JByte] {
       def apply(b: Byte) = JByte.valueOf(b)
       override def invert(b: JByte) = b.byteValue
     }
 
   implicit val short2Boxed: Bijection[Short, JShort] =
-    new Bijection[Short, JShort] {
+    new AbstractBijection[Short, JShort] {
       def apply(s: Short) = JShort.valueOf(s)
       override def invert(s: JShort) = s.shortValue
     }
 
+  implicit val short2ByteByte: Bijection[Short,(Byte,Byte)] =
+    new AbstractBijection[Short,(Byte,Byte)] {
+      def apply(l: Short) = ((l >>> 8).toByte, l.toByte)
+      override def invert(tup: (Byte,Byte)) = {
+        val lowbits = tup._2.toInt & 0xff
+        (((tup._1 << 8) | lowbits)).toShort
+      }
+    }
+
   implicit val int2Boxed: Bijection[Int, JInt] =
-    new Bijection[Int, JInt] {
+    new AbstractBijection[Int, JInt] {
       def apply(i: Int) = JInt.valueOf(i)
       override def invert(i: JInt) =  i.intValue
     }
 
+  implicit val int2ShortShort: Bijection[Int,(Short,Short)] =
+    new AbstractBijection[Int,(Short,Short)] {
+      def apply(l: Int) = ((l >>> 16).toShort, l.toShort)
+      override def invert(tup: (Short,Short)) =
+        ((tup._1.toInt << 16) | ((tup._2.toInt << 16) >>> 16))
+    }
+
   implicit val long2Boxed: Bijection[Long, JLong] =
-    new Bijection[Long, JLong] {
+    new AbstractBijection[Long, JLong] {
       def apply(l: Long) = JLong.valueOf(l)
       override def invert(l: JLong) = l.longValue
     }
 
+  implicit val long2IntInt: Bijection[Long,(Int,Int)] =
+    new AbstractBijection[Long,(Int,Int)] {
+      def apply(l: Long) = ((l >>> 32).toInt, l.toInt)
+      override def invert(tup: (Int,Int)) =
+        ((tup._1.toLong << 32) | ((tup._2.toLong << 32) >>> 32))
+    }
+
   implicit val float2Boxed: Bijection[Float, JFloat] =
-    new Bijection[Float, JFloat] {
+    new AbstractBijection[Float, JFloat] {
       def apply(f: Float) = JFloat.valueOf(f)
       override def invert(f: JFloat) = f.floatValue
     }
 
   implicit val double2Boxed: Bijection[Double, JDouble] =
-    new Bijection[Double, JDouble] {
+    new AbstractBijection[Double, JDouble] {
       def apply(d: Double) = JDouble.valueOf(d)
       override def invert(d: JDouble) = d.doubleValue
     }
 
-  /**
-   * Bijections between the numeric types and string.
-   */
-  implicit val byte2String: Bijection[Byte, String @@ Rep[Byte]] =
-    new Bijection[Byte, String @@ Rep[Byte]] {
-      def apply(b: Byte) = Tag(b.toString)
-      override def invert(s: String @@ Rep[Byte]) = s.toByte
-    }
-  implicit val jbyte2String: Bijection[JByte, String @@ Rep[Byte]] =
-    build[JByte, String @@ Rep[Byte]] { (b: JByte) => Tag[String,Rep[Byte]](b.toString) } { s =>
-      JByte.valueOf(s) }
-
-  implicit val short2String: Bijection[Short, String @@ Rep[Short]] =
-    new Bijection[Short, String @@ Rep[Short]] {
-      def apply(s: Short) = Tag(s.toString)
-      override def invert(s: String @@ Rep[Short]) = s.toShort
-    }
-  implicit val jshort2String: Bijection[JShort, String @@ Rep[Short]] =
-    build[JShort, String @@ Rep[Short]] { (b: JShort) => Tag[String,Rep[Short]](b.toString) } { s =>
-      JShort.valueOf(s) }
-
-  implicit val int2String: Bijection[Int, String @@ Rep[Int]] =
-    new Bijection[Int, String @@ Rep[Int]] {
-      def apply(i: Int) = Tag(i.toString)
-      override def invert(s: String @@ Rep[Int]) = s.toInt
-    }
-  implicit val jint2String: Bijection[JInt, String @@ Rep[Int]] =
-    build[JInt, String @@ Rep[Int]] { (b: JInt) => Tag[String,Rep[Int]](b.toString) } { s =>
-      JInt.valueOf(s) }
-
-  implicit val long2String: Bijection[Long, String @@ Rep[Long]] =
-    new Bijection[Long, String @@ Rep[Long]] {
-      def apply(l: Long) = Tag(l.toString)
-      override def invert(s: String @@ Rep[Long]) = s.toLong
-    }
-  implicit val jlong2String: Bijection[JLong, String @@ Rep[Long]] =
-    build[JLong, String @@ Rep[Long]] { (b: JLong) => Tag[String,Rep[Long]](b.toString) } { s =>
-      JLong.valueOf(s) }
-
-  implicit val float2String: Bijection[Float, String @@ Rep[Float]] =
-    new Bijection[Float, String @@ Rep[Float]] {
-      def apply(f: Float) = Tag(f.toString)
-      override def invert(s: String @@ Rep[Float]) = s.toFloat
-    }
-
-  implicit val jfloat2String: Bijection[JFloat, String @@ Rep[Float]] =
-    build[JFloat, String @@ Rep[Float]] { (b: JFloat) => Tag[String,Rep[Float]](b.toString) } { s =>
-      JFloat.valueOf(s) }
-
-  implicit val double2String: Bijection[Double, String @@ Rep[Double]] =
-    new Bijection[Double, String @@ Rep[Double]] {
-      def apply(d: Double) = Tag(d.toString)
-      override def invert(s: String @@ Rep[Double]) = s.toDouble
-    }
-
-  implicit val jdouble2String: Bijection[JDouble, String @@ Rep[Double]] =
-    build[JDouble, String @@ Rep[Double]] { (b: JDouble) => Tag[String,Rep[Double]](b.toString) } { s =>
-      JDouble.valueOf(s) }
-  /**
-   * Bijections between the numeric types and Array[Byte].
-   */
   val float2IntIEEE754: Bijection[Float, Int] =
-    new Bijection[Float, Int] {
+    new AbstractBijection[Float, Int] {
       def apply(f: Float) = JFloat.floatToIntBits(f)
       override def invert(i: Int) = JFloat.intBitsToFloat(i)
     }
 
   val double2LongIEEE754: Bijection[Double, Long] =
-    new Bijection[Double, Long] {
+    new AbstractBijection[Double, Long] {
       def apply(d: Double) = JDouble.doubleToLongBits(d)
       override def invert(l: Long) = JDouble.longBitsToDouble(l)
     }
 
-  implicit val short2BigEndian: Bijection[Short, Array[Byte]] =
-    new Bijection[Short, Array[Byte]] {
-      def apply(value: Short) = {
-        val buf = ByteBuffer.allocate(2)
-        buf.putShort(value)
-        buf.array
-      }
-      override def invert(b: Array[Byte]) = ByteBuffer.wrap(b).getShort
-    }
-
-  implicit val int2BigEndian: Bijection[Int, Array[Byte]] =
-    new Bijection[Int, Array[Byte]] { value =>
-      def apply(value: Int) = {
-        val buf = ByteBuffer.allocate(4)
-        buf.putInt(value)
-        buf.array
-      }
-      override def invert(b: Array[Byte]) = ByteBuffer.wrap(b).getInt
-    }
-
-  implicit val long2BigEndian: Bijection[Long, Array[Byte]] =
-    new Bijection[Long, Array[Byte]] {
-      def apply(value: Long) = {
-        val buf = ByteBuffer.allocate(8)
-        buf.putLong(value)
-        buf.array
-      }
-      override def invert(b: Array[Byte]) = ByteBuffer.wrap(b).getLong
-    }
-
-  implicit val float2BigEndian: Bijection[Float, Array[Byte]] =
-    float2IntIEEE754 andThen int2BigEndian
-  implicit val double2BigEndian: Bijection[Double, Array[Byte]] =
-    double2LongIEEE754 andThen long2BigEndian
-
   /* Other types to and from Numeric types */
   implicit val uid2LongLong: Bijection[UUID, (Long,Long)] =
-    new Bijection[UUID, (Long,Long)] { uid =>
+    new AbstractBijection[UUID, (Long,Long)] { uid =>
       def apply(uid: UUID) =
         (uid.getMostSignificantBits, uid.getLeastSignificantBits)
       override def invert(ml: (Long,Long)) = new UUID(ml._1, ml._2)
     }
 
   implicit val date2Long: Bijection[java.util.Date, Long] =
-    new Bijection[java.util.Date, Long] {
+    new AbstractBijection[java.util.Date, Long] {
       def apply(d: java.util.Date) = d.getTime
       override def invert(l: Long) = new java.util.Date(l)
     }

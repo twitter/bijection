@@ -23,33 +23,19 @@ import java.io.{OutputStream, InputStream, ByteArrayInputStream, ByteArrayOutput
 import annotation.tailrec
 
 // TODO: Convert to value classes on Scala 2.10 upgrade.
-case class GZippedBytes(bytes: Array[Byte])
-
-object GZippedBytes {
-  val unwrap: Bijection[GZippedBytes, Array[Byte]] =
-    new Bijection[GZippedBytes, Array[Byte]] {
-      override def apply(gzb: GZippedBytes) = gzb.bytes
-      override def invert(bytes: Array[Byte]) = GZippedBytes(bytes)
-    }
+case class GZippedBytes(bytes: Array[Byte]) {
+  override def toString = bytes.mkString("GZippedBytes(", ", ", ")")
 }
 
 case class GZippedBase64String(str: String)
 
-object GZippedBase64String {
-  val unwrap: Bijection[GZippedBase64String, String] =
-    new Bijection[GZippedBase64String, String] {
-      override def apply(gzbs: GZippedBase64String) = gzbs.str
-      override def invert(str: String) = GZippedBase64String(str)
-    }
-}
-
 case class Base64String(str: String)
 
 object Base64String {
-  val unwrap: Bijection[Base64String, String] =
-    new Bijection[Base64String, String] {
+  implicit val unwrap: Injection[Base64String, String] =
+    new AbstractInjection[Base64String, String] {
       override def apply(bs: Base64String) = bs.str
-      override def invert(str: String) = Base64String(str)
+      override def invert(str: String) = if (Base64.isBase64(str)) Some(Base64String(str)) else None
     }
 }
 
@@ -60,12 +46,12 @@ object Base64String {
  * This object is thread-safe because there are no streams shared
  * outside of method scope, and therefore no contention for shared byte arrays.
  */
-trait BinaryBijections {
+trait BinaryBijections extends StringBijections {
   /**
    * Bijection between byte array and java.nio.ByteBuffer.
    */
   implicit val bytes2Buffer: Bijection[Array[Byte], ByteBuffer] =
-    new Bijection[Array[Byte], ByteBuffer] {
+    new AbstractBijection[Array[Byte], ByteBuffer] {
       def apply(b: Array[Byte]) = ByteBuffer.wrap(b)
       override def invert(byteBuffer: ByteBuffer) = {
         val buf = byteBuffer.duplicate()
@@ -88,8 +74,8 @@ trait BinaryBijections {
   /**
    * Bijection between byte array and GZippedBytes.
    */
-  implicit val bytes2GzippedBytes: Bijection[Array[Byte], GZippedBytes] =
-    new Bijection[Array[Byte], GZippedBytes] {
+  implicit lazy val bytes2GzippedBytes: Bijection[Array[Byte], GZippedBytes] =
+    new AbstractBijection[Array[Byte], GZippedBytes] {
       def apply(bytes: Array[Byte]) = {
         val baos = new ByteArrayOutputStream
         val gos = new GZIPOutputStream(baos)
@@ -111,16 +97,22 @@ trait BinaryBijections {
    * tags a newline on the end of its encoding. DON'T REMOVE THIS
    * CALL TO TRIM.
    */
-  implicit val bytes2Base64: Bijection[Array[Byte], Base64String] =
-    new Bijection[Array[Byte], Base64String] {
+  implicit lazy val bytes2Base64: Bijection[Array[Byte], Base64String] =
+    new AbstractBijection[Array[Byte], Base64String] {
       def apply(bytes: Array[Byte]) = Base64String(Base64.encodeBase64String(bytes).trim)
       override def invert(b64: Base64String) = Base64.decodeBase64(b64.str)
     }
 
   implicit val bytes2GZippedBase64: Bijection[Array[Byte], GZippedBase64String] =
-    bytes2GzippedBytes
-      .andThen(GZippedBytes.unwrap)
-      .andThen(bytes2Base64)
-      .andThen(Base64String.unwrap)
-      .andThen(GZippedBase64String.unwrap.inverse)
+    new AbstractBijection[Array[Byte], GZippedBase64String] {
+      override def apply(bytes: Array[Byte]) = {
+        val gzipped = bytes2GzippedBytes(bytes).bytes
+        val b64z = bytes2Base64(gzipped).str
+        GZippedBase64String(b64z)
+      }
+      override def invert(b64z: GZippedBase64String) = {
+        val gzipped = bytes2Base64.invert(Base64String(b64z.str))
+        bytes2GzippedBytes.invert(GZippedBytes(gzipped))
+      }
+    }
 }

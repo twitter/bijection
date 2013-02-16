@@ -32,12 +32,17 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.forAll
 
 trait BaseBufferable {
-  def defEq[T](l: T, r: T) = l == r
-  def roundTrips[T: Bufferable : Arbitrary](eqfn: (T,T) => Boolean = (defEq _)) = forAll { (t: T) =>
+  def roundTrips[T: Bufferable : Arbitrary : Equiv] = forAll { (t: T) =>
     val buf = ByteBuffer.allocateDirect(100)
     val newBuf = Bufferable.put(buf, t)
     val newBuf2 = ByteBuffer.wrap(Bufferable.getBytes(newBuf))
-    eqfn(t, Bufferable.get[T](newBuf2))
+    val pos = newBuf2.position
+    val (newBuf3, rtt) = Bufferable.get[T](newBuf2).get
+    val copyT = Bufferable.deepCopy(t)
+    Equiv[T].equiv(t, rtt) && Equiv[T].equiv(t, copyT) && (newBuf2.position == pos)
+  }
+  implicit protected def aeq[T:Equiv]: Equiv[Array[T]] = Equiv.fromFunction { (a1, a2) =>
+    a1.zip(a2).forall { tup => Equiv[T].equiv(tup._1, tup._2) }
   }
 }
 
@@ -56,23 +61,23 @@ object BufferableLaws extends Properties("Bufferable") with BaseBufferable {
     Bufferable.getBytes(bb).toList == bytes.toList
   }
 
-  property("Ints roundtrip") = roundTrips[Int]()
-  property("Doubles roundtrip") = roundTrips[Double]()
-  property("Floats roundtrip") = roundTrips[Float]()
-  property("Shorts roundtrip") = roundTrips[Int]()
-  property("Longs roundtrip") = roundTrips[Long]()
-  property("(Int,Long) roundtrip") = roundTrips[(Int,Long)]()
-  property("(Int,Long,String) roundtrip") = roundTrips[(Int,Long,String)]()
-  property("(Int,Long,String,(Int,Long)) roundtrip") = roundTrips[(Int,Long,String,(Int,Long))]()
-  property("Array[Byte] roundtrip") = roundTrips[Array[Byte]] { _.toList == _.toList }
-  property("Array[Int] roundtrip") = roundTrips[Array[Int]] { _.toList == _.toList }
-  property("List[Double] roundtrip") = roundTrips[List[Double]]()
-  property("Set[Double] roundtrip") = roundTrips[Set[Double]]()
-  property("Map[String, Int] roundtrip") = roundTrips[Map[String, Int]]()
-  property("Option[(Long,Long)] roundtrip") = roundTrips[Option[(Long,Long)]]()
-  property("Either[Long,String] roundtrip") = roundTrips[Either[Long,String]]()
+  property("Ints roundtrip") = roundTrips[Int]
+  property("Doubles roundtrip") = roundTrips[Double]
+  property("Floats roundtrip") = roundTrips[Float]
+  property("Shorts roundtrip") = roundTrips[Int]
+  property("Longs roundtrip") = roundTrips[Long]
+  property("(Int,Long) roundtrip") = roundTrips[(Int,Long)]
+  property("(Int,Long,String) roundtrip") = roundTrips[(Int,Long,String)]
+  property("(Int,Long,String,(Int,Long)) roundtrip") = roundTrips[(Int,Long,String,(Int,Long))]
+  property("Array[Byte] roundtrip") = roundTrips[Array[Byte]]
+  property("Array[Int] roundtrip") = roundTrips[Array[Int]]
+  property("List[Double] roundtrip") = roundTrips[List[Double]]
+  property("Set[Double] roundtrip") = roundTrips[Set[Double]]
+  property("Map[String, Int] roundtrip") = roundTrips[Map[String, Int]]
+  property("Option[(Long,Long)] roundtrip") = roundTrips[Option[(Long,Long)]]
+  property("Either[Long,String] roundtrip") = roundTrips[Either[Long,String]]
 
   implicit val symbolArb = Arbitrary { implicitly[Arbitrary[String]]
     .arbitrary.map { Symbol(_) } }
-  property("Symbol roundtrip") = roundTrips[Symbol]()
+  property("Symbol roundtrip") = roundTrips[Symbol]
 }

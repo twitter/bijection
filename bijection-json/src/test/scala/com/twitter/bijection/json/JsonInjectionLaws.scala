@@ -16,32 +16,30 @@
 
 package com.twitter.bijection.json
 
-import com.twitter.bijection.Bijection.asMethod
+import com.twitter.bijection.Conversion.asMethod
 
-import com.twitter.bijection.{ BaseProperties, Bijection }
+import com.twitter.bijection.{ BaseProperties, Bijection, Injection }
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 import org.scalacheck.Arbitrary
 
 import org.codehaus.jackson.JsonNode
-import com.twitter.bijection.json.JsonNodeBijection.{fromJsonNode, toJsonNode}
+import com.twitter.bijection.json.JsonNodeInjection.{fromJsonNode, toJsonNode}
 
-object JsonBijectionLaws extends Properties("JsonBijection") with BaseProperties {
-  def roundTripJson[T: JsonNodeBijection : Arbitrary] = {
-    implicit val bij: Bijection[T,String] = JsonBijection.toString[T]
-    roundTrips[T,String]()
-  }
-  def roundTripJsonEq[T: JsonNodeBijection : Arbitrary](eq: (T,T) => Boolean) = {
-    implicit val bij: Bijection[T,String] = JsonBijection.toString[T]
-    roundTrips[T,String](eq)
+object JsonInjectionLaws extends Properties("JsonInjection") with BaseProperties {
+
+  def roundTripJson[T: JsonNodeInjection : Arbitrary: Equiv] = {
+    implicit val bij: Injection[T,String] = JsonInjection.toString[T]
+    isLooseInjection[T,String]
   }
 
   property("Short") = roundTripJson[Short]
   property("Int") = roundTripJson[Int]
   property("Long") = roundTripJson[Long]
+  property("Float") = roundTripJson[Float]
   property("Double") = roundTripJson[Double]
   property("String") = roundTripJson[String]
-  property("Array[Byte]") = roundTripJsonEq[Array[Byte]]({(l,r) => (l.toList == r.toList)})
+  property("Array[Byte]") = roundTripJson[Array[Byte]]
   // Collections
   property("Either[String,Int]") = roundTripJson[Either[String,Int]]
   property("Map[String, Either[String,Int]]") = roundTripJson[Map[String, Either[String,Int]]]
@@ -54,9 +52,16 @@ object JsonBijectionLaws extends Properties("JsonBijection") with BaseProperties
   property("List[List[String]]") = roundTripJson[List[List[String]]]
   property("Set[Int]") = roundTripJson[Set[Int]]
 
-  //property("Seq[Int]") = roundTripJson[Seq[Int]]
-  //property("Vector[Int]") = roundTripJson[Vector[Int]]
-  //property("IndexedSeq[Int]") = roundTripJson[IndexedSeq[Int]]
+  implicit val jsonOpt = JsonNodeInjection.viaInjection[Option[Int],List[Int]]
+  property("Option[Int]") = roundTripJson[Option[Int]]
+
+  implicit val arbSeq: Arbitrary[Seq[Int]] = arbitraryViaFn { s: List[Int] => s.toSeq }
+  implicit val arbVec: Arbitrary[Vector[Int]] = arbitraryViaFn { s: List[Int] => Vector(s: _*) }
+  implicit val arbIndexed: Arbitrary[IndexedSeq[Int]] = arbitraryViaFn { s: List[Int] => s.toIndexedSeq }
+
+  property("Seq[Int]") = roundTripJson[Seq[Int]]
+  property("Vector[Int]") = roundTripJson[Vector[Int]]
+  property("IndexedSeq[Int]") = roundTripJson[IndexedSeq[Int]]
 
   // Handle Mixed values:
   property("Mixed values") = forAll { (kv: List[(String, Int, List[String])]) =>
@@ -67,13 +72,13 @@ object JsonBijectionLaws extends Properties("JsonBijection") with BaseProperties
 
     val jsonMixed = mixedMap.as[UnparsedJson]
 
-    jsonMixed.as[Map[String, JsonNode]].map { kup : (String, JsonNode) =>
+    jsonMixed.as[Option[Map[String, JsonNode]]].get.map { kup : (String, JsonNode) =>
       val (k, up) = kup
       if (k.endsWith("i")) {
-        fromJsonNode[Int](up) == fromJsonNode[Int](mixedMap(k))
+        fromJsonNode[Int](up).get == fromJsonNode[Int](mixedMap(k)).get
       }
       else {
-        fromJsonNode[Int](up) == fromJsonNode[Int](mixedMap(k))
+        fromJsonNode[List[String]](up).get == fromJsonNode[List[String]](mixedMap(k)).get
       }
     }.forall { x => x}
   }

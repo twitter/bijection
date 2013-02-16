@@ -1,14 +1,16 @@
+package bijection
+
 import sbt._
 import Keys._
+import sbtgitflow.ReleasePlugin._
 
 object BijectionBuild extends Build {
-  val sharedSettings = Project.defaultSettings ++ Seq(
+  val sharedSettings = Project.defaultSettings ++ releaseSettings ++ Seq(
     organization := "com.twitter",
-    version := "0.2.1",
-    scalaVersion := "2.9.2",
+    crossScalaVersions := Seq("2.9.2", "2.10.0"),
     libraryDependencies ++= Seq(
       "org.scalacheck" %% "scalacheck" % "1.10.0" % "test" withSources(),
-      "org.scala-tools.testing" % "specs_2.9.1" % "1.6.9" % "test" withSources()
+      "org.scala-tools.testing" %% "specs" % "1.6.9" % "test" withSources()
     ),
 
     resolvers ++= Seq(
@@ -70,18 +72,21 @@ object BijectionBuild extends Build {
 
   lazy val bijection = Project(
     id = "bijection",
-    base = file(".")
-    ).settings(
+    base = file("."),
+    settings = sharedSettings ++ DocGen.publishSettings
+  ).settings(
     test := { },
     publish := { }, // skip publishing for this root project.
     publishLocal := { }
   ).aggregate(bijectionCore,
-              // TODO: Add back in once we can figure out how to run the tests for these on travis.
-              // bijectionProtobuf,
-              // bijectionThrift,
+              bijectionProtobuf,
+              bijectionThrift,
               bijectionGuava,
               bijectionScrooge,
-              bijectionJson)
+              bijectionJson,
+              bijectionAlgebird,
+              bijectionUtil,
+              bijectionClojure)
 
   lazy val bijectionCore = Project(
     id = "bijection-core",
@@ -92,7 +97,7 @@ object BijectionBuild extends Build {
     libraryDependencies ++= Seq(
         "commons-codec" % "commons-codec" % "1.7",
         "com.novocode" % "junit-interface" % "0.10-M1" % "test",
-        "org.scalatest" %% "scalatest" % "1.6.1" % "test"
+        "org.scalatest" %% "scalatest" % "1.9.1" % "test"
     )
   )
 
@@ -139,11 +144,9 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-scrooge",
-    resolvers += ("twitter-maven" at "http://maven.twttr.com/"),
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
-      // TODO: scrooge runtime cannot be pulled in from sonatype
-      "com.twitter" % "scrooge-runtime" % "3.0.3"
+      "com.twitter" % "scrooge-runtime" % "3.0.4"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
@@ -154,5 +157,33 @@ object BijectionBuild extends Build {
   ).settings(
     name := "bijection-json",
     libraryDependencies += jsonParser
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  lazy val bijectionAlgebird = Project(
+    id = "bijection-algebird",
+    base = file("bijection-algebird"),
+    settings = sharedSettings
+  ).settings(
+    name := "bijection-algebird",
+    // TODO: Update to %% "algebird-core" once 0.1.9 comes out.
+    libraryDependencies += "com.twitter" % "algebird-core_2.9.2" % "0.1.8"
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  lazy val bijectionUtil = Project(
+    id = "bijection-util",
+    base = file("bijection-util"),
+    settings = sharedSettings
+  ).settings(
+    name := "bijection-util",
+    libraryDependencies += "com.twitter" %% "util-core" % "6.2.0"
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  lazy val bijectionClojure = Project(
+    id = "bijection-clojure",
+    base = file("bijection-clojure"),
+    settings = sharedSettings
+  ).settings(
+    name := "bijection-clojure",
+    libraryDependencies += "org.clojure" % "clojure" % "1.4.0"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 }

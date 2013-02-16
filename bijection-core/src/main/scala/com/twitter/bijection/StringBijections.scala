@@ -22,38 +22,13 @@ import java.util.UUID
 import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
 
-trait StringBijections {
-  implicit val utf8: Bijection[String, Array[Byte]] = withEncoding("UTF-8")
-  def withEncoding(encoding: String): Bijection[String, Array[Byte]] =
-    new Bijection[String, Array[Byte]] {
-      def apply(s: String) = s.getBytes(encoding)
-      override def invert(b: Array[Byte]) = new String(b, encoding)
-    }
-
-  // Some bijections with string from standard java/scala classes:
-  implicit val url2String: Bijection[URL, String @@ Rep[URL]] =
-    new Bijection[URL, String @@ Rep[URL]] {
-      def apply(u: URL) = Tag(u.toString)
-      override def invert(s: String @@ Rep[URL]) = new URL(s)
-    }
-
+trait StringBijections extends NumericBijections {
   implicit val symbol2String: Bijection[Symbol, String] =
-    new Bijection[Symbol, String] {
+    new AbstractBijection[Symbol, String] {
       def apply(s: Symbol) = s.name
       override def invert(s: String ) = Symbol(s)
     }
-
-  implicit val uuid2String: Bijection[UUID, String @@ Rep[UUID]] =
-    new Bijection[UUID, String @@ Rep[UUID]] {
-      def apply(uuid: UUID) = Tag(uuid.toString)
-      override def invert(s: String @@ Rep[UUID]) = UUID.fromString(s)
-    }
-
-  implicit def class2String[T]: Bijection[Class[T], String @@ Rep[Class[T]]] =
-    ClassBijection[T]()
 }
-
-object StringCodec extends StringBijections
 
 /**
  * Bijection for joining together iterables of strings into a single string
@@ -64,7 +39,7 @@ object StringJoinBijection {
   val DEFAULT_SEP = ":"
 
   @tailrec
-  private def split(str: String, sep: String, acc: List[String] = Nil): List[String] = {
+  private[bijection] def split(str: String, sep: String, acc: List[String] = Nil): List[String] = {
     str.indexOf(sep) match {
       case -1 => (str::acc).reverse
       case idx: Int =>
@@ -73,7 +48,7 @@ object StringJoinBijection {
   }
 
   def apply(separator: String = DEFAULT_SEP): Bijection[Iterable[String], Option[String]] =
-    new Bijection[Iterable[String], Option[String]] {
+    new AbstractBijection[Iterable[String], Option[String]] {
       override def apply(xs: Iterable[String]) = {
         // TODO: Instead of throwing, escape the separator in the encoded string.
         assert(!xs.exists(_.contains(separator)), "Can't encode strings that include the separator.")
@@ -97,7 +72,7 @@ object StringJoinBijection {
    * TODO add a Tag appoach to Say that N has no zero-length representations
    */
   def nonEmptyValues[N, B <: TraversableOnce[N]](separator: String = DEFAULT_SEP)
-  (implicit bij: Bijection[N, String], ab: CanBuildFrom[Nothing, N, B]): Bijection[B, String] =
+  (implicit bij: ImplicitBijection[N, String], ab: CanBuildFrom[Nothing, N, B]): Bijection[B, String] =
     Bijection.toContainer[N, String, B, Iterable[String]]
       .andThen(apply(separator))
       .andThen(Bijection.filterDefault("").inverse)
@@ -114,7 +89,6 @@ object StringJoinBijection {
    * an instance of type A with the "as" notation for a default item
    * in the collection:
    *
-   * import Bijection.asMethod
    * viaContainer[Int,Set[Int]] andThen Bijection.getOrElse(0.as[String]): Bijection[Set[Int],String]
    */
   def viaContainer[A, B <: TraversableOnce[A]](separator: String = DEFAULT_SEP)

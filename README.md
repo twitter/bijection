@@ -4,108 +4,112 @@ A Bijection is an invertible function that converts back and forth between two t
 the contract that a round-trip through the Bijection will bring back the original object. Moreover,
 the inverse has the same property.
 
-Many Bijections are supplied by default. Use the `Bijection` object to apply Bijections that are present implicitly:
+See the [current API documentation](http://twitter.github.com/bijection) for more information.
+
+## Maven
+
+Current version is `0.3.0`. groupid=`"com.twitter"` artifact=`"bijection-core_2.9.2"`.
+
+## Examples:
 
 ```scala
 scala> Bijection[Int, java.lang.Integer](42)
 res0: java.lang.Integer = 42
 ```
 
-Sometimes, we can map onto a larger space for which the inverse is not well defined over all inputs
-in that space. Consider `Int -> String`. The set of Strings that are minimal representations of Ints
-is well defined, but not all Strings are in this set. To handle this, we mark types with `@@ Rep[T]`
-to show that they are the image of some other set:
+In addition to Bijection, we have Injection. An Injection embeds a type A in a larger space of type
+B. Every item from A can be round-tripped through B, but not every B can be mapped to A. So
+Injection is like a pair of function: `A => B, B => Option[A]`.
 
 ```scala
 import com.twitter.bijection._
 
-scala> Bijection[Int, String @@ Rep[Int]](100)
-res0: com.twitter.bijection.package.@@[String,com.twitter.bijection.Rep[Int]] = 100
+scala> Injection[Int, String](100)
+res0: String = 100
 
-scala> Bijection.invert[Int, String @@ Rep[Int]](res0)
-res1: Int = 100
-
-scala> res0.isInstanceOf[String]
-res2: Boolean = true
+scala> Injection.invert[Int, String](res0)
+res1: Option[Int] = Some(100)
 ```
-Notice that `@@ Rep[Int]` is a marker that this special subclass of `String` is a representation
-of an Int (needed to make this a bijection).  To create instances of such a restricted type:
+If we want to treat an Injection like a Bijection (over a restricted subspace of the larger set),
+we use the `B @@ Rep[A]` syntax, for instance: `String @@ Rep[Int]`
 
 ```scala
-scala> import Rep._
-import Rep._
-
-scala> "10".toRep[Int]
-res3: Option[com.twitter.bijection.package.@@[java.lang.String,com.twitter.bijection.Rep[Int]]] = Some(10)
+Bijection[Int, String @@ Rep[Int]](100)
+res2: com.twitter.bijection.package.@@[String,com.twitter.bijection.Rep[Int]] = 100
 ```
 
 Use `invert` to reverse the transformation:
 
 ```scala
 scala> Bijection.invert[Int, String @@ Rep[Int]](res2)
-res4: Int = 100
+res3: Int = 100
 ```
 
-If you `import Bijection.asMethod` you can use `.as[T]` to do the default bijection to `T`:
+If you `import Conversion.asMethod` you can use `.as[T]` to use an available Bijection/Injection to `T`:
 
 ```scala
-scala> import com.twitter.bijection.Bijection.asMethod
-import com.twitter.bijection.Bijection.asMethod
+scala> import com.twitter.bijection.Conversion.asMethod
+import com.twitter.bijection.Conversion.asMethod
 
 scala> 1.as[java.lang.Integer]
-res0: java.lang.Integer = 1
+res6: java.lang.Integer = 1
 ```
 
-Bijections can also be composed. As with functions, `andThen` composes forward, `compose` composes backward.
+Bijections and Injections can also be composed. As with functions, `andThen` composes forward, `compose` composes backward.
 
 This example round-trips a long into a GZipped base64-encoded string:
 
 ```scala
-scala> val bijection = Bijection.long2BigEndian andThen Bijection.bytes2GZippedBase64
-bijection: com.twitter.bijection.Bijection[Long,com.twitter.bijection.GZippedBase64String] = <function1>
+scala> val injection = Injection.long2BigEndian andThen Bijection.bytes2GZippedBase64
+injection: com.twitter.bijection.Injection[Long,Array[Byte]] = <function1>
 
-scala> bijection(123456789L)
-res8: com.twitter.bijection.GZippedBase64String = GZippedBase64String(H4sIAAAAAAAAAGNgYGBgjz4rCgBpa5WLCAAAAA==)
+scala> injection(123456789L)
+res1: com.twitter.bijection.GZippedBase64String = GZippedBase64String(H4sIAAAAAAAAAGNgYGBgjz4rCgBpa5WLCAAAAA==)
 
-scala> bijection.invert(res8)
-res9: Long = 123456789
+scala> injection.invert(res1)
+res2: Option[Long] = Some(123456789)
 ```
 
-When you have bijections between a path of items you can `Bijection.connect` them:
+When you have bijections between a path of items you can `Bijection.connect` or `Injection.connect` them:
 
 ```scala
-scala> import com.twitter.bijection.Bijection.{asMethod, connect}
-import com.twitter.bijection.Bijection.{asMethod, connect}
+scala> import com.twitter.bijection.Injection.connect
+import com.twitter.bijection.Injection.connect
 
 scala> import com.twitter.bijection.Base64String
 import com.twitter.bijection.Base64String
 
-scala> implicit val string2Long2Bytes2B64 = connect[String @@ Rep[Long],Long,Array[Byte],Base64String]
+scala> import Conversion.asMethod
+import Conversion.asMethod
+
+scala> implicit val long2String2Bytes2B64 = connect[Long,String,Array[Byte],Base64String]
 string2Long2Bytes2B64: com.twitter.bijection.Bijection[String,com.twitter.bijection.Base64String] = <function1>
 
-scala> "243".toRep[Long].get.as[Base64String]
-res0: com.twitter.bijection.Base64String = Base64String(AAAAAAAAAPM=)
+scala> 243L.as[Base64String]
+res0: com.twitter.bijection.Base64String = Base64String(MjQz)
 
-scala> res0.as[String @@ Rep[Long]]
-res1: String = 243
+scala> long2String2Bytes2B64.invert(res5)
+res1: Option[Long] = Some(243)
 ```
 
-## Supported Bijections
+## Supported Bijections/Injections
 
 Bijection implicitly supplies Bijections between:
 
 * all numeric types <-> their boxed java counterparts
-* all numeric types <-> big-endian `Array[Byte]` encodings
-* all numeric types <-> String
+* containers/primitives <-> Json (Injections via bijection-json)
+* thrift/protobuf <-> Array[Byte] (Injections via bijection-protobuf/bijection-thrift)
+* all numeric types <-> big-endian `Array[Byte]` encodings (Injections)
+* all numeric types <-> String (Injections)
 * Bijections for all `asScala`, `asJava` pairs provided by [scala.collection.JavaConverters](http://www.scala-lang.org/api/current/scala/collection/JavaConverters$.html)
 * String <-> utf8 encoded bytes
 * `Array[Byte]` <-> `GZippedBytes`
 * `Array[Byte]` <-> `Base64String`
 * `Array[Byte]` <-> `GZippedBase64String`
 * `Array[Byte]` <-> `java.nio.ByteBuffer`
-* `Class[T]` <-> String
+* `Class[T]` <-> String (Injection)
 * `A => B` <-> `C => D` (function conversion)
-* Bijection builders for all tuples. (`(String,Int)` <-> `(Array[Byte], java.lang.Integer)` is built automatically, for example.)
+* Bijection/Injection builders for all tuples. (`(String,Int)` <-> `(Array[Byte], java.lang.Integer)` is built automatically, for example.)
 
 Additionally there is a method to generate Bijections between most of Scala's built in types:
 ```Bijection.toContainer[Int,String,List[Int],Vector[String]``` returns
@@ -114,9 +118,11 @@ Additionally there is a method to generate Bijections between most of Scala's bu
 If you see a reversible conversion that is not here and related to types in the standard library
 of Java or Scala, please contribute!
 
-## Maven
+## Serialization via Bufferable
 
-Current version is `0.2.1`. groupid=`"com.twitter"` artifact=`"bijection-core_2.9.2"`.
+`Bufferable[T]` handles putting and getting a type `T` into a ByteBuffer in a composable way.
+`Bufferable[T]` instances for all primitives/tuples/containers are provided. Bijections and
+Injections to any of these types give you binary serialization via Bufferable.
 
 ## Authors
 

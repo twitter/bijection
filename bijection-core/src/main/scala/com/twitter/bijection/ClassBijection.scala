@@ -27,13 +27,3 @@ class ClassBijection[T] extends Bijection[Class[T], String @@ Rep[Class[T]]] {
 object ClassBijection {
   def apply[T](): Bijection[Class[T], String @@ Rep[Class[T]]] = new ClassBijection()
 }
-/**
- *  Bijection to cast back and forth between two types.
- *  Note that this uses casting and can fail at runtime.
- */
-object CastBijection {
-  def of[A, B]: Bijection[A,B] = new Bijection[A, B] {
-    def apply(a: A) = a.asInstanceOf[B]
-    override def invert(b: B) = b.asInstanceOf[A]
-  }
-}

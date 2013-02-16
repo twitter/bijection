@@ -17,13 +17,18 @@
 package com.twitter.bijection.guava
 
 import com.google.common.base.Optional
-import com.google.common.base.{ Function => GFn }
-import com.twitter.bijection.{ @@, BaseProperties, Bijection, Rep }
+import com.google.common.base.{ Function => GFn, Predicate, Supplier }
+import com.twitter.bijection.{ @@, BaseProperties, Bijection, Rep, Conversion }
 import com.twitter.bijection.Rep._
 
 import org.scalacheck.Arbitrary
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
+
+import java.lang.{ Long => JLong }
+
+import Bijection.connect
+import Conversion.asMethod
 
 object GuavaBijectionLaws extends Properties("GuavaBijections") with BaseProperties {
   import GuavaBijections._
@@ -32,17 +37,29 @@ object GuavaBijectionLaws extends Properties("GuavaBijections") with BasePropert
     arbitraryViaFn[T, Optional[T]] { Optional.of(_) }
 
   property("round trips Option[Int] -> Optional[Int]") =
-    isBijection[Option[Int], Optional[Int]]()
+    isBijection[Option[Int], Optional[Int]]
 
   property("round trips Option[Long] -> Optional[Long]") =
-    isBijection[Option[Long], Optional[Long]]()
+    isBijection[Option[Long], Optional[Long]]
 
-  def roundTripsFn[A, B](eqFn: (B, B) => Boolean = defaultEq _)(fn: A => B)
-  (implicit arb: Arbitrary[A], bij: Bijection[A => B, GFn[A, B]]) = {
+  def roundTripsFn[A, B](fn: A => B)
+  (implicit arb: Arbitrary[A], bij: Bijection[A => B, GFn[A, B]], eqb: Equiv[B]) = {
     val rtFn = bij(fn)
-    forAll { a: A => eqFn(fn(a), rtFn.apply(a)) }
+    forAll { a: A => eqb.equiv(fn(a), rtFn.apply(a)) }
   }
 
   property("round trips Int => Long -> GuavaFn[Int, Long]") =
-    roundTripsFn[Int, Long]() { x => (x * x).toLong }
+    roundTripsFn[Int, Long] { x => (x * x).toLong }
+
+  property("round trips () => Long -> Supplier[JLong]") =
+    forAll { l: Long =>
+      val fn = { () => l }
+      fn() == fn.as[Supplier[JLong]].get.as[Long]
+    }
+
+  property("round trips Long => Boolean -> Predicate[JLong]") =
+    forAll { l: Long =>
+      val isEven = { l: Long => l % 2 == 0 }
+      isEven(l) == isEven.as[Predicate[JLong]].apply(l.as[JLong])
+    }
 }
