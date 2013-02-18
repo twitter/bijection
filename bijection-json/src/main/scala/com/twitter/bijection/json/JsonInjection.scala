@@ -57,9 +57,9 @@ trait LowPriorityJson {
       def invert(j: JsonNode) = json.invert(j).map { bij.invert(_) }
     }
   // To get the tuple conversions, low priority because List[T] <: Product
-  implicit def tuple[T <: Product](implicit inj: Injection[T,List[JsonNode]], ltoJ:
-  Injection[List[JsonNode], JsonNode]):
-    JsonNodeInjection[T] = new AbstractJsonNodeInjection[T] {
+  implicit def tuple[T <: Product](implicit inj: Injection[T,List[JsonNode]],
+    ltoJ: Injection[List[JsonNode], JsonNode]): JsonNodeInjection[T] =
+    new AbstractJsonNodeInjection[T] {
       def apply(t: T) = ltoJ.apply(inj(t))
       def invert(j: JsonNode) = ltoJ.invert(j).flatMap { l => inj.invert(l) }
     }
