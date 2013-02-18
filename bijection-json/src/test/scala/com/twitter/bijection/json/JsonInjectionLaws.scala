@@ -27,6 +27,8 @@ import org.codehaus.jackson.JsonNode
 import com.twitter.bijection.json.JsonNodeInjection.{fromJsonNode, toJsonNode}
 
 object JsonInjectionLaws extends Properties("JsonInjection") with BaseProperties {
+  // Needed from some recursive injections (like tuples)
+  import JsonNodeInjection._
 
   def roundTripJson[T: JsonNodeInjection : Arbitrary: Equiv] = {
     implicit val bij: Injection[T,String] = JsonInjection.toString[T]
@@ -41,6 +43,9 @@ object JsonInjectionLaws extends Properties("JsonInjection") with BaseProperties
   property("String") = roundTripJson[String]
   property("Array[Byte]") = roundTripJson[Array[Byte]]
   // Collections
+  property("(String,Int)") = roundTripJson[(String,Int)]
+  property("(String,Int,Long)") = roundTripJson[(String,Int,Long)]
+  property("(String,(String,Int))") = roundTripJson[(String,(String,Int))]
   property("Either[String,Int]") = roundTripJson[Either[String,Int]]
   property("Map[String, Either[String,Int]]") = roundTripJson[Map[String, Either[String,Int]]]
   property("Map[String,Int]") = roundTripJson[Map[String,Int]]
