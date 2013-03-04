@@ -23,7 +23,7 @@ import org.jboss.netty.buffer.{ ChannelBuffer, ChannelBuffers }
 /** Reads from the current position to the end into an array without changing
  * the given ChannelBuffer
  */
-class ChannelBufferBijection extends Bijection[ChannelBuffer, Array[Byte]] {
+object ChannelBufferBijection extends Bijection[ChannelBuffer, Array[Byte]] {
   override def apply(cb: ChannelBuffer) = {
     val dup = cb.duplicate
     val result = new Array[Byte](dup.readableBytes)
