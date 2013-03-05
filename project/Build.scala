@@ -86,7 +86,8 @@ object BijectionBuild extends Build {
               bijectionJson,
               bijectionAlgebird,
               bijectionUtil,
-              bijectionClojure)
+              bijectionClojure,
+              bijectionNetty)
 
   lazy val bijectionCore = Project(
     id = "bijection-core",
@@ -184,5 +185,14 @@ object BijectionBuild extends Build {
   ).settings(
     name := "bijection-clojure",
     libraryDependencies += "org.clojure" % "clojure" % "1.4.0"
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  lazy val bijectionNetty = Project(
+    id = "bijection-netty",
+    base = file("bijection-netty"),
+    settings = sharedSettings
+  ).settings(
+    name := "bijection-netty",
+    libraryDependencies += "io.netty" % "netty" % "3.5.5.Final"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 }
