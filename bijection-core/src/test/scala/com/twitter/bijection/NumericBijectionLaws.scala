@@ -72,6 +72,15 @@ with BaseProperties {
   property("long -> BigIng") = isInjection[Long, BigInt]
   property("int -> double") = isLooseInjection[Int, Double]
   property("float -> double") = isLooseInjection[Float, Double]
+  // ModDiv
+  property("Int -> (Int,Int) by ModDiv") = {
+    implicit val modDiv: Injection[Int,(Int,Int)] = new IntModDivInjection(128)
+    isInjection[Int, (Int,Int)]
+  }
+  property("Long -> (Long,Long) by ModDiv") = {
+    implicit val modDiv: Injection[Long,(Long,Long)] = new LongModDivInjection(10040L)
+    isInjection[Long, (Long,Long)]
+  }
 
   // TODO need Rep[Int], etc... on the Array[Byte]
   property("round trips short -> Array[Byte]") = isLooseInjection[Short, Array[Byte]]
