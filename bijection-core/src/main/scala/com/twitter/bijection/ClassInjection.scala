@@ -27,10 +27,14 @@ class ClassInjection[T] extends AbstractInjection[Class[T], String] {
 
 /**
  *  Injection to cast back and forth between two types.
+ * WARNING: this uses java's Class.cast, which is subject to type erasure. If you have
+ * a type parameterized type, like List[String] => List[Any], the cast will succeed, but
+ * the inner items will not be correct. This is intended for experts.
  */
 object CastInjection {
-  def of[A, B <: A]: Injection[A, B] = new AbstractInjection[A, B] {
-    def apply(a: A) = a.asInstanceOf[B] // Always succeeds
-    override def invert(b: B) = allCatch.opt(b.asInstanceOf[A])
+  def of[A, B >: A](implicit cmf: ClassManifest[A]): Injection[A, B] = new AbstractInjection[A, B] {
+    private val cls = cmf.erasure.asInstanceOf[Class[A]]
+    def apply(a: A) = a
+    def invert(b: B) = allCatch.opt { cls.cast(b) }
   }
 }

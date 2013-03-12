@@ -138,8 +138,12 @@ object Injection extends CollectionInjections
       override def apply(a: A) = bij(a)
       override def invert(b: B) = Some(bij.invert(b))
     }
-
-  implicit def subclass[A, B <: A]: Injection[A, B] = CastInjection.of[A, B]
+  /*
+   * WARNING: this uses java's Class.cast, which is subject to type erasure. If you have
+   * a type parameterized type, like List[String] => List[Any], the cast will succeed, but
+   * the inner items will not be correct. This is intended for experts.
+   */
+  implicit def subclass[A, B >: A](implicit cmf: ClassManifest[A]): Injection[A, B] = CastInjection.of[A, B]
 
   /**
    * Get a partial from B => D from injections and a function from A => C
