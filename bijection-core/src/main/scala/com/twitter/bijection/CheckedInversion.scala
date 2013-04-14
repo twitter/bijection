@@ -17,6 +17,7 @@ limitations under the License.
 package com.twitter.bijection
 
 import java.io.Serializable
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
   * Handles the error checking for Injection inversion. if check
