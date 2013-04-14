@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.twitter.storehaus.netty
+package com.twitter.bijection.netty
 
 import com.twitter.bijection.Bijection
 
