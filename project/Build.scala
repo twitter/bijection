@@ -213,4 +213,24 @@ object BijectionBuild extends Build {
     previousArtifact := youngestForwardCompatible("netty"),
     libraryDependencies += "io.netty" % "netty" % "3.5.5.Final"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  lazy val bijectionBench = Project(
+    id = "bijection-bench",
+    base = file("bijection-bench"),
+    settings = sharedSettings
+  ).settings(
+    name := "bijection-bench",
+    publish := { }, // skip publishing for this root project.
+    publishLocal := { },
+    libraryDependencies ++= Seq(
+      "com.google.code.java-allocation-instrumenter" % "java-allocation-instrumenter" % "2.0",
+      "com.google.caliper" % "caliper" % "0.5-rc1"
+    ),
+    // enable forking in run
+    fork in run := true,
+    // we need to add the runtime classpath as a "-cp" argument to the
+    // `javaOptions in run`, otherwise caliper will not see the right
+    // classpath and die with a ConfigurationException
+    javaOptions in run <++= (fullClasspath in Runtime) map { cp => Seq("-cp", sbt.Build.data(cp).mkString(":")) }
+  ).dependsOn(bijectionCore)
 }
