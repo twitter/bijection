@@ -214,6 +214,8 @@ object BijectionBuild extends Build {
     libraryDependencies += "io.netty" % "netty" % "3.5.5.Final"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
+  // Settings stolen shamelessly from
+  // https://github.com/sirthias/scala-benchmarking-template/blob/master/project/Build.scala
   lazy val bijectionBench = Project(
     id = "bijection-bench",
     base = file("bijection-bench"),
@@ -224,13 +226,17 @@ object BijectionBuild extends Build {
     publishLocal := { },
     libraryDependencies ++= Seq(
       "com.google.code.java-allocation-instrumenter" % "java-allocation-instrumenter" % "2.0",
-      "com.google.caliper" % "caliper" % "0.5-rc1"
+      "com.google.code.caliper" % "caliper" % "1.0-SNAPSHOT" from "http://n0d.es/jars/caliper-1.0-SNAPSHOT.jar",
+      "com.google.code.gson" % "gson" % "1.7.1"
     ),
+    // raise memory limits here if necessary
+    javaOptions in run += "-Xmx6G",
     // enable forking in run
     fork in run := true,
-    // we need to add the runtime classpath as a "-cp" argument to the
-    // `javaOptions in run`, otherwise caliper will not see the right
-    // classpath and die with a ConfigurationException
+
+     // we need to add the runtime classpath as a "-cp" argument to
+    // the `javaOptions in run`, otherwise caliper will not see the
+    // right classpath and die with a ConfigurationException
     javaOptions in run <++= (fullClasspath in Runtime) map { cp => Seq("-cp", sbt.Build.data(cp).mkString(":")) }
-  ).dependsOn(bijectionCore)
+  ).dependsOn(bijection)
 }
