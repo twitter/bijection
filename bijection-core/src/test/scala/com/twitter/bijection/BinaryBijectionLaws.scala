@@ -35,4 +35,9 @@ with BaseProperties {
     isInjective[Array[Byte], Base64String]
   property("rts Array[Byte] -> GZippedBase64String") =
     isInjective[Array[Byte], GZippedBase64String]
+
+  implicit val optSer = JavaSerializationInjection[Option[Int]]
+
+  property("java serialize Option[Int]") =
+    isInjection[Option[Int], Array[Byte]]
 }

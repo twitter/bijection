@@ -3,11 +3,19 @@ package bijection
 import sbt._
 import Keys._
 import sbtgitflow.ReleasePlugin._
+import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
+import com.typesafe.tools.mima.plugin.MimaKeys.previousArtifact
 
 object BijectionBuild extends Build {
   val sharedSettings = Project.defaultSettings ++ releaseSettings ++ Seq(
     organization := "com.twitter",
+
     crossScalaVersions := Seq("2.9.2", "2.10.0"),
+
+    javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
+
+    javacOptions in doc := Seq("-source", "1.6"),
+
     libraryDependencies ++= Seq(
       "org.scalacheck" %% "scalacheck" % "1.10.0" % "test" withSources(),
       "org.scala-tools.testing" %% "specs" % "1.6.9" % "test" withSources()
@@ -68,7 +76,13 @@ object BijectionBuild extends Build {
           <url>http://twitter.com/sritchie</url>
         </developer>
       </developers>)
-  )
+  ) ++ mimaDefaultSettings
+
+  // This returns the youngest jar we released that is compatible with the current
+  def youngestForwardCompatible(subProj: String) = {
+    if(subProj == "netty") None // This is new. Update after next version
+    else Some("com.twitter" % ("bijection-" + subProj + "_2.9.2") % "0.3.0")
+  }
 
   lazy val bijection = Project(
     id = "bijection",
@@ -86,7 +100,8 @@ object BijectionBuild extends Build {
               bijectionJson,
               bijectionAlgebird,
               bijectionUtil,
-              bijectionClojure)
+              bijectionClojure,
+              bijectionNetty)
 
   lazy val bijectionCore = Project(
     id = "bijection-core",
@@ -94,6 +109,7 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-core",
+    previousArtifact := youngestForwardCompatible("core"),
     libraryDependencies ++= Seq(
         "commons-codec" % "commons-codec" % "1.7",
         "com.novocode" % "junit-interface" % "0.10-M1" % "test",
@@ -107,6 +123,7 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-protobuf",
+    previousArtifact := youngestForwardCompatible("protobuf"),
     libraryDependencies += "com.google.protobuf" % "protobuf-java" % "2.4.1"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
@@ -118,6 +135,7 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-thrift",
+    previousArtifact := youngestForwardCompatible("thrift"),
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
       jsonParser
@@ -130,6 +148,7 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-guava",
+    previousArtifact := youngestForwardCompatible("guava"),
     libraryDependencies ++= Seq(
       // This dependency is required due to a bug with guava 13.0, detailed here:
       // http://code.google.com/p/guava-libraries/issues/detail?id=1095
@@ -144,6 +163,7 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-scrooge",
+    previousArtifact := youngestForwardCompatible("scrooge"),
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
       "com.twitter" % "scrooge-runtime" % "3.0.4"
@@ -156,6 +176,7 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-json",
+    previousArtifact := youngestForwardCompatible("json"),
     libraryDependencies += jsonParser
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
@@ -165,6 +186,7 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-algebird",
+    previousArtifact := youngestForwardCompatible("algebird"),
     libraryDependencies += "com.twitter" %% "algebird-core" % "0.1.9"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
@@ -174,6 +196,7 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-util",
+    previousArtifact := youngestForwardCompatible("util"),
     libraryDependencies += "com.twitter" %% "util-core" % "6.2.0"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
@@ -183,6 +206,17 @@ object BijectionBuild extends Build {
     settings = sharedSettings
   ).settings(
     name := "bijection-clojure",
+    previousArtifact := youngestForwardCompatible("clojure"),
     libraryDependencies += "org.clojure" % "clojure" % "1.4.0"
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  lazy val bijectionNetty = Project(
+    id = "bijection-netty",
+    base = file("bijection-netty"),
+    settings = sharedSettings
+  ).settings(
+    name := "bijection-netty",
+    previousArtifact := youngestForwardCompatible("netty"),
+    libraryDependencies += "io.netty" % "netty" % "3.5.5.Final"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 }
