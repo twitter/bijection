@@ -1,8 +1,12 @@
 # Bijection #
 
-### 0.3.1
+### 0.4.0
 
 * `bijection-netty` for async functionality. These help with Finagle stores.
+* JavaSerializationInjection
+* ModDivInjection
+* fix CastInjection
+* JsonInjection
 
 ### 0.3.0
 
