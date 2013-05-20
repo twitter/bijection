@@ -5,9 +5,10 @@ import Keys._
 import sbtgitflow.ReleasePlugin._
 import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 import com.typesafe.tools.mima.plugin.MimaKeys.previousArtifact
+import com.typesafe.sbt.osgi.SbtOsgi._
 
 object BijectionBuild extends Build {
-  val sharedSettings = Project.defaultSettings ++ releaseSettings ++ Seq(
+  val sharedSettings = Project.defaultSettings ++ releaseSettings ++ osgiSettings ++ Seq(
     organization := "com.twitter",
 
     crossScalaVersions := Seq("2.9.2", "2.10.0"),
@@ -29,6 +30,12 @@ object BijectionBuild extends Build {
     parallelExecution in Test := true,
 
     scalacOptions ++= Seq("-unchecked", "-deprecation"),
+
+    OsgiKeys.importPackage <<= scalaVersion { sv => Seq("""scala.*;version="$<range;[==,=+);%s>"""".format(sv)) },
+
+    OsgiKeys.importPackage ++= Seq("com.twitter.bijection.*;version=\"[${Bundle-Version}, ${Bundle-Version}]\"", "*"),
+
+    OsgiKeys.additionalHeaders := Map("-removeheaders" -> "Include-Resource,Private-Package"),
 
     // Publishing options:
     publishMavenStyle := true,
@@ -84,6 +91,8 @@ object BijectionBuild extends Build {
     else Some("com.twitter" % ("bijection-" + subProj + "_2.9.2") % "0.3.0")
   }
 
+  def osgiExportAll(packs: String*) = OsgiKeys.exportPackage := packs.map(_ + ".*;version=${Bundle-Version}")
+
   lazy val bijection = Project(
     id = "bijection",
     base = file("."),
@@ -110,6 +119,7 @@ object BijectionBuild extends Build {
   ).settings(
     name := "bijection-core",
     previousArtifact := youngestForwardCompatible("core"),
+    osgiExportAll("com.twitter.bijection"),
     libraryDependencies ++= Seq(
         "commons-codec" % "commons-codec" % "1.7",
         "com.novocode" % "junit-interface" % "0.10-M1" % "test",
@@ -124,6 +134,7 @@ object BijectionBuild extends Build {
   ).settings(
     name := "bijection-protobuf",
     previousArtifact := youngestForwardCompatible("protobuf"),
+    osgiExportAll("com.twitter.bijection.protobuf"),
     libraryDependencies += "com.google.protobuf" % "protobuf-java" % "2.4.1"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
@@ -136,6 +147,7 @@ object BijectionBuild extends Build {
   ).settings(
     name := "bijection-thrift",
     previousArtifact := youngestForwardCompatible("thrift"),
+    osgiExportAll("com.twitter.bijection.thrift"),
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
       jsonParser
@@ -149,6 +161,7 @@ object BijectionBuild extends Build {
   ).settings(
     name := "bijection-guava",
     previousArtifact := youngestForwardCompatible("guava"),
+    osgiExportAll("com.twitter.bijection.guava"),
     libraryDependencies ++= Seq(
       // This dependency is required due to a bug with guava 13.0, detailed here:
       // http://code.google.com/p/guava-libraries/issues/detail?id=1095
@@ -164,6 +177,7 @@ object BijectionBuild extends Build {
   ).settings(
     name := "bijection-scrooge",
     previousArtifact := youngestForwardCompatible("scrooge"),
+    osgiExportAll("com.twitter.bijection.scrooge"),
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
       "com.twitter" % "scrooge-runtime" % "3.0.4"
@@ -177,6 +191,7 @@ object BijectionBuild extends Build {
   ).settings(
     name := "bijection-json",
     previousArtifact := youngestForwardCompatible("json"),
+    osgiExportAll("com.twitter.bijection.json"),
     libraryDependencies += jsonParser
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
@@ -187,6 +202,7 @@ object BijectionBuild extends Build {
   ).settings(
     name := "bijection-algebird",
     previousArtifact := youngestForwardCompatible("algebird"),
+    osgiExportAll("com.twitter.bijection.algebird"),
     libraryDependencies += "com.twitter" %% "algebird-core" % "0.1.9"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
@@ -197,6 +213,7 @@ object BijectionBuild extends Build {
   ).settings(
     name := "bijection-util",
     previousArtifact := youngestForwardCompatible("util"),
+    osgiExportAll("com.twitter.bijection.util"),
     libraryDependencies += "com.twitter" %% "util-core" % "6.2.0"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
@@ -207,6 +224,7 @@ object BijectionBuild extends Build {
   ).settings(
     name := "bijection-clojure",
     previousArtifact := youngestForwardCompatible("clojure"),
+    osgiExportAll("com.twitter.bijection.clojure"),
     libraryDependencies += "org.clojure" % "clojure" % "1.4.0"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
@@ -217,6 +235,7 @@ object BijectionBuild extends Build {
   ).settings(
     name := "bijection-netty",
     previousArtifact := youngestForwardCompatible("netty"),
+    osgiExportAll("com.twitter.bijection.netty"),
     libraryDependencies += "io.netty" % "netty" % "3.5.5.Final"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 }
