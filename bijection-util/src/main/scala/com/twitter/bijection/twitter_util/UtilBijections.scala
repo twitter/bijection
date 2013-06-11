@@ -17,7 +17,7 @@ limitations under the License.
 package com.twitter.bijection.twitter_util
 
 import com.twitter.bijection.{ AbstractBijection, Bijection, ImplicitBijection }
-import com.twitter.util.{ Future => TwitterFuture, Try => TwitterTry, Promise => TwitterPromise, Return, Throw }
+import com.twitter.util.{ Future => TwitterFuture, Try => TwitterTry, Promise => TwitterPromise, Return, Throw, FuturePool }
 
 import scala.concurrent.{ Future => ScalaFuture, Promise => ScalaPromise, ExecutionContext }
 import scala.util.{ Success, Failure, Try => ScalaTry }
@@ -112,6 +112,15 @@ trait UtilBijections {
     new AbstractBijection[ScalaTry[A], ScalaTry[B]] {
       override def apply(fa: ScalaTry[A]) = fa.map(bij(_))
       override def invert(fb: ScalaTry[B]) = fb.map(bij.invert(_))
+    }
+
+  /**
+    * Bijection from FuturePool to ExecutionContext
+    */
+  implicit def futurePoolExecutionContextBijection: Bijection[FuturePool, ExecutionContext] =
+    new AbstractBijection[FuturePool, ExecutionContext] {
+      override def apply(pool: FuturePool) = new TwitterExecutionContext(pool)
+      override def invert(context: ExecutionContext) = new ScalaFuturePool(context)
     }
 }
 
