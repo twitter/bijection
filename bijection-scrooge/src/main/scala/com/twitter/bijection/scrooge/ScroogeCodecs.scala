@@ -36,16 +36,19 @@ object BinaryScalaCodec {
   def apply[T <: ThriftStruct](c: ThriftStructCodec[T]) =
     new BinaryScalaCodec[T](c)
 }
+
 class BinaryScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
     extends ScalaCodec(new BinaryThriftStructSerializer[T] {
       override def codec = c
+      val protocolFactory = new TBinaryProtocol.Factory
     }
-  )
+)
 
 object CompactScalaCodec {
   def apply[T <: ThriftStruct](c: ThriftStructCodec[T]) =
     new CompactScalaCodec[T](c)
 }
+
 class CompactScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
     extends ScalaCodec(new CompactThriftSerializer[T] {
       override def codec = c
