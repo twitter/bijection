@@ -1,5 +1,9 @@
 # Bijection #
 
+### 0.4.1
+
+* Added `Codec[T]` alias for serialization injections.
+
 ### 0.4.0
 
 * `bijection-netty` for async functionality. These help with Finagle stores.
