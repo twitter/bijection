@@ -25,6 +25,16 @@ package com.twitter
  * libraries (Bijection[MyTrait, YourTrait]) and many other purposes.
  */
 package object bijection {
+  /**
+    * Using Injections for serialization is a common pattern. Currying
+    * the byte array parameter makes it easier to write code like
+    * this:
+    *
+    * {{{
+    def getProducer[T: Codec] = ...
+    * }}}
+    */
+  type Codec[T] = Injection[T, Array[Byte]]
 
   /**
    * Tagging infrastructure.
