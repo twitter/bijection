@@ -18,7 +18,6 @@ package com.twitter.bijection.scrooge
 
 import com.twitter.bijection.{Bijection, Injection}
 import com.twitter.scrooge.{
-  BinaryThriftStructSerializer,
   CompactThriftSerializer,
   ThriftStruct,
   ThriftStructCodec,
@@ -36,16 +35,19 @@ object BinaryScalaCodec {
   def apply[T <: ThriftStruct](c: ThriftStructCodec[T]) =
     new BinaryScalaCodec[T](c)
 }
+
 class BinaryScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
-    extends ScalaCodec(new BinaryThriftStructSerializer[T] {
+    extends ScalaCodec(new ThriftStructSerializer[T] {
       override def codec = c
+      val protocolFactory = new TBinaryProtocol.Factory
     }
-  )
+)
 
 object CompactScalaCodec {
   def apply[T <: ThriftStruct](c: ThriftStructCodec[T]) =
     new CompactScalaCodec[T](c)
 }
+
 class CompactScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
     extends ScalaCodec(new CompactThriftSerializer[T] {
       override def codec = c
