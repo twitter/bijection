@@ -35,7 +35,7 @@ class IntModDivInjection(val modulus: Int) extends Injection[Int, (Int,Int)] {
       Right(div * modulus + mod)
     }
     else
-      Left(new InversionFailure)
+      Left(InversionFailure())
   }
 }
 
@@ -59,6 +59,6 @@ class LongModDivInjection(val modulus: Long) extends Injection[Long, (Long,Long)
       Right(div * modulus + mod)
     }
     else
-      Left(new InversionFailure)
+      Left(InversionFailure())
   }
 }

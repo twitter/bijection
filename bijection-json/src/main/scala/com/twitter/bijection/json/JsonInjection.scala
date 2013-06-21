@@ -83,19 +83,19 @@ object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
   }
   implicit val booleanJson = new AbstractJsonNodeInjection[Boolean] {
     def apply(b: Boolean) = JsonNodeFactory.instance.booleanNode(b)
-    override def invert(n: JsonNode) = if(n.isBoolean) Right(n.getValueAsBoolean) else Left(new InversionFailure)
+    override def invert(n: JsonNode) = if(n.isBoolean) Right(n.getValueAsBoolean) else Left(InversionFailure())
   }
   implicit val shortJson = new AbstractJsonNodeInjection[Short] {
     def apply(i: Short) = JsonNodeFactory.instance.numberNode(i)
-    override def invert(n: JsonNode) = if (n.isInt) Right(n.getValueAsInt.toShort) else Left(new InversionFailure)
+    override def invert(n: JsonNode) = if (n.isInt) Right(n.getValueAsInt.toShort) else Left(InversionFailure())
   }
   implicit val intJson = new AbstractJsonNodeInjection[Int] {
     def apply(i: Int) = JsonNodeFactory.instance.numberNode(i)
-    override def invert(n: JsonNode) = if (n.isInt) Right(n.getValueAsInt) else Left(new InversionFailure)
+    override def invert(n: JsonNode) = if (n.isInt) Right(n.getValueAsInt) else Left(InversionFailure())
   }
   implicit val longJson = new AbstractJsonNodeInjection[Long] {
     def apply(i: Long) = JsonNodeFactory.instance.numberNode(i)
-    override def invert(n: JsonNode) = if (n.isLong || n.isInt) Right(n.getValueAsLong) else Left(new InversionFailure)
+    override def invert(n: JsonNode) = if (n.isLong || n.isInt) Right(n.getValueAsLong) else Left(InversionFailure())
   }
   implicit val floatJson = new AbstractJsonNodeInjection[Float] {
     def apply(i: Float) = JsonNodeFactory.instance.numberNode(i)
@@ -103,11 +103,11 @@ object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
   }
   implicit val doubleJson = new AbstractJsonNodeInjection[Double] {
     def apply(i: Double) = JsonNodeFactory.instance.numberNode(i)
-    override def invert(n: JsonNode) = if (n.isDouble) Right(n.getValueAsDouble) else Left(new InversionFailure)
+    override def invert(n: JsonNode) = if (n.isDouble) Right(n.getValueAsDouble) else Left(InversionFailure())
   }
   implicit val stringJson = new AbstractJsonNodeInjection[String] {
     def apply(s: String) = JsonNodeFactory.instance.textNode(s)
-    override def invert(n: JsonNode) = if (n.isTextual) Right(n.getValueAsText) else Left(new InversionFailure)
+    override def invert(n: JsonNode) = if (n.isTextual) Right(n.getValueAsText) else Left(InversionFailure())
   }
   implicit val byteArray = new AbstractJsonNodeInjection[Array[Byte]] {
     def apply(b: Array[Byte]) = JsonNodeFactory.instance.binaryNode(b)
@@ -143,12 +143,12 @@ object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
           inCount += 1
           val thisC = jbij.invert(jn)
           if(thisC.isLeft) {
-            return Left(new InversionFailure)
+            return Left(InversionFailure())
           }
           builder += thisC.right.get
         }
         val res = builder.result
-        if (res.size == inCount) Right(res) else Left(new InversionFailure)
+        if (res.size == inCount) Right(res) else Left(InversionFailure())
       }
     }
 
@@ -187,11 +187,11 @@ object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
             builder += (kv.getKey -> value.right.get)
           }
           else {
-            return Left(new InversionFailure)
+            return Left(InversionFailure())
           }
         }
         val res = builder.result
-        if (res.size == cnt) Right(res) else Left(new InversionFailure)
+        if (res.size == cnt) Right(res) else Left(InversionFailure())
       }
     }
 

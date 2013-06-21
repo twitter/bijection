@@ -32,6 +32,15 @@ package object bijection {
    *  that failure
    */
   type InversionFailure = UnsupportedOperationException
+  object InversionFailure {
+    def apply(msg: String = "") =
+      if (msg.isEmpty) new InversionFailure()
+      else new InversionFailure(msg)
+    def apply(msg: String, cause: Throwable) =
+      new InversionFailure(msg, cause)
+    def apply(cause: Throwable) =
+      new InversionFailure(cause)
+  }
 
   /**
    * Injections may not be defined for their inverse conversion.
