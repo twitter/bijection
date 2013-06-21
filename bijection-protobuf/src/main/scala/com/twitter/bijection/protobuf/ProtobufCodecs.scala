@@ -1,6 +1,6 @@
 package com.twitter.bijection.protobuf
 
-import com.twitter.bijection.{Bijection, Conversion, Injection}
+import com.twitter.bijection.{Bijection, Conversion, Injection, InversionFailure}
 import com.google.protobuf.Message
 import com.google.protobuf.ProtocolMessageEnum
 import java.lang.{ Integer => JInt }
@@ -29,7 +29,7 @@ object ProtobufCodec {
 class ProtobufCodec[T <: Message](klass: Class[T]) extends Injection[T, Array[Byte]] {
   lazy val parseFrom = klass.getMethod("parseFrom", classOf[Array[Byte]])
   override def apply(item: T) = item.toByteArray
-  override def invert(bytes: Array[Byte]) = allCatch.opt {
+  override def invert(bytes: Array[Byte]) = allCatch.either {
     parseFrom.invoke(null, bytes).asInstanceOf[T]
   }
 }
@@ -62,5 +62,5 @@ class ProtobufEnumCodec[T <: ProtocolMessageEnum](klass: Class[T]) extends Injec
   override def apply(enum: T) = enum.getNumber
   override def invert(i: Int) = Option {
     cache.getOrElseUpdate(i, valueOf.invoke(null, i.as[JInt]).asInstanceOf[T])
-  }
+  }.toRight(new InversionFailure)
 }

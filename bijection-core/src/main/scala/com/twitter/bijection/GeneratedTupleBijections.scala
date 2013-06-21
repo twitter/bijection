@@ -114,168 +114,168 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
     Injection[(A,B),List[C]] = new AbstractInjection[(A,B),List[C]] {
       def apply(in: (A,B)) = List(ba(in._1), bb(in._2))
       def invert(out: List[C]) = out match {
-        case a :: b :: Nil => for(a <- ba.invert(a); b <- bb.invert(b)) yield (a,b)
-        case _ => None
+        case a :: b :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right) yield (a,b)
+        case _ => Left(new InversionFailure)
       }
     }
   implicit def tuple3ToList[A,B,C,D](implicit ba: Injection[A,D], bb: Injection[B,D], bc: Injection[C,D]):
     Injection[(A,B,C),List[D]] = new AbstractInjection[(A,B,C),List[D]] {
       def apply(in: (A,B,C)) = List(ba(in._1), bb(in._2), bc(in._3))
       def invert(out: List[D]) = out match {
-        case a :: b :: c :: Nil => for(a <- ba.invert(a); b <- bb.invert(b); c <- bc.invert(c)) yield (a,b,c)
-        case _ => None
+        case a :: b :: c :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right) yield (a,b,c)
+        case _ => Left(new InversionFailure)
       }
     }
   implicit def tuple4ToList[A,B,C,D,E](implicit ba: Injection[A,E], bb: Injection[B,E], bc: Injection[C,E], bd: Injection[D,E]):
     Injection[(A,B,C,D),List[E]] = new AbstractInjection[(A,B,C,D),List[E]] {
       def apply(in: (A,B,C,D)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4))
       def invert(out: List[E]) = out match {
-        case a :: b :: c :: d :: Nil => for(a <- ba.invert(a); b <- bb.invert(b); c <- bc.invert(c); d <- bd.invert(d)) yield (a,b,c,d)
-        case _ => None
+        case a :: b :: c :: d :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right) yield (a,b,c,d)
+        case _ => Left(new InversionFailure)
       }
     }
   implicit def tuple5ToList[A,B,C,D,E,F](implicit ba: Injection[A,F], bb: Injection[B,F], bc: Injection[C,F], bd: Injection[D,F], be: Injection[E,F]):
     Injection[(A,B,C,D,E),List[F]] = new AbstractInjection[(A,B,C,D,E),List[F]] {
       def apply(in: (A,B,C,D,E)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5))
       def invert(out: List[F]) = out match {
-        case a :: b :: c :: d :: e :: Nil => for(a <- ba.invert(a); b <- bb.invert(b); c <- bc.invert(c); d <- bd.invert(d); e <- be.invert(e)) yield (a,b,c,d,e)
-        case _ => None
+        case a :: b :: c :: d :: e :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right) yield (a,b,c,d,e)
+        case _ => Left(new InversionFailure)
       }
     }
   implicit def tuple6ToList[A,B,C,D,E,F,G](implicit ba: Injection[A,G], bb: Injection[B,G], bc: Injection[C,G], bd: Injection[D,G], be: Injection[E,G], bf: Injection[F,G]):
     Injection[(A,B,C,D,E,F),List[G]] = new AbstractInjection[(A,B,C,D,E,F),List[G]] {
       def apply(in: (A,B,C,D,E,F)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6))
       def invert(out: List[G]) = out match {
-        case a :: b :: c :: d :: e :: f :: Nil => for(a <- ba.invert(a); b <- bb.invert(b); c <- bc.invert(c); d <- bd.invert(d); e <- be.invert(e); f <- bf.invert(f)) yield (a,b,c,d,e,f)
-        case _ => None
+        case a :: b :: c :: d :: e :: f :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right) yield (a,b,c,d,e,f)
+        case _ => Left(new InversionFailure)
       }
     }
   implicit def tuple7ToList[A,B,C,D,E,F,G,H](implicit ba: Injection[A,H], bb: Injection[B,H], bc: Injection[C,H], bd: Injection[D,H], be: Injection[E,H], bf: Injection[F,H], bg: Injection[G,H]):
     Injection[(A,B,C,D,E,F,G),List[H]] = new AbstractInjection[(A,B,C,D,E,F,G),List[H]] {
       def apply(in: (A,B,C,D,E,F,G)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7))
       def invert(out: List[H]) = out match {
-        case a :: b :: c :: d :: e :: f :: g :: Nil => for(a <- ba.invert(a); b <- bb.invert(b); c <- bc.invert(c); d <- bd.invert(d); e <- be.invert(e); f <- bf.invert(f); g <- bg.invert(g)) yield (a,b,c,d,e,f,g)
-        case _ => None
+        case a :: b :: c :: d :: e :: f :: g :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right) yield (a,b,c,d,e,f,g)
+        case _ => Left(new InversionFailure)
       }
     }
   implicit def tuple8ToList[A,B,C,D,E,F,G,H,I](implicit ba: Injection[A,I], bb: Injection[B,I], bc: Injection[C,I], bd: Injection[D,I], be: Injection[E,I], bf: Injection[F,I], bg: Injection[G,I], bh: Injection[H,I]):
     Injection[(A,B,C,D,E,F,G,H),List[I]] = new AbstractInjection[(A,B,C,D,E,F,G,H),List[I]] {
       def apply(in: (A,B,C,D,E,F,G,H)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8))
       def invert(out: List[I]) = out match {
-        case a :: b :: c :: d :: e :: f :: g :: h :: Nil => for(a <- ba.invert(a); b <- bb.invert(b); c <- bc.invert(c); d <- bd.invert(d); e <- be.invert(e); f <- bf.invert(f); g <- bg.invert(g); h <- bh.invert(h)) yield (a,b,c,d,e,f,g,h)
-        case _ => None
+        case a :: b :: c :: d :: e :: f :: g :: h :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right) yield (a,b,c,d,e,f,g,h)
+        case _ => Left(new InversionFailure)
       }
     }
   implicit def tuple9ToList[A,B,C,D,E,F,G,H,I,J](implicit ba: Injection[A,J], bb: Injection[B,J], bc: Injection[C,J], bd: Injection[D,J], be: Injection[E,J], bf: Injection[F,J], bg: Injection[G,J], bh: Injection[H,J], bi: Injection[I,J]):
     Injection[(A,B,C,D,E,F,G,H,I),List[J]] = new AbstractInjection[(A,B,C,D,E,F,G,H,I),List[J]] {
       def apply(in: (A,B,C,D,E,F,G,H,I)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9))
       def invert(out: List[J]) = out match {
-        case a :: b :: c :: d :: e :: f :: g :: h :: i :: Nil => for(a <- ba.invert(a); b <- bb.invert(b); c <- bc.invert(c); d <- bd.invert(d); e <- be.invert(e); f <- bf.invert(f); g <- bg.invert(g); h <- bh.invert(h); i <- bi.invert(i)) yield (a,b,c,d,e,f,g,h,i)
-        case _ => None
+        case a :: b :: c :: d :: e :: f :: g :: h :: i :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right) yield (a,b,c,d,e,f,g,h,i)
+        case _ => Left(new InversionFailure)
       }
     }
   implicit def tuple10ToList[A,B,C,D,E,F,G,H,I,J,K](implicit ba: Injection[A,K], bb: Injection[B,K], bc: Injection[C,K], bd: Injection[D,K], be: Injection[E,K], bf: Injection[F,K], bg: Injection[G,K], bh: Injection[H,K], bi: Injection[I,K], bj: Injection[J,K]):
     Injection[(A,B,C,D,E,F,G,H,I,J),List[K]] = new AbstractInjection[(A,B,C,D,E,F,G,H,I,J),List[K]] {
       def apply(in: (A,B,C,D,E,F,G,H,I,J)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10))
       def invert(out: List[K]) = out match {
-        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: Nil => for(a <- ba.invert(a); b <- bb.invert(b); c <- bc.invert(c); d <- bd.invert(d); e <- be.invert(e); f <- bf.invert(f); g <- bg.invert(g); h <- bh.invert(h); i <- bi.invert(i); j <- bj.invert(j)) yield (a,b,c,d,e,f,g,h,i,j)
-        case _ => None
+        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right) yield (a,b,c,d,e,f,g,h,i,j)
+        case _ => Left(new InversionFailure)
       }
     }
   implicit def tuple11ToList[A,B,C,D,E,F,G,H,I,J,K,L](implicit ba: Injection[A,L], bb: Injection[B,L], bc: Injection[C,L], bd: Injection[D,L], be: Injection[E,L], bf: Injection[F,L], bg: Injection[G,L], bh: Injection[H,L], bi: Injection[I,L], bj: Injection[J,L], bk: Injection[K,L]):
     Injection[(A,B,C,D,E,F,G,H,I,J,K),List[L]] = new AbstractInjection[(A,B,C,D,E,F,G,H,I,J,K),List[L]] {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11))
       def invert(out: List[L]) = out match {
-        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: Nil => for(a <- ba.invert(a); b <- bb.invert(b); c <- bc.invert(c); d <- bd.invert(d); e <- be.invert(e); f <- bf.invert(f); g <- bg.invert(g); h <- bh.invert(h); i <- bi.invert(i); j <- bj.invert(j); k <- bk.invert(k)) yield (a,b,c,d,e,f,g,h,i,j,k)
-        case _ => None
+        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right) yield (a,b,c,d,e,f,g,h,i,j,k)
+        case _ => Left(new InversionFailure)
       }
     }
   implicit def tuple12ToList[A,B,C,D,E,F,G,H,I,J,K,L,M](implicit ba: Injection[A,M], bb: Injection[B,M], bc: Injection[C,M], bd: Injection[D,M], be: Injection[E,M], bf: Injection[F,M], bg: Injection[G,M], bh: Injection[H,M], bi: Injection[I,M], bj: Injection[J,M], bk: Injection[K,M], bl: Injection[L,M]):
     Injection[(A,B,C,D,E,F,G,H,I,J,K,L),List[M]] = new AbstractInjection[(A,B,C,D,E,F,G,H,I,J,K,L),List[M]] {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12))
       def invert(out: List[M]) = out match {
-        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: Nil => for(a <- ba.invert(a); b <- bb.invert(b); c <- bc.invert(c); d <- bd.invert(d); e <- be.invert(e); f <- bf.invert(f); g <- bg.invert(g); h <- bh.invert(h); i <- bi.invert(i); j <- bj.invert(j); k <- bk.invert(k); l <- bl.invert(l)) yield (a,b,c,d,e,f,g,h,i,j,k,l)
-        case _ => None
+        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right) yield (a,b,c,d,e,f,g,h,i,j,k,l)
+        case _ => Left(new InversionFailure)
       }
     }
   implicit def tuple13ToList[A,B,C,D,E,F,G,H,I,J,K,L,M,N](implicit ba: Injection[A,N], bb: Injection[B,N], bc: Injection[C,N], bd: Injection[D,N], be: Injection[E,N], bf: Injection[F,N], bg: Injection[G,N], bh: Injection[H,N], bi: Injection[I,N], bj: Injection[J,N], bk: Injection[K,N], bl: Injection[L,N], bm: Injection[M,N]):
     Injection[(A,B,C,D,E,F,G,H,I,J,K,L,M),List[N]] = new AbstractInjection[(A,B,C,D,E,F,G,H,I,J,K,L,M),List[N]] {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L,M)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13))
       def invert(out: List[N]) = out match {
-        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: Nil => for(a <- ba.invert(a); b <- bb.invert(b); c <- bc.invert(c); d <- bd.invert(d); e <- be.invert(e); f <- bf.invert(f); g <- bg.invert(g); h <- bh.invert(h); i <- bi.invert(i); j <- bj.invert(j); k <- bk.invert(k); l <- bl.invert(l); m <- bm.invert(m)) yield (a,b,c,d,e,f,g,h,i,j,k,l,m)
-        case _ => None
+        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right; m <- bm.invert(m).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m)
+        case _ => Left(new InversionFailure)
       }
     }
   implicit def tuple14ToList[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O](implicit ba: Injection[A,O], bb: Injection[B,O], bc: Injection[C,O], bd: Injection[D,O], be: Injection[E,O], bf: Injection[F,O], bg: Injection[G,O], bh: Injection[H,O], bi: Injection[I,O], bj: Injection[J,O], bk: Injection[K,O], bl: Injection[L,O], bm: Injection[M,O], bn: Injection[N,O]):
     Injection[(A,B,C,D,E,F,G,H,I,J,K,L,M,N),List[O]] = new AbstractInjection[(A,B,C,D,E,F,G,H,I,J,K,L,M,N),List[O]] {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L,M,N)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14))
       def invert(out: List[O]) = out match {
-        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: Nil => for(a <- ba.invert(a); b <- bb.invert(b); c <- bc.invert(c); d <- bd.invert(d); e <- be.invert(e); f <- bf.invert(f); g <- bg.invert(g); h <- bh.invert(h); i <- bi.invert(i); j <- bj.invert(j); k <- bk.invert(k); l <- bl.invert(l); m <- bm.invert(m); n <- bn.invert(n)) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n)
-        case _ => None
+        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right; m <- bm.invert(m).right; n <- bn.invert(n).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n)
+        case _ => Left(new InversionFailure)
       }
     }
   implicit def tuple15ToList[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P](implicit ba: Injection[A,P], bb: Injection[B,P], bc: Injection[C,P], bd: Injection[D,P], be: Injection[E,P], bf: Injection[F,P], bg: Injection[G,P], bh: Injection[H,P], bi: Injection[I,P], bj: Injection[J,P], bk: Injection[K,P], bl: Injection[L,P], bm: Injection[M,P], bn: Injection[N,P], bo: Injection[O,P]):
     Injection[(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O),List[P]] = new AbstractInjection[(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O),List[P]] {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L,M,N,O)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15))
       def invert(out: List[P]) = out match {
-        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: Nil => for(a <- ba.invert(a); b <- bb.invert(b); c <- bc.invert(c); d <- bd.invert(d); e <- be.invert(e); f <- bf.invert(f); g <- bg.invert(g); h <- bh.invert(h); i <- bi.invert(i); j <- bj.invert(j); k <- bk.invert(k); l <- bl.invert(l); m <- bm.invert(m); n <- bn.invert(n); o <- bo.invert(o)) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o)
-        case _ => None
+        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right; m <- bm.invert(m).right; n <- bn.invert(n).right; o <- bo.invert(o).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o)
+        case _ => Left(new InversionFailure)
       }
     }
   implicit def tuple16ToList[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q](implicit ba: Injection[A,Q], bb: Injection[B,Q], bc: Injection[C,Q], bd: Injection[D,Q], be: Injection[E,Q], bf: Injection[F,Q], bg: Injection[G,Q], bh: Injection[H,Q], bi: Injection[I,Q], bj: Injection[J,Q], bk: Injection[K,Q], bl: Injection[L,Q], bm: Injection[M,Q], bn: Injection[N,Q], bo: Injection[O,Q], bp: Injection[P,Q]):
     Injection[(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P),List[Q]] = new AbstractInjection[(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P),List[Q]] {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15), bp(in._16))
       def invert(out: List[Q]) = out match {
-        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: p :: Nil => for(a <- ba.invert(a); b <- bb.invert(b); c <- bc.invert(c); d <- bd.invert(d); e <- be.invert(e); f <- bf.invert(f); g <- bg.invert(g); h <- bh.invert(h); i <- bi.invert(i); j <- bj.invert(j); k <- bk.invert(k); l <- bl.invert(l); m <- bm.invert(m); n <- bn.invert(n); o <- bo.invert(o); p <- bp.invert(p)) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p)
-        case _ => None
+        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: p :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right; m <- bm.invert(m).right; n <- bn.invert(n).right; o <- bo.invert(o).right; p <- bp.invert(p).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p)
+        case _ => Left(new InversionFailure)
       }
     }
   implicit def tuple17ToList[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R](implicit ba: Injection[A,R], bb: Injection[B,R], bc: Injection[C,R], bd: Injection[D,R], be: Injection[E,R], bf: Injection[F,R], bg: Injection[G,R], bh: Injection[H,R], bi: Injection[I,R], bj: Injection[J,R], bk: Injection[K,R], bl: Injection[L,R], bm: Injection[M,R], bn: Injection[N,R], bo: Injection[O,R], bp: Injection[P,R], bq: Injection[Q,R]):
     Injection[(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),List[R]] = new AbstractInjection[(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q),List[R]] {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15), bp(in._16), bq(in._17))
       def invert(out: List[R]) = out match {
-        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: p :: q :: Nil => for(a <- ba.invert(a); b <- bb.invert(b); c <- bc.invert(c); d <- bd.invert(d); e <- be.invert(e); f <- bf.invert(f); g <- bg.invert(g); h <- bh.invert(h); i <- bi.invert(i); j <- bj.invert(j); k <- bk.invert(k); l <- bl.invert(l); m <- bm.invert(m); n <- bn.invert(n); o <- bo.invert(o); p <- bp.invert(p); q <- bq.invert(q)) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q)
-        case _ => None
+        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: p :: q :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right; m <- bm.invert(m).right; n <- bn.invert(n).right; o <- bo.invert(o).right; p <- bp.invert(p).right; q <- bq.invert(q).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q)
+        case _ => Left(new InversionFailure)
       }
     }
   implicit def tuple18ToList[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S](implicit ba: Injection[A,S], bb: Injection[B,S], bc: Injection[C,S], bd: Injection[D,S], be: Injection[E,S], bf: Injection[F,S], bg: Injection[G,S], bh: Injection[H,S], bi: Injection[I,S], bj: Injection[J,S], bk: Injection[K,S], bl: Injection[L,S], bm: Injection[M,S], bn: Injection[N,S], bo: Injection[O,S], bp: Injection[P,S], bq: Injection[Q,S], br: Injection[R,S]):
     Injection[(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R),List[S]] = new AbstractInjection[(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R),List[S]] {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15), bp(in._16), bq(in._17), br(in._18))
       def invert(out: List[S]) = out match {
-        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: p :: q :: r :: Nil => for(a <- ba.invert(a); b <- bb.invert(b); c <- bc.invert(c); d <- bd.invert(d); e <- be.invert(e); f <- bf.invert(f); g <- bg.invert(g); h <- bh.invert(h); i <- bi.invert(i); j <- bj.invert(j); k <- bk.invert(k); l <- bl.invert(l); m <- bm.invert(m); n <- bn.invert(n); o <- bo.invert(o); p <- bp.invert(p); q <- bq.invert(q); r <- br.invert(r)) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r)
-        case _ => None
+        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: p :: q :: r :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right; m <- bm.invert(m).right; n <- bn.invert(n).right; o <- bo.invert(o).right; p <- bp.invert(p).right; q <- bq.invert(q).right; r <- br.invert(r).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r)
+        case _ => Left(new InversionFailure)
       }
     }
   implicit def tuple19ToList[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T](implicit ba: Injection[A,T], bb: Injection[B,T], bc: Injection[C,T], bd: Injection[D,T], be: Injection[E,T], bf: Injection[F,T], bg: Injection[G,T], bh: Injection[H,T], bi: Injection[I,T], bj: Injection[J,T], bk: Injection[K,T], bl: Injection[L,T], bm: Injection[M,T], bn: Injection[N,T], bo: Injection[O,T], bp: Injection[P,T], bq: Injection[Q,T], br: Injection[R,T], bs: Injection[S,T]):
     Injection[(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S),List[T]] = new AbstractInjection[(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S),List[T]] {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15), bp(in._16), bq(in._17), br(in._18), bs(in._19))
       def invert(out: List[T]) = out match {
-        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: p :: q :: r :: s :: Nil => for(a <- ba.invert(a); b <- bb.invert(b); c <- bc.invert(c); d <- bd.invert(d); e <- be.invert(e); f <- bf.invert(f); g <- bg.invert(g); h <- bh.invert(h); i <- bi.invert(i); j <- bj.invert(j); k <- bk.invert(k); l <- bl.invert(l); m <- bm.invert(m); n <- bn.invert(n); o <- bo.invert(o); p <- bp.invert(p); q <- bq.invert(q); r <- br.invert(r); s <- bs.invert(s)) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s)
-        case _ => None
+        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: p :: q :: r :: s :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right; m <- bm.invert(m).right; n <- bn.invert(n).right; o <- bo.invert(o).right; p <- bp.invert(p).right; q <- bq.invert(q).right; r <- br.invert(r).right; s <- bs.invert(s).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s)
+        case _ => Left(new InversionFailure)
       }
     }
   implicit def tuple20ToList[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U](implicit ba: Injection[A,U], bb: Injection[B,U], bc: Injection[C,U], bd: Injection[D,U], be: Injection[E,U], bf: Injection[F,U], bg: Injection[G,U], bh: Injection[H,U], bi: Injection[I,U], bj: Injection[J,U], bk: Injection[K,U], bl: Injection[L,U], bm: Injection[M,U], bn: Injection[N,U], bo: Injection[O,U], bp: Injection[P,U], bq: Injection[Q,U], br: Injection[R,U], bs: Injection[S,U], bt: Injection[T,U]):
     Injection[(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T),List[U]] = new AbstractInjection[(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T),List[U]] {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15), bp(in._16), bq(in._17), br(in._18), bs(in._19), bt(in._20))
       def invert(out: List[U]) = out match {
-        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: p :: q :: r :: s :: t :: Nil => for(a <- ba.invert(a); b <- bb.invert(b); c <- bc.invert(c); d <- bd.invert(d); e <- be.invert(e); f <- bf.invert(f); g <- bg.invert(g); h <- bh.invert(h); i <- bi.invert(i); j <- bj.invert(j); k <- bk.invert(k); l <- bl.invert(l); m <- bm.invert(m); n <- bn.invert(n); o <- bo.invert(o); p <- bp.invert(p); q <- bq.invert(q); r <- br.invert(r); s <- bs.invert(s); t <- bt.invert(t)) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t)
-        case _ => None
+        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: p :: q :: r :: s :: t :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right; m <- bm.invert(m).right; n <- bn.invert(n).right; o <- bo.invert(o).right; p <- bp.invert(p).right; q <- bq.invert(q).right; r <- br.invert(r).right; s <- bs.invert(s).right; t <- bt.invert(t).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t)
+        case _ => Left(new InversionFailure)
       }
     }
   implicit def tuple21ToList[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V](implicit ba: Injection[A,V], bb: Injection[B,V], bc: Injection[C,V], bd: Injection[D,V], be: Injection[E,V], bf: Injection[F,V], bg: Injection[G,V], bh: Injection[H,V], bi: Injection[I,V], bj: Injection[J,V], bk: Injection[K,V], bl: Injection[L,V], bm: Injection[M,V], bn: Injection[N,V], bo: Injection[O,V], bp: Injection[P,V], bq: Injection[Q,V], br: Injection[R,V], bs: Injection[S,V], bt: Injection[T,V], bu: Injection[U,V]):
     Injection[(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U),List[V]] = new AbstractInjection[(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U),List[V]] {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15), bp(in._16), bq(in._17), br(in._18), bs(in._19), bt(in._20), bu(in._21))
       def invert(out: List[V]) = out match {
-        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: p :: q :: r :: s :: t :: u :: Nil => for(a <- ba.invert(a); b <- bb.invert(b); c <- bc.invert(c); d <- bd.invert(d); e <- be.invert(e); f <- bf.invert(f); g <- bg.invert(g); h <- bh.invert(h); i <- bi.invert(i); j <- bj.invert(j); k <- bk.invert(k); l <- bl.invert(l); m <- bm.invert(m); n <- bn.invert(n); o <- bo.invert(o); p <- bp.invert(p); q <- bq.invert(q); r <- br.invert(r); s <- bs.invert(s); t <- bt.invert(t); u <- bu.invert(u)) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u)
-        case _ => None
+        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: p :: q :: r :: s :: t :: u :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right; m <- bm.invert(m).right; n <- bn.invert(n).right; o <- bo.invert(o).right; p <- bp.invert(p).right; q <- bq.invert(q).right; r <- br.invert(r).right; s <- bs.invert(s).right; t <- bt.invert(t).right; u <- bu.invert(u).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u)
+        case _ => Left(new InversionFailure)
       }
     }
   implicit def tuple22ToList[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W](implicit ba: Injection[A,W], bb: Injection[B,W], bc: Injection[C,W], bd: Injection[D,W], be: Injection[E,W], bf: Injection[F,W], bg: Injection[G,W], bh: Injection[H,W], bi: Injection[I,W], bj: Injection[J,W], bk: Injection[K,W], bl: Injection[L,W], bm: Injection[M,W], bn: Injection[N,W], bo: Injection[O,W], bp: Injection[P,W], bq: Injection[Q,W], br: Injection[R,W], bs: Injection[S,W], bt: Injection[T,W], bu: Injection[U,W], bv: Injection[V,W]):
     Injection[(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V),List[W]] = new AbstractInjection[(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V),List[W]] {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15), bp(in._16), bq(in._17), br(in._18), bs(in._19), bt(in._20), bu(in._21), bv(in._22))
       def invert(out: List[W]) = out match {
-        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: p :: q :: r :: s :: t :: u :: v :: Nil => for(a <- ba.invert(a); b <- bb.invert(b); c <- bc.invert(c); d <- bd.invert(d); e <- be.invert(e); f <- bf.invert(f); g <- bg.invert(g); h <- bh.invert(h); i <- bi.invert(i); j <- bj.invert(j); k <- bk.invert(k); l <- bl.invert(l); m <- bm.invert(m); n <- bn.invert(n); o <- bo.invert(o); p <- bp.invert(p); q <- bq.invert(q); r <- br.invert(r); s <- bs.invert(s); t <- bt.invert(t); u <- bu.invert(u); v <- bv.invert(v)) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v)
-        case _ => None
+        case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: p :: q :: r :: s :: t :: u :: v :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right; m <- bm.invert(m).right; n <- bn.invert(n).right; o <- bo.invert(o).right; p <- bp.invert(p).right; q <- bq.invert(q).right; r <- br.invert(r).right; s <- bs.invert(s).right; t <- bt.invert(t).right; u <- bu.invert(u).right; v <- bv.invert(v).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v)
+        case _ => Left(new InversionFailure)
       }
     }
 }
@@ -284,106 +284,106 @@ trait GeneratedTupleInjections extends GeneratedTupleCollectionInjections {
   implicit def tuple2[A1,B1,A2,B2](implicit ba: Injection[A1,A2], bb: Injection[B1,B2]):
     Injection[(A1,B1), (A2,B2)] = new AbstractInjection[(A1,B1), (A2,B2)] {
       def apply(in: (A1,B1)) = (ba(in._1), bb(in._2))
-      def invert(out: (A2,B2)) = for(a <- ba.invert(out._1); b <- bb.invert(out._2)) yield (a,b)
+      def invert(out: (A2,B2)) = for(a <- ba.invert(out._1).right; b <- bb.invert(out._2).right) yield (a,b)
     }
   implicit def tuple3[A1,B1,C1,A2,B2,C2](implicit ba: Injection[A1,A2], bb: Injection[B1,B2], bc: Injection[C1,C2]):
     Injection[(A1,B1,C1), (A2,B2,C2)] = new AbstractInjection[(A1,B1,C1), (A2,B2,C2)] {
       def apply(in: (A1,B1,C1)) = (ba(in._1), bb(in._2), bc(in._3))
-      def invert(out: (A2,B2,C2)) = for(a <- ba.invert(out._1); b <- bb.invert(out._2); c <- bc.invert(out._3)) yield (a,b,c)
+      def invert(out: (A2,B2,C2)) = for(a <- ba.invert(out._1).right; b <- bb.invert(out._2).right; c <- bc.invert(out._3).right) yield (a,b,c)
     }
   implicit def tuple4[A1,B1,C1,D1,A2,B2,C2,D2](implicit ba: Injection[A1,A2], bb: Injection[B1,B2], bc: Injection[C1,C2], bd: Injection[D1,D2]):
     Injection[(A1,B1,C1,D1), (A2,B2,C2,D2)] = new AbstractInjection[(A1,B1,C1,D1), (A2,B2,C2,D2)] {
       def apply(in: (A1,B1,C1,D1)) = (ba(in._1), bb(in._2), bc(in._3), bd(in._4))
-      def invert(out: (A2,B2,C2,D2)) = for(a <- ba.invert(out._1); b <- bb.invert(out._2); c <- bc.invert(out._3); d <- bd.invert(out._4)) yield (a,b,c,d)
+      def invert(out: (A2,B2,C2,D2)) = for(a <- ba.invert(out._1).right; b <- bb.invert(out._2).right; c <- bc.invert(out._3).right; d <- bd.invert(out._4).right) yield (a,b,c,d)
     }
   implicit def tuple5[A1,B1,C1,D1,E1,A2,B2,C2,D2,E2](implicit ba: Injection[A1,A2], bb: Injection[B1,B2], bc: Injection[C1,C2], bd: Injection[D1,D2], be: Injection[E1,E2]):
     Injection[(A1,B1,C1,D1,E1), (A2,B2,C2,D2,E2)] = new AbstractInjection[(A1,B1,C1,D1,E1), (A2,B2,C2,D2,E2)] {
       def apply(in: (A1,B1,C1,D1,E1)) = (ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5))
-      def invert(out: (A2,B2,C2,D2,E2)) = for(a <- ba.invert(out._1); b <- bb.invert(out._2); c <- bc.invert(out._3); d <- bd.invert(out._4); e <- be.invert(out._5)) yield (a,b,c,d,e)
+      def invert(out: (A2,B2,C2,D2,E2)) = for(a <- ba.invert(out._1).right; b <- bb.invert(out._2).right; c <- bc.invert(out._3).right; d <- bd.invert(out._4).right; e <- be.invert(out._5).right) yield (a,b,c,d,e)
     }
   implicit def tuple6[A1,B1,C1,D1,E1,F1,A2,B2,C2,D2,E2,F2](implicit ba: Injection[A1,A2], bb: Injection[B1,B2], bc: Injection[C1,C2], bd: Injection[D1,D2], be: Injection[E1,E2], bf: Injection[F1,F2]):
     Injection[(A1,B1,C1,D1,E1,F1), (A2,B2,C2,D2,E2,F2)] = new AbstractInjection[(A1,B1,C1,D1,E1,F1), (A2,B2,C2,D2,E2,F2)] {
       def apply(in: (A1,B1,C1,D1,E1,F1)) = (ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6))
-      def invert(out: (A2,B2,C2,D2,E2,F2)) = for(a <- ba.invert(out._1); b <- bb.invert(out._2); c <- bc.invert(out._3); d <- bd.invert(out._4); e <- be.invert(out._5); f <- bf.invert(out._6)) yield (a,b,c,d,e,f)
+      def invert(out: (A2,B2,C2,D2,E2,F2)) = for(a <- ba.invert(out._1).right; b <- bb.invert(out._2).right; c <- bc.invert(out._3).right; d <- bd.invert(out._4).right; e <- be.invert(out._5).right; f <- bf.invert(out._6).right) yield (a,b,c,d,e,f)
     }
   implicit def tuple7[A1,B1,C1,D1,E1,F1,G1,A2,B2,C2,D2,E2,F2,G2](implicit ba: Injection[A1,A2], bb: Injection[B1,B2], bc: Injection[C1,C2], bd: Injection[D1,D2], be: Injection[E1,E2], bf: Injection[F1,F2], bg: Injection[G1,G2]):
     Injection[(A1,B1,C1,D1,E1,F1,G1), (A2,B2,C2,D2,E2,F2,G2)] = new AbstractInjection[(A1,B1,C1,D1,E1,F1,G1), (A2,B2,C2,D2,E2,F2,G2)] {
       def apply(in: (A1,B1,C1,D1,E1,F1,G1)) = (ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7))
-      def invert(out: (A2,B2,C2,D2,E2,F2,G2)) = for(a <- ba.invert(out._1); b <- bb.invert(out._2); c <- bc.invert(out._3); d <- bd.invert(out._4); e <- be.invert(out._5); f <- bf.invert(out._6); g <- bg.invert(out._7)) yield (a,b,c,d,e,f,g)
+      def invert(out: (A2,B2,C2,D2,E2,F2,G2)) = for(a <- ba.invert(out._1).right; b <- bb.invert(out._2).right; c <- bc.invert(out._3).right; d <- bd.invert(out._4).right; e <- be.invert(out._5).right; f <- bf.invert(out._6).right; g <- bg.invert(out._7).right) yield (a,b,c,d,e,f,g)
     }
   implicit def tuple8[A1,B1,C1,D1,E1,F1,G1,H1,A2,B2,C2,D2,E2,F2,G2,H2](implicit ba: Injection[A1,A2], bb: Injection[B1,B2], bc: Injection[C1,C2], bd: Injection[D1,D2], be: Injection[E1,E2], bf: Injection[F1,F2], bg: Injection[G1,G2], bh: Injection[H1,H2]):
     Injection[(A1,B1,C1,D1,E1,F1,G1,H1), (A2,B2,C2,D2,E2,F2,G2,H2)] = new AbstractInjection[(A1,B1,C1,D1,E1,F1,G1,H1), (A2,B2,C2,D2,E2,F2,G2,H2)] {
       def apply(in: (A1,B1,C1,D1,E1,F1,G1,H1)) = (ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8))
-      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2)) = for(a <- ba.invert(out._1); b <- bb.invert(out._2); c <- bc.invert(out._3); d <- bd.invert(out._4); e <- be.invert(out._5); f <- bf.invert(out._6); g <- bg.invert(out._7); h <- bh.invert(out._8)) yield (a,b,c,d,e,f,g,h)
+      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2)) = for(a <- ba.invert(out._1).right; b <- bb.invert(out._2).right; c <- bc.invert(out._3).right; d <- bd.invert(out._4).right; e <- be.invert(out._5).right; f <- bf.invert(out._6).right; g <- bg.invert(out._7).right; h <- bh.invert(out._8).right) yield (a,b,c,d,e,f,g,h)
     }
   implicit def tuple9[A1,B1,C1,D1,E1,F1,G1,H1,I1,A2,B2,C2,D2,E2,F2,G2,H2,I2](implicit ba: Injection[A1,A2], bb: Injection[B1,B2], bc: Injection[C1,C2], bd: Injection[D1,D2], be: Injection[E1,E2], bf: Injection[F1,F2], bg: Injection[G1,G2], bh: Injection[H1,H2], bi: Injection[I1,I2]):
     Injection[(A1,B1,C1,D1,E1,F1,G1,H1,I1), (A2,B2,C2,D2,E2,F2,G2,H2,I2)] = new AbstractInjection[(A1,B1,C1,D1,E1,F1,G1,H1,I1), (A2,B2,C2,D2,E2,F2,G2,H2,I2)] {
       def apply(in: (A1,B1,C1,D1,E1,F1,G1,H1,I1)) = (ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9))
-      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2)) = for(a <- ba.invert(out._1); b <- bb.invert(out._2); c <- bc.invert(out._3); d <- bd.invert(out._4); e <- be.invert(out._5); f <- bf.invert(out._6); g <- bg.invert(out._7); h <- bh.invert(out._8); i <- bi.invert(out._9)) yield (a,b,c,d,e,f,g,h,i)
+      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2)) = for(a <- ba.invert(out._1).right; b <- bb.invert(out._2).right; c <- bc.invert(out._3).right; d <- bd.invert(out._4).right; e <- be.invert(out._5).right; f <- bf.invert(out._6).right; g <- bg.invert(out._7).right; h <- bh.invert(out._8).right; i <- bi.invert(out._9).right) yield (a,b,c,d,e,f,g,h,i)
     }
   implicit def tuple10[A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,A2,B2,C2,D2,E2,F2,G2,H2,I2,J2](implicit ba: Injection[A1,A2], bb: Injection[B1,B2], bc: Injection[C1,C2], bd: Injection[D1,D2], be: Injection[E1,E2], bf: Injection[F1,F2], bg: Injection[G1,G2], bh: Injection[H1,H2], bi: Injection[I1,I2], bj: Injection[J1,J2]):
     Injection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2)] = new AbstractInjection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2)] {
       def apply(in: (A1,B1,C1,D1,E1,F1,G1,H1,I1,J1)) = (ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10))
-      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2)) = for(a <- ba.invert(out._1); b <- bb.invert(out._2); c <- bc.invert(out._3); d <- bd.invert(out._4); e <- be.invert(out._5); f <- bf.invert(out._6); g <- bg.invert(out._7); h <- bh.invert(out._8); i <- bi.invert(out._9); j <- bj.invert(out._10)) yield (a,b,c,d,e,f,g,h,i,j)
+      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2)) = for(a <- ba.invert(out._1).right; b <- bb.invert(out._2).right; c <- bc.invert(out._3).right; d <- bd.invert(out._4).right; e <- be.invert(out._5).right; f <- bf.invert(out._6).right; g <- bg.invert(out._7).right; h <- bh.invert(out._8).right; i <- bi.invert(out._9).right; j <- bj.invert(out._10).right) yield (a,b,c,d,e,f,g,h,i,j)
     }
   implicit def tuple11[A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2](implicit ba: Injection[A1,A2], bb: Injection[B1,B2], bc: Injection[C1,C2], bd: Injection[D1,D2], be: Injection[E1,E2], bf: Injection[F1,F2], bg: Injection[G1,G2], bh: Injection[H1,H2], bi: Injection[I1,I2], bj: Injection[J1,J2], bk: Injection[K1,K2]):
     Injection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2)] = new AbstractInjection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2)] {
       def apply(in: (A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1)) = (ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11))
-      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2)) = for(a <- ba.invert(out._1); b <- bb.invert(out._2); c <- bc.invert(out._3); d <- bd.invert(out._4); e <- be.invert(out._5); f <- bf.invert(out._6); g <- bg.invert(out._7); h <- bh.invert(out._8); i <- bi.invert(out._9); j <- bj.invert(out._10); k <- bk.invert(out._11)) yield (a,b,c,d,e,f,g,h,i,j,k)
+      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2)) = for(a <- ba.invert(out._1).right; b <- bb.invert(out._2).right; c <- bc.invert(out._3).right; d <- bd.invert(out._4).right; e <- be.invert(out._5).right; f <- bf.invert(out._6).right; g <- bg.invert(out._7).right; h <- bh.invert(out._8).right; i <- bi.invert(out._9).right; j <- bj.invert(out._10).right; k <- bk.invert(out._11).right) yield (a,b,c,d,e,f,g,h,i,j,k)
     }
   implicit def tuple12[A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2](implicit ba: Injection[A1,A2], bb: Injection[B1,B2], bc: Injection[C1,C2], bd: Injection[D1,D2], be: Injection[E1,E2], bf: Injection[F1,F2], bg: Injection[G1,G2], bh: Injection[H1,H2], bi: Injection[I1,I2], bj: Injection[J1,J2], bk: Injection[K1,K2], bl: Injection[L1,L2]):
     Injection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2)] = new AbstractInjection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2)] {
       def apply(in: (A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1)) = (ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12))
-      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2)) = for(a <- ba.invert(out._1); b <- bb.invert(out._2); c <- bc.invert(out._3); d <- bd.invert(out._4); e <- be.invert(out._5); f <- bf.invert(out._6); g <- bg.invert(out._7); h <- bh.invert(out._8); i <- bi.invert(out._9); j <- bj.invert(out._10); k <- bk.invert(out._11); l <- bl.invert(out._12)) yield (a,b,c,d,e,f,g,h,i,j,k,l)
+      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2)) = for(a <- ba.invert(out._1).right; b <- bb.invert(out._2).right; c <- bc.invert(out._3).right; d <- bd.invert(out._4).right; e <- be.invert(out._5).right; f <- bf.invert(out._6).right; g <- bg.invert(out._7).right; h <- bh.invert(out._8).right; i <- bi.invert(out._9).right; j <- bj.invert(out._10).right; k <- bk.invert(out._11).right; l <- bl.invert(out._12).right) yield (a,b,c,d,e,f,g,h,i,j,k,l)
     }
   implicit def tuple13[A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2](implicit ba: Injection[A1,A2], bb: Injection[B1,B2], bc: Injection[C1,C2], bd: Injection[D1,D2], be: Injection[E1,E2], bf: Injection[F1,F2], bg: Injection[G1,G2], bh: Injection[H1,H2], bi: Injection[I1,I2], bj: Injection[J1,J2], bk: Injection[K1,K2], bl: Injection[L1,L2], bm: Injection[M1,M2]):
     Injection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2)] = new AbstractInjection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2)] {
       def apply(in: (A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1)) = (ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13))
-      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2)) = for(a <- ba.invert(out._1); b <- bb.invert(out._2); c <- bc.invert(out._3); d <- bd.invert(out._4); e <- be.invert(out._5); f <- bf.invert(out._6); g <- bg.invert(out._7); h <- bh.invert(out._8); i <- bi.invert(out._9); j <- bj.invert(out._10); k <- bk.invert(out._11); l <- bl.invert(out._12); m <- bm.invert(out._13)) yield (a,b,c,d,e,f,g,h,i,j,k,l,m)
+      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2)) = for(a <- ba.invert(out._1).right; b <- bb.invert(out._2).right; c <- bc.invert(out._3).right; d <- bd.invert(out._4).right; e <- be.invert(out._5).right; f <- bf.invert(out._6).right; g <- bg.invert(out._7).right; h <- bh.invert(out._8).right; i <- bi.invert(out._9).right; j <- bj.invert(out._10).right; k <- bk.invert(out._11).right; l <- bl.invert(out._12).right; m <- bm.invert(out._13).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m)
     }
   implicit def tuple14[A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2](implicit ba: Injection[A1,A2], bb: Injection[B1,B2], bc: Injection[C1,C2], bd: Injection[D1,D2], be: Injection[E1,E2], bf: Injection[F1,F2], bg: Injection[G1,G2], bh: Injection[H1,H2], bi: Injection[I1,I2], bj: Injection[J1,J2], bk: Injection[K1,K2], bl: Injection[L1,L2], bm: Injection[M1,M2], bn: Injection[N1,N2]):
     Injection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2)] = new AbstractInjection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2)] {
       def apply(in: (A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1)) = (ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14))
-      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2)) = for(a <- ba.invert(out._1); b <- bb.invert(out._2); c <- bc.invert(out._3); d <- bd.invert(out._4); e <- be.invert(out._5); f <- bf.invert(out._6); g <- bg.invert(out._7); h <- bh.invert(out._8); i <- bi.invert(out._9); j <- bj.invert(out._10); k <- bk.invert(out._11); l <- bl.invert(out._12); m <- bm.invert(out._13); n <- bn.invert(out._14)) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n)
+      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2)) = for(a <- ba.invert(out._1).right; b <- bb.invert(out._2).right; c <- bc.invert(out._3).right; d <- bd.invert(out._4).right; e <- be.invert(out._5).right; f <- bf.invert(out._6).right; g <- bg.invert(out._7).right; h <- bh.invert(out._8).right; i <- bi.invert(out._9).right; j <- bj.invert(out._10).right; k <- bk.invert(out._11).right; l <- bl.invert(out._12).right; m <- bm.invert(out._13).right; n <- bn.invert(out._14).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n)
     }
   implicit def tuple15[A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2](implicit ba: Injection[A1,A2], bb: Injection[B1,B2], bc: Injection[C1,C2], bd: Injection[D1,D2], be: Injection[E1,E2], bf: Injection[F1,F2], bg: Injection[G1,G2], bh: Injection[H1,H2], bi: Injection[I1,I2], bj: Injection[J1,J2], bk: Injection[K1,K2], bl: Injection[L1,L2], bm: Injection[M1,M2], bn: Injection[N1,N2], bo: Injection[O1,O2]):
     Injection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2)] = new AbstractInjection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2)] {
       def apply(in: (A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1)) = (ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15))
-      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2)) = for(a <- ba.invert(out._1); b <- bb.invert(out._2); c <- bc.invert(out._3); d <- bd.invert(out._4); e <- be.invert(out._5); f <- bf.invert(out._6); g <- bg.invert(out._7); h <- bh.invert(out._8); i <- bi.invert(out._9); j <- bj.invert(out._10); k <- bk.invert(out._11); l <- bl.invert(out._12); m <- bm.invert(out._13); n <- bn.invert(out._14); o <- bo.invert(out._15)) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o)
+      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2)) = for(a <- ba.invert(out._1).right; b <- bb.invert(out._2).right; c <- bc.invert(out._3).right; d <- bd.invert(out._4).right; e <- be.invert(out._5).right; f <- bf.invert(out._6).right; g <- bg.invert(out._7).right; h <- bh.invert(out._8).right; i <- bi.invert(out._9).right; j <- bj.invert(out._10).right; k <- bk.invert(out._11).right; l <- bl.invert(out._12).right; m <- bm.invert(out._13).right; n <- bn.invert(out._14).right; o <- bo.invert(out._15).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o)
     }
   implicit def tuple16[A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2](implicit ba: Injection[A1,A2], bb: Injection[B1,B2], bc: Injection[C1,C2], bd: Injection[D1,D2], be: Injection[E1,E2], bf: Injection[F1,F2], bg: Injection[G1,G2], bh: Injection[H1,H2], bi: Injection[I1,I2], bj: Injection[J1,J2], bk: Injection[K1,K2], bl: Injection[L1,L2], bm: Injection[M1,M2], bn: Injection[N1,N2], bo: Injection[O1,O2], bp: Injection[P1,P2]):
     Injection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2)] = new AbstractInjection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2)] {
       def apply(in: (A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1)) = (ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15), bp(in._16))
-      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2)) = for(a <- ba.invert(out._1); b <- bb.invert(out._2); c <- bc.invert(out._3); d <- bd.invert(out._4); e <- be.invert(out._5); f <- bf.invert(out._6); g <- bg.invert(out._7); h <- bh.invert(out._8); i <- bi.invert(out._9); j <- bj.invert(out._10); k <- bk.invert(out._11); l <- bl.invert(out._12); m <- bm.invert(out._13); n <- bn.invert(out._14); o <- bo.invert(out._15); p <- bp.invert(out._16)) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p)
+      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2)) = for(a <- ba.invert(out._1).right; b <- bb.invert(out._2).right; c <- bc.invert(out._3).right; d <- bd.invert(out._4).right; e <- be.invert(out._5).right; f <- bf.invert(out._6).right; g <- bg.invert(out._7).right; h <- bh.invert(out._8).right; i <- bi.invert(out._9).right; j <- bj.invert(out._10).right; k <- bk.invert(out._11).right; l <- bl.invert(out._12).right; m <- bm.invert(out._13).right; n <- bn.invert(out._14).right; o <- bo.invert(out._15).right; p <- bp.invert(out._16).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p)
     }
   implicit def tuple17[A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1,A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2](implicit ba: Injection[A1,A2], bb: Injection[B1,B2], bc: Injection[C1,C2], bd: Injection[D1,D2], be: Injection[E1,E2], bf: Injection[F1,F2], bg: Injection[G1,G2], bh: Injection[H1,H2], bi: Injection[I1,I2], bj: Injection[J1,J2], bk: Injection[K1,K2], bl: Injection[L1,L2], bm: Injection[M1,M2], bn: Injection[N1,N2], bo: Injection[O1,O2], bp: Injection[P1,P2], bq: Injection[Q1,Q2]):
     Injection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2)] = new AbstractInjection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2)] {
       def apply(in: (A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1)) = (ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15), bp(in._16), bq(in._17))
-      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2)) = for(a <- ba.invert(out._1); b <- bb.invert(out._2); c <- bc.invert(out._3); d <- bd.invert(out._4); e <- be.invert(out._5); f <- bf.invert(out._6); g <- bg.invert(out._7); h <- bh.invert(out._8); i <- bi.invert(out._9); j <- bj.invert(out._10); k <- bk.invert(out._11); l <- bl.invert(out._12); m <- bm.invert(out._13); n <- bn.invert(out._14); o <- bo.invert(out._15); p <- bp.invert(out._16); q <- bq.invert(out._17)) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q)
+      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2)) = for(a <- ba.invert(out._1).right; b <- bb.invert(out._2).right; c <- bc.invert(out._3).right; d <- bd.invert(out._4).right; e <- be.invert(out._5).right; f <- bf.invert(out._6).right; g <- bg.invert(out._7).right; h <- bh.invert(out._8).right; i <- bi.invert(out._9).right; j <- bj.invert(out._10).right; k <- bk.invert(out._11).right; l <- bl.invert(out._12).right; m <- bm.invert(out._13).right; n <- bn.invert(out._14).right; o <- bo.invert(out._15).right; p <- bp.invert(out._16).right; q <- bq.invert(out._17).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q)
     }
   implicit def tuple18[A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1,R1,A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2](implicit ba: Injection[A1,A2], bb: Injection[B1,B2], bc: Injection[C1,C2], bd: Injection[D1,D2], be: Injection[E1,E2], bf: Injection[F1,F2], bg: Injection[G1,G2], bh: Injection[H1,H2], bi: Injection[I1,I2], bj: Injection[J1,J2], bk: Injection[K1,K2], bl: Injection[L1,L2], bm: Injection[M1,M2], bn: Injection[N1,N2], bo: Injection[O1,O2], bp: Injection[P1,P2], bq: Injection[Q1,Q2], br: Injection[R1,R2]):
     Injection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1,R1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2)] = new AbstractInjection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1,R1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2)] {
       def apply(in: (A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1,R1)) = (ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15), bp(in._16), bq(in._17), br(in._18))
-      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2)) = for(a <- ba.invert(out._1); b <- bb.invert(out._2); c <- bc.invert(out._3); d <- bd.invert(out._4); e <- be.invert(out._5); f <- bf.invert(out._6); g <- bg.invert(out._7); h <- bh.invert(out._8); i <- bi.invert(out._9); j <- bj.invert(out._10); k <- bk.invert(out._11); l <- bl.invert(out._12); m <- bm.invert(out._13); n <- bn.invert(out._14); o <- bo.invert(out._15); p <- bp.invert(out._16); q <- bq.invert(out._17); r <- br.invert(out._18)) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r)
+      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2)) = for(a <- ba.invert(out._1).right; b <- bb.invert(out._2).right; c <- bc.invert(out._3).right; d <- bd.invert(out._4).right; e <- be.invert(out._5).right; f <- bf.invert(out._6).right; g <- bg.invert(out._7).right; h <- bh.invert(out._8).right; i <- bi.invert(out._9).right; j <- bj.invert(out._10).right; k <- bk.invert(out._11).right; l <- bl.invert(out._12).right; m <- bm.invert(out._13).right; n <- bn.invert(out._14).right; o <- bo.invert(out._15).right; p <- bp.invert(out._16).right; q <- bq.invert(out._17).right; r <- br.invert(out._18).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r)
     }
   implicit def tuple19[A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1,R1,S1,A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2,S2](implicit ba: Injection[A1,A2], bb: Injection[B1,B2], bc: Injection[C1,C2], bd: Injection[D1,D2], be: Injection[E1,E2], bf: Injection[F1,F2], bg: Injection[G1,G2], bh: Injection[H1,H2], bi: Injection[I1,I2], bj: Injection[J1,J2], bk: Injection[K1,K2], bl: Injection[L1,L2], bm: Injection[M1,M2], bn: Injection[N1,N2], bo: Injection[O1,O2], bp: Injection[P1,P2], bq: Injection[Q1,Q2], br: Injection[R1,R2], bs: Injection[S1,S2]):
     Injection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1,R1,S1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2,S2)] = new AbstractInjection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1,R1,S1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2,S2)] {
       def apply(in: (A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1,R1,S1)) = (ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15), bp(in._16), bq(in._17), br(in._18), bs(in._19))
-      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2,S2)) = for(a <- ba.invert(out._1); b <- bb.invert(out._2); c <- bc.invert(out._3); d <- bd.invert(out._4); e <- be.invert(out._5); f <- bf.invert(out._6); g <- bg.invert(out._7); h <- bh.invert(out._8); i <- bi.invert(out._9); j <- bj.invert(out._10); k <- bk.invert(out._11); l <- bl.invert(out._12); m <- bm.invert(out._13); n <- bn.invert(out._14); o <- bo.invert(out._15); p <- bp.invert(out._16); q <- bq.invert(out._17); r <- br.invert(out._18); s <- bs.invert(out._19)) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s)
+      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2,S2)) = for(a <- ba.invert(out._1).right; b <- bb.invert(out._2).right; c <- bc.invert(out._3).right; d <- bd.invert(out._4).right; e <- be.invert(out._5).right; f <- bf.invert(out._6).right; g <- bg.invert(out._7).right; h <- bh.invert(out._8).right; i <- bi.invert(out._9).right; j <- bj.invert(out._10).right; k <- bk.invert(out._11).right; l <- bl.invert(out._12).right; m <- bm.invert(out._13).right; n <- bn.invert(out._14).right; o <- bo.invert(out._15).right; p <- bp.invert(out._16).right; q <- bq.invert(out._17).right; r <- br.invert(out._18).right; s <- bs.invert(out._19).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s)
     }
   implicit def tuple20[A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1,R1,S1,T1,A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2,S2,T2](implicit ba: Injection[A1,A2], bb: Injection[B1,B2], bc: Injection[C1,C2], bd: Injection[D1,D2], be: Injection[E1,E2], bf: Injection[F1,F2], bg: Injection[G1,G2], bh: Injection[H1,H2], bi: Injection[I1,I2], bj: Injection[J1,J2], bk: Injection[K1,K2], bl: Injection[L1,L2], bm: Injection[M1,M2], bn: Injection[N1,N2], bo: Injection[O1,O2], bp: Injection[P1,P2], bq: Injection[Q1,Q2], br: Injection[R1,R2], bs: Injection[S1,S2], bt: Injection[T1,T2]):
     Injection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1,R1,S1,T1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2,S2,T2)] = new AbstractInjection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1,R1,S1,T1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2,S2,T2)] {
       def apply(in: (A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1,R1,S1,T1)) = (ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15), bp(in._16), bq(in._17), br(in._18), bs(in._19), bt(in._20))
-      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2,S2,T2)) = for(a <- ba.invert(out._1); b <- bb.invert(out._2); c <- bc.invert(out._3); d <- bd.invert(out._4); e <- be.invert(out._5); f <- bf.invert(out._6); g <- bg.invert(out._7); h <- bh.invert(out._8); i <- bi.invert(out._9); j <- bj.invert(out._10); k <- bk.invert(out._11); l <- bl.invert(out._12); m <- bm.invert(out._13); n <- bn.invert(out._14); o <- bo.invert(out._15); p <- bp.invert(out._16); q <- bq.invert(out._17); r <- br.invert(out._18); s <- bs.invert(out._19); t <- bt.invert(out._20)) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t)
+      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2,S2,T2)) = for(a <- ba.invert(out._1).right; b <- bb.invert(out._2).right; c <- bc.invert(out._3).right; d <- bd.invert(out._4).right; e <- be.invert(out._5).right; f <- bf.invert(out._6).right; g <- bg.invert(out._7).right; h <- bh.invert(out._8).right; i <- bi.invert(out._9).right; j <- bj.invert(out._10).right; k <- bk.invert(out._11).right; l <- bl.invert(out._12).right; m <- bm.invert(out._13).right; n <- bn.invert(out._14).right; o <- bo.invert(out._15).right; p <- bp.invert(out._16).right; q <- bq.invert(out._17).right; r <- br.invert(out._18).right; s <- bs.invert(out._19).right; t <- bt.invert(out._20).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t)
     }
   implicit def tuple21[A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1,R1,S1,T1,U1,A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2,S2,T2,U2](implicit ba: Injection[A1,A2], bb: Injection[B1,B2], bc: Injection[C1,C2], bd: Injection[D1,D2], be: Injection[E1,E2], bf: Injection[F1,F2], bg: Injection[G1,G2], bh: Injection[H1,H2], bi: Injection[I1,I2], bj: Injection[J1,J2], bk: Injection[K1,K2], bl: Injection[L1,L2], bm: Injection[M1,M2], bn: Injection[N1,N2], bo: Injection[O1,O2], bp: Injection[P1,P2], bq: Injection[Q1,Q2], br: Injection[R1,R2], bs: Injection[S1,S2], bt: Injection[T1,T2], bu: Injection[U1,U2]):
     Injection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1,R1,S1,T1,U1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2,S2,T2,U2)] = new AbstractInjection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1,R1,S1,T1,U1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2,S2,T2,U2)] {
       def apply(in: (A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1,R1,S1,T1,U1)) = (ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15), bp(in._16), bq(in._17), br(in._18), bs(in._19), bt(in._20), bu(in._21))
-      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2,S2,T2,U2)) = for(a <- ba.invert(out._1); b <- bb.invert(out._2); c <- bc.invert(out._3); d <- bd.invert(out._4); e <- be.invert(out._5); f <- bf.invert(out._6); g <- bg.invert(out._7); h <- bh.invert(out._8); i <- bi.invert(out._9); j <- bj.invert(out._10); k <- bk.invert(out._11); l <- bl.invert(out._12); m <- bm.invert(out._13); n <- bn.invert(out._14); o <- bo.invert(out._15); p <- bp.invert(out._16); q <- bq.invert(out._17); r <- br.invert(out._18); s <- bs.invert(out._19); t <- bt.invert(out._20); u <- bu.invert(out._21)) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u)
+      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2,S2,T2,U2)) = for(a <- ba.invert(out._1).right; b <- bb.invert(out._2).right; c <- bc.invert(out._3).right; d <- bd.invert(out._4).right; e <- be.invert(out._5).right; f <- bf.invert(out._6).right; g <- bg.invert(out._7).right; h <- bh.invert(out._8).right; i <- bi.invert(out._9).right; j <- bj.invert(out._10).right; k <- bk.invert(out._11).right; l <- bl.invert(out._12).right; m <- bm.invert(out._13).right; n <- bn.invert(out._14).right; o <- bo.invert(out._15).right; p <- bp.invert(out._16).right; q <- bq.invert(out._17).right; r <- br.invert(out._18).right; s <- bs.invert(out._19).right; t <- bt.invert(out._20).right; u <- bu.invert(out._21).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u)
     }
   implicit def tuple22[A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1,R1,S1,T1,U1,V1,A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2,S2,T2,U2,V2](implicit ba: Injection[A1,A2], bb: Injection[B1,B2], bc: Injection[C1,C2], bd: Injection[D1,D2], be: Injection[E1,E2], bf: Injection[F1,F2], bg: Injection[G1,G2], bh: Injection[H1,H2], bi: Injection[I1,I2], bj: Injection[J1,J2], bk: Injection[K1,K2], bl: Injection[L1,L2], bm: Injection[M1,M2], bn: Injection[N1,N2], bo: Injection[O1,O2], bp: Injection[P1,P2], bq: Injection[Q1,Q2], br: Injection[R1,R2], bs: Injection[S1,S2], bt: Injection[T1,T2], bu: Injection[U1,U2], bv: Injection[V1,V2]):
     Injection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1,R1,S1,T1,U1,V1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2,S2,T2,U2,V2)] = new AbstractInjection[(A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1,R1,S1,T1,U1,V1), (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2,S2,T2,U2,V2)] {
       def apply(in: (A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1,R1,S1,T1,U1,V1)) = (ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15), bp(in._16), bq(in._17), br(in._18), bs(in._19), bt(in._20), bu(in._21), bv(in._22))
-      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2,S2,T2,U2,V2)) = for(a <- ba.invert(out._1); b <- bb.invert(out._2); c <- bc.invert(out._3); d <- bd.invert(out._4); e <- be.invert(out._5); f <- bf.invert(out._6); g <- bg.invert(out._7); h <- bh.invert(out._8); i <- bi.invert(out._9); j <- bj.invert(out._10); k <- bk.invert(out._11); l <- bl.invert(out._12); m <- bm.invert(out._13); n <- bn.invert(out._14); o <- bo.invert(out._15); p <- bp.invert(out._16); q <- bq.invert(out._17); r <- br.invert(out._18); s <- bs.invert(out._19); t <- bt.invert(out._20); u <- bu.invert(out._21); v <- bv.invert(out._22)) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v)
+      def invert(out: (A2,B2,C2,D2,E2,F2,G2,H2,I2,J2,K2,L2,M2,N2,O2,P2,Q2,R2,S2,T2,U2,V2)) = for(a <- ba.invert(out._1).right; b <- bb.invert(out._2).right; c <- bc.invert(out._3).right; d <- bd.invert(out._4).right; e <- be.invert(out._5).right; f <- bf.invert(out._6).right; g <- bg.invert(out._7).right; h <- bh.invert(out._8).right; i <- bi.invert(out._9).right; j <- bj.invert(out._10).right; k <- bk.invert(out._11).right; l <- bl.invert(out._12).right; m <- bm.invert(out._13).right; n <- bn.invert(out._14).right; o <- bo.invert(out._15).right; p <- bp.invert(out._16).right; q <- bq.invert(out._17).right; r <- br.invert(out._18).right; s <- bs.invert(out._19).right; t <- bt.invert(out._20).right; u <- bu.invert(out._21).right; v <- bv.invert(out._22).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v)
     }
 }

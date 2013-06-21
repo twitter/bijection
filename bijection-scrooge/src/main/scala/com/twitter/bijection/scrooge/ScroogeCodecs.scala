@@ -28,7 +28,7 @@ import scala.util.control.Exception.allCatch
 class ScalaCodec[T <: ThriftStruct](ser: ThriftStructSerializer[T])
     extends Injection[T, Array[Byte]] {
   override def apply(item: T) = ser.toBytes(item)
-  override def invert(bytes: Array[Byte]) = allCatch.opt(ser.fromBytes(bytes))
+  override def invert(bytes: Array[Byte]) = allCatch.either(ser.fromBytes(bytes))
 }
 
 object BinaryScalaCodec {

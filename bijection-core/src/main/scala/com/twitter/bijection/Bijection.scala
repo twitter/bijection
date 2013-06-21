@@ -79,7 +79,7 @@ trait LowPriorityBijections {
     new AbstractBijection[A, B @@ Rep[A]] {
       override def apply(a: A): B @@ Rep[A] = Tag(inj.apply(a))
       // This tag promises the Option will return something:
-      override def invert(b: B @@ Rep[A]): A = inj.invert(b).get
+      override def invert(b: B @@ Rep[A]): A = inj.invert(b).right.get
     }
 }
 

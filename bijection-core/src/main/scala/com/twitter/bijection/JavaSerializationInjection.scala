@@ -49,16 +49,16 @@ class JavaSerializationInjection[T <: Serializable](klass: Class[T]) extends Inj
   }
   def invert(bytes: Array[Byte]) = {
     val bis = new ByteArrayInputStream(bytes)
-    val inOpt = allCatch.opt(new ObjectInputStream(bis))
+    val inOpt = allCatch.either(new ObjectInputStream(bis))
     try {
-      inOpt.map { in => klass.cast(in.readObject) }
+      inOpt.right.map { in => klass.cast(in.readObject) }
     }
     catch {
-      case t: Throwable => None
+      case t: Throwable => Left(t)
     }
     finally {
       bis.close
-      inOpt.foreach { _.close }
+      inOpt.right.foreach { _.close }
     }
   }
 }

@@ -31,20 +31,20 @@ trait StringInjections extends NumericInjections {
     new AbstractInjection[String, Array[Byte]] {
       def apply(s: String) = s.getBytes(encoding)
       override def invert(b: Array[Byte]) =
-        allCatch.opt { new String(b, encoding) }
+        allCatch.either { new String(b, encoding) }
     }
 
   // Some bijections with string from standard java/scala classes:
   implicit val url2String: Injection[URL, String] =
     new AbstractInjection[URL, String] {
       def apply(u: URL) = u.toString
-      override def invert(s: String) = allCatch.opt(new URL(s))
+      override def invert(s: String) = allCatch.either(new URL(s))
     }
 
   implicit val uuid2String: Injection[UUID, String] =
     new AbstractInjection[UUID, String] {
       def apply(uuid: UUID) = uuid.toString
-      override def invert(s: String) = allCatch.opt(UUID.fromString(s))
+      override def invert(s: String) = allCatch.either(UUID.fromString(s))
     }
 }
 

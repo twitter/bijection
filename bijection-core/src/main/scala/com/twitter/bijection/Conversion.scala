@@ -43,8 +43,8 @@ trait Conversion[A, B] extends Serializable {
 
 trait CrazyLowPriorityConversion extends Serializable {
   // If you want to an Option[B]
-  implicit def fromInjectionInverse[A,B](implicit inj: Injection[B,A]): Conversion[A,Option[B]] =
-  new Conversion[A,Option[B]] {
+  implicit def fromInjectionInverse[A,B](implicit inj: Injection[B,A]): Conversion[A,Attempt[B]] =
+  new Conversion[A,Attempt[B]] {
     def apply(a: A) = inj.invert(a)
   }
   implicit def fromBijectionInv[A,B](implicit fn: ImplicitBijection[B,A]) = new Conversion[A,B] {

@@ -35,7 +35,7 @@ object Base64String {
   implicit val unwrap: Injection[Base64String, String] =
     new AbstractInjection[Base64String, String] {
       override def apply(bs: Base64String) = bs.str
-      override def invert(str: String) = if (Base64.isBase64(str)) Some(Base64String(str)) else None
+      override def invert(str: String) = if (Base64.isBase64(str)) Right(Base64String(str)) else Left(new InversionFailure)
     }
 }
 

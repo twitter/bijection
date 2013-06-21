@@ -32,10 +32,10 @@ class IntModDivInjection(val modulus: Int) extends Injection[Int, (Int,Int)] {
   override def invert(moddiv: (Int,Int)) = {
     val (mod, div) = moddiv
     if (mod >= 0 && mod < modulus && div <= maxDiv && div >= minDiv) {
-      Some(div * modulus + mod)
+      Right(div * modulus + mod)
     }
     else
-      None
+      Left(new InversionFailure)
   }
 }
 
@@ -56,9 +56,9 @@ class LongModDivInjection(val modulus: Long) extends Injection[Long, (Long,Long)
   override def invert(moddiv: (Long,Long)) = {
     val (mod, div) = moddiv
     if (mod >= 0 && mod < modulus && div <= maxDiv && div >= minDiv) {
-      Some(div * modulus + mod)
+      Right(div * modulus + mod)
     }
     else
-      None
+      Left(new InversionFailure)
   }
 }

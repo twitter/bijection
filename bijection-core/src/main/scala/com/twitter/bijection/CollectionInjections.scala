@@ -39,12 +39,12 @@ trait CollectionInjections extends StringInjections {
       def invert(b: Option[B]) = {
         if(b.isEmpty) {
           // This is the inverse of a == None
-          Some(None)
+          Right(None)
         }
         else {
           val optA = inj.invert(b.get)
-          // If it is not None, then convert to Some(Some(_))
-          optA.map { Some(_) }
+          // If it is not None, then convert to Right(Some(_))
+          optA.right.map { Some(_) }
         }
       }
     }
@@ -52,9 +52,9 @@ trait CollectionInjections extends StringInjections {
     new AbstractInjection[Option[V1], List[V2]] {
       def apply(opt: Option[V1]) = opt.map(inj).toList
       def invert(l: List[V2]) = l match {
-        case h :: Nil => inj.invert(h).map { Some(_) }
-        case Nil => Some(None)
-        case _ => None
+        case h :: Nil => inj.invert(h).right.map { Some(_) }
+        case Nil => Right(None)
+        case _ => Left(new InversionFailure)
       }
     }
 
@@ -85,19 +85,19 @@ trait CollectionInjections extends StringInjections {
         c foreach { builder += inj(_) }
         builder.result()
       }
-      override def invert(d: D): Option[C] = {
+      override def invert(d: D): Attempt[C] = {
         val builder = dc()
         d foreach { b =>
           val thisB = inj.invert(b)
-          if (thisB.isDefined) {
-            builder += thisB.get
+          if (thisB.right.toOption.isDefined) {
+            builder += thisB.right.get
           }
           else {
-            return None
+            return Left(new InversionFailure)
           }
         }
         val res = builder.result()
-        if(goodInv(d, res)) Some(res) else None
+        if(goodInv(d, res)) Right(res) else Left(new InversionFailure)
       }
     }
 }

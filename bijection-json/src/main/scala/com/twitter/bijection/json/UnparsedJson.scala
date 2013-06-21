@@ -30,7 +30,7 @@ object UnparsedJson {
 
   implicit def injection[T](implicit json: JsonNodeInjection[T]): Injection[T, UnparsedJson] =
     new AbstractInjection[T, UnparsedJson] {
-      def apply(t: T) = (json andThen { n: JsonNode => JsonNodeInjection.unparsed.invert(n).get })(t)
+      def apply(t: T) = (json andThen { n: JsonNode => JsonNodeInjection.unparsed.invert(n).right.get })(t)
       override def invert(up: UnparsedJson) = fromJsonNode[T](toJsonNode(up))
     }
 
@@ -42,10 +42,10 @@ object UnparsedJson {
           val res = UnparsedJson(str)
           JsonNodeInjection.unparsed.apply(res)
           // If we get here, it parsed:
-          Some(res)
+          Right(res)
         }
         catch {
-          case _ => None
+          case t => Left(t)
         }
       }
     }

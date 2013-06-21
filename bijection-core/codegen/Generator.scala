@@ -25,7 +25,7 @@ val pkg = "package com.twitter.bijection"
       def apply(in: (A,B)) = List(ba(in._1), bb(in._2))
       def invert(out: List[C]) = out match {
         case a :: b :: Nil => for(a <- ba.invert(a); b <- bb.invert(b)) yield (a,b)
-        case _ => None
+        case _ => Left(new InversionFailure)
       }
     }
 */
@@ -56,7 +56,7 @@ def tupleBijectionType(cnt: Int, typeStr: String = "Bijection"): String =
 
 def applyPart(i: Int): String = "b" + lowerLetters(i) + "(in._" + (i+1) + ")"
 def invertPart(i: Int): String = "b" + lowerLetters(i) + ".invert(out._" + (i+1) + ")"
-def forInvertPart(i: Int): String = lowerLetters(i) + " <- " + invertPart(i)
+def forInvertPart(i: Int): String = lowerLetters(i) + " <- " + invertPart(i) + ".right"
 
 def expressionTuple(cnt: Int, sep: String = ", ")(part: (Int) => String) =
   (0 until cnt) map { part(_) } mkString("(", sep, ")")
@@ -98,7 +98,7 @@ def toListMethod(cnt: Int) =
 
 def fromListInvertPart(i: Int): String = {
   val letter = lowerLetters(i)
-  "b" + letter + ".invert(" + letter + ")"
+  "b" + letter + ".invert(" + letter + ").right"
 }
 
 def forInvertFromListPart(i: Int): String = lowerLetters(i) + " <- " + fromListInvertPart(i)
@@ -110,7 +110,7 @@ def fromListMethod(cnt: Int) = {
     expressionTuple(cnt, "; ") { forInvertFromListPart(_) } + " yield (" +
     letters.mkString(",") + ")\n"
   }
-  val noneCase = "        case _ => None\n"
+  val noneCase = "        case _ => Left(new InversionFailure)\n"
   "def invert(out: " + singleTypeParameter("List", cnt) + ") = out match {\n" +
   someCase + noneCase + "      }"
 }

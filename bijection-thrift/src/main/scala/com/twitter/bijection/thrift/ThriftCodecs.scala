@@ -1,6 +1,6 @@
 package com.twitter.bijection.thrift
 
-import com.twitter.bijection.{Bijection, Conversion, Injection, StringCodec}
+import com.twitter.bijection.{Bijection, Conversion, Injection, InversionFailure, StringCodec}
 import java.io.{ ByteArrayInputStream, ByteArrayOutputStream }
 import org.apache.thrift.{ TBase, TEnum }
 import org.apache.thrift.protocol.{
@@ -48,7 +48,7 @@ extends Injection[T, Array[Byte]] {
     item.write(factory.getProtocol(new TIOStreamTransport(baos)))
     baos.toByteArray
   }
-  override def invert(bytes: Array[Byte]) = allCatch.opt {
+  override def invert(bytes: Array[Byte]) = allCatch.either {
     val obj = prototype.deepCopy
     val stream = new ByteArrayInputStream(bytes)
     obj.read(factory.getProtocol(new TIOStreamTransport(stream)))
@@ -82,7 +82,7 @@ object JsonThriftCodec {
 
 class JsonThriftCodec[T <: TBase[_, _]](klass: Class[T])
 extends ThriftCodec[T, TSimpleJSONProtocol.Factory](klass, new TSimpleJSONProtocol.Factory) {
-  override def invert(bytes: Array[Byte]) = allCatch.opt {
+  override def invert(bytes: Array[Byte]) = allCatch.either {
     new MappingJsonFactory()
       .createJsonParser(bytes)
       .readValueAs(klass)
@@ -119,5 +119,5 @@ class TEnumCodec[T <: TEnum](klass: Class[T]) extends Injection[T, Int] {
   override def apply(enum: T) = enum.getValue
   override def invert(i: Int) = Option {
     cache.getOrElseUpdate(i, findByValue.invoke(null, i.as[JInt]).asInstanceOf[T])
-  }
+  }.toRight(new InversionFailure)
 }

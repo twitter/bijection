@@ -25,6 +25,22 @@ package com.twitter
  * libraries (Bijection[MyTrait, YourTrait]) and many other purposes.
  */
 package object bijection {
+
+  /**
+   *  When Injection inversion attempts are known to fail,
+   *  the attempt will encode an InversionFailure to represent
+   *  that failure
+   */
+  type InversionFailure = UnsupportedOperationException
+
+  /**
+   * Injections may not be defined for their inverse conversion.
+   * This type represents the attempted conversion. A failure
+   * Will result in a Left containing an Throwable. A success
+   * will result in a Right containing the converted value.
+   */ 
+  type Attempt[T] = Either[Throwable, T]
+
   /**
     * Using Injections for serialization is a common pattern. Currying
     * the byte array parameter makes it easier to write code like

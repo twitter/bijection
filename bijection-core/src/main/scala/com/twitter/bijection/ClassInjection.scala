@@ -22,7 +22,7 @@ import scala.util.control.Exception.allCatch
  */
 class ClassInjection[T] extends AbstractInjection[Class[T], String] {
   override def apply(k: Class[T]) = k.getName
-  override def invert(s: String) = allCatch.opt(Class.forName(s).asInstanceOf[Class[T]])
+  override def invert(s: String) = allCatch.either(Class.forName(s).asInstanceOf[Class[T]])
 }
 
 /**
@@ -35,6 +35,6 @@ object CastInjection {
   def of[A, B >: A](implicit cmf: ClassManifest[A]): Injection[A, B] = new AbstractInjection[A, B] {
     private val cls = cmf.erasure.asInstanceOf[Class[A]]
     def apply(a: A) = a
-    def invert(b: B) = allCatch.opt { cls.cast(b) }
+    def invert(b: B) = allCatch.either { cls.cast(b) }
   }
 }
