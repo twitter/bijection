@@ -166,6 +166,10 @@ object Injection extends CollectionInjections
   def unsafeToBijection[A,B](implicit inj: Injection[A,B]): Bijection[A,B] =
     new AbstractBijection[A,B] {
       def apply(a: A) = inj(a)
-      override def invert(b: B) = inj.invert(b).right.get
+      override def invert(b: B) =
+        inj.invert(b) match {
+          case Right(a) => a
+          case Left(t) => throw t
+        }
     }
 }
