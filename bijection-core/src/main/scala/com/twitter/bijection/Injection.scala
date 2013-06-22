@@ -119,10 +119,12 @@ object Injection extends CollectionInjections
   def connect[A, B, C, D, E](implicit bij: Injection[A, B], bij2: Injection[B, C], bij3: Injection[C, D], bij4: Injection[D, E]): Injection[A, E] =
     connect[A, B, C, D] andThen bij4
 
-  implicit def attempt[A]: Injection[A, Attempt[A]] =
-    new AbstractInjection[A, Attempt[A]] {
+  implicit def either1[A,B]: Injection[A, Either[B,A]] =
+    new AbstractInjection[A, Either[B,A]] {
       override def apply(a: A) = Right(a)
-      override def invert(b: Attempt[A]) = b
+      override def invert(e: Either[B,A]) = e.left.map {
+        _ => InversionFailure()
+      }
     }
   implicit def option[A]: Injection[A, Option[A]] =
     new AbstractInjection[A, Option[A]] {
