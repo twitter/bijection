@@ -54,7 +54,7 @@ trait CollectionInjections extends StringInjections {
       def invert(l: List[V2]) = l match {
         case h :: Nil => inj.invert(h).right.map { Some(_) }
         case Nil => Right(None)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(l)
       }
     }
 
@@ -93,11 +93,11 @@ trait CollectionInjections extends StringInjections {
             builder += thisB.right.get
           }
           else {
-            return Left(InversionFailure())
+            return InversionFailure.failedAttempt(d)
           }
         }
         val res = builder.result()
-        if(goodInv(d, res)) Right(res) else Left(InversionFailure())
+        if(goodInv(d, res)) Right(res) else InversionFailure.failedAttempt(d)
       }
     }
 }

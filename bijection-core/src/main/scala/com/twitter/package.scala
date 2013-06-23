@@ -27,22 +27,6 @@ package com.twitter
 package object bijection {
 
   /**
-   *  When Injection inversion attempts are known to fail,
-   *  the attempt will encode an InversionFailure to represent
-   *  that failure
-   */
-  type InversionFailure = UnsupportedOperationException
-  object InversionFailure {
-    def apply(msg: String = "") =
-      if (msg.isEmpty) new InversionFailure()
-      else new InversionFailure(msg)
-    def apply(msg: String, cause: Throwable) =
-      new InversionFailure(msg, cause)
-    def apply(cause: Throwable) =
-      new InversionFailure(cause)
-  }
-
-  /**
    * Injections may not be defined for their inverse conversion.
    * This type represents the attempted conversion. A failure
    * Will result in a Left containing an Throwable. A success

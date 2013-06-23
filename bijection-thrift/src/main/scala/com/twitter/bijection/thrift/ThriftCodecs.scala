@@ -119,5 +119,5 @@ class TEnumCodec[T <: TEnum](klass: Class[T]) extends Injection[T, Int] {
   override def apply(enum: T) = enum.getValue
   override def invert(i: Int) = Option {
     cache.getOrElseUpdate(i, findByValue.invoke(null, i.as[JInt]).asInstanceOf[T])
-  }.toRight(InversionFailure())
+  }.toRight(InversionFailure(i))
 }

@@ -25,7 +25,7 @@ val pkg = "package com.twitter.bijection"
       def apply(in: (A,B)) = List(ba(in._1), bb(in._2))
       def invert(out: List[C]) = out match {
         case a :: b :: Nil => for(a <- ba.invert(a); b <- bb.invert(b)) yield (a,b)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
 */
@@ -110,7 +110,7 @@ def fromListMethod(cnt: Int) = {
     expressionTuple(cnt, "; ") { forInvertFromListPart(_) } + " yield (" +
     letters.mkString(",") + ")\n"
   }
-  val noneCase = "        case _ => Left(InversionFailure())\n"
+  val noneCase = "        case _ => InversionFailure.failedAttempt(out)\n"
   "def invert(out: " + singleTypeParameter("List", cnt) + ") = out match {\n" +
   someCase + noneCase + "      }"
 }

@@ -83,19 +83,19 @@ object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
   }
   implicit val booleanJson = new AbstractJsonNodeInjection[Boolean] {
     def apply(b: Boolean) = JsonNodeFactory.instance.booleanNode(b)
-    override def invert(n: JsonNode) = if(n.isBoolean) Right(n.getValueAsBoolean) else Left(InversionFailure())
+    override def invert(n: JsonNode) = if(n.isBoolean) Right(n.getValueAsBoolean) else InversionFailure.failedAttempt(n)
   }
   implicit val shortJson = new AbstractJsonNodeInjection[Short] {
     def apply(i: Short) = JsonNodeFactory.instance.numberNode(i)
-    override def invert(n: JsonNode) = if (n.isInt) Right(n.getValueAsInt.toShort) else Left(InversionFailure())
+    override def invert(n: JsonNode) = if (n.isInt) Right(n.getValueAsInt.toShort) else InversionFailure.failedAttempt(n)
   }
   implicit val intJson = new AbstractJsonNodeInjection[Int] {
     def apply(i: Int) = JsonNodeFactory.instance.numberNode(i)
-    override def invert(n: JsonNode) = if (n.isInt) Right(n.getValueAsInt) else Left(InversionFailure())
+    override def invert(n: JsonNode) = if (n.isInt) Right(n.getValueAsInt) else InversionFailure.failedAttempt(n)
   }
   implicit val longJson = new AbstractJsonNodeInjection[Long] {
     def apply(i: Long) = JsonNodeFactory.instance.numberNode(i)
-    override def invert(n: JsonNode) = if (n.isLong || n.isInt) Right(n.getValueAsLong) else Left(InversionFailure())
+    override def invert(n: JsonNode) = if (n.isLong || n.isInt) Right(n.getValueAsLong) else InversionFailure.failedAttempt(n)
   }
   implicit val floatJson = new AbstractJsonNodeInjection[Float] {
     def apply(i: Float) = JsonNodeFactory.instance.numberNode(i)
@@ -103,11 +103,11 @@ object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
   }
   implicit val doubleJson = new AbstractJsonNodeInjection[Double] {
     def apply(i: Double) = JsonNodeFactory.instance.numberNode(i)
-    override def invert(n: JsonNode) = if (n.isDouble) Right(n.getValueAsDouble) else Left(InversionFailure())
+    override def invert(n: JsonNode) = if (n.isDouble) Right(n.getValueAsDouble) else InversionFailure.failedAttempt(n)
   }
   implicit val stringJson = new AbstractJsonNodeInjection[String] {
     def apply(s: String) = JsonNodeFactory.instance.textNode(s)
-    override def invert(n: JsonNode) = if (n.isTextual) Right(n.getValueAsText) else Left(InversionFailure())
+    override def invert(n: JsonNode) = if (n.isTextual) Right(n.getValueAsText) else InversionFailure.failedAttempt(n)
   }
   implicit val byteArray = new AbstractJsonNodeInjection[Array[Byte]] {
     def apply(b: Array[Byte]) = JsonNodeFactory.instance.binaryNode(b)
@@ -121,7 +121,7 @@ object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
     override def invert(n: JsonNode) =
       fromJsonNode[R](n)
         .right.map { Right(_) }
-        .left.flatMap(_ => fromJsonNode[L](n).right.map { Left(_) })
+        .left.flatMap(_ => fromJsonNode[L](n).right.map { Left(_) }.left.flatMap { _ => InversionFailure.failedAttempt(n) } )
   }
 
   // This causes diverging implicits
@@ -143,12 +143,12 @@ object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
           inCount += 1
           val thisC = jbij.invert(jn)
           if(thisC.isLeft) {
-            return Left(InversionFailure())
+            return InversionFailure.failedAttempt(n)
           }
           builder += thisC.right.get
         }
         val res = builder.result
-        if (res.size == inCount) Right(res) else Left(InversionFailure())
+        if (res.size == inCount) Right(res) else InversionFailure.failedAttempt(n)
       }
     }
 
@@ -187,11 +187,11 @@ object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
             builder += (kv.getKey -> value.right.get)
           }
           else {
-            return Left(InversionFailure())
+            return InversionFailure.failedAttempt(n)
           }
         }
         val res = builder.result
-        if (res.size == cnt) Right(res) else Left(InversionFailure())
+        if (res.size == cnt) Right(res) else InversionFailure.failedAttempt(n)
       }
     }
 

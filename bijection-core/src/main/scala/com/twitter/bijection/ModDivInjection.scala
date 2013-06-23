@@ -34,8 +34,7 @@ class IntModDivInjection(val modulus: Int) extends Injection[Int, (Int,Int)] {
     if (mod >= 0 && mod < modulus && div <= maxDiv && div >= minDiv) {
       Right(div * modulus + mod)
     }
-    else
-      Left(InversionFailure())
+    else InversionFailure.failedAttempt(moddiv)
   }
 }
 
@@ -58,7 +57,6 @@ class LongModDivInjection(val modulus: Long) extends Injection[Long, (Long,Long)
     if (mod >= 0 && mod < modulus && div <= maxDiv && div >= minDiv) {
       Right(div * modulus + mod)
     }
-    else
-      Left(InversionFailure())
+    else InversionFailure.failedAttempt(moddiv)
   }
 }

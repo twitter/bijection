@@ -62,5 +62,5 @@ class ProtobufEnumCodec[T <: ProtocolMessageEnum](klass: Class[T]) extends Injec
   override def apply(enum: T) = enum.getNumber
   override def invert(i: Int) = Option {
     cache.getOrElseUpdate(i, valueOf.invoke(null, i.as[JInt]).asInstanceOf[T])
-  }.toRight(InversionFailure())
+  }.toRight(InversionFailure(i))
 }

@@ -122,8 +122,8 @@ object Injection extends CollectionInjections
   implicit def either1[A,B]: Injection[A, Either[B,A]] =
     new AbstractInjection[A, Either[B,A]] {
       override def apply(a: A) = Right(a)
-      override def invert(e: Either[B,A]) = e.left.map {
-        _ => InversionFailure()
+      override def invert(e: Either[B,A]) = e.left.flatMap {
+        _ => InversionFailure.failedAttempt(e)
       }
     }
   implicit def option[A]: Injection[A, Option[A]] =

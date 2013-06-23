@@ -115,7 +115,7 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
       def apply(in: (A,B)) = List(ba(in._1), bb(in._2))
       def invert(out: List[C]) = out match {
         case a :: b :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right) yield (a,b)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
   implicit def tuple3ToList[A,B,C,D](implicit ba: Injection[A,D], bb: Injection[B,D], bc: Injection[C,D]):
@@ -123,7 +123,7 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
       def apply(in: (A,B,C)) = List(ba(in._1), bb(in._2), bc(in._3))
       def invert(out: List[D]) = out match {
         case a :: b :: c :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right) yield (a,b,c)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
   implicit def tuple4ToList[A,B,C,D,E](implicit ba: Injection[A,E], bb: Injection[B,E], bc: Injection[C,E], bd: Injection[D,E]):
@@ -131,7 +131,7 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
       def apply(in: (A,B,C,D)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4))
       def invert(out: List[E]) = out match {
         case a :: b :: c :: d :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right) yield (a,b,c,d)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
   implicit def tuple5ToList[A,B,C,D,E,F](implicit ba: Injection[A,F], bb: Injection[B,F], bc: Injection[C,F], bd: Injection[D,F], be: Injection[E,F]):
@@ -139,7 +139,7 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
       def apply(in: (A,B,C,D,E)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5))
       def invert(out: List[F]) = out match {
         case a :: b :: c :: d :: e :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right) yield (a,b,c,d,e)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
   implicit def tuple6ToList[A,B,C,D,E,F,G](implicit ba: Injection[A,G], bb: Injection[B,G], bc: Injection[C,G], bd: Injection[D,G], be: Injection[E,G], bf: Injection[F,G]):
@@ -147,7 +147,7 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
       def apply(in: (A,B,C,D,E,F)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6))
       def invert(out: List[G]) = out match {
         case a :: b :: c :: d :: e :: f :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right) yield (a,b,c,d,e,f)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
   implicit def tuple7ToList[A,B,C,D,E,F,G,H](implicit ba: Injection[A,H], bb: Injection[B,H], bc: Injection[C,H], bd: Injection[D,H], be: Injection[E,H], bf: Injection[F,H], bg: Injection[G,H]):
@@ -155,7 +155,7 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
       def apply(in: (A,B,C,D,E,F,G)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7))
       def invert(out: List[H]) = out match {
         case a :: b :: c :: d :: e :: f :: g :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right) yield (a,b,c,d,e,f,g)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
   implicit def tuple8ToList[A,B,C,D,E,F,G,H,I](implicit ba: Injection[A,I], bb: Injection[B,I], bc: Injection[C,I], bd: Injection[D,I], be: Injection[E,I], bf: Injection[F,I], bg: Injection[G,I], bh: Injection[H,I]):
@@ -163,7 +163,7 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
       def apply(in: (A,B,C,D,E,F,G,H)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8))
       def invert(out: List[I]) = out match {
         case a :: b :: c :: d :: e :: f :: g :: h :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right) yield (a,b,c,d,e,f,g,h)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
   implicit def tuple9ToList[A,B,C,D,E,F,G,H,I,J](implicit ba: Injection[A,J], bb: Injection[B,J], bc: Injection[C,J], bd: Injection[D,J], be: Injection[E,J], bf: Injection[F,J], bg: Injection[G,J], bh: Injection[H,J], bi: Injection[I,J]):
@@ -171,7 +171,7 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
       def apply(in: (A,B,C,D,E,F,G,H,I)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9))
       def invert(out: List[J]) = out match {
         case a :: b :: c :: d :: e :: f :: g :: h :: i :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right) yield (a,b,c,d,e,f,g,h,i)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
   implicit def tuple10ToList[A,B,C,D,E,F,G,H,I,J,K](implicit ba: Injection[A,K], bb: Injection[B,K], bc: Injection[C,K], bd: Injection[D,K], be: Injection[E,K], bf: Injection[F,K], bg: Injection[G,K], bh: Injection[H,K], bi: Injection[I,K], bj: Injection[J,K]):
@@ -179,7 +179,7 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
       def apply(in: (A,B,C,D,E,F,G,H,I,J)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10))
       def invert(out: List[K]) = out match {
         case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right) yield (a,b,c,d,e,f,g,h,i,j)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
   implicit def tuple11ToList[A,B,C,D,E,F,G,H,I,J,K,L](implicit ba: Injection[A,L], bb: Injection[B,L], bc: Injection[C,L], bd: Injection[D,L], be: Injection[E,L], bf: Injection[F,L], bg: Injection[G,L], bh: Injection[H,L], bi: Injection[I,L], bj: Injection[J,L], bk: Injection[K,L]):
@@ -187,7 +187,7 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11))
       def invert(out: List[L]) = out match {
         case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right) yield (a,b,c,d,e,f,g,h,i,j,k)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
   implicit def tuple12ToList[A,B,C,D,E,F,G,H,I,J,K,L,M](implicit ba: Injection[A,M], bb: Injection[B,M], bc: Injection[C,M], bd: Injection[D,M], be: Injection[E,M], bf: Injection[F,M], bg: Injection[G,M], bh: Injection[H,M], bi: Injection[I,M], bj: Injection[J,M], bk: Injection[K,M], bl: Injection[L,M]):
@@ -195,7 +195,7 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12))
       def invert(out: List[M]) = out match {
         case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right) yield (a,b,c,d,e,f,g,h,i,j,k,l)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
   implicit def tuple13ToList[A,B,C,D,E,F,G,H,I,J,K,L,M,N](implicit ba: Injection[A,N], bb: Injection[B,N], bc: Injection[C,N], bd: Injection[D,N], be: Injection[E,N], bf: Injection[F,N], bg: Injection[G,N], bh: Injection[H,N], bi: Injection[I,N], bj: Injection[J,N], bk: Injection[K,N], bl: Injection[L,N], bm: Injection[M,N]):
@@ -203,7 +203,7 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L,M)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13))
       def invert(out: List[N]) = out match {
         case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right; m <- bm.invert(m).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
   implicit def tuple14ToList[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O](implicit ba: Injection[A,O], bb: Injection[B,O], bc: Injection[C,O], bd: Injection[D,O], be: Injection[E,O], bf: Injection[F,O], bg: Injection[G,O], bh: Injection[H,O], bi: Injection[I,O], bj: Injection[J,O], bk: Injection[K,O], bl: Injection[L,O], bm: Injection[M,O], bn: Injection[N,O]):
@@ -211,7 +211,7 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L,M,N)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14))
       def invert(out: List[O]) = out match {
         case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right; m <- bm.invert(m).right; n <- bn.invert(n).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
   implicit def tuple15ToList[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P](implicit ba: Injection[A,P], bb: Injection[B,P], bc: Injection[C,P], bd: Injection[D,P], be: Injection[E,P], bf: Injection[F,P], bg: Injection[G,P], bh: Injection[H,P], bi: Injection[I,P], bj: Injection[J,P], bk: Injection[K,P], bl: Injection[L,P], bm: Injection[M,P], bn: Injection[N,P], bo: Injection[O,P]):
@@ -219,7 +219,7 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L,M,N,O)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15))
       def invert(out: List[P]) = out match {
         case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right; m <- bm.invert(m).right; n <- bn.invert(n).right; o <- bo.invert(o).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
   implicit def tuple16ToList[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q](implicit ba: Injection[A,Q], bb: Injection[B,Q], bc: Injection[C,Q], bd: Injection[D,Q], be: Injection[E,Q], bf: Injection[F,Q], bg: Injection[G,Q], bh: Injection[H,Q], bi: Injection[I,Q], bj: Injection[J,Q], bk: Injection[K,Q], bl: Injection[L,Q], bm: Injection[M,Q], bn: Injection[N,Q], bo: Injection[O,Q], bp: Injection[P,Q]):
@@ -227,7 +227,7 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15), bp(in._16))
       def invert(out: List[Q]) = out match {
         case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: p :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right; m <- bm.invert(m).right; n <- bn.invert(n).right; o <- bo.invert(o).right; p <- bp.invert(p).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
   implicit def tuple17ToList[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R](implicit ba: Injection[A,R], bb: Injection[B,R], bc: Injection[C,R], bd: Injection[D,R], be: Injection[E,R], bf: Injection[F,R], bg: Injection[G,R], bh: Injection[H,R], bi: Injection[I,R], bj: Injection[J,R], bk: Injection[K,R], bl: Injection[L,R], bm: Injection[M,R], bn: Injection[N,R], bo: Injection[O,R], bp: Injection[P,R], bq: Injection[Q,R]):
@@ -235,7 +235,7 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15), bp(in._16), bq(in._17))
       def invert(out: List[R]) = out match {
         case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: p :: q :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right; m <- bm.invert(m).right; n <- bn.invert(n).right; o <- bo.invert(o).right; p <- bp.invert(p).right; q <- bq.invert(q).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
   implicit def tuple18ToList[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S](implicit ba: Injection[A,S], bb: Injection[B,S], bc: Injection[C,S], bd: Injection[D,S], be: Injection[E,S], bf: Injection[F,S], bg: Injection[G,S], bh: Injection[H,S], bi: Injection[I,S], bj: Injection[J,S], bk: Injection[K,S], bl: Injection[L,S], bm: Injection[M,S], bn: Injection[N,S], bo: Injection[O,S], bp: Injection[P,S], bq: Injection[Q,S], br: Injection[R,S]):
@@ -243,7 +243,7 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15), bp(in._16), bq(in._17), br(in._18))
       def invert(out: List[S]) = out match {
         case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: p :: q :: r :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right; m <- bm.invert(m).right; n <- bn.invert(n).right; o <- bo.invert(o).right; p <- bp.invert(p).right; q <- bq.invert(q).right; r <- br.invert(r).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
   implicit def tuple19ToList[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T](implicit ba: Injection[A,T], bb: Injection[B,T], bc: Injection[C,T], bd: Injection[D,T], be: Injection[E,T], bf: Injection[F,T], bg: Injection[G,T], bh: Injection[H,T], bi: Injection[I,T], bj: Injection[J,T], bk: Injection[K,T], bl: Injection[L,T], bm: Injection[M,T], bn: Injection[N,T], bo: Injection[O,T], bp: Injection[P,T], bq: Injection[Q,T], br: Injection[R,T], bs: Injection[S,T]):
@@ -251,7 +251,7 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15), bp(in._16), bq(in._17), br(in._18), bs(in._19))
       def invert(out: List[T]) = out match {
         case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: p :: q :: r :: s :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right; m <- bm.invert(m).right; n <- bn.invert(n).right; o <- bo.invert(o).right; p <- bp.invert(p).right; q <- bq.invert(q).right; r <- br.invert(r).right; s <- bs.invert(s).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
   implicit def tuple20ToList[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U](implicit ba: Injection[A,U], bb: Injection[B,U], bc: Injection[C,U], bd: Injection[D,U], be: Injection[E,U], bf: Injection[F,U], bg: Injection[G,U], bh: Injection[H,U], bi: Injection[I,U], bj: Injection[J,U], bk: Injection[K,U], bl: Injection[L,U], bm: Injection[M,U], bn: Injection[N,U], bo: Injection[O,U], bp: Injection[P,U], bq: Injection[Q,U], br: Injection[R,U], bs: Injection[S,U], bt: Injection[T,U]):
@@ -259,7 +259,7 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15), bp(in._16), bq(in._17), br(in._18), bs(in._19), bt(in._20))
       def invert(out: List[U]) = out match {
         case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: p :: q :: r :: s :: t :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right; m <- bm.invert(m).right; n <- bn.invert(n).right; o <- bo.invert(o).right; p <- bp.invert(p).right; q <- bq.invert(q).right; r <- br.invert(r).right; s <- bs.invert(s).right; t <- bt.invert(t).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
   implicit def tuple21ToList[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V](implicit ba: Injection[A,V], bb: Injection[B,V], bc: Injection[C,V], bd: Injection[D,V], be: Injection[E,V], bf: Injection[F,V], bg: Injection[G,V], bh: Injection[H,V], bi: Injection[I,V], bj: Injection[J,V], bk: Injection[K,V], bl: Injection[L,V], bm: Injection[M,V], bn: Injection[N,V], bo: Injection[O,V], bp: Injection[P,V], bq: Injection[Q,V], br: Injection[R,V], bs: Injection[S,V], bt: Injection[T,V], bu: Injection[U,V]):
@@ -267,7 +267,7 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15), bp(in._16), bq(in._17), br(in._18), bs(in._19), bt(in._20), bu(in._21))
       def invert(out: List[V]) = out match {
         case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: p :: q :: r :: s :: t :: u :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right; m <- bm.invert(m).right; n <- bn.invert(n).right; o <- bo.invert(o).right; p <- bp.invert(p).right; q <- bq.invert(q).right; r <- br.invert(r).right; s <- bs.invert(s).right; t <- bt.invert(t).right; u <- bu.invert(u).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
   implicit def tuple22ToList[A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W](implicit ba: Injection[A,W], bb: Injection[B,W], bc: Injection[C,W], bd: Injection[D,W], be: Injection[E,W], bf: Injection[F,W], bg: Injection[G,W], bh: Injection[H,W], bi: Injection[I,W], bj: Injection[J,W], bk: Injection[K,W], bl: Injection[L,W], bm: Injection[M,W], bn: Injection[N,W], bo: Injection[O,W], bp: Injection[P,W], bq: Injection[Q,W], br: Injection[R,W], bs: Injection[S,W], bt: Injection[T,W], bu: Injection[U,W], bv: Injection[V,W]):
@@ -275,7 +275,7 @@ trait GeneratedTupleCollectionInjections extends LowPriorityInjections {
       def apply(in: (A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V)) = List(ba(in._1), bb(in._2), bc(in._3), bd(in._4), be(in._5), bf(in._6), bg(in._7), bh(in._8), bi(in._9), bj(in._10), bk(in._11), bl(in._12), bm(in._13), bn(in._14), bo(in._15), bp(in._16), bq(in._17), br(in._18), bs(in._19), bt(in._20), bu(in._21), bv(in._22))
       def invert(out: List[W]) = out match {
         case a :: b :: c :: d :: e :: f :: g :: h :: i :: j :: k :: l :: m :: n :: o :: p :: q :: r :: s :: t :: u :: v :: Nil => for(a <- ba.invert(a).right; b <- bb.invert(b).right; c <- bc.invert(c).right; d <- bd.invert(d).right; e <- be.invert(e).right; f <- bf.invert(f).right; g <- bg.invert(g).right; h <- bh.invert(h).right; i <- bi.invert(i).right; j <- bj.invert(j).right; k <- bk.invert(k).right; l <- bl.invert(l).right; m <- bm.invert(m).right; n <- bn.invert(n).right; o <- bo.invert(o).right; p <- bp.invert(p).right; q <- bq.invert(q).right; r <- br.invert(r).right; s <- bs.invert(s).right; t <- bt.invert(t).right; u <- bu.invert(u).right; v <- bv.invert(v).right) yield (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v)
-        case _ => Left(InversionFailure())
+        case _ => InversionFailure.failedAttempt(out)
       }
     }
 }

@@ -35,29 +35,29 @@ trait NumericInjections extends GeneratedTupleInjections {
   implicit val byte2Short: Injection[Byte, Short] = new AbstractInjection[Byte, Short] {
     def apply(i: Byte) = i.toShort
     def invert(l: Short) =
-      if (l.isValidByte) Right(l.toByte) else Left(InversionFailure())
+      if (l.isValidByte) Right(l.toByte) else InversionFailure.failedAttempt(l)
   }
   implicit val short2Int: Injection[Short, Int] = new AbstractInjection[Short, Int] {
     def apply(i: Short) = i.toInt
     def invert(l: Int) =
-      if (l.isValidShort) Right(l.toShort) else Left(InversionFailure())
+      if (l.isValidShort) Right(l.toShort) else InversionFailure.failedAttempt(l)
   }
   implicit val int2Long: Injection[Int, Long] = new AbstractInjection[Int,Long] {
     def apply(i: Int) = i.toLong
     def invert(l: Long) =
-      if (l.isValidInt) Right(l.toInt) else Left(InversionFailure())
+      if (l.isValidInt) Right(l.toInt) else InversionFailure.failedAttempt(l)
   }
   implicit val long2BigInt: Injection[Long, BigInt] = new AbstractInjection[Long,BigInt] {
     def apply(l: Long) = BigInt(l)
     def invert(bi: BigInt) =
-      if (bi <= Long.MaxValue && Long.MinValue <= bi) Right(bi.toLong) else Left(InversionFailure())
+      if (bi <= Long.MaxValue && Long.MinValue <= bi) Right(bi.toLong) else InversionFailure.failedAttempt(bi)
   }
 
   // This is a loose injection
   implicit val float2Double: Injection[Float, Double] = new AbstractInjection[Float, Double] {
     def apply(i: Float) = i.toDouble
     def invert(l: Double) =
-      if (l <= Float.MaxValue && l >= Float.MinValue) Right(l.toFloat) else Left(InversionFailure())
+      if (l <= Float.MaxValue && l >= Float.MinValue) Right(l.toFloat) else InversionFailure.failedAttempt(l)
   }
   // This is a loose injection
   implicit val int2Double: Injection[Int, Double] = new AbstractInjection[Int, Double] {
