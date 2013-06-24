@@ -17,7 +17,7 @@ limitations under the License.
 package com.twitter.bijection.json
 
 import com.twitter.bijection.{Attempt, Bijection, Injection, InversionFailure, ImplicitBijection}
-
+import com.twitter.bijection.InversionFailure.attempt
 import org.codehaus.jackson.{JsonParser, JsonNode, JsonFactory}
 import org.codehaus.jackson.map.ObjectMapper
 import org.codehaus.jackson.node.{
@@ -39,7 +39,6 @@ import scala.collection.JavaConverters._
  * types and JSON objects.
  */
 
-import scala.util.control.Exception.allCatch
 
 trait JsonNodeInjection[T] extends Injection[T, JsonNode]
 
@@ -99,7 +98,7 @@ object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
   }
   implicit val floatJson = new AbstractJsonNodeInjection[Float] {
     def apply(i: Float) = JsonNodeFactory.instance.numberNode(i)
-    override def invert(n: JsonNode) = allCatch.either(n.getValueAsDouble.toFloat)
+    override def invert(n: JsonNode) = attempt(n)(_.getValueAsDouble.toFloat)
   }
   implicit val doubleJson = new AbstractJsonNodeInjection[Double] {
     def apply(i: Double) = JsonNodeFactory.instance.numberNode(i)
@@ -111,7 +110,7 @@ object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
   }
   implicit val byteArray = new AbstractJsonNodeInjection[Array[Byte]] {
     def apply(b: Array[Byte]) = JsonNodeFactory.instance.binaryNode(b)
-    override def invert(n: JsonNode) = allCatch.either(n.getBinaryValue)
+    override def invert(n: JsonNode) = attempt(n)(_.getBinaryValue)
   }
   implicit def either[L:JsonNodeInjection, R:JsonNodeInjection] = new AbstractJsonNodeInjection[Either[L,R]] {
     def apply(e: Either[L,R]) = e match {

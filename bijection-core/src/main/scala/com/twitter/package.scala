@@ -29,10 +29,10 @@ package object bijection {
   /**
    * Injections may not be defined for their inverse conversion.
    * This type represents the attempted conversion. A failure
-   * Will result in a Left containing an Throwable. A success
-   * will result in a Right containing the converted value.
+   * will result in a Left containing a the InversionFailure. A success
+   * will result in a Right containing the inverted value.
    */ 
-  type Attempt[T] = Either[Throwable, T]
+  type Attempt[T] = Either[InversionFailure, T]
 
   /**
     * Using Injections for serialization is a common pattern. Currying

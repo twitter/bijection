@@ -28,8 +28,7 @@ import java.nio.ByteBuffer
 import java.util.UUID
 
 import Bijection.build
-
-import scala.util.control.Exception.allCatch
+import InversionFailure.attempt
 
 trait NumericInjections extends GeneratedTupleInjections {
   implicit val byte2Short: Injection[Byte, Short] = new AbstractInjection[Byte, Short] {
@@ -68,67 +67,67 @@ trait NumericInjections extends GeneratedTupleInjections {
   implicit val byte2String: Injection[Byte, String] =
     new AbstractInjection[Byte, String] {
       def apply(b: Byte) = b.toString
-      override def invert(s: String) = allCatch.either(s.toByte)
+      override def invert(s: String) = attempt(s)(_.toByte)
     }
   implicit val jbyte2String: Injection[JByte, String] =
     new AbstractInjection[JByte, String] {
       def apply(b: JByte) = b.toString
-      override def invert(s: String) = allCatch.either(JByte.valueOf(s))
+      override def invert(s: String) = attempt(s)(JByte.valueOf(_))
     }
   implicit val short2String: Injection[Short, String] =
     new AbstractInjection[Short, String] {
       def apply(s: Short) = s.toString
-      override def invert(s: String) = allCatch.either(s.toShort)
+      override def invert(s: String) = attempt(s)(_.toShort)
     }
   implicit val jshort2String: Injection[JShort, String] =
     new AbstractInjection[JShort, String] {
       def apply(b: JShort) = b.toString
-      override def invert(s: String) = allCatch.either(JShort.valueOf(s))
+      override def invert(s: String) = attempt(s)(JShort.valueOf(_))
     }
   implicit val int2String: Injection[Int, String] =
     new AbstractInjection[Int, String] {
       def apply(i: Int) = i.toString
-      override def invert(s: String) = allCatch.either(s.toInt)
+      override def invert(s: String) = attempt(s)(_.toInt)
     }
   implicit val jint2String: Injection[JInt, String] =
     new AbstractInjection[JInt, String] {
       def apply(i: JInt) = i.toString
-      override def invert(s: String) = allCatch.either(JInt.valueOf(s))
+      override def invert(s: String) = attempt(s)(JInt.valueOf(_))
     }
 
   implicit val long2String: Injection[Long, String] =
     new AbstractInjection[Long, String] {
       def apply(l: Long) = l.toString
-      override def invert(s: String) = allCatch.either(s.toLong)
+      override def invert(s: String) = attempt(s)(_.toLong)
     }
   implicit val jlong2String: Injection[JLong, String] =
     new AbstractInjection[JLong, String] {
       def apply(l: JLong) = l.toString
-      override def invert(s: String) = allCatch.either(JLong.valueOf(s))
+      override def invert(s: String) = attempt(s)(JLong.valueOf(_))
     }
 
   implicit val float2String: Injection[Float, String] =
     new AbstractInjection[Float, String] {
       def apply(f: Float) = f.toString
-      override def invert(s: String) = allCatch.either(s.toFloat)
+      override def invert(s: String) = attempt(s)(_.toFloat)
     }
 
   implicit val jfloat2String: Injection[JFloat, String] =
     new AbstractInjection[JFloat, String] {
       def apply(f: JFloat) = f.toString
-      override def invert(s: String) = allCatch.either(JFloat.valueOf(s))
+      override def invert(s: String) = attempt(s)(JFloat.valueOf(_))
     }
 
   implicit val double2String: Injection[Double, String] =
     new AbstractInjection[Double, String] {
       def apply(d: Double) = d.toString
-      override def invert(s: String) = allCatch.either(s.toDouble)
+      override def invert(s: String) = attempt(s)(_.toDouble)
     }
 
   implicit val jdouble2String: Injection[JDouble, String] =
     new AbstractInjection[JDouble, String] {
       def apply(d: JDouble) = d.toString
-      override def invert(s: String) = allCatch.either(JDouble.valueOf(s))
+      override def invert(s: String) = attempt(s)(JDouble.valueOf(_))
     }
 
   implicit val short2BigEndian: Injection[Short, Array[Byte]] =
@@ -140,7 +139,7 @@ trait NumericInjections extends GeneratedTupleInjections {
         buf.array
       }
       override def invert(b: Array[Byte]) =
-        allCatch.either(ByteBuffer.wrap(b).getShort)
+        attempt(b)(ByteBuffer.wrap(_).getShort)
     }
 
   implicit val int2BigEndian: Injection[Int, Array[Byte]] =
@@ -152,7 +151,7 @@ trait NumericInjections extends GeneratedTupleInjections {
         buf.array
       }
       override def invert(b: Array[Byte]) =
-        allCatch.either(ByteBuffer.wrap(b).getInt)
+        attempt(b)(ByteBuffer.wrap(_).getInt)
     }
 
   implicit val long2BigEndian: Injection[Long, Array[Byte]] =
@@ -164,7 +163,7 @@ trait NumericInjections extends GeneratedTupleInjections {
         buf.array
       }
       override def invert(b: Array[Byte]) =
-        allCatch.either(ByteBuffer.wrap(b).getLong)
+        attempt(b)(ByteBuffer.wrap(_).getLong)
     }
 
   // Lazy to deal with the fact that int2BigEndian od Bijection may not be init yet

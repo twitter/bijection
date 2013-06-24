@@ -22,7 +22,7 @@ import java.util.UUID
 import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
 
-import scala.util.control.Exception.allCatch
+import com.twitter.bijection.InversionFailure.attempt
 
 trait StringInjections extends NumericInjections {
   implicit val utf8: Injection[String, Array[Byte]] = withEncoding("UTF-8")
@@ -31,20 +31,20 @@ trait StringInjections extends NumericInjections {
     new AbstractInjection[String, Array[Byte]] {
       def apply(s: String) = s.getBytes(encoding)
       override def invert(b: Array[Byte]) =
-        allCatch.either { new String(b, encoding) }
+        attempt(b) { new String(_, encoding) }
     }
 
   // Some bijections with string from standard java/scala classes:
   implicit val url2String: Injection[URL, String] =
     new AbstractInjection[URL, String] {
       def apply(u: URL) = u.toString
-      override def invert(s: String) = allCatch.either(new URL(s))
+      override def invert(s: String) = attempt(s)(new URL(_))
     }
 
   implicit val uuid2String: Injection[UUID, String] =
     new AbstractInjection[UUID, String] {
       def apply(uuid: UUID) = uuid.toString
-      override def invert(s: String) = allCatch.either(UUID.fromString(s))
+      override def invert(s: String) = attempt(s)(UUID.fromString(_))
     }
 }
 

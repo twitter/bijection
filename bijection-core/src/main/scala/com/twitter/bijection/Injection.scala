@@ -18,7 +18,7 @@ package com.twitter.bijection
 
 import java.io.Serializable
 import scala.annotation.implicitNotFound
-import scala.util.control.Exception.allCatch
+import com.twitter.bijection.InversionFailure.attempt
 
 /**
  * An Injection[A, B] is a function from A to B, and from some B back to A.
@@ -102,7 +102,7 @@ object Injection extends CollectionInjections
   def buildCatchInvert[A, B](to: A => B)(from: B => A): Injection[A, B] =
     new AbstractInjection[A, B] {
       override def apply(a: A) = to(a)
-      override def invert(b: B) = allCatch.either(from(b))
+      override def invert(b: B) = attempt(b)(from)
     }
 
   /**
@@ -129,7 +129,7 @@ object Injection extends CollectionInjections
   implicit def option[A]: Injection[A, Option[A]] =
     new AbstractInjection[A, Option[A]] {
       override def apply(a: A) = Some(a)
-      override def invert(b: Option[A]) = b.toRight(new NoSuchElementException())
+      override def invert(b: Option[A]) = b.toRight(InversionFailure(b, new NoSuchElementException()))
     }
   implicit def identity[A]: Injection[A, A] =
     new AbstractInjection[A, A] {

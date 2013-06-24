@@ -2,7 +2,7 @@
 package com.twitter.bijection
 import Bufferable.reallocatingPut
 import java.nio.ByteBuffer
-import scala.util.control.Exception.allCatch
+import com.twitter.bijection.InversionFailure.attempt
 
 trait GeneratedTupleBufferable {
   implicit def tuple2[A,B](implicit ba: Bufferable[A], bb: Bufferable[B]):
@@ -13,7 +13,7 @@ trait GeneratedTupleBufferable {
         nextBb = reallocatingPut(nextBb) { bb.put(_, tup._2) }
         nextBb
       }
-      def get(bytebuf: ByteBuffer) = allCatch.either {
+      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
         val (bufa, a) = ba.get(bytebuf).right.get
         val (bufb, b) = bb.get(bufa).right.get
         val res = (a, b)
@@ -29,7 +29,7 @@ trait GeneratedTupleBufferable {
         nextBb = reallocatingPut(nextBb) { bc.put(_, tup._3) }
         nextBb
       }
-      def get(bytebuf: ByteBuffer) = allCatch.either {
+      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
         val (bufa, a) = ba.get(bytebuf).right.get
         val (bufb, b) = bb.get(bufa).right.get
         val (bufc, c) = bc.get(bufb).right.get
@@ -47,7 +47,7 @@ trait GeneratedTupleBufferable {
         nextBb = reallocatingPut(nextBb) { bd.put(_, tup._4) }
         nextBb
       }
-      def get(bytebuf: ByteBuffer) = allCatch.either {
+      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
         val (bufa, a) = ba.get(bytebuf).right.get
         val (bufb, b) = bb.get(bufa).right.get
         val (bufc, c) = bc.get(bufb).right.get
@@ -67,7 +67,7 @@ trait GeneratedTupleBufferable {
         nextBb = reallocatingPut(nextBb) { be.put(_, tup._5) }
         nextBb
       }
-      def get(bytebuf: ByteBuffer) = allCatch.either {
+      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
         val (bufa, a) = ba.get(bytebuf).right.get
         val (bufb, b) = bb.get(bufa).right.get
         val (bufc, c) = bc.get(bufb).right.get
@@ -89,7 +89,7 @@ trait GeneratedTupleBufferable {
         nextBb = reallocatingPut(nextBb) { bf.put(_, tup._6) }
         nextBb
       }
-      def get(bytebuf: ByteBuffer) = allCatch.either {
+      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
         val (bufa, a) = ba.get(bytebuf).right.get
         val (bufb, b) = bb.get(bufa).right.get
         val (bufc, c) = bc.get(bufb).right.get
@@ -113,7 +113,7 @@ trait GeneratedTupleBufferable {
         nextBb = reallocatingPut(nextBb) { bg.put(_, tup._7) }
         nextBb
       }
-      def get(bytebuf: ByteBuffer) = allCatch.either {
+      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
         val (bufa, a) = ba.get(bytebuf).right.get
         val (bufb, b) = bb.get(bufa).right.get
         val (bufc, c) = bc.get(bufb).right.get
@@ -139,7 +139,7 @@ trait GeneratedTupleBufferable {
         nextBb = reallocatingPut(nextBb) { bh.put(_, tup._8) }
         nextBb
       }
-      def get(bytebuf: ByteBuffer) = allCatch.either {
+      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
         val (bufa, a) = ba.get(bytebuf).right.get
         val (bufb, b) = bb.get(bufa).right.get
         val (bufc, c) = bc.get(bufb).right.get
@@ -167,7 +167,7 @@ trait GeneratedTupleBufferable {
         nextBb = reallocatingPut(nextBb) { bi.put(_, tup._9) }
         nextBb
       }
-      def get(bytebuf: ByteBuffer) = allCatch.either {
+      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
         val (bufa, a) = ba.get(bytebuf).right.get
         val (bufb, b) = bb.get(bufa).right.get
         val (bufc, c) = bc.get(bufb).right.get
@@ -197,7 +197,7 @@ trait GeneratedTupleBufferable {
         nextBb = reallocatingPut(nextBb) { bj.put(_, tup._10) }
         nextBb
       }
-      def get(bytebuf: ByteBuffer) = allCatch.either {
+      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
         val (bufa, a) = ba.get(bytebuf).right.get
         val (bufb, b) = bb.get(bufa).right.get
         val (bufc, c) = bc.get(bufb).right.get
@@ -229,7 +229,7 @@ trait GeneratedTupleBufferable {
         nextBb = reallocatingPut(nextBb) { bk.put(_, tup._11) }
         nextBb
       }
-      def get(bytebuf: ByteBuffer) = allCatch.either {
+      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
         val (bufa, a) = ba.get(bytebuf).right.get
         val (bufb, b) = bb.get(bufa).right.get
         val (bufc, c) = bc.get(bufb).right.get
@@ -263,7 +263,7 @@ trait GeneratedTupleBufferable {
         nextBb = reallocatingPut(nextBb) { bl.put(_, tup._12) }
         nextBb
       }
-      def get(bytebuf: ByteBuffer) = allCatch.either {
+      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
         val (bufa, a) = ba.get(bytebuf).right.get
         val (bufb, b) = bb.get(bufa).right.get
         val (bufc, c) = bc.get(bufb).right.get
@@ -299,7 +299,7 @@ trait GeneratedTupleBufferable {
         nextBb = reallocatingPut(nextBb) { bm.put(_, tup._13) }
         nextBb
       }
-      def get(bytebuf: ByteBuffer) = allCatch.either {
+      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
         val (bufa, a) = ba.get(bytebuf).right.get
         val (bufb, b) = bb.get(bufa).right.get
         val (bufc, c) = bc.get(bufb).right.get
@@ -337,7 +337,7 @@ trait GeneratedTupleBufferable {
         nextBb = reallocatingPut(nextBb) { bn.put(_, tup._14) }
         nextBb
       }
-      def get(bytebuf: ByteBuffer) = allCatch.either {
+      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
         val (bufa, a) = ba.get(bytebuf).right.get
         val (bufb, b) = bb.get(bufa).right.get
         val (bufc, c) = bc.get(bufb).right.get
@@ -377,7 +377,7 @@ trait GeneratedTupleBufferable {
         nextBb = reallocatingPut(nextBb) { bo.put(_, tup._15) }
         nextBb
       }
-      def get(bytebuf: ByteBuffer) = allCatch.either {
+      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
         val (bufa, a) = ba.get(bytebuf).right.get
         val (bufb, b) = bb.get(bufa).right.get
         val (bufc, c) = bc.get(bufb).right.get
@@ -419,7 +419,7 @@ trait GeneratedTupleBufferable {
         nextBb = reallocatingPut(nextBb) { bp.put(_, tup._16) }
         nextBb
       }
-      def get(bytebuf: ByteBuffer) = allCatch.either {
+      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
         val (bufa, a) = ba.get(bytebuf).right.get
         val (bufb, b) = bb.get(bufa).right.get
         val (bufc, c) = bc.get(bufb).right.get
@@ -463,7 +463,7 @@ trait GeneratedTupleBufferable {
         nextBb = reallocatingPut(nextBb) { bq.put(_, tup._17) }
         nextBb
       }
-      def get(bytebuf: ByteBuffer) = allCatch.either {
+      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
         val (bufa, a) = ba.get(bytebuf).right.get
         val (bufb, b) = bb.get(bufa).right.get
         val (bufc, c) = bc.get(bufb).right.get
@@ -509,7 +509,7 @@ trait GeneratedTupleBufferable {
         nextBb = reallocatingPut(nextBb) { br.put(_, tup._18) }
         nextBb
       }
-      def get(bytebuf: ByteBuffer) = allCatch.either {
+      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
         val (bufa, a) = ba.get(bytebuf).right.get
         val (bufb, b) = bb.get(bufa).right.get
         val (bufc, c) = bc.get(bufb).right.get
@@ -557,7 +557,7 @@ trait GeneratedTupleBufferable {
         nextBb = reallocatingPut(nextBb) { bs.put(_, tup._19) }
         nextBb
       }
-      def get(bytebuf: ByteBuffer) = allCatch.either {
+      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
         val (bufa, a) = ba.get(bytebuf).right.get
         val (bufb, b) = bb.get(bufa).right.get
         val (bufc, c) = bc.get(bufb).right.get
@@ -607,7 +607,7 @@ trait GeneratedTupleBufferable {
         nextBb = reallocatingPut(nextBb) { bt.put(_, tup._20) }
         nextBb
       }
-      def get(bytebuf: ByteBuffer) = allCatch.either {
+      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
         val (bufa, a) = ba.get(bytebuf).right.get
         val (bufb, b) = bb.get(bufa).right.get
         val (bufc, c) = bc.get(bufb).right.get
@@ -659,7 +659,7 @@ trait GeneratedTupleBufferable {
         nextBb = reallocatingPut(nextBb) { bu.put(_, tup._21) }
         nextBb
       }
-      def get(bytebuf: ByteBuffer) = allCatch.either {
+      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
         val (bufa, a) = ba.get(bytebuf).right.get
         val (bufb, b) = bb.get(bufa).right.get
         val (bufc, c) = bc.get(bufb).right.get
@@ -713,7 +713,7 @@ trait GeneratedTupleBufferable {
         nextBb = reallocatingPut(nextBb) { bv.put(_, tup._22) }
         nextBb
       }
-      def get(bytebuf: ByteBuffer) = allCatch.either {
+      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
         val (bufa, a) = ba.get(bytebuf).right.get
         val (bufb, b) = bb.get(bufa).right.get
         val (bufc, c) = bc.get(bufb).right.get

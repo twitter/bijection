@@ -1,12 +1,11 @@
 package com.twitter.bijection.protobuf
 
 import com.twitter.bijection.{Bijection, Conversion, Injection, InversionFailure}
+import com.twitter.bijection.InversionFailure.attempt
 import com.google.protobuf.Message
 import com.google.protobuf.ProtocolMessageEnum
 import java.lang.{ Integer => JInt }
 import scala.collection.mutable.{ Map =>MMap }
-
-import scala.util.control.Exception.allCatch
 
 /**
  * Bijections for use in serializing and deserializing Protobufs.
@@ -29,7 +28,7 @@ object ProtobufCodec {
 class ProtobufCodec[T <: Message](klass: Class[T]) extends Injection[T, Array[Byte]] {
   lazy val parseFrom = klass.getMethod("parseFrom", classOf[Array[Byte]])
   override def apply(item: T) = item.toByteArray
-  override def invert(bytes: Array[Byte]) = allCatch.either {
+  override def invert(bytes: Array[Byte]) = attempt(bytes) { bytes =>
     parseFrom.invoke(null, bytes).asInstanceOf[T]
   }
 }

@@ -23,7 +23,7 @@ import scala.annotation.implicitNotFound
 import scala.annotation.tailrec
 import scala.collection.mutable.{Builder, Map => MMap, Set => MSet, Buffer => MBuffer}
 
-import scala.util.control.Exception.allCatch
+import com.twitter.bijection.InversionFailure.attempt
 
 /**
  * Bufferable[T] is a typeclass to work with java.nio.ByteBuffer for serialization/injections to
@@ -135,7 +135,7 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
   def buildCatchDuplicate[T](putfn: (ByteBuffer,T) => ByteBuffer)(getfn: (ByteBuffer) => T):
     Bufferable[T] = new AbstractBufferable[T] {
       override def put(into: ByteBuffer, t: T) = putfn(into,t)
-      override def get(from: ByteBuffer) = allCatch.either {
+      override def get(from: ByteBuffer) = attempt(from) { from =>
         val dup = from.duplicate
         (dup, getfn(dup))
       }
