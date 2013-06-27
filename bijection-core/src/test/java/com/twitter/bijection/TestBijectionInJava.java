@@ -29,17 +29,17 @@ public class TestBijectionInJava {
         @Override
         public String apply(Long in) { return in.toString(); }
         @Override
-        public scala.Option<Long> invert(String in) {
+        public scala.Either<InversionFailure, Long> invert(String in) {
           try {
-            return scala.Option.apply(Long.valueOf(in));
+            return new scala.Right(Long.valueOf(in));
           }
           catch(NumberFormatException nfe) {
-            return scala.Option.apply(null);
+            return new scala.Left(new InversionFailure(in, nfe));
           }
         }
       };
-      assertEquals(Long.valueOf("123"), l2s.invert("123").get());
-      assertEquals(true, l2s.invert("hello").isEmpty());
+      assertEquals(Long.valueOf("123"), l2s.invert("123").right().get());
+      assertEquals(true, l2s.invert("hello").isLeft());
     }
 
     //TODO include a more complete example using Base64 conversion, and GZip + Base64 version

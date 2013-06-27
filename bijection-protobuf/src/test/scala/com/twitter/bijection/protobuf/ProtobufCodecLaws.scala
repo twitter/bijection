@@ -48,6 +48,6 @@ class ProtobufEnumTest extends Specification with BaseProperties {
     val female = Gender.valueOf(1)
     female must_== rt(female)
 
-    b.invert(2) must_== None
+    b.invert(2).isLeft must beTrue
   }
 }

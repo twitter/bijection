@@ -42,20 +42,20 @@ trait BaseProperties {
         b != null &&
         { val bofa = inj.invert(b)
           bofa != null &&
-          bofa.isDefined &&
-          eqa.equiv(bofa.get, a)
+          bofa.isRight &&
+          eqa.equiv(bofa.right.get, a)
         }
     }
 
  def invertIsStrict[A,B](implicit arbb: Arbitrary[B], inj: Injection[A,B], eqb: Equiv[B]) =
    forAll { (b: B) =>
-     inj.invert(b)
-       .map { aofb =>
+     inj.invert(b) match {
+       case Right(aofb) =>
          assert(aofb != null, "aofb was null")
          eqb.equiv(b, inj(aofb))
-       }
-       .getOrElse(true)
+       case _ => true // the failing case of None previously returned true?
      }
+   }
 
   def isInjection[A,B](implicit a: Arbitrary[A],
     inj: Injection[A, B], barb: Arbitrary[B], eqa: Equiv[A], eqb: Equiv[B]) =
