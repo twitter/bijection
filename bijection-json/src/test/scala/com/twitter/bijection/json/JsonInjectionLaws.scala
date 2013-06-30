@@ -18,7 +18,7 @@ package com.twitter.bijection.json
 
 import com.twitter.bijection.Conversion.asMethod
 
-import com.twitter.bijection.{ BaseProperties, Bijection, Injection }
+import com.twitter.bijection.{ Attempt, BaseProperties, Bijection, Injection }
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 import org.scalacheck.Arbitrary
@@ -77,15 +77,15 @@ object JsonInjectionLaws extends Properties("JsonInjection") with BaseProperties
 
     val jsonMixed = mixedMap.as[UnparsedJson]
 
-    jsonMixed.as[Option[Map[String, JsonNode]]].get.map { kup : (String, JsonNode) =>
+    jsonMixed.as[Attempt[Map[String, JsonNode]]].right.get.map({ kup : (String, JsonNode) =>
       val (k, up) = kup
       if (k.endsWith("i")) {
-        fromJsonNode[Int](up).get == fromJsonNode[Int](mixedMap(k)).get
+        fromJsonNode[Int](up).right.get == fromJsonNode[Int](mixedMap(k)).right.get
       }
       else {
-        fromJsonNode[List[String]](up).get == fromJsonNode[List[String]](mixedMap(k)).get
+        fromJsonNode[List[String]](up).right.get == fromJsonNode[List[String]](mixedMap(k)).right.get
       }
-    }.forall { x => x}
+    }).forall { x => x }
   }
 
 }
