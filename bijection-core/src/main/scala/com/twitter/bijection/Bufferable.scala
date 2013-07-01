@@ -35,6 +35,12 @@ import com.twitter.bijection.InversionFailure.attempt
 trait Bufferable[T] extends Serializable {
   def put(into: ByteBuffer, t: T): ByteBuffer
   def get(from: ByteBuffer): Attempt[(ByteBuffer, T)]
+  /** Retrieve the value of get or throw an exception if the operation fails */
+  def unsafeGet(from: ByteBuffer): (ByteBuffer, T) =
+    get(from) match {
+      case Right(tup @ _) => tup
+      case Left(InversionFailure(_, t)) => throw t
+    }
 }
 
 /** For Java and avoiding trait bloat

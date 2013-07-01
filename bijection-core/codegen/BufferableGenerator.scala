@@ -13,8 +13,8 @@ val pkg = "package com.twitter.bijection"
       }
       // this should perform better than for comprehension
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
         (bufb, (a,b))
       }
     }
@@ -36,7 +36,7 @@ def reallocatingPut(idx: Int) =
 def bufferGet(idx: Int) = {
   val getFrom = if (idx == 0) "bytebuf" else ("buf" + lowerLetters(idx - 1))
   val lowlet = lowerLetters(idx)
-  "val (buf%s, %s) = b%s.get(%s).right.get".format(lowlet, lowlet, lowlet, getFrom)
+  "val (buf%s, %s) = b%s.unsafeGet(%s)".format(lowlet, lowlet, lowlet, getFrom)
 }
 
 def bufferableType(idx: Int) = "Bufferable[" + upperLetters(idx) + "]"

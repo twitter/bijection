@@ -14,8 +14,8 @@ trait GeneratedTupleBufferable {
         nextBb
       }
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
         val res = (a, b)
         (bufb, res)
       }
@@ -30,9 +30,9 @@ trait GeneratedTupleBufferable {
         nextBb
       }
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
-        val (bufc, c) = bc.get(bufb).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
+        val (bufc, c) = bc.unsafeGet(bufb)
         val res = (a, b, c)
         (bufc, res)
       }
@@ -48,10 +48,10 @@ trait GeneratedTupleBufferable {
         nextBb
       }
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
-        val (bufc, c) = bc.get(bufb).right.get
-        val (bufd, d) = bd.get(bufc).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
+        val (bufc, c) = bc.unsafeGet(bufb)
+        val (bufd, d) = bd.unsafeGet(bufc)
         val res = (a, b, c, d)
         (bufd, res)
       }
@@ -68,11 +68,11 @@ trait GeneratedTupleBufferable {
         nextBb
       }
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
-        val (bufc, c) = bc.get(bufb).right.get
-        val (bufd, d) = bd.get(bufc).right.get
-        val (bufe, e) = be.get(bufd).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
+        val (bufc, c) = bc.unsafeGet(bufb)
+        val (bufd, d) = bd.unsafeGet(bufc)
+        val (bufe, e) = be.unsafeGet(bufd)
         val res = (a, b, c, d, e)
         (bufe, res)
       }
@@ -90,12 +90,12 @@ trait GeneratedTupleBufferable {
         nextBb
       }
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
-        val (bufc, c) = bc.get(bufb).right.get
-        val (bufd, d) = bd.get(bufc).right.get
-        val (bufe, e) = be.get(bufd).right.get
-        val (buff, f) = bf.get(bufe).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
+        val (bufc, c) = bc.unsafeGet(bufb)
+        val (bufd, d) = bd.unsafeGet(bufc)
+        val (bufe, e) = be.unsafeGet(bufd)
+        val (buff, f) = bf.unsafeGet(bufe)
         val res = (a, b, c, d, e, f)
         (buff, res)
       }
@@ -114,13 +114,13 @@ trait GeneratedTupleBufferable {
         nextBb
       }
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
-        val (bufc, c) = bc.get(bufb).right.get
-        val (bufd, d) = bd.get(bufc).right.get
-        val (bufe, e) = be.get(bufd).right.get
-        val (buff, f) = bf.get(bufe).right.get
-        val (bufg, g) = bg.get(buff).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
+        val (bufc, c) = bc.unsafeGet(bufb)
+        val (bufd, d) = bd.unsafeGet(bufc)
+        val (bufe, e) = be.unsafeGet(bufd)
+        val (buff, f) = bf.unsafeGet(bufe)
+        val (bufg, g) = bg.unsafeGet(buff)
         val res = (a, b, c, d, e, f, g)
         (bufg, res)
       }
@@ -140,14 +140,14 @@ trait GeneratedTupleBufferable {
         nextBb
       }
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
-        val (bufc, c) = bc.get(bufb).right.get
-        val (bufd, d) = bd.get(bufc).right.get
-        val (bufe, e) = be.get(bufd).right.get
-        val (buff, f) = bf.get(bufe).right.get
-        val (bufg, g) = bg.get(buff).right.get
-        val (bufh, h) = bh.get(bufg).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
+        val (bufc, c) = bc.unsafeGet(bufb)
+        val (bufd, d) = bd.unsafeGet(bufc)
+        val (bufe, e) = be.unsafeGet(bufd)
+        val (buff, f) = bf.unsafeGet(bufe)
+        val (bufg, g) = bg.unsafeGet(buff)
+        val (bufh, h) = bh.unsafeGet(bufg)
         val res = (a, b, c, d, e, f, g, h)
         (bufh, res)
       }
@@ -168,15 +168,15 @@ trait GeneratedTupleBufferable {
         nextBb
       }
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
-        val (bufc, c) = bc.get(bufb).right.get
-        val (bufd, d) = bd.get(bufc).right.get
-        val (bufe, e) = be.get(bufd).right.get
-        val (buff, f) = bf.get(bufe).right.get
-        val (bufg, g) = bg.get(buff).right.get
-        val (bufh, h) = bh.get(bufg).right.get
-        val (bufi, i) = bi.get(bufh).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
+        val (bufc, c) = bc.unsafeGet(bufb)
+        val (bufd, d) = bd.unsafeGet(bufc)
+        val (bufe, e) = be.unsafeGet(bufd)
+        val (buff, f) = bf.unsafeGet(bufe)
+        val (bufg, g) = bg.unsafeGet(buff)
+        val (bufh, h) = bh.unsafeGet(bufg)
+        val (bufi, i) = bi.unsafeGet(bufh)
         val res = (a, b, c, d, e, f, g, h, i)
         (bufi, res)
       }
@@ -198,16 +198,16 @@ trait GeneratedTupleBufferable {
         nextBb
       }
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
-        val (bufc, c) = bc.get(bufb).right.get
-        val (bufd, d) = bd.get(bufc).right.get
-        val (bufe, e) = be.get(bufd).right.get
-        val (buff, f) = bf.get(bufe).right.get
-        val (bufg, g) = bg.get(buff).right.get
-        val (bufh, h) = bh.get(bufg).right.get
-        val (bufi, i) = bi.get(bufh).right.get
-        val (bufj, j) = bj.get(bufi).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
+        val (bufc, c) = bc.unsafeGet(bufb)
+        val (bufd, d) = bd.unsafeGet(bufc)
+        val (bufe, e) = be.unsafeGet(bufd)
+        val (buff, f) = bf.unsafeGet(bufe)
+        val (bufg, g) = bg.unsafeGet(buff)
+        val (bufh, h) = bh.unsafeGet(bufg)
+        val (bufi, i) = bi.unsafeGet(bufh)
+        val (bufj, j) = bj.unsafeGet(bufi)
         val res = (a, b, c, d, e, f, g, h, i, j)
         (bufj, res)
       }
@@ -230,17 +230,17 @@ trait GeneratedTupleBufferable {
         nextBb
       }
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
-        val (bufc, c) = bc.get(bufb).right.get
-        val (bufd, d) = bd.get(bufc).right.get
-        val (bufe, e) = be.get(bufd).right.get
-        val (buff, f) = bf.get(bufe).right.get
-        val (bufg, g) = bg.get(buff).right.get
-        val (bufh, h) = bh.get(bufg).right.get
-        val (bufi, i) = bi.get(bufh).right.get
-        val (bufj, j) = bj.get(bufi).right.get
-        val (bufk, k) = bk.get(bufj).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
+        val (bufc, c) = bc.unsafeGet(bufb)
+        val (bufd, d) = bd.unsafeGet(bufc)
+        val (bufe, e) = be.unsafeGet(bufd)
+        val (buff, f) = bf.unsafeGet(bufe)
+        val (bufg, g) = bg.unsafeGet(buff)
+        val (bufh, h) = bh.unsafeGet(bufg)
+        val (bufi, i) = bi.unsafeGet(bufh)
+        val (bufj, j) = bj.unsafeGet(bufi)
+        val (bufk, k) = bk.unsafeGet(bufj)
         val res = (a, b, c, d, e, f, g, h, i, j, k)
         (bufk, res)
       }
@@ -264,18 +264,18 @@ trait GeneratedTupleBufferable {
         nextBb
       }
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
-        val (bufc, c) = bc.get(bufb).right.get
-        val (bufd, d) = bd.get(bufc).right.get
-        val (bufe, e) = be.get(bufd).right.get
-        val (buff, f) = bf.get(bufe).right.get
-        val (bufg, g) = bg.get(buff).right.get
-        val (bufh, h) = bh.get(bufg).right.get
-        val (bufi, i) = bi.get(bufh).right.get
-        val (bufj, j) = bj.get(bufi).right.get
-        val (bufk, k) = bk.get(bufj).right.get
-        val (bufl, l) = bl.get(bufk).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
+        val (bufc, c) = bc.unsafeGet(bufb)
+        val (bufd, d) = bd.unsafeGet(bufc)
+        val (bufe, e) = be.unsafeGet(bufd)
+        val (buff, f) = bf.unsafeGet(bufe)
+        val (bufg, g) = bg.unsafeGet(buff)
+        val (bufh, h) = bh.unsafeGet(bufg)
+        val (bufi, i) = bi.unsafeGet(bufh)
+        val (bufj, j) = bj.unsafeGet(bufi)
+        val (bufk, k) = bk.unsafeGet(bufj)
+        val (bufl, l) = bl.unsafeGet(bufk)
         val res = (a, b, c, d, e, f, g, h, i, j, k, l)
         (bufl, res)
       }
@@ -300,19 +300,19 @@ trait GeneratedTupleBufferable {
         nextBb
       }
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
-        val (bufc, c) = bc.get(bufb).right.get
-        val (bufd, d) = bd.get(bufc).right.get
-        val (bufe, e) = be.get(bufd).right.get
-        val (buff, f) = bf.get(bufe).right.get
-        val (bufg, g) = bg.get(buff).right.get
-        val (bufh, h) = bh.get(bufg).right.get
-        val (bufi, i) = bi.get(bufh).right.get
-        val (bufj, j) = bj.get(bufi).right.get
-        val (bufk, k) = bk.get(bufj).right.get
-        val (bufl, l) = bl.get(bufk).right.get
-        val (bufm, m) = bm.get(bufl).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
+        val (bufc, c) = bc.unsafeGet(bufb)
+        val (bufd, d) = bd.unsafeGet(bufc)
+        val (bufe, e) = be.unsafeGet(bufd)
+        val (buff, f) = bf.unsafeGet(bufe)
+        val (bufg, g) = bg.unsafeGet(buff)
+        val (bufh, h) = bh.unsafeGet(bufg)
+        val (bufi, i) = bi.unsafeGet(bufh)
+        val (bufj, j) = bj.unsafeGet(bufi)
+        val (bufk, k) = bk.unsafeGet(bufj)
+        val (bufl, l) = bl.unsafeGet(bufk)
+        val (bufm, m) = bm.unsafeGet(bufl)
         val res = (a, b, c, d, e, f, g, h, i, j, k, l, m)
         (bufm, res)
       }
@@ -338,20 +338,20 @@ trait GeneratedTupleBufferable {
         nextBb
       }
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
-        val (bufc, c) = bc.get(bufb).right.get
-        val (bufd, d) = bd.get(bufc).right.get
-        val (bufe, e) = be.get(bufd).right.get
-        val (buff, f) = bf.get(bufe).right.get
-        val (bufg, g) = bg.get(buff).right.get
-        val (bufh, h) = bh.get(bufg).right.get
-        val (bufi, i) = bi.get(bufh).right.get
-        val (bufj, j) = bj.get(bufi).right.get
-        val (bufk, k) = bk.get(bufj).right.get
-        val (bufl, l) = bl.get(bufk).right.get
-        val (bufm, m) = bm.get(bufl).right.get
-        val (bufn, n) = bn.get(bufm).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
+        val (bufc, c) = bc.unsafeGet(bufb)
+        val (bufd, d) = bd.unsafeGet(bufc)
+        val (bufe, e) = be.unsafeGet(bufd)
+        val (buff, f) = bf.unsafeGet(bufe)
+        val (bufg, g) = bg.unsafeGet(buff)
+        val (bufh, h) = bh.unsafeGet(bufg)
+        val (bufi, i) = bi.unsafeGet(bufh)
+        val (bufj, j) = bj.unsafeGet(bufi)
+        val (bufk, k) = bk.unsafeGet(bufj)
+        val (bufl, l) = bl.unsafeGet(bufk)
+        val (bufm, m) = bm.unsafeGet(bufl)
+        val (bufn, n) = bn.unsafeGet(bufm)
         val res = (a, b, c, d, e, f, g, h, i, j, k, l, m, n)
         (bufn, res)
       }
@@ -378,21 +378,21 @@ trait GeneratedTupleBufferable {
         nextBb
       }
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
-        val (bufc, c) = bc.get(bufb).right.get
-        val (bufd, d) = bd.get(bufc).right.get
-        val (bufe, e) = be.get(bufd).right.get
-        val (buff, f) = bf.get(bufe).right.get
-        val (bufg, g) = bg.get(buff).right.get
-        val (bufh, h) = bh.get(bufg).right.get
-        val (bufi, i) = bi.get(bufh).right.get
-        val (bufj, j) = bj.get(bufi).right.get
-        val (bufk, k) = bk.get(bufj).right.get
-        val (bufl, l) = bl.get(bufk).right.get
-        val (bufm, m) = bm.get(bufl).right.get
-        val (bufn, n) = bn.get(bufm).right.get
-        val (bufo, o) = bo.get(bufn).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
+        val (bufc, c) = bc.unsafeGet(bufb)
+        val (bufd, d) = bd.unsafeGet(bufc)
+        val (bufe, e) = be.unsafeGet(bufd)
+        val (buff, f) = bf.unsafeGet(bufe)
+        val (bufg, g) = bg.unsafeGet(buff)
+        val (bufh, h) = bh.unsafeGet(bufg)
+        val (bufi, i) = bi.unsafeGet(bufh)
+        val (bufj, j) = bj.unsafeGet(bufi)
+        val (bufk, k) = bk.unsafeGet(bufj)
+        val (bufl, l) = bl.unsafeGet(bufk)
+        val (bufm, m) = bm.unsafeGet(bufl)
+        val (bufn, n) = bn.unsafeGet(bufm)
+        val (bufo, o) = bo.unsafeGet(bufn)
         val res = (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o)
         (bufo, res)
       }
@@ -420,22 +420,22 @@ trait GeneratedTupleBufferable {
         nextBb
       }
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
-        val (bufc, c) = bc.get(bufb).right.get
-        val (bufd, d) = bd.get(bufc).right.get
-        val (bufe, e) = be.get(bufd).right.get
-        val (buff, f) = bf.get(bufe).right.get
-        val (bufg, g) = bg.get(buff).right.get
-        val (bufh, h) = bh.get(bufg).right.get
-        val (bufi, i) = bi.get(bufh).right.get
-        val (bufj, j) = bj.get(bufi).right.get
-        val (bufk, k) = bk.get(bufj).right.get
-        val (bufl, l) = bl.get(bufk).right.get
-        val (bufm, m) = bm.get(bufl).right.get
-        val (bufn, n) = bn.get(bufm).right.get
-        val (bufo, o) = bo.get(bufn).right.get
-        val (bufp, p) = bp.get(bufo).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
+        val (bufc, c) = bc.unsafeGet(bufb)
+        val (bufd, d) = bd.unsafeGet(bufc)
+        val (bufe, e) = be.unsafeGet(bufd)
+        val (buff, f) = bf.unsafeGet(bufe)
+        val (bufg, g) = bg.unsafeGet(buff)
+        val (bufh, h) = bh.unsafeGet(bufg)
+        val (bufi, i) = bi.unsafeGet(bufh)
+        val (bufj, j) = bj.unsafeGet(bufi)
+        val (bufk, k) = bk.unsafeGet(bufj)
+        val (bufl, l) = bl.unsafeGet(bufk)
+        val (bufm, m) = bm.unsafeGet(bufl)
+        val (bufn, n) = bn.unsafeGet(bufm)
+        val (bufo, o) = bo.unsafeGet(bufn)
+        val (bufp, p) = bp.unsafeGet(bufo)
         val res = (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p)
         (bufp, res)
       }
@@ -464,23 +464,23 @@ trait GeneratedTupleBufferable {
         nextBb
       }
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
-        val (bufc, c) = bc.get(bufb).right.get
-        val (bufd, d) = bd.get(bufc).right.get
-        val (bufe, e) = be.get(bufd).right.get
-        val (buff, f) = bf.get(bufe).right.get
-        val (bufg, g) = bg.get(buff).right.get
-        val (bufh, h) = bh.get(bufg).right.get
-        val (bufi, i) = bi.get(bufh).right.get
-        val (bufj, j) = bj.get(bufi).right.get
-        val (bufk, k) = bk.get(bufj).right.get
-        val (bufl, l) = bl.get(bufk).right.get
-        val (bufm, m) = bm.get(bufl).right.get
-        val (bufn, n) = bn.get(bufm).right.get
-        val (bufo, o) = bo.get(bufn).right.get
-        val (bufp, p) = bp.get(bufo).right.get
-        val (bufq, q) = bq.get(bufp).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
+        val (bufc, c) = bc.unsafeGet(bufb)
+        val (bufd, d) = bd.unsafeGet(bufc)
+        val (bufe, e) = be.unsafeGet(bufd)
+        val (buff, f) = bf.unsafeGet(bufe)
+        val (bufg, g) = bg.unsafeGet(buff)
+        val (bufh, h) = bh.unsafeGet(bufg)
+        val (bufi, i) = bi.unsafeGet(bufh)
+        val (bufj, j) = bj.unsafeGet(bufi)
+        val (bufk, k) = bk.unsafeGet(bufj)
+        val (bufl, l) = bl.unsafeGet(bufk)
+        val (bufm, m) = bm.unsafeGet(bufl)
+        val (bufn, n) = bn.unsafeGet(bufm)
+        val (bufo, o) = bo.unsafeGet(bufn)
+        val (bufp, p) = bp.unsafeGet(bufo)
+        val (bufq, q) = bq.unsafeGet(bufp)
         val res = (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q)
         (bufq, res)
       }
@@ -510,24 +510,24 @@ trait GeneratedTupleBufferable {
         nextBb
       }
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
-        val (bufc, c) = bc.get(bufb).right.get
-        val (bufd, d) = bd.get(bufc).right.get
-        val (bufe, e) = be.get(bufd).right.get
-        val (buff, f) = bf.get(bufe).right.get
-        val (bufg, g) = bg.get(buff).right.get
-        val (bufh, h) = bh.get(bufg).right.get
-        val (bufi, i) = bi.get(bufh).right.get
-        val (bufj, j) = bj.get(bufi).right.get
-        val (bufk, k) = bk.get(bufj).right.get
-        val (bufl, l) = bl.get(bufk).right.get
-        val (bufm, m) = bm.get(bufl).right.get
-        val (bufn, n) = bn.get(bufm).right.get
-        val (bufo, o) = bo.get(bufn).right.get
-        val (bufp, p) = bp.get(bufo).right.get
-        val (bufq, q) = bq.get(bufp).right.get
-        val (bufr, r) = br.get(bufq).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
+        val (bufc, c) = bc.unsafeGet(bufb)
+        val (bufd, d) = bd.unsafeGet(bufc)
+        val (bufe, e) = be.unsafeGet(bufd)
+        val (buff, f) = bf.unsafeGet(bufe)
+        val (bufg, g) = bg.unsafeGet(buff)
+        val (bufh, h) = bh.unsafeGet(bufg)
+        val (bufi, i) = bi.unsafeGet(bufh)
+        val (bufj, j) = bj.unsafeGet(bufi)
+        val (bufk, k) = bk.unsafeGet(bufj)
+        val (bufl, l) = bl.unsafeGet(bufk)
+        val (bufm, m) = bm.unsafeGet(bufl)
+        val (bufn, n) = bn.unsafeGet(bufm)
+        val (bufo, o) = bo.unsafeGet(bufn)
+        val (bufp, p) = bp.unsafeGet(bufo)
+        val (bufq, q) = bq.unsafeGet(bufp)
+        val (bufr, r) = br.unsafeGet(bufq)
         val res = (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r)
         (bufr, res)
       }
@@ -558,25 +558,25 @@ trait GeneratedTupleBufferable {
         nextBb
       }
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
-        val (bufc, c) = bc.get(bufb).right.get
-        val (bufd, d) = bd.get(bufc).right.get
-        val (bufe, e) = be.get(bufd).right.get
-        val (buff, f) = bf.get(bufe).right.get
-        val (bufg, g) = bg.get(buff).right.get
-        val (bufh, h) = bh.get(bufg).right.get
-        val (bufi, i) = bi.get(bufh).right.get
-        val (bufj, j) = bj.get(bufi).right.get
-        val (bufk, k) = bk.get(bufj).right.get
-        val (bufl, l) = bl.get(bufk).right.get
-        val (bufm, m) = bm.get(bufl).right.get
-        val (bufn, n) = bn.get(bufm).right.get
-        val (bufo, o) = bo.get(bufn).right.get
-        val (bufp, p) = bp.get(bufo).right.get
-        val (bufq, q) = bq.get(bufp).right.get
-        val (bufr, r) = br.get(bufq).right.get
-        val (bufs, s) = bs.get(bufr).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
+        val (bufc, c) = bc.unsafeGet(bufb)
+        val (bufd, d) = bd.unsafeGet(bufc)
+        val (bufe, e) = be.unsafeGet(bufd)
+        val (buff, f) = bf.unsafeGet(bufe)
+        val (bufg, g) = bg.unsafeGet(buff)
+        val (bufh, h) = bh.unsafeGet(bufg)
+        val (bufi, i) = bi.unsafeGet(bufh)
+        val (bufj, j) = bj.unsafeGet(bufi)
+        val (bufk, k) = bk.unsafeGet(bufj)
+        val (bufl, l) = bl.unsafeGet(bufk)
+        val (bufm, m) = bm.unsafeGet(bufl)
+        val (bufn, n) = bn.unsafeGet(bufm)
+        val (bufo, o) = bo.unsafeGet(bufn)
+        val (bufp, p) = bp.unsafeGet(bufo)
+        val (bufq, q) = bq.unsafeGet(bufp)
+        val (bufr, r) = br.unsafeGet(bufq)
+        val (bufs, s) = bs.unsafeGet(bufr)
         val res = (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s)
         (bufs, res)
       }
@@ -608,26 +608,26 @@ trait GeneratedTupleBufferable {
         nextBb
       }
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
-        val (bufc, c) = bc.get(bufb).right.get
-        val (bufd, d) = bd.get(bufc).right.get
-        val (bufe, e) = be.get(bufd).right.get
-        val (buff, f) = bf.get(bufe).right.get
-        val (bufg, g) = bg.get(buff).right.get
-        val (bufh, h) = bh.get(bufg).right.get
-        val (bufi, i) = bi.get(bufh).right.get
-        val (bufj, j) = bj.get(bufi).right.get
-        val (bufk, k) = bk.get(bufj).right.get
-        val (bufl, l) = bl.get(bufk).right.get
-        val (bufm, m) = bm.get(bufl).right.get
-        val (bufn, n) = bn.get(bufm).right.get
-        val (bufo, o) = bo.get(bufn).right.get
-        val (bufp, p) = bp.get(bufo).right.get
-        val (bufq, q) = bq.get(bufp).right.get
-        val (bufr, r) = br.get(bufq).right.get
-        val (bufs, s) = bs.get(bufr).right.get
-        val (buft, t) = bt.get(bufs).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
+        val (bufc, c) = bc.unsafeGet(bufb)
+        val (bufd, d) = bd.unsafeGet(bufc)
+        val (bufe, e) = be.unsafeGet(bufd)
+        val (buff, f) = bf.unsafeGet(bufe)
+        val (bufg, g) = bg.unsafeGet(buff)
+        val (bufh, h) = bh.unsafeGet(bufg)
+        val (bufi, i) = bi.unsafeGet(bufh)
+        val (bufj, j) = bj.unsafeGet(bufi)
+        val (bufk, k) = bk.unsafeGet(bufj)
+        val (bufl, l) = bl.unsafeGet(bufk)
+        val (bufm, m) = bm.unsafeGet(bufl)
+        val (bufn, n) = bn.unsafeGet(bufm)
+        val (bufo, o) = bo.unsafeGet(bufn)
+        val (bufp, p) = bp.unsafeGet(bufo)
+        val (bufq, q) = bq.unsafeGet(bufp)
+        val (bufr, r) = br.unsafeGet(bufq)
+        val (bufs, s) = bs.unsafeGet(bufr)
+        val (buft, t) = bt.unsafeGet(bufs)
         val res = (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t)
         (buft, res)
       }
@@ -660,27 +660,27 @@ trait GeneratedTupleBufferable {
         nextBb
       }
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
-        val (bufc, c) = bc.get(bufb).right.get
-        val (bufd, d) = bd.get(bufc).right.get
-        val (bufe, e) = be.get(bufd).right.get
-        val (buff, f) = bf.get(bufe).right.get
-        val (bufg, g) = bg.get(buff).right.get
-        val (bufh, h) = bh.get(bufg).right.get
-        val (bufi, i) = bi.get(bufh).right.get
-        val (bufj, j) = bj.get(bufi).right.get
-        val (bufk, k) = bk.get(bufj).right.get
-        val (bufl, l) = bl.get(bufk).right.get
-        val (bufm, m) = bm.get(bufl).right.get
-        val (bufn, n) = bn.get(bufm).right.get
-        val (bufo, o) = bo.get(bufn).right.get
-        val (bufp, p) = bp.get(bufo).right.get
-        val (bufq, q) = bq.get(bufp).right.get
-        val (bufr, r) = br.get(bufq).right.get
-        val (bufs, s) = bs.get(bufr).right.get
-        val (buft, t) = bt.get(bufs).right.get
-        val (bufu, u) = bu.get(buft).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
+        val (bufc, c) = bc.unsafeGet(bufb)
+        val (bufd, d) = bd.unsafeGet(bufc)
+        val (bufe, e) = be.unsafeGet(bufd)
+        val (buff, f) = bf.unsafeGet(bufe)
+        val (bufg, g) = bg.unsafeGet(buff)
+        val (bufh, h) = bh.unsafeGet(bufg)
+        val (bufi, i) = bi.unsafeGet(bufh)
+        val (bufj, j) = bj.unsafeGet(bufi)
+        val (bufk, k) = bk.unsafeGet(bufj)
+        val (bufl, l) = bl.unsafeGet(bufk)
+        val (bufm, m) = bm.unsafeGet(bufl)
+        val (bufn, n) = bn.unsafeGet(bufm)
+        val (bufo, o) = bo.unsafeGet(bufn)
+        val (bufp, p) = bp.unsafeGet(bufo)
+        val (bufq, q) = bq.unsafeGet(bufp)
+        val (bufr, r) = br.unsafeGet(bufq)
+        val (bufs, s) = bs.unsafeGet(bufr)
+        val (buft, t) = bt.unsafeGet(bufs)
+        val (bufu, u) = bu.unsafeGet(buft)
         val res = (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u)
         (bufu, res)
       }
@@ -714,28 +714,28 @@ trait GeneratedTupleBufferable {
         nextBb
       }
       def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>
-        val (bufa, a) = ba.get(bytebuf).right.get
-        val (bufb, b) = bb.get(bufa).right.get
-        val (bufc, c) = bc.get(bufb).right.get
-        val (bufd, d) = bd.get(bufc).right.get
-        val (bufe, e) = be.get(bufd).right.get
-        val (buff, f) = bf.get(bufe).right.get
-        val (bufg, g) = bg.get(buff).right.get
-        val (bufh, h) = bh.get(bufg).right.get
-        val (bufi, i) = bi.get(bufh).right.get
-        val (bufj, j) = bj.get(bufi).right.get
-        val (bufk, k) = bk.get(bufj).right.get
-        val (bufl, l) = bl.get(bufk).right.get
-        val (bufm, m) = bm.get(bufl).right.get
-        val (bufn, n) = bn.get(bufm).right.get
-        val (bufo, o) = bo.get(bufn).right.get
-        val (bufp, p) = bp.get(bufo).right.get
-        val (bufq, q) = bq.get(bufp).right.get
-        val (bufr, r) = br.get(bufq).right.get
-        val (bufs, s) = bs.get(bufr).right.get
-        val (buft, t) = bt.get(bufs).right.get
-        val (bufu, u) = bu.get(buft).right.get
-        val (bufv, v) = bv.get(bufu).right.get
+        val (bufa, a) = ba.unsafeGet(bytebuf)
+        val (bufb, b) = bb.unsafeGet(bufa)
+        val (bufc, c) = bc.unsafeGet(bufb)
+        val (bufd, d) = bd.unsafeGet(bufc)
+        val (bufe, e) = be.unsafeGet(bufd)
+        val (buff, f) = bf.unsafeGet(bufe)
+        val (bufg, g) = bg.unsafeGet(buff)
+        val (bufh, h) = bh.unsafeGet(bufg)
+        val (bufi, i) = bi.unsafeGet(bufh)
+        val (bufj, j) = bj.unsafeGet(bufi)
+        val (bufk, k) = bk.unsafeGet(bufj)
+        val (bufl, l) = bl.unsafeGet(bufk)
+        val (bufm, m) = bm.unsafeGet(bufl)
+        val (bufn, n) = bn.unsafeGet(bufm)
+        val (bufo, o) = bo.unsafeGet(bufn)
+        val (bufp, p) = bp.unsafeGet(bufo)
+        val (bufq, q) = bq.unsafeGet(bufp)
+        val (bufr, r) = br.unsafeGet(bufq)
+        val (bufs, s) = bs.unsafeGet(bufr)
+        val (buft, t) = bt.unsafeGet(bufs)
+        val (bufu, u) = bu.unsafeGet(buft)
+        val (bufv, v) = bv.unsafeGet(bufu)
         val res = (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v)
         (bufv, res)
       }
