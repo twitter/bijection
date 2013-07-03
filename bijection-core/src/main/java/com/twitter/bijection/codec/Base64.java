@@ -327,7 +327,7 @@ public class Base64 extends BaseNCodec {
      *            the context to be used
      */
     @Override
-    void encode(final byte[] in, int inPos, final int inAvail, final Context context) {
+    void encode(final byte[] in, int inPos, final int inAvail, final BaseNCodec.Context context) {
         if (context.eof) {
             return;
         }
@@ -424,7 +424,7 @@ public class Base64 extends BaseNCodec {
      *            the context to be used
      */
     @Override
-    void decode(final byte[] in, int inPos, final int inAvail, final Context context) {
+    void decode(final byte[] in, int inPos, final int inAvail, final BaseNCodec.Context context) {
         if (context.eof) {
             return;
         }
