@@ -27,7 +27,7 @@ import scala.annotation.implicitNotFound
  */
 
 @implicitNotFound(msg = "Cannot find Bijection type class between ${A} and ${B}")
-trait Bijection[A, B] extends (A => B) with Serializable { self =>
+trait Bijection[A, B] extends Serializable { self =>
   def apply(a: A): B
   def invert(b: B): A = inverse(b)
 
@@ -35,6 +35,7 @@ trait Bijection[A, B] extends (A => B) with Serializable { self =>
     new AbstractBijection[B, A] {
       override def apply(b: B) = self.invert(b)
       override def invert(a: A) = self(a)
+      override def inverse = self
     }
 
   /**
@@ -47,6 +48,7 @@ trait Bijection[A, B] extends (A => B) with Serializable { self =>
       override def invert(c: C) = self.invert(g.invert(c))
     }
   def andThen[C](g: Injection[B, C]): Injection[A, C] = g compose this
+  def andThen[C](g: (B => C)): (A => C) = g compose (this.toFn)
 
   /**
    * Composes two instances of Bijection in a new Bijection,
@@ -54,6 +56,9 @@ trait Bijection[A, B] extends (A => B) with Serializable { self =>
    */
   def compose[T](g: Bijection[T, A]): Bijection[T, B] = g andThen this
   def compose[T](g: Injection[T, A]): Injection[T, B] = g andThen this
+  def compose[T](g: (T => A)): (T => B) = g andThen (this.toFn)
+
+  def toFn: (A => B) = new BijectionFn(self)
 }
 
 /**
@@ -62,13 +67,6 @@ trait Bijection[A, B] extends (A => B) with Serializable { self =>
 abstract class AbstractBijection[A, B] extends Bijection[A, B] {
   override def apply(a: A): B
   override def invert(b: B): A
-
-  /**
-   * This is necessary for interop with Java, which is not smart enough to
-   * infer the proper type.
-   */
-  override def compose[T](g: Function1[T,A]): Function1[T,B] = g andThen this
-  override def andThen[T](g: Function1[B,T]): Function1[A,T] = g compose this
 }
 
 trait LowPriorityBijections {
@@ -83,8 +81,15 @@ trait LowPriorityBijections {
     }
 }
 
+// Avoid a closure
+private [bijection] class BijectionFn[A, B](bij: Bijection[A, B]) extends (A => B) with Serializable {
+  def apply(a: A) = bij(a)
+}
+
 object Bijection extends CollectionBijections
   with Serializable {
+
+  implicit def toFunction[A, B](bij: Bijection[A, B]): (A => B) = bij.toFn
 
   def apply[A, B](a: A)(implicit bij: ImplicitBijection[A, B]): B = bij.bijection(a)
   def invert[A, B](b: B)(implicit bij: ImplicitBijection[A, B]): A = bij.bijection.invert(b)

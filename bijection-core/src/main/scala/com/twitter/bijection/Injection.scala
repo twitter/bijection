@@ -26,7 +26,7 @@ import scala.util.control.Exception.allCatch
  */
 
 @implicitNotFound(msg = "Cannot find Injection type class between ${A} and ${B}")
-trait Injection[A, B] extends (A => B) with Serializable { self =>
+trait Injection[A, B] extends Serializable { self =>
   def apply(a: A): B
   def invert(b: B): Option[A]
 
@@ -46,6 +46,7 @@ trait Injection[A, B] extends (A => B) with Serializable { self =>
       override def apply(a: A) = bij(self.apply(a))
       override def invert(c: C) = self.invert(bij.invert(c))
     }
+  def andThen[C](g: (B => C)): (A => C) = g.compose(this.toFn)
 
   /**
    * Composes two instances of Injection in a new Injection,
@@ -57,6 +58,14 @@ trait Injection[A, B] extends (A => B) with Serializable { self =>
       override def apply(t: T) = self.apply(bij(t))
       override def invert(b: B) = self.invert(b).map { a => bij.invert(a) }
     }
+  def compose[T](g: (T => A)): (T => B) = g andThen (this.toFn)
+
+  def toFn: (A => B) = new InjectionFn(self)
+}
+
+// Avoid a closure
+private [bijection] class InjectionFn[A, B](inj: Injection[A, B]) extends (A => B) with Serializable {
+  def apply(a: A) = inj(a)
 }
 
 /**
@@ -66,13 +75,6 @@ trait Injection[A, B] extends (A => B) with Serializable { self =>
 abstract class AbstractInjection[A, B] extends Injection[A, B] {
   override def apply(a: A): B
   override def invert(b: B): Option[A]
-
-  /**
-   * This is necessary for interop with Java, which is not smart enough to
-   * infer the proper type.
-   */
-  override def compose[T](g: Function1[T,A]): Function1[T,B] = g andThen this
-  override def andThen[T](g: Function1[B,T]): Function1[A,T] = g compose this
 }
 
 trait LowPriorityInjections {
@@ -86,6 +88,8 @@ trait LowPriorityInjections {
 
 object Injection extends CollectionInjections
   with Serializable {
+
+  implicit def toFunction[A,B](inj: Injection[A, B]): (A => B) = inj.toFn
 
   def apply[A, B](a: A)(implicit inj: Injection[A, B]): B = inj(a)
   def invert[A, B](b: B)(implicit inj: Injection[A, B]): Option[A] = inj.invert(b)
