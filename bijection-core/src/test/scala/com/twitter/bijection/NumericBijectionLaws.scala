@@ -25,6 +25,7 @@ import java.lang.{
   Byte => JByte
 }
 
+import java.math.BigInteger
 import java.util.UUID
 
 import org.scalacheck.Properties
@@ -41,6 +42,9 @@ object JavaNumArbs {
   implicit val intA = viaFn { v: Int => JInt.valueOf(v) }
   implicit val floatA = viaFn { v: Float => JFloat.valueOf(v) }
   implicit val doubleA = viaFn { v:Double => JDouble.valueOf(v) }
+  implicit val bigInteger = viaFn { (l1l2: (Long, Long))  =>
+    (new BigInteger(l1l2._1.toString)).multiply(new BigInteger(l1l2._2.toString))
+  }
 }
 
 object NumericBijectionLaws extends Properties("NumericBijections")
@@ -54,6 +58,7 @@ with BaseProperties {
   property("round trips long -> jlong") = isBijection[Long, JLong]
   property("round trips float -> jfloat") = isBijection[Float, JFloat]
   property("round trips double -> jdouble") = isBijection[Double, JDouble]
+  property("round trips BigInt <-> java.math.BigInteger") = isBijection[BigInt, BigInteger]
 
   property("round trips byte -> string") = isBijection[Byte, String @@ Rep[Byte]]
   property("round trips short -> string") = isBijection[Short, String @@ Rep[Short]]
@@ -69,7 +74,7 @@ with BaseProperties {
   property("byte -> short") = isInjection[Byte, Short]
   property("short -> int") = isInjection[Short, Int]
   property("int -> long") = isInjection[Int, Long]
-  property("long -> BigIng") = isInjection[Long, BigInt]
+  property("long -> BigInt") = isInjection[Long, BigInt]
   property("int -> double") = isLooseInjection[Int, Double]
   property("float -> double") = isLooseInjection[Float, Double]
   // ModDiv

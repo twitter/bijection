@@ -17,35 +17,37 @@
 package com.twitter.bijection.scrooge
 
 import com.twitter.bijection.{Bijection, Injection}
+import com.twitter.bijection.Inversion.attempt
 import com.twitter.scrooge.{
-  BinaryThriftStructSerializer,
   CompactThriftSerializer,
   ThriftStruct,
   ThriftStructCodec,
   ThriftStructSerializer
 }
-import scala.util.control.Exception.allCatch
 
 class ScalaCodec[T <: ThriftStruct](ser: ThriftStructSerializer[T])
     extends Injection[T, Array[Byte]] {
   override def apply(item: T) = ser.toBytes(item)
-  override def invert(bytes: Array[Byte]) = allCatch.opt(ser.fromBytes(bytes))
+  override def invert(bytes: Array[Byte]) = attempt(bytes)(ser.fromBytes(_))
 }
 
 object BinaryScalaCodec {
   def apply[T <: ThriftStruct](c: ThriftStructCodec[T]) =
     new BinaryScalaCodec[T](c)
 }
+
 class BinaryScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
-    extends ScalaCodec(new BinaryThriftStructSerializer[T] {
+    extends ScalaCodec(new ThriftStructSerializer[T] {
       override def codec = c
+      val protocolFactory = new TBinaryProtocol.Factory
     }
-  )
+)
 
 object CompactScalaCodec {
   def apply[T <: ThriftStruct](c: ThriftStructCodec[T]) =
     new CompactScalaCodec[T](c)
 }
+
 class CompactScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
     extends ScalaCodec(new CompactThriftSerializer[T] {
       override def codec = c

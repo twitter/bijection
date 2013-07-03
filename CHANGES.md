@@ -1,5 +1,17 @@
 # Bijection #
 
+
+### 0.5.0
+
+* Make Bijection/Injection not extend Function
+* Add support for scala Futures & Try
+* Either injections
+* Add java Base64 from Apache commons
+
+### 0.4.1
+
+* Added `Codec[T]` alias for serialization injections.
+
 ### 0.4.0
 
 * `bijection-netty` for async functionality. These help with Finagle stores.

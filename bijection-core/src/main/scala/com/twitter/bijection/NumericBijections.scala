@@ -24,6 +24,8 @@ import java.lang.{
   Double => JDouble,
   Byte => JByte
 }
+
+import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.util.UUID
 
@@ -102,6 +104,12 @@ trait NumericBijections extends GeneratedTupleBijections {
     new AbstractBijection[Double, Long] {
       def apply(d: Double) = JDouble.doubleToLongBits(d)
       override def invert(l: Long) = JDouble.longBitsToDouble(l)
+    }
+
+  implicit val bigInt2BigInteger: Bijection[BigInt, BigInteger] =
+    new AbstractBijection[BigInt, BigInteger] {
+      def apply(bi: BigInt) = bi.bigInteger
+      override def invert(jbi: BigInteger) = new BigInt(jbi)
     }
 
   /* Other types to and from Numeric types */

@@ -17,6 +17,7 @@ limitations under the License.
 package com.twitter.bijection.json
 
 import com.twitter.bijection.{Bijection, AbstractBijection, AbstractInjection, Injection}
+import com.twitter.bijection.Inversion.attempt
 import JsonNodeInjection.{fromJsonNode, toJsonNode}
 
 import org.codehaus.jackson.JsonNode
@@ -37,16 +38,13 @@ object UnparsedJson {
   implicit val unwrap: Injection[UnparsedJson, String] =
     new AbstractInjection[UnparsedJson, String] {
       def apply(upj: UnparsedJson) = upj.str
-      def invert(str: String) = {
-        try {
+      def invert(str: String) =
+        attempt(str) { str =>
           val res = UnparsedJson(str)
           JsonNodeInjection.unparsed.apply(res)
           // If we get here, it parsed:
-          Some(res)
+          res
         }
-        catch {
-          case _ => None
-        }
-      }
     }
+
 }
