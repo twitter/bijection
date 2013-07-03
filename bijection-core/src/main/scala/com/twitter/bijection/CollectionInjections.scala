@@ -29,7 +29,8 @@ import java.util.{
 import java.util.concurrent.{ ConcurrentMap => JConcurrentMap }
 import scala.collection.JavaConverters._
 import scala.collection.mutable
-import collection.generic.CanBuildFrom
+import scala.collection.generic.CanBuildFrom
+import scala.util.Success
 
 trait CollectionInjections extends StringInjections {
 
@@ -37,13 +38,13 @@ trait CollectionInjections extends StringInjections {
     = new AbstractInjection[Option[A], Option[B]] {
       def apply(a: Option[A]) = a.map(inj)
       def invert(b: Option[B]) = {
-        if(b.isEmpty) {
+        if (b.isEmpty) {
           // This is the inverse of a == None
-          Some(None)
+          Success(None)
         }
         else {
           val optA = inj.invert(b.get)
-          // If it is not None, then convert to Some(Some(_))
+          // If it is not None, then convert to Success(Some(_))
           optA.map { Some(_) }
         }
       }
@@ -53,8 +54,8 @@ trait CollectionInjections extends StringInjections {
       def apply(opt: Option[V1]) = opt.map(inj).toList
       def invert(l: List[V2]) = l match {
         case h :: Nil => inj.invert(h).map { Some(_) }
-        case Nil => Some(None)
-        case _ => None
+        case Nil => Success(None)
+        case _ => InversionFailure.failedAttempt(l)
       }
     }
 
@@ -85,19 +86,19 @@ trait CollectionInjections extends StringInjections {
         c foreach { builder += inj(_) }
         builder.result()
       }
-      override def invert(d: D): Option[C] = {
+      override def invert(d: D): Attempt[C] = {
         val builder = dc()
         d foreach { b =>
           val thisB = inj.invert(b)
-          if (thisB.isDefined) {
+          if (thisB.isSuccess) {
             builder += thisB.get
           }
           else {
-            return None
+            return InversionFailure.failedAttempt(d)
           }
         }
         val res = builder.result()
-        if(goodInv(d, res)) Some(res) else None
+        if(goodInv(d, res)) Success(res) else InversionFailure.failedAttempt(d)
       }
     }
 }

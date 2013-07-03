@@ -48,7 +48,7 @@ trait Bijection[A, B] extends Serializable { self =>
       override def invert(c: C) = self.invert(g.invert(c))
     }
   def andThen[C](g: Injection[B, C]): Injection[A, C] = g compose this
-  def andThen[C](g: (B => C)): (A => C) = g compose (this.toFn)
+  def andThen[C](g: (B => C)): (A => C) = g compose (this.toFunction)
 
   /**
    * Composes two instances of Bijection in a new Bijection,
@@ -56,9 +56,9 @@ trait Bijection[A, B] extends Serializable { self =>
    */
   def compose[T](g: Bijection[T, A]): Bijection[T, B] = g andThen this
   def compose[T](g: Injection[T, A]): Injection[T, B] = g andThen this
-  def compose[T](g: (T => A)): (T => B) = g andThen (this.toFn)
+  def compose[T](g: (T => A)): (T => B) = g andThen (this.toFunction)
 
-  def toFn: (A => B) = new BijectionFn(self)
+  def toFunction: (A => B) = new BijectionFn(self)
 }
 
 /**
@@ -76,7 +76,7 @@ trait LowPriorityBijections {
   implicit def fromInjection[A, B](implicit inj: Injection[A, B]): Bijection[A, B @@ Rep[A]] =
     new AbstractBijection[A, B @@ Rep[A]] {
       override def apply(a: A): B @@ Rep[A] = Tag(inj.apply(a))
-      // This tag promises the Option will return something:
+      // This tag promises the Attempt will return something:
       override def invert(b: B @@ Rep[A]): A = inj.invert(b).get
     }
 }
@@ -89,7 +89,7 @@ private [bijection] class BijectionFn[A, B](bij: Bijection[A, B]) extends (A => 
 object Bijection extends CollectionBijections
   with Serializable {
 
-  implicit def toFunction[A, B](bij: Bijection[A, B]): (A => B) = bij.toFn
+  implicit def toFunction[A, B](bij: Bijection[A, B]): (A => B) = bij.toFunction
 
   def apply[A, B](a: A)(implicit bij: ImplicitBijection[A, B]): B = bij.bijection(a)
   def invert[A, B](b: B)(implicit bij: ImplicitBijection[A, B]): A = bij.bijection.invert(b)

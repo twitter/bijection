@@ -16,9 +16,11 @@ limitations under the License.
 
 package com.twitter.bijection
 
+import com.twitter.bijection.Inversion.attemptWhen
 import java.util.zip.{ GZIPInputStream, GZIPOutputStream }
 import java.nio.ByteBuffer
-import org.apache.commons.codec.binary.Base64
+// copied java code from Apache commons 1.7
+import com.twitter.bijection.codec.Base64
 import java.io.{OutputStream, InputStream, ByteArrayInputStream, ByteArrayOutputStream}
 import annotation.tailrec
 
@@ -35,7 +37,7 @@ object Base64String {
   implicit val unwrap: Injection[Base64String, String] =
     new AbstractInjection[Base64String, String] {
       override def apply(bs: Base64String) = bs.str
-      override def invert(str: String) = if (Base64.isBase64(str)) Some(Base64String(str)) else None
+      override def invert(str: String) = attemptWhen(str)(Base64.isBase64(_))(Base64String(_))
     }
 }
 

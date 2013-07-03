@@ -17,6 +17,7 @@ limitations under the License.
 package com.twitter.bijection
 
 import org.specs._
+import scala.util.Success
 
 class AsSyntax extends Specification {
   noDetailedDiffs()
@@ -26,7 +27,7 @@ class AsSyntax extends Specification {
   "As syntax" should {
     "work on injections" in {
       val listAry = (1,2).as[List[Array[Byte]]]
-      Injection.connect[(Int,Int), List[Array[Byte]]].invert(listAry) must be_==(Some(1->2))
+      Injection.connect[(Int,Int), List[Array[Byte]]].invert(listAry) must be_==(Success(1->2))
     }
     "work on bijections" in {
       List(1,2,3).as[Vector[Int]] must be_==(Vector(1,2,3))
