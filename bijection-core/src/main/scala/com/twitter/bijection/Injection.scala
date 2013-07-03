@@ -18,7 +18,8 @@ package com.twitter.bijection
 
 import java.io.Serializable
 import scala.annotation.implicitNotFound
-import scala.util.control.Exception.allCatch
+import scala.util.{ Failure, Success, Try }
+import com.twitter.bijection.Inversion.attempt
 
 /**
  * An Injection[A, B] is a function from A to B, and from some B back to A.
@@ -28,7 +29,7 @@ import scala.util.control.Exception.allCatch
 @implicitNotFound(msg = "Cannot find Injection type class between ${A} and ${B}")
 trait Injection[A, B] extends (A => B) with Serializable { self =>
   def apply(a: A): B
-  def invert(b: B): Option[A]
+  def invert(b: B): Attempt[A]
 
   /**
    * Composes two instances of Injection in a new Injection,
@@ -65,7 +66,7 @@ trait Injection[A, B] extends (A => B) with Serializable { self =>
  */
 abstract class AbstractInjection[A, B] extends Injection[A, B] {
   override def apply(a: A): B
-  override def invert(b: B): Option[A]
+  override def invert(b: B): Attempt[A]
 
   /**
    * This is necessary for interop with Java, which is not smart enough to
@@ -80,7 +81,7 @@ trait LowPriorityInjections {
   implicit def fromImplicitBijection[A,B](implicit bij: ImplicitBijection[A, B]): Injection[A,B] =
     new AbstractInjection[A, B] {
       override def apply(a: A) = bij(a)
-      override def invert(b: B) = Some(bij.invert(b))
+      override def invert(b: B) = Success(bij.invert(b))
     }
 }
 
@@ -88,9 +89,9 @@ object Injection extends CollectionInjections
   with Serializable {
 
   def apply[A, B](a: A)(implicit inj: Injection[A, B]): B = inj(a)
-  def invert[A, B](b: B)(implicit inj: Injection[A, B]): Option[A] = inj.invert(b)
+  def invert[A, B](b: B)(implicit inj: Injection[A, B]): Attempt[A] = inj.invert(b)
 
-  def build[A, B](to: A => B)(from: B => Option[A]): Injection[A, B] =
+  def build[A, B](to: A => B)(from: B => Attempt[A]): Injection[A, B] =
     new AbstractInjection[A, B] {
       override def apply(a: A) = to(a)
       override def invert(b: B) = from(b)
@@ -102,7 +103,7 @@ object Injection extends CollectionInjections
   def buildCatchInvert[A, B](to: A => B)(from: B => A): Injection[A, B] =
     new AbstractInjection[A, B] {
       override def apply(a: A) = to(a)
-      override def invert(b: B) = allCatch.opt(from(b))
+      override def invert(b: B) = attempt(b)(from)
     }
 
   /**
@@ -119,15 +120,24 @@ object Injection extends CollectionInjections
   def connect[A, B, C, D, E](implicit bij: Injection[A, B], bij2: Injection[B, C], bij3: Injection[C, D], bij4: Injection[D, E]): Injection[A, E] =
     connect[A, B, C, D] andThen bij4
 
+  implicit def either1[A,B]: Injection[A, Either[B,A]] =
+    new AbstractInjection[A, Either[B,A]] {
+      override def apply(a: A) = Right(a)
+      override def invert(e: Either[B,A]) = e match {
+        case Right(a) => Success(a)
+        case _ => InversionFailure.failedAttempt(e)
+      }
+    }
   implicit def option[A]: Injection[A, Option[A]] =
     new AbstractInjection[A, Option[A]] {
       override def apply(a: A) = Some(a)
-      override def invert(b: Option[A]) = b
+      override def invert(b: Option[A]) =
+        b.toRight(InversionFailure(b, new NoSuchElementException())).fold(Failure(_), Success(_))
     }
   implicit def identity[A]: Injection[A, A] =
     new AbstractInjection[A, A] {
       def apply(a: A) = a
-      def invert(a: A) = Some(a)
+      def invert(a: A) = Success(a)
     }
 
   implicit def class2String[T]: Injection[Class[T], String] = new ClassInjection[T]
@@ -136,7 +146,7 @@ object Injection extends CollectionInjections
   def fromBijection[A,B](bij: Bijection[A, B]): Injection[A,B] =
     new AbstractInjection[A, B] {
       override def apply(a: A) = bij(a)
-      override def invert(b: B) = Some(bij.invert(b))
+      override def invert(b: B) = Success(bij.invert(b))
     }
   /*
    * WARNING: this uses java's Class.cast, which is subject to type erasure. If you have
@@ -159,6 +169,10 @@ object Injection extends CollectionInjections
   def unsafeToBijection[A,B](implicit inj: Injection[A,B]): Bijection[A,B] =
     new AbstractBijection[A,B] {
       def apply(a: A) = inj(a)
-      override def invert(b: B) = inj.invert(b).get
+      override def invert(b: B) =
+        inj.invert(b) match {
+          case Success(a) => a
+          case Failure(t) => throw t
+        }
     }
 }

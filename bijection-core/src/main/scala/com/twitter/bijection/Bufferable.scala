@@ -22,8 +22,8 @@ import java.nio.channels.Channel
 import scala.annotation.implicitNotFound
 import scala.annotation.tailrec
 import scala.collection.mutable.{Builder, Map => MMap, Set => MSet, Buffer => MBuffer}
-
-import scala.util.control.Exception.allCatch
+import scala.util.{ Failure, Success, Try }
+import com.twitter.bijection.Inversion.attempt
 
 /**
  * Bufferable[T] is a typeclass to work with java.nio.ByteBuffer for serialization/injections to
@@ -34,7 +34,13 @@ import scala.util.control.Exception.allCatch
 @implicitNotFound(msg = "Cannot find Bufferable type class for ${T}")
 trait Bufferable[T] extends Serializable {
   def put(into: ByteBuffer, t: T): ByteBuffer
-  def get(from: ByteBuffer): Option[(ByteBuffer, T)]
+  def get(from: ByteBuffer): Attempt[(ByteBuffer, T)]
+  /** Retrieve the value of get or throw an exception if the operation fails */
+  def unsafeGet(from: ByteBuffer): (ByteBuffer, T) =
+    get(from) match {
+      case Success(tup @ _) => tup
+      case Failure(InversionFailure(_, t)) => throw t
+    }
 }
 
 /** For Java and avoiding trait bloat
@@ -58,7 +64,7 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     inj.invert(inj(t)).get
   }
   def put[T](into: ByteBuffer, t: T)(implicit buf: Bufferable[T]): ByteBuffer = buf.put(into, t)
-  def get[T](from: ByteBuffer)(implicit buf: Bufferable[T]): Option[(ByteBuffer, T)] = buf.get(from)
+  def get[T](from: ByteBuffer)(implicit buf: Bufferable[T]): Attempt[(ByteBuffer, T)] = buf.get(from)
   // get the bytes from a given position to the current position
   def getBytes(from: ByteBuffer, start: Int = 0): Array[Byte] = {
     val fromd = from.duplicate
@@ -79,12 +85,17 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
         (tup._1, bij.invert(tup._2))
       }
     }
+
   // TODO Bufferable should integrate with injection
   def viaInjection[A,B](implicit buf: Bufferable[B], inj: Injection[A, B]): Bufferable[A] =
     Bufferable.build[A] { (bb, a) =>
       buf.put(bb, inj(a))
     } { bb =>
-      for( (rbb, b) <- buf.get(bb); a <- inj.invert(b)) yield (rbb, a)
+      buf.get(bb).flatMap {
+        case (rbb, b) => inj.invert(b).map { a =>
+          (rbb, a)
+        }
+      }
     }
 
   def injectionOf[T](implicit buf: Bufferable[T]): Injection[T, Array[Byte]] =
@@ -122,7 +133,7 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
   /** remember: putfn and getfn must call duplicate and not change the input ByteBuffer
    * We are duplicating the ByteBuffer state, not the backing array (which IS mutated)
    */
-  def build[T](putfn: (ByteBuffer,T) => ByteBuffer)(getfn: (ByteBuffer) => Option[(ByteBuffer, T)]):
+  def build[T](putfn: (ByteBuffer,T) => ByteBuffer)(getfn: (ByteBuffer) => Attempt[(ByteBuffer, T)]):
     Bufferable[T] = new AbstractBufferable[T] {
       override def put(into: ByteBuffer, t: T) = putfn(into,t)
       override def get(from: ByteBuffer) = getfn(from)
@@ -130,7 +141,7 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
   def buildCatchDuplicate[T](putfn: (ByteBuffer,T) => ByteBuffer)(getfn: (ByteBuffer) => T):
     Bufferable[T] = new AbstractBufferable[T] {
       override def put(into: ByteBuffer, t: T) = putfn(into,t)
-      override def get(from: ByteBuffer) = allCatch.opt {
+      override def get(from: ByteBuffer) = attempt(from) { from =>
         val dup = from.duplicate
         (dup, getfn(dup))
       }
@@ -177,11 +188,12 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     } { bb =>
       val dup = bb.duplicate
       val byte0 = 0 : Byte
-      if(dup.get == byte0) Some((dup, None))
+      if(dup.get == byte0) Success((dup, None))
       else {
         buf.get(dup).map { tup => (tup._1, Some(tup._2)) }
       }
     }
+
   implicit def either[L,R](implicit bufl: Bufferable[L], bufr: Bufferable[R]): Bufferable[Either[L,R]] =
     build[Either[L,R]] { (bb, eith) =>
       eith match {
@@ -211,9 +223,9 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     l.foldLeft(nextBb) { (oldbb, t) => reallocatingPut(oldbb) { buf.put(_, t) } }
   }
   def getCollection[T,C](initbb: ByteBuffer, builder: Builder[T,C])(implicit buf: Bufferable[T]):
-    Option[(ByteBuffer, C)] = {
+    Attempt[(ByteBuffer, C)] = {
 
-    val bbOpt: Option[ByteBuffer] = Some(initbb.duplicate)
+    val bbOpt: Attempt[ByteBuffer] = Try(initbb.duplicate)
     val size = bbOpt.get.getInt
     // We can't mutate the builder while calling other functions (not safe)
     // so we write into this array:
@@ -221,11 +233,11 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     (0 until size).foldLeft(bbOpt) { (oldBb, idx) =>
       oldBb.flatMap { bb =>
         buf.get(bb) match {
-          case None => None
-          case Some((newbb, t)) =>
+          case Success((newbb, t)) =>
             //Side-effect! scary!!!
             ary(idx) = t
-            Some(newbb)
+            Success(newbb)
+          case Failure(t) => Failure(t)
         }
       }
     }
