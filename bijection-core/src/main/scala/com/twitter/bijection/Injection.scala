@@ -26,8 +26,8 @@ import com.twitter.bijection.Inversion.attempt
  * see: http://mathworld.wolfram.com/Injection.html
  */
 
-@implicitNotFound(msg = "Cannot find Injection type class between ${A} and ${B}")
-trait Injection[A, B] extends (A => B) with Serializable { self =>
+@implicitNotFound(msg = "Cannot find Injection type class from ${A} to ${B}")
+trait Injection[A, B] extends Serializable { self =>
   def apply(a: A): B
   def invert(b: B): Attempt[A]
 
@@ -47,6 +47,7 @@ trait Injection[A, B] extends (A => B) with Serializable { self =>
       override def apply(a: A) = bij(self.apply(a))
       override def invert(c: C) = self.invert(bij.invert(c))
     }
+  def andThen[C](g: (B => C)): (A => C) = g.compose(this.toFunction)
 
   /**
    * Composes two instances of Injection in a new Injection,
@@ -58,22 +59,23 @@ trait Injection[A, B] extends (A => B) with Serializable { self =>
       override def apply(t: T) = self.apply(bij(t))
       override def invert(b: B) = self.invert(b).map { a => bij.invert(a) }
     }
+  def compose[T](g: (T => A)): (T => B) = g andThen (this.toFunction)
+
+  def toFunction: (A => B) = new InjectionFn(self)
+}
+
+// Avoid a closure
+private [bijection] class InjectionFn[A, B](inj: Injection[A, B]) extends (A => B) with Serializable {
+  def apply(a: A) = inj(a)
 }
 
 /**
- * Abstract class to ease Bijection creation from Java (and reduce instance
+ * Abstract class to ease Injection creation from Java (and reduce instance
  * size in scala). Prefer to subclass this for anonymous instances.
  */
 abstract class AbstractInjection[A, B] extends Injection[A, B] {
   override def apply(a: A): B
   override def invert(b: B): Attempt[A]
-
-  /**
-   * This is necessary for interop with Java, which is not smart enough to
-   * infer the proper type.
-   */
-  override def compose[T](g: Function1[T,A]): Function1[T,B] = g andThen this
-  override def andThen[T](g: Function1[B,T]): Function1[A,T] = g compose this
 }
 
 trait LowPriorityInjections {
@@ -87,6 +89,8 @@ trait LowPriorityInjections {
 
 object Injection extends CollectionInjections
   with Serializable {
+
+  implicit def toFunction[A,B](inj: Injection[A, B]): (A => B) = inj.toFunction
 
   def apply[A, B](a: A)(implicit inj: Injection[A, B]): B = inj(a)
   def invert[A, B](b: B)(implicit inj: Injection[A, B]): Attempt[A] = inj.invert(b)
@@ -152,15 +156,19 @@ object Injection extends CollectionInjections
    * WARNING: this uses java's Class.cast, which is subject to type erasure. If you have
    * a type parameterized type, like List[String] => List[Any], the cast will succeed, but
    * the inner items will not be correct. This is intended for experts.
+   *
+   * This should not be implicit, because the cast on invert can succeed, but still be incorrect
+   * due to the above. Only use this in instances where A has no type parameters, or you can prove
+   * that the cast from B to A succeeding is enough to prove correctness.
    */
-  implicit def subclass[A, B >: A](implicit cmf: ClassManifest[A]): Injection[A, B] = CastInjection.of[A, B]
+  def subclass[A, B >: A](implicit cmf: ClassManifest[A]): Injection[A, B] = CastInjection.of[A, B]
 
   /**
    * Get a partial from B => D from injections and a function from A => C
    */
   def toPartial[A, C, B, D](fn: A => C)(implicit inj1: Injection[A, B], inj2: Injection[C, D]):
     PartialFunction[B, D] = new PartialFunction[B, D] {
-      override def isDefinedAt(b: B) = inj1.invert(b).isDefined
+      override def isDefinedAt(b: B) = inj1.invert(b).isSuccess
       override def apply(b: B): D = inj2.apply(fn(inj1.invert(b).get))
     }
 
