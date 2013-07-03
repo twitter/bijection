@@ -26,7 +26,7 @@ import com.twitter.bijection.Inversion.attempt
  * see: http://mathworld.wolfram.com/Injection.html
  */
 
-@implicitNotFound(msg = "Cannot find Injection type class between ${A} and ${B}")
+@implicitNotFound(msg = "Cannot find Injection type class from ${A} to ${B}")
 trait Injection[A, B] extends Serializable { self =>
   def apply(a: A): B
   def invert(b: B): Attempt[A]
@@ -156,8 +156,12 @@ object Injection extends CollectionInjections
    * WARNING: this uses java's Class.cast, which is subject to type erasure. If you have
    * a type parameterized type, like List[String] => List[Any], the cast will succeed, but
    * the inner items will not be correct. This is intended for experts.
+   *
+   * This should not be implicit, because the cast on invert can succeed, but still be incorrect
+   * due to the above. Only use this in instances where A has no type parameters, or you can prove
+   * that the cast from B to A succeeding is enough to prove correctness.
    */
-  implicit def subclass[A, B >: A](implicit cmf: ClassManifest[A]): Injection[A, B] = CastInjection.of[A, B]
+  def subclass[A, B >: A](implicit cmf: ClassManifest[A]): Injection[A, B] = CastInjection.of[A, B]
 
   /**
    * Get a partial from B => D from injections and a function from A => C
