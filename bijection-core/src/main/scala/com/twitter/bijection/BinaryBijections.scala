@@ -18,7 +18,8 @@ package com.twitter.bijection
 
 import java.util.zip.{ GZIPInputStream, GZIPOutputStream }
 import java.nio.ByteBuffer
-import org.apache.commons.codec.binary.Base64
+// copied java code from Apache commons 1.7
+import com.twitter.bijection.codec.Base64
 import java.io.{OutputStream, InputStream, ByteArrayInputStream, ByteArrayOutputStream}
 import annotation.tailrec
 
