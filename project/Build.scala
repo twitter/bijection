@@ -114,6 +114,7 @@ object BijectionBuild extends Build {
               bijectionClojure,
               bijectionNetty)
 
+  /** No dependencies in bijection other than java + scala */
   lazy val bijectionCore = Project(
     id = "bijection-core",
     base = file("bijection-core"),
@@ -123,7 +124,6 @@ object BijectionBuild extends Build {
     previousArtifact := youngestForwardCompatible("core"),
     osgiExportAll("com.twitter.bijection"),
     libraryDependencies ++= Seq(
-        "commons-codec" % "commons-codec" % "1.7",
         "com.novocode" % "junit-interface" % "0.10-M1" % "test",
         "org.scalatest" %% "scalatest" % "1.9.1" % "test"
     )
