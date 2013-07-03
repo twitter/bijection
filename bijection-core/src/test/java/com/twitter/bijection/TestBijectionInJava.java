@@ -1,7 +1,9 @@
 package com.twitter.bijection;
 
 import org.junit.Test;
-
+import scala.util.Failure;
+import scala.util.Success;
+import scala.util.Try;
 import static junit.framework.Assert.assertEquals;
 
 /**
@@ -29,17 +31,17 @@ public class TestBijectionInJava {
         @Override
         public String apply(Long in) { return in.toString(); }
         @Override
-        public scala.Either<InversionFailure, Long> invert(String in) {
+        public Try<Long> invert(String in) {
           try {
-            return new scala.Right(Long.valueOf(in));
+            return new Success(Long.valueOf(in));
           }
           catch(NumberFormatException nfe) {
-            return new scala.Left(new InversionFailure(in, nfe));
+            return new Failure(new InversionFailure(in, nfe));
           }
         }
       };
-      assertEquals(Long.valueOf("123"), l2s.invert("123").right().get());
-      assertEquals(true, l2s.invert("hello").isLeft());
+      assertEquals(Long.valueOf("123"), l2s.invert("123").get());
+      assertEquals(true, l2s.invert("hello").isFailure());
     }
 
     //TODO include a more complete example using Base64 conversion, and GZip + Base64 version

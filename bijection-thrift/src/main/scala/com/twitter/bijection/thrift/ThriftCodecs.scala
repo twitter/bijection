@@ -1,7 +1,7 @@
 package com.twitter.bijection.thrift
 
 import com.twitter.bijection.{Bijection, Conversion, Injection, InversionFailure, StringCodec}
-import com.twitter.bijection.InversionFailure.attempt
+import com.twitter.bijection.Inversion.attempt
 import java.io.{ ByteArrayInputStream, ByteArrayOutputStream }
 import org.apache.thrift.{ TBase, TEnum }
 import org.apache.thrift.protocol.{
@@ -14,6 +14,7 @@ import org.apache.thrift.transport.TIOStreamTransport
 import org.codehaus.jackson.map.MappingJsonFactory
 import java.lang.{ Integer => JInt }
 import scala.collection.mutable.{ Map =>MMap }
+import scala.util.{ Failure, Success }
 
 /**
  * Codecs for use in serializing and deserializing Thrift structures.
@@ -118,5 +119,5 @@ class TEnumCodec[T <: TEnum](klass: Class[T]) extends Injection[T, Int] {
   override def apply(enum: T) = enum.getValue
   override def invert(i: Int) = Option {
     cache.getOrElseUpdate(i, findByValue.invoke(null, i.as[JInt]).asInstanceOf[T])
-  }.toRight(InversionFailure(i))
+  }.toRight(InversionFailure(i)).fold(Failure(_),Success(_))
 }

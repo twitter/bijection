@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 package com.twitter.bijection
+import scala.util.Success
 
 /** A common injection on numbers: N -> (m = N mod K, (N-m)/K)
  * The first element in result tuple is always [0, modulus)
@@ -32,7 +33,7 @@ class IntModDivInjection(val modulus: Int) extends Injection[Int, (Int,Int)] {
   override def invert(moddiv: (Int,Int)) = {
     val (mod, div) = moddiv
     if (mod >= 0 && mod < modulus && div <= maxDiv && div >= minDiv) {
-      Right(div * modulus + mod)
+      Success(div * modulus + mod)
     }
     else InversionFailure.failedAttempt(moddiv)
   }
@@ -55,7 +56,7 @@ class LongModDivInjection(val modulus: Long) extends Injection[Long, (Long,Long)
   override def invert(moddiv: (Long,Long)) = {
     val (mod, div) = moddiv
     if (mod >= 0 && mod < modulus && div <= maxDiv && div >= minDiv) {
-      Right(div * modulus + mod)
+      Success(div * modulus + mod)
     }
     else InversionFailure.failedAttempt(moddiv)
   }

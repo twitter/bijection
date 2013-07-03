@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.twitter.bijection
 
-import com.twitter.bijection.InversionFailure.attempt
+import com.twitter.bijection.Inversion.attempt
 
 /**
  *  Injection between Class objects and string.

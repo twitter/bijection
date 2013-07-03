@@ -78,8 +78,8 @@ trait LowPriorityBijections {
   implicit def fromInjection[A, B](implicit inj: Injection[A, B]): Bijection[A, B @@ Rep[A]] =
     new AbstractBijection[A, B @@ Rep[A]] {
       override def apply(a: A): B @@ Rep[A] = Tag(inj.apply(a))
-      // This tag promises the Option will return something:
-      override def invert(b: B @@ Rep[A]): A = inj.invert(b).right.get
+      // This tag promises the Attempt will return something:
+      override def invert(b: B @@ Rep[A]): A = inj.invert(b).get
     }
 }
 

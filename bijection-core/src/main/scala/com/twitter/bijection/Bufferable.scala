@@ -22,8 +22,8 @@ import java.nio.channels.Channel
 import scala.annotation.implicitNotFound
 import scala.annotation.tailrec
 import scala.collection.mutable.{Builder, Map => MMap, Set => MSet, Buffer => MBuffer}
-
-import com.twitter.bijection.InversionFailure.attempt
+import scala.util.{ Failure, Success, Try }
+import com.twitter.bijection.Inversion.attempt
 
 /**
  * Bufferable[T] is a typeclass to work with java.nio.ByteBuffer for serialization/injections to
@@ -38,8 +38,8 @@ trait Bufferable[T] extends Serializable {
   /** Retrieve the value of get or throw an exception if the operation fails */
   def unsafeGet(from: ByteBuffer): (ByteBuffer, T) =
     get(from) match {
-      case Right(tup @ _) => tup
-      case Left(InversionFailure(_, t)) => throw t
+      case Success(tup @ _) => tup
+      case Failure(InversionFailure(_, t)) => throw t
     }
 }
 
@@ -61,7 +61,7 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
    */
   def deepCopy[T](t: T)(implicit buf: Bufferable[T]): T = {
     val inj = injectionOf[T]
-    inj.invert(inj(t)).right.get
+    inj.invert(inj(t)).get
   }
   def put[T](into: ByteBuffer, t: T)(implicit buf: Bufferable[T]): ByteBuffer = buf.put(into, t)
   def get[T](from: ByteBuffer)(implicit buf: Bufferable[T]): Attempt[(ByteBuffer, T)] = buf.get(from)
@@ -81,7 +81,7 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     Bufferable.build[A] { (bb, a) =>
       buf.put(bb, bij(a))
     } { bb =>
-      buf.get(bb).right.map { tup =>
+      buf.get(bb).map { tup =>
         (tup._1, bij.invert(tup._2))
       }
     }
@@ -91,8 +91,8 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     Bufferable.build[A] { (bb, a) =>
       buf.put(bb, inj(a))
     } { bb =>
-      buf.get(bb).right.flatMap {
-        case (rbb, b) => inj.invert(b).right.map { a =>
+      buf.get(bb).flatMap {
+        case (rbb, b) => inj.invert(b).map { a =>
           (rbb, a)
         }
       }
@@ -101,7 +101,7 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
   def injectionOf[T](implicit buf: Bufferable[T]): Injection[T, Array[Byte]] =
     Injection.build[T, Array[Byte]] { t =>
       getBytes(put(ByteBuffer.allocateDirect(128), t))
-    } { bytes => get[T](ByteBuffer.wrap(bytes)).right.map { _._2 } }
+    } { bytes => get[T](ByteBuffer.wrap(bytes)).map { _._2 } }
 
   def reallocate(bb: ByteBuffer): ByteBuffer = {
     // Double the buffer, copy the old one, and put:
@@ -188,9 +188,9 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     } { bb =>
       val dup = bb.duplicate
       val byte0 = 0 : Byte
-      if(dup.get == byte0) Right((dup, None))
+      if(dup.get == byte0) Success((dup, None))
       else {
-        buf.get(dup).right.map { tup => (tup._1, Some(tup._2)) }
+        buf.get(dup).map { tup => (tup._1, Some(tup._2)) }
       }
     }
 
@@ -210,10 +210,10 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
       val dup = bb.duplicate
       val byte0 = 0 : Byte
       if (dup.get == byte0) {
-        bufl.get(dup).right.map { tup => (tup._1, Left(tup._2)) }
+        bufl.get(dup).map { tup => (tup._1, Left(tup._2)) }
       }
       else {
-        bufr.get(dup).right.map { tup => (tup._1, Right(tup._2)) }
+        bufr.get(dup).map { tup => (tup._1, Right(tup._2)) }
       }
     }
 
@@ -225,23 +225,23 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
   def getCollection[T,C](initbb: ByteBuffer, builder: Builder[T,C])(implicit buf: Bufferable[T]):
     Attempt[(ByteBuffer, C)] = {
 
-    val bbOpt: Attempt[ByteBuffer] = Right(initbb.duplicate)
-    val size = bbOpt.right.get.getInt
+    val bbOpt: Attempt[ByteBuffer] = Try(initbb.duplicate)
+    val size = bbOpt.get.getInt
     // We can't mutate the builder while calling other functions (not safe)
     // so we write into this array:
     val ary = new Array[Any](size)
     (0 until size).foldLeft(bbOpt) { (oldBb, idx) =>
-      oldBb.right.flatMap { bb =>
+      oldBb.flatMap { bb =>
         buf.get(bb) match {
-          case Right((newbb, t)) =>
+          case Success((newbb, t)) =>
             //Side-effect! scary!!!
             ary(idx) = t
-            Right(newbb)
-          case Left(t) => Left(t)
+            Success(newbb)
+          case Failure(t) => Failure(t)
         }
       }
     }
-    .right.map { bb =>
+    .map { bb =>
       // Now use the builder:
       builder.clear()
       builder.sizeHint(size)

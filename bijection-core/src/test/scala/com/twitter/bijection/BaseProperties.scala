@@ -20,6 +20,7 @@ import org.scalacheck.{ Arbitrary, Properties }
 import org.scalacheck.Prop.forAll
 
 import scala.math.Equiv
+import scala.util.Success
 import java.util.Arrays
 
 trait BaseProperties {
@@ -42,15 +43,15 @@ trait BaseProperties {
         b != null &&
         { val bofa = inj.invert(b)
           bofa != null &&
-          bofa.isRight &&
-          eqa.equiv(bofa.right.get, a)
+          bofa.isSuccess &&
+          eqa.equiv(bofa.get, a)
         }
     }
 
  def invertIsStrict[A,B](implicit arbb: Arbitrary[B], inj: Injection[A,B], eqb: Equiv[B]) =
    forAll { (b: B) =>
      inj.invert(b) match {
-       case Right(aofb) =>
+       case Success(aofb) =>
          assert(aofb != null, "aofb was null")
          eqb.equiv(b, inj(aofb))
        case _ => true // the failing case of None previously returned true?

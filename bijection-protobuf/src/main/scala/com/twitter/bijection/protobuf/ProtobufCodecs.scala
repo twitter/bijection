@@ -1,11 +1,12 @@
 package com.twitter.bijection.protobuf
 
 import com.twitter.bijection.{Bijection, Conversion, Injection, InversionFailure}
-import com.twitter.bijection.InversionFailure.attempt
+import com.twitter.bijection.Inversion.attempt
 import com.google.protobuf.Message
 import com.google.protobuf.ProtocolMessageEnum
 import java.lang.{ Integer => JInt }
 import scala.collection.mutable.{ Map =>MMap }
+import scala.util.{ Failure, Success }
 
 /**
  * Bijections for use in serializing and deserializing Protobufs.
@@ -61,5 +62,5 @@ class ProtobufEnumCodec[T <: ProtocolMessageEnum](klass: Class[T]) extends Injec
   override def apply(enum: T) = enum.getNumber
   override def invert(i: Int) = Option {
     cache.getOrElseUpdate(i, valueOf.invoke(null, i.as[JInt]).asInstanceOf[T])
-  }.toRight(InversionFailure(i))
+  }.toRight(InversionFailure(i)).fold(Failure(_), Success(_))
 }

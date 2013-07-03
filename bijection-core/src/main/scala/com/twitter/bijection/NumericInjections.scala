@@ -26,42 +26,42 @@ import java.lang.{
 }
 import java.nio.ByteBuffer
 import java.util.UUID
-
+import scala.util.Success
 import Bijection.build
-import InversionFailure.attempt
+import Inversion.{ attempt, attemptWhen }
 
 trait NumericInjections extends GeneratedTupleInjections {
   implicit val byte2Short: Injection[Byte, Short] = new AbstractInjection[Byte, Short] {
     def apply(i: Byte) = i.toShort
     def invert(l: Short) =
-      if (l.isValidByte) Right(l.toByte) else InversionFailure.failedAttempt(l)
+      attemptWhen(l)(_.isValidByte)(_.toByte)
   }
   implicit val short2Int: Injection[Short, Int] = new AbstractInjection[Short, Int] {
     def apply(i: Short) = i.toInt
     def invert(l: Int) =
-      if (l.isValidShort) Right(l.toShort) else InversionFailure.failedAttempt(l)
+      attemptWhen(l)(_.isValidShort)(_.toShort)
   }
   implicit val int2Long: Injection[Int, Long] = new AbstractInjection[Int,Long] {
     def apply(i: Int) = i.toLong
     def invert(l: Long) =
-      if (l.isValidInt) Right(l.toInt) else InversionFailure.failedAttempt(l)
+      attemptWhen(l)(_.isValidInt)(_.toInt)
   }
   implicit val long2BigInt: Injection[Long, BigInt] = new AbstractInjection[Long,BigInt] {
     def apply(l: Long) = BigInt(l)
     def invert(bi: BigInt) =
-      if (bi <= Long.MaxValue && Long.MinValue <= bi) Right(bi.toLong) else InversionFailure.failedAttempt(bi)
+      attemptWhen(bi)(bi => bi <= Long.MaxValue && Long.MinValue <= bi)(_.toLong)
   }
 
   // This is a loose injection
   implicit val float2Double: Injection[Float, Double] = new AbstractInjection[Float, Double] {
     def apply(i: Float) = i.toDouble
     def invert(l: Double) =
-      if (l <= Float.MaxValue && l >= Float.MinValue) Right(l.toFloat) else InversionFailure.failedAttempt(l)
+      attemptWhen(l)(l => l <= Float.MaxValue && l >= Float.MinValue)(_.toFloat)
   }
   // This is a loose injection
   implicit val int2Double: Injection[Int, Double] = new AbstractInjection[Int, Double] {
     def apply(i: Int) = i.toDouble
-    def invert(l: Double) = Right(l.toInt)
+    def invert(l: Double) = Success(l.toInt)
   }
 
   implicit val byte2String: Injection[Byte, String] =

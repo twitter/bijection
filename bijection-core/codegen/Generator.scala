@@ -56,7 +56,7 @@ def tupleBijectionType(cnt: Int, typeStr: String = "Bijection"): String =
 
 def applyPart(i: Int): String = "b" + lowerLetters(i) + "(in._" + (i+1) + ")"
 def invertPart(i: Int): String = "b" + lowerLetters(i) + ".invert(out._" + (i+1) + ")"
-def forInvertPart(i: Int): String = lowerLetters(i) + " <- " + invertPart(i) + ".right"
+def forInvertPart(i: Int): String = lowerLetters(i) + " <- " + invertPart(i)
 
 def expressionTuple(cnt: Int, sep: String = ", ")(part: (Int) => String) =
   (0 until cnt) map { part(_) } mkString("(", sep, ")")
@@ -98,7 +98,7 @@ def toListMethod(cnt: Int) =
 
 def fromListInvertPart(i: Int): String = {
   val letter = lowerLetters(i)
-  "b" + letter + ".invert(" + letter + ").right"
+  "b" + letter + ".invert(" + letter + ")"
 }
 
 def forInvertFromListPart(i: Int): String = lowerLetters(i) + " <- " + fromListInvertPart(i)

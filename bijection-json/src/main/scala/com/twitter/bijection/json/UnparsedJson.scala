@@ -17,7 +17,7 @@ limitations under the License.
 package com.twitter.bijection.json
 
 import com.twitter.bijection.{Bijection, AbstractBijection, AbstractInjection, Injection}
-import com.twitter.bijection.InversionFailure.attempt
+import com.twitter.bijection.Inversion.attempt
 import JsonNodeInjection.{fromJsonNode, toJsonNode}
 
 import org.codehaus.jackson.JsonNode
@@ -31,7 +31,7 @@ object UnparsedJson {
 
   implicit def injection[T](implicit json: JsonNodeInjection[T]): Injection[T, UnparsedJson] =
     new AbstractInjection[T, UnparsedJson] {
-      def apply(t: T) = (json andThen { n: JsonNode => JsonNodeInjection.unparsed.invert(n).right.get })(t)
+      def apply(t: T) = (json andThen { n: JsonNode => JsonNodeInjection.unparsed.invert(n).get })(t)
       override def invert(up: UnparsedJson) = fromJsonNode[T](toJsonNode(up))
     }
 

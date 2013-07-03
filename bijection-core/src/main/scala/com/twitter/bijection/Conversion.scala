@@ -17,6 +17,8 @@ limitations under the License.
 package com.twitter.bijection
 
 import java.io.Serializable
+import scala.util.Success
+
 /**
  * Convert allows the user to convert an instance of type A to type B given an implicit Conversion
  * that goes between the two.
@@ -46,7 +48,7 @@ trait CrazyLowPriorityConversion extends Serializable {
   implicit def fromInjectionOptInverse[A,B](implicit inj: Injection[B,A]): Conversion[A, Option[B]] =
   new Conversion[A,Option[B]] {
     def apply(a: A) = inj.invert(a) match {
-      case Right(value) => Some(value)
+      case Success(value) => Some(value)
       case _ => None
     }
   }

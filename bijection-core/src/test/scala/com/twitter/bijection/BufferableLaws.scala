@@ -37,7 +37,7 @@ trait BaseBufferable {
     val newBuf = Bufferable.put(buf, t)
     val newBuf2 = ByteBuffer.wrap(Bufferable.getBytes(newBuf))
     val pos = newBuf2.position
-    val (newBuf3, rtt) = Bufferable.get[T](newBuf2).right.get
+    val (newBuf3, rtt) = Bufferable.get[T](newBuf2).get
     val copyT = Bufferable.deepCopy(t)
     Equiv[T].equiv(t, rtt) && Equiv[T].equiv(t, copyT) && (newBuf2.position == pos)
   }

@@ -15,18 +15,13 @@ limitations under the License.
 */
 package com.twitter.bijection
 
-import scala.util.control.Exception.allCatch
+import scala.util.{ Failure, Success, Try }
+import scala.util.control.NonFatal
 
 /**
  *  Factory for producing InversionFailures
  */
 object InversionFailure {
-  /**
-   *  The analog of Exception.allCatch either where exceptions
-   *  are wrapped by the InversionFailure type
-   */
-  def attempt[A, B](b: B)(fn: B => A): Attempt[A] =
-    allCatch.either(fn(b)).left.map(InversionFailure(b, _))
 
   /**
    *  Produces a new InversionFailure of a given type
@@ -38,7 +33,15 @@ object InversionFailure {
    *  Produces a failed Attempt
    */ 
   def failedAttempt[A, B](b: B): Attempt[A] =
-    Left(apply(b))
+    Failure(apply(b))
+
+  /**
+   * Produces a failed attempt statisfying a partial function defined
+   * for any non-fatal Throwable
+   */
+  def partialFailure[A, B](b: B): PartialFunction[Throwable, Attempt[A]] = {
+    case NonFatal(t) => Failure(InversionFailure(b, t))
+  }
 }
 
 /**

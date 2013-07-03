@@ -2,7 +2,7 @@
 package com.twitter.bijection
 import Bufferable.reallocatingPut
 import java.nio.ByteBuffer
-import com.twitter.bijection.InversionFailure.attempt
+import com.twitter.bijection.Inversion.attempt
 
 trait GeneratedTupleBufferable {
   implicit def tuple2[A,B](implicit ba: Bufferable[A], bb: Bufferable[B]):

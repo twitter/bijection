@@ -22,7 +22,7 @@ import java.util.UUID
 import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
 
-import com.twitter.bijection.InversionFailure.attempt
+import com.twitter.bijection.Inversion.attempt
 
 trait StringInjections extends NumericInjections {
   implicit val utf8: Injection[String, Array[Byte]] = withEncoding("UTF-8")

@@ -17,7 +17,7 @@
 package com.twitter.bijection.scrooge
 
 import com.twitter.bijection.{Bijection, Injection}
-import com.twitter.bijection.InversionFailure.attempt
+import com.twitter.bijection.Inversion.attempt
 import com.twitter.scrooge.{
   CompactThriftSerializer,
   ThriftStruct,

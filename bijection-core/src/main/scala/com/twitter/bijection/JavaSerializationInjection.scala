@@ -17,8 +17,9 @@ limitations under the License.
 package com.twitter.bijection
 
 import java.io._
+import scala.util.{ Failure, Try }
 import scala.util.control.Exception.allCatch
-import com.twitter.bijection.InversionFailure.attempt
+import com.twitter.bijection.Inversion.attempt
 
 object JavaSerializationInjection extends Serializable {
   /**
@@ -49,16 +50,16 @@ class JavaSerializationInjection[T <: Serializable](klass: Class[T]) extends Inj
   }
   def invert(bytes: Array[Byte]) = {
     val bis = new ByteArrayInputStream(bytes)
-    val inOpt = allCatch.either(new ObjectInputStream(bis))
+    val inOpt = Try(new ObjectInputStream(bis))
     try {
-      inOpt.right.map { in => klass.cast(in.readObject) }.left.map(InversionFailure(bytes, _))
+      inOpt.map { in => klass.cast(in.readObject) }.recoverWith(InversionFailure.partialFailure(bytes))
     }
     catch {
-      case t: Throwable => Left(InversionFailure(bytes, t))
+      case t: Throwable => Failure(InversionFailure(bytes, t))
     }
     finally {
       bis.close
-      inOpt.right.foreach { _.close }
+      inOpt.map { _.close }
     }
   }
 }

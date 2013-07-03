@@ -18,7 +18,8 @@ package com.twitter.bijection
 
 import java.io.Serializable
 import scala.annotation.implicitNotFound
-import com.twitter.bijection.InversionFailure.attempt
+import scala.util.{ Failure, Success, Try }
+import com.twitter.bijection.Inversion.attempt
 
 /**
  * An Injection[A, B] is a function from A to B, and from some B back to A.
@@ -37,7 +38,7 @@ trait Injection[A, B] extends (A => B) with Serializable { self =>
   def andThen[C](g: Injection[B, C]): Injection[A, C] =
     new AbstractInjection[A, C] {
       override def apply(a: A) = g(self.apply(a))
-      override def invert(c: C) = g.invert(c).right.flatMap { b => self.invert(b) }
+      override def invert(c: C) = g.invert(c).flatMap { b => self.invert(b) }
     }
   /** Follow the Injection with a Bijection
    */
@@ -55,7 +56,7 @@ trait Injection[A, B] extends (A => B) with Serializable { self =>
   def compose[T](bij: Bijection[T, A]): Injection[T, B] =
     new AbstractInjection[T, B] {
       override def apply(t: T) = self.apply(bij(t))
-      override def invert(b: B) = self.invert(b).right.map { a => bij.invert(a) }
+      override def invert(b: B) = self.invert(b).map { a => bij.invert(a) }
     }
 }
 
@@ -80,7 +81,7 @@ trait LowPriorityInjections {
   implicit def fromImplicitBijection[A,B](implicit bij: ImplicitBijection[A, B]): Injection[A,B] =
     new AbstractInjection[A, B] {
       override def apply(a: A) = bij(a)
-      override def invert(b: B) = Right(bij.invert(b))
+      override def invert(b: B) = Success(bij.invert(b))
     }
 }
 
@@ -122,19 +123,21 @@ object Injection extends CollectionInjections
   implicit def either1[A,B]: Injection[A, Either[B,A]] =
     new AbstractInjection[A, Either[B,A]] {
       override def apply(a: A) = Right(a)
-      override def invert(e: Either[B,A]) = e.left.flatMap {
-        _ => InversionFailure.failedAttempt(e)
+      override def invert(e: Either[B,A]) = e match {
+        case Right(a) => Success(a)
+        case _ => InversionFailure.failedAttempt(e)
       }
     }
   implicit def option[A]: Injection[A, Option[A]] =
     new AbstractInjection[A, Option[A]] {
       override def apply(a: A) = Some(a)
-      override def invert(b: Option[A]) = b.toRight(InversionFailure(b, new NoSuchElementException()))
+      override def invert(b: Option[A]) =
+        b.toRight(InversionFailure(b, new NoSuchElementException())).fold(Failure(_), Success(_))
     }
   implicit def identity[A]: Injection[A, A] =
     new AbstractInjection[A, A] {
       def apply(a: A) = a
-      def invert(a: A) = Right(a)
+      def invert(a: A) = Success(a)
     }
 
   implicit def class2String[T]: Injection[Class[T], String] = new ClassInjection[T]
@@ -143,7 +146,7 @@ object Injection extends CollectionInjections
   def fromBijection[A,B](bij: Bijection[A, B]): Injection[A,B] =
     new AbstractInjection[A, B] {
       override def apply(a: A) = bij(a)
-      override def invert(b: B) = Right(bij.invert(b))
+      override def invert(b: B) = Success(bij.invert(b))
     }
   /*
    * WARNING: this uses java's Class.cast, which is subject to type erasure. If you have
@@ -158,7 +161,7 @@ object Injection extends CollectionInjections
   def toPartial[A, C, B, D](fn: A => C)(implicit inj1: Injection[A, B], inj2: Injection[C, D]):
     PartialFunction[B, D] = new PartialFunction[B, D] {
       override def isDefinedAt(b: B) = inj1.invert(b).isDefined
-      override def apply(b: B): D = inj2.apply(fn(inj1.invert(b).right.get))
+      override def apply(b: B): D = inj2.apply(fn(inj1.invert(b).get))
     }
 
   /** Use of this implies you want exceptions when the inverse is undefined
@@ -168,8 +171,8 @@ object Injection extends CollectionInjections
       def apply(a: A) = inj(a)
       override def invert(b: B) =
         inj.invert(b) match {
-          case Right(a) => a
-          case Left(t) => throw t
+          case Success(a) => a
+          case Failure(t) => throw t
         }
     }
 }
