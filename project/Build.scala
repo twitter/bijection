@@ -126,7 +126,19 @@ object BijectionBuild extends Build {
     libraryDependencies ++= Seq(
         "com.novocode" % "junit-interface" % "0.10-M1" % "test",
         "org.scalatest" %% "scalatest" % "1.9.1" % "test"
-    )
+    ),
+    sourceGenerators in Compile <+= (sourceManaged in Compile, streams) map {
+      (main, out) =>
+        val pkg = main / "scala"/ "com" / "twitter" / "bijection"
+        def genSrc(name: String, gen: => String) = {
+          val srcFile = pkg / name
+          IO.write(srcFile, gen)
+          out.log.debug("generated %s" format srcFile)
+          srcFile
+        }
+        Seq(genSrc("GeneratedTupleBijections.scala", Generator.generate),
+            genSrc("GeneratedTupleBuffer.scala", BufferableGenerator.generate))
+    }
   )
 
   lazy val bijectionProtobuf = Project(
