@@ -2,6 +2,8 @@ package com.twitter.bijection
 
 import java.util._
 import scala.util.control.Exception.allCatch
+import com.github.nscala_time.time.Imports._
+
 
 trait DateInjections extends GeneratedTupleInjections {
 

@@ -1,6 +1,7 @@
 package com.twitter.bijection
 
 import java.util._
+import com.github.nscala_time.time.Imports._
 
 trait DateBijections extends GeneratedTupleBijections {
 
