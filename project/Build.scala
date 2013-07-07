@@ -112,7 +112,8 @@ object BijectionBuild extends Build {
               bijectionAlgebird,
               bijectionUtil,
               bijectionClojure,
-              bijectionNetty)
+              bijectionNetty,
+              bijectionAvro)
 
   /** No dependencies in bijection other than java + scala */
   lazy val bijectionCore = Project(
@@ -247,5 +248,18 @@ object BijectionBuild extends Build {
     previousArtifact := youngestForwardCompatible("netty"),
     osgiExportAll("com.twitter.bijection.netty"),
     libraryDependencies += "io.netty" % "netty" % "3.5.5.Final"
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  lazy val bijectionAvro = Project(
+    id = "bijection-avro",
+    base = file("bijection-avro"),
+    settings = sharedSettings
+  ).settings(
+    name := "bijection-avro",
+    previousArtifact := youngestForwardCompatible("avro"),
+    osgiExportAll("com.twitter.bijection.avro"),
+    libraryDependencies ++= Seq(
+      "org.apache.avro" % "avro" % "1.7.4"
+    )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 }
