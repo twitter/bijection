@@ -17,9 +17,12 @@ object BijectionBuild extends Build {
 
     javacOptions in doc := Seq("-source", "1.6"),
 
+	//nscala-time to support joda time
     libraryDependencies ++= Seq(
       "org.scalacheck" %% "scalacheck" % "1.10.0" % "test" withSources(),
-      "org.scala-tools.testing" %% "specs" % "1.6.9" % "test" withSources()
+      "org.scala-tools.testing" %% "specs" % "1.6.9" % "test" withSources(),
+	  "com.github.nscala-time" %% "nscala-time" % "0.4.2"
+
     ),
 
     resolvers ++= Seq(
