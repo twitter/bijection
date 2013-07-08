@@ -11,7 +11,9 @@ object BijectionBuild extends Build {
   val sharedSettings = Project.defaultSettings ++ releaseSettings ++ osgiSettings ++ Seq(
     organization := "com.twitter",
 
-    crossScalaVersions := Seq("2.9.2", "2.10.0"),
+    crossScalaVersions := Seq("2.9.3", "2.10.2"),
+
+    scalaVersion := "2.9.3",
 
     javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
 
@@ -91,7 +93,7 @@ object BijectionBuild extends Build {
   // This returns the youngest jar we released that is compatible with the current
   def youngestForwardCompatible(subProj: String) = {
     if(subProj == "netty") None // This is new. Update after next version
-    else Some("com.twitter" % ("bijection-" + subProj + "_2.9.2") % "0.3.0")
+    else Some("com.twitter" % ("bijection-" + subProj + "_2.9.2") % "0.4.0")
   }
 
   def osgiExportAll(packs: String*) = OsgiKeys.exportPackage := packs.map(_ + ".*;version=${Bundle-Version}")
@@ -115,6 +117,7 @@ object BijectionBuild extends Build {
               bijectionClojure,
               bijectionNetty)
 
+  /** No dependencies in bijection other than java + scala */
   lazy val bijectionCore = Project(
     id = "bijection-core",
     base = file("bijection-core"),
@@ -124,7 +127,6 @@ object BijectionBuild extends Build {
     previousArtifact := youngestForwardCompatible("core"),
     osgiExportAll("com.twitter.bijection"),
     libraryDependencies ++= Seq(
-        "commons-codec" % "commons-codec" % "1.7",
         "com.novocode" % "junit-interface" % "0.10-M1" % "test",
         "org.scalatest" %% "scalatest" % "1.9.1" % "test"
     )
@@ -206,7 +208,11 @@ object BijectionBuild extends Build {
     name := "bijection-algebird",
     previousArtifact := youngestForwardCompatible("algebird"),
     osgiExportAll("com.twitter.bijection.algebird"),
-    libraryDependencies += "com.twitter" %% "algebird-core" % "0.1.9"
+    libraryDependencies += "com.twitter" %% "algebird-core" % "0.1.9" cross CrossVersion.binaryMapped {
+      case "2.9.3" => "2.9.2" // TODO: hack because twitter hasn't built things agaisnt 2.9.3
+      case version if version startsWith "2.10" => "2.10" // TODO: hack because sbt is broken
+      case x       => x
+    }
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   lazy val bijectionUtil = Project(
@@ -217,7 +223,11 @@ object BijectionBuild extends Build {
     name := "bijection-util",
     previousArtifact := youngestForwardCompatible("util"),
     osgiExportAll("com.twitter.bijection.util"),
-    libraryDependencies += "com.twitter" %% "util-core" % "6.2.0"
+    libraryDependencies += "com.twitter" %% "util-core" % "6.2.0" cross CrossVersion.binaryMapped {
+      case "2.9.3" => "2.9.2" // TODO: hack because twitter hasn't built things agaisnt 2.9.3
+      case version if version startsWith "2.10" => "2.10" // TODO: hack because sbt is broken
+      case x       => x
+    }
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   lazy val bijectionClojure = Project(
