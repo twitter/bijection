@@ -1,9 +1,11 @@
 # Bijection #
 
+### 0.5.2
+* Remove withSources
 
 ### 0.5.1
-* Remove withSources
 * Lets bijection-util be distributed
+* Correct README
 
 ### 0.5.0
 
