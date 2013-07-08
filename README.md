@@ -8,7 +8,7 @@ See the [current API documentation](http://twitter.github.com/bijection) for mor
 
 ## Maven
 
-Current version is `0.5.1`. groupid=`"com.twitter"` artifact=`"bijection-core_2.9.3"`.
+Current version is `0.5.2`. groupid=`"com.twitter"` artifact=`"bijection-core_2.9.3"`.
 
 ## Examples:
 
