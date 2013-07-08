@@ -219,9 +219,9 @@ object BijectionBuild extends Build {
   ).settings(
     name := "bijection-util",
     previousArtifact := youngestForwardCompatible("util"),
-    osgiExportAll("com.twitter.bijection.util"),
+    osgiExportAll("com.twitter.bijection.twitter_util"),
     libraryDependencies += "com.twitter" %% "util-core" % "6.2.0" cross CrossVersion.binaryMapped {
-      case "2.9.3" => "2.9.2" // TODO: hack because twitter hasn't built things agaisnt 2.9.3
+      case "2.9.3" => "2.9.2" // TODO: hack because twitter hasn't built things against 2.9.3
       case version if version startsWith "2.10" => "2.10" // TODO: hack because sbt is broken
       case x       => x
     }
