@@ -1,6 +1,10 @@
 # Bijection #
 
 
+### 0.5.1
+* Remove withSources
+* Lets bijection-util be distributed
+
 ### 0.5.0
 
 * Make Bijection/Injection not extend Function
