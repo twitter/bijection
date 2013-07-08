@@ -25,6 +25,7 @@ import org.scalacheck.Arbitrary
 
 import org.codehaus.jackson.JsonNode
 import com.twitter.bijection.json.JsonNodeInjection.{fromJsonNode, toJsonNode}
+import scala.util.Try
 
 object JsonInjectionLaws extends Properties("JsonInjection") with BaseProperties {
   // Needed from some recursive injections (like tuples)
