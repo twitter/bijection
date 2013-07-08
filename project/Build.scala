@@ -20,8 +20,8 @@ object BijectionBuild extends Build {
     javacOptions in doc := Seq("-source", "1.6"),
 
     libraryDependencies ++= Seq(
-      "org.scalacheck" %% "scalacheck" % "1.10.0" % "test" withSources(),
-      "org.scala-tools.testing" %% "specs" % "1.6.9" % "test" withSources()
+      "org.scalacheck" %% "scalacheck" % "1.10.0" % "test",
+      "org.scala-tools.testing" %% "specs" % "1.6.9" % "test"
     ),
 
     resolvers ++= Seq(
@@ -90,7 +90,7 @@ object BijectionBuild extends Build {
   // This returns the youngest jar we released that is compatible with the current
   def youngestForwardCompatible(subProj: String) = {
     if(subProj == "netty") None // This is new. Update after next version
-    else Some("com.twitter" % ("bijection-" + subProj + "_2.9.2") % "0.5.0")
+    else Some("com.twitter" % ("bijection-" + subProj + "_2.9.3") % "0.5.0")
   }
 
   def osgiExportAll(packs: String*) = OsgiKeys.exportPackage := packs.map(_ + ".*;version=${Bundle-Version}")
