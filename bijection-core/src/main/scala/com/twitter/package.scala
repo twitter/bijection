@@ -16,8 +16,6 @@ limitations under the License.
 
 package com.twitter
 
-import scala.util.Try
-
 /**
  * Bijection trait with numerous implementations.
  *
@@ -27,15 +25,6 @@ import scala.util.Try
  * libraries (Bijection[MyTrait, YourTrait]) and many other purposes.
  */
 package object bijection {
-
-  /**
-   * Injections may not be defined for their inverse conversion.
-   * This type represents the attempted conversion. A failure
-   * will result in a scala.util.Failure containing the InversionFailure. A success
-   * will result in a scala.util.Success containing the inverted value.
-   */
-  type Attempt[T] = Try[T]
-
   /**
     * Using Injections for serialization is a common pattern. Currying
     * the byte array parameter makes it easier to write code like

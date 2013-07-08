@@ -30,16 +30,16 @@ object InversionFailure {
     new InversionFailure(b, new UnsupportedOperationException)
 
   /**
-   *  Produces a failed Attempt
-   */ 
-  def failedAttempt[A, B](b: B): Attempt[A] =
+   *  Produces a failed Try
+   */
+  def failedAttempt[A, B](b: B): Try[A] =
     Failure(apply(b))
 
   /**
    * Produces a failed attempt statisfying a partial function defined
    * for any non-fatal Throwable
    */
-  def partialFailure[A, B](b: B): PartialFunction[Throwable, Attempt[A]] = {
+  def partialFailure[A, B](b: B): PartialFunction[Throwable, Try[A]] = {
     case NonFatal(t) => Failure(InversionFailure(b, t))
   }
 }
