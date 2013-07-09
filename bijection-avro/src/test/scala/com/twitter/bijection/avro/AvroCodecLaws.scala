@@ -105,10 +105,10 @@ object AvroCodecLaws extends Properties("AvroCodecs") with BaseProperties {
   property("round trips Generic Record -> Array[Byte] using Binary Encoder/Decoder") =
     roundTripsGenericRecord(AvroCodecs.toBinary[GenericRecord](testSchema))
 
-  property("round trips Generic Record -> Array[Byte] using Json Encoder/Decoder") =
+  property("round trips Generic Record -> String using Json Encoder/Decoder") =
     roundTripsGenericRecordToJson(AvroCodecs.toJson[GenericRecord](testSchema))
 
-  property("round trips Specific Record -> Array[Byte] using Json Encoder/Decoder") =
+  property("round trips Specific Record -> String using Json Encoder/Decoder") =
     roundTripsSpecificRecordToJson(AvroCodecs.toJson[FiscalRecord](testSchema))
 
 }
