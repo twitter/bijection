@@ -17,7 +17,7 @@ package com.twitter.bijection.avro
 import com.twitter.bijection.Injection
 import org.apache.avro.specific.{SpecificDatumReader, SpecificDatumWriter, SpecificRecordBase}
 import org.apache.avro.file.{DataFileStream, DataFileWriter}
-import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
+import java.io.{UnsupportedEncodingException, ByteArrayInputStream, ByteArrayOutputStream}
 import com.twitter.bijection.Inversion.attempt
 import com.twitter.bijection.Attempt
 import org.apache.avro.generic.{GenericDatumReader, GenericDatumWriter, GenericRecord}
@@ -80,7 +80,7 @@ object AvroCodecs {
    * @tparam T compiled Avro record
    * @return Injection
    */
-  def toJson[T <: GenericRecord](schema: Schema): Injection[T, Array[Byte]] = {
+  def toJson[T <: GenericRecord](schema: Schema): Injection[T, String] = {
     val writer = new GenericDatumWriter[T](schema)
     val reader = new GenericDatumReader[T](schema)
     new JsonAvroCodec[T](schema, writer, reader)
@@ -91,7 +91,7 @@ object AvroCodecs {
    * @tparam T compiled Avro record
    * @return Injection
    */
-  def toJson[T <: SpecificRecordBase : Manifest](schema: Schema): Injection[T, Array[Byte]] = {
+  def toJson[T <: SpecificRecordBase : Manifest](schema: Schema): Injection[T, String] = {
     val klass = manifest[T].erasure.asInstanceOf[Class[T]]
     val writer = new SpecificDatumWriter[T](klass)
     val reader = new SpecificDatumReader[T](klass)
@@ -179,18 +179,41 @@ class BinaryAvroCodec[T](writer: DatumWriter[T], reader: DatumReader[T]) extends
  * @param reader Datum reader
  * @tparam T avro record
  */
-class JsonAvroCodec[T](schema: Schema, writer: DatumWriter[T], reader: DatumReader[T]) extends Injection[T, Array[Byte]] {
-  def apply(a: T): Array[Byte] = {
+class JsonAvroCodec[T](schema: Schema, writer: DatumWriter[T], reader: DatumReader[T]) extends Injection[T, String] {
+  def apply(a: T): String = {
     val stream = new ByteArrayOutputStream()
     val encoder = EncoderFactory.get().jsonEncoder(schema, stream)
     writer.write(a, encoder)
     encoder.flush()
-    stream.toByteArray
+    newUtf8(stream.toByteArray)
   }
 
-  def invert(bytes: Array[Byte]): Attempt[T] = attempt(bytes) {
-    bytes =>
-      val decoder = DecoderFactory.get().jsonDecoder(schema, new ByteArrayInputStream(bytes))
+  def invert(str: String): Attempt[T] = attempt(str) {
+    str =>
+      val decoder = DecoderFactory.get().jsonDecoder(schema, new ByteArrayInputStream(getBytesUtf8(str)))
       reader.read(null.asInstanceOf[T], decoder)
   }
+
+  private def newUtf8(bytes: Array[Byte]): String = {
+    try {
+      if (bytes == null) null else new String(bytes, "UTF-8")
+    }
+    catch {
+      case uee: UnsupportedEncodingException => {
+        throw new RuntimeException("UTF-8 Not supported on this platform")
+      }
+    }
+  }
+
+  private def getBytesUtf8(string: String): Array[Byte] = {
+    try {
+      if (string == null) null else string.getBytes("UTF-8")
+    }
+    catch {
+      case uee: UnsupportedEncodingException => {
+        throw new RuntimeException("UTF-8 Not supported on this platform")
+      }
+    }
+  }
+
 }

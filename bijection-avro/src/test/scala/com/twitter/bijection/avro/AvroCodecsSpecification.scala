@@ -73,8 +73,8 @@ object AvroCodecsSpecification extends Specification with BaseProperties {
     "Round trip specific record using Json Injection" in {
       implicit val specificJsonInjection = AvroCodecs.toJson[FiscalRecord](testSchema)
       val testRecord = buildSpecificAvroRecord(("2012-01-01", 1, 12))
-      val bytes = Injection[FiscalRecord, Array[Byte]](testRecord)
-      val attempt = Injection.invert[FiscalRecord, Array[Byte]](bytes)
+      val jsonString = Injection[FiscalRecord, String](testRecord)
+      val attempt = Injection.invert[FiscalRecord, String](jsonString)
       attempt.get must_== testRecord
     }
 
@@ -97,8 +97,8 @@ object AvroCodecsSpecification extends Specification with BaseProperties {
     "Round trip specific record using Json Injection" in {
       implicit val genericJsonInjection = AvroCodecs.toJson[GenericRecord](testSchema)
       val testRecord = buildGenericAvroRecord(("2012-01-01", 1, 12))
-      val bytes = Injection[GenericRecord, Array[Byte]](testRecord)
-      val attempt = Injection.invert[GenericRecord, Array[Byte]](bytes)
+      val jsonString = Injection[GenericRecord, String](testRecord)
+      val attempt = Injection.invert[GenericRecord, String](jsonString)
       attempt.get must_== testRecord
     }
   }

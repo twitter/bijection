@@ -85,6 +85,14 @@ object AvroCodecLaws extends Properties("AvroCodecs") with BaseProperties {
     isLooseInjection[GenericRecord, Array[Byte]]
   }
 
+  def roundTripsSpecificRecordToJson(implicit injection: Injection[FiscalRecord, String]) = {
+    isLooseInjection[FiscalRecord, String]
+  }
+
+  def roundTripsGenericRecordToJson(implicit injection: Injection[GenericRecord, String]) = {
+    isLooseInjection[GenericRecord, String]
+  }
+
   property("round trips Specific Record -> Array[Byte]") =
     roundTripsSpecificRecord(AvroCodecs[FiscalRecord])
 
@@ -98,10 +106,10 @@ object AvroCodecLaws extends Properties("AvroCodecs") with BaseProperties {
     roundTripsGenericRecord(AvroCodecs.toBinary[GenericRecord](testSchema))
 
   property("round trips Generic Record -> Array[Byte] using Json Encoder/Decoder") =
-    roundTripsGenericRecord(AvroCodecs.toJson[GenericRecord](testSchema))
+    roundTripsGenericRecordToJson(AvroCodecs.toJson[GenericRecord](testSchema))
 
   property("round trips Specific Record -> Array[Byte] using Json Encoder/Decoder") =
-    roundTripsSpecificRecord(AvroCodecs.toJson[FiscalRecord](testSchema))
+    roundTripsSpecificRecordToJson(AvroCodecs.toJson[FiscalRecord](testSchema))
 
 }
 
