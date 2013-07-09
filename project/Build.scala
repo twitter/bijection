@@ -112,7 +112,8 @@ object BijectionBuild extends Build {
               bijectionAlgebird,
               bijectionUtil,
               bijectionClojure,
-              bijectionNetty)
+              bijectionNetty,
+              bijectionAvro)
 
   /** No dependencies in bijection other than java + scala */
   lazy val bijectionCore = Project(
@@ -180,7 +181,7 @@ object BijectionBuild extends Build {
       // This dependency is required due to a bug with guava 13.0, detailed here:
       // http://code.google.com/p/guava-libraries/issues/detail?id=1095
       "com.google.code.findbugs" % "jsr305" % "1.3.+",
-      "com.google.guava" % "guava" % "13.0"
+      "com.google.guava" % "guava" % "14.0"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
@@ -259,5 +260,18 @@ object BijectionBuild extends Build {
     previousArtifact := youngestForwardCompatible("netty"),
     osgiExportAll("com.twitter.bijection.netty"),
     libraryDependencies += "io.netty" % "netty" % "3.5.5.Final"
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  lazy val bijectionAvro = Project(
+    id = "bijection-avro",
+    base = file("bijection-avro"),
+    settings = sharedSettings
+  ).settings(
+    name := "bijection-avro",
+    previousArtifact := youngestForwardCompatible("avro"),
+    osgiExportAll("com.twitter.bijection.avro"),
+    libraryDependencies ++= Seq(
+      "org.apache.avro" % "avro" % "1.7.4"
+    )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 }
