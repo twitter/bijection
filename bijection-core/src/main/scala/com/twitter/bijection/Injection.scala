@@ -29,7 +29,7 @@ import com.twitter.bijection.Inversion.attempt
 @implicitNotFound(msg = "Cannot find Injection type class from ${A} to ${B}")
 trait Injection[A, B] extends Serializable { self =>
   def apply(a: A): B
-  def invert(b: B): Attempt[A]
+  def invert(b: B): Try[A]
 
   /**
    * Composes two instances of Injection in a new Injection,
@@ -75,7 +75,7 @@ private [bijection] class InjectionFn[A, B](inj: Injection[A, B]) extends (A => 
  */
 abstract class AbstractInjection[A, B] extends Injection[A, B] {
   override def apply(a: A): B
-  override def invert(b: B): Attempt[A]
+  override def invert(b: B): Try[A]
 }
 
 trait LowPriorityInjections {
@@ -93,9 +93,9 @@ object Injection extends CollectionInjections
   implicit def toFunction[A,B](inj: Injection[A, B]): (A => B) = inj.toFunction
 
   def apply[A, B](a: A)(implicit inj: Injection[A, B]): B = inj(a)
-  def invert[A, B](b: B)(implicit inj: Injection[A, B]): Attempt[A] = inj.invert(b)
+  def invert[A, B](b: B)(implicit inj: Injection[A, B]): Try[A] = inj.invert(b)
 
-  def build[A, B](to: A => B)(from: B => Attempt[A]): Injection[A, B] =
+  def build[A, B](to: A => B)(from: B => Try[A]): Injection[A, B] =
     new AbstractInjection[A, B] {
       override def apply(a: A) = to(a)
       override def invert(b: B) = from(b)

@@ -18,13 +18,14 @@ package com.twitter.bijection.json
 
 import com.twitter.bijection.Conversion.asMethod
 
-import com.twitter.bijection.{ Attempt, BaseProperties, Bijection, Injection }
+import com.twitter.bijection.{ BaseProperties, Bijection, Injection }
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 import org.scalacheck.Arbitrary
 
 import org.codehaus.jackson.JsonNode
 import com.twitter.bijection.json.JsonNodeInjection.{fromJsonNode, toJsonNode}
+import scala.util.Try
 
 object JsonInjectionLaws extends Properties("JsonInjection") with BaseProperties {
   // Needed from some recursive injections (like tuples)
@@ -77,7 +78,7 @@ object JsonInjectionLaws extends Properties("JsonInjection") with BaseProperties
 
     val jsonMixed = mixedMap.as[UnparsedJson]
 
-    jsonMixed.as[Attempt[Map[String, JsonNode]]].get.map({ kup : (String, JsonNode) =>
+    jsonMixed.as[Try[Map[String, JsonNode]]].get.map({ kup : (String, JsonNode) =>
       val (k, up) = kup
       if (k.endsWith("i")) {
         fromJsonNode[Int](up).get == fromJsonNode[Int](mixedMap(k)).get
