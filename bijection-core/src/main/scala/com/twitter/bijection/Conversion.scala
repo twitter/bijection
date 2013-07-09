@@ -17,7 +17,7 @@ limitations under the License.
 package com.twitter.bijection
 
 import java.io.Serializable
-import scala.util.Success
+import scala.util.{ Success, Try }
 
 /**
  * Convert allows the user to convert an instance of type A to type B given an implicit Conversion
@@ -52,8 +52,8 @@ trait CrazyLowPriorityConversion extends Serializable {
       case _ => None
     }
   }
-  implicit def fromInjectionInverse[A,B](implicit inj: Injection[B,A]): Conversion[A,Attempt[B]] =
-  new Conversion[A,Attempt[B]] {
+  implicit def fromInjectionInverse[A,B](implicit inj: Injection[B,A]): Conversion[A,Try[B]] =
+  new Conversion[A,Try[B]] {
     def apply(a: A) = inj.invert(a)
   }
   implicit def fromBijectionInv[A,B](implicit fn: ImplicitBijection[B,A]) = new Conversion[A,B] {
@@ -80,4 +80,3 @@ object Conversion extends LowPriorityConversion {
     def apply(a: A) = fn(a)
   }
 }
-

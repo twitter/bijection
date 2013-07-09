@@ -34,7 +34,7 @@ import com.twitter.bijection.Inversion.attempt
 @implicitNotFound(msg = "Cannot find Bufferable type class for ${T}")
 trait Bufferable[T] extends Serializable {
   def put(into: ByteBuffer, t: T): ByteBuffer
-  def get(from: ByteBuffer): Attempt[(ByteBuffer, T)]
+  def get(from: ByteBuffer): Try[(ByteBuffer, T)]
   /** Retrieve the value of get or throw an exception if the operation fails */
   def unsafeGet(from: ByteBuffer): (ByteBuffer, T) =
     get(from) match {
@@ -64,7 +64,7 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     inj.invert(inj(t)).get
   }
   def put[T](into: ByteBuffer, t: T)(implicit buf: Bufferable[T]): ByteBuffer = buf.put(into, t)
-  def get[T](from: ByteBuffer)(implicit buf: Bufferable[T]): Attempt[(ByteBuffer, T)] = buf.get(from)
+  def get[T](from: ByteBuffer)(implicit buf: Bufferable[T]): Try[(ByteBuffer, T)] = buf.get(from)
   // get the bytes from a given position to the current position
   def getBytes(from: ByteBuffer, start: Int = 0): Array[Byte] = {
     val fromd = from.duplicate
@@ -133,7 +133,7 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
   /** remember: putfn and getfn must call duplicate and not change the input ByteBuffer
    * We are duplicating the ByteBuffer state, not the backing array (which IS mutated)
    */
-  def build[T](putfn: (ByteBuffer,T) => ByteBuffer)(getfn: (ByteBuffer) => Attempt[(ByteBuffer, T)]):
+  def build[T](putfn: (ByteBuffer,T) => ByteBuffer)(getfn: (ByteBuffer) => Try[(ByteBuffer, T)]):
     Bufferable[T] = new AbstractBufferable[T] {
       override def put(into: ByteBuffer, t: T) = putfn(into,t)
       override def get(from: ByteBuffer) = getfn(from)
@@ -223,9 +223,9 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     l.foldLeft(nextBb) { (oldbb, t) => reallocatingPut(oldbb) { buf.put(_, t) } }
   }
   def getCollection[T,C](initbb: ByteBuffer, builder: Builder[T,C])(implicit buf: Bufferable[T]):
-    Attempt[(ByteBuffer, C)] = {
+    Try[(ByteBuffer, C)] = {
 
-    val bbOpt: Attempt[ByteBuffer] = Try(initbb.duplicate)
+    val bbOpt: Try[ByteBuffer] = Try(initbb.duplicate)
     val size = bbOpt.get.getInt
     // We can't mutate the builder while calling other functions (not safe)
     // so we write into this array:
