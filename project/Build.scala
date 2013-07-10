@@ -251,4 +251,17 @@ object BijectionBuild extends Build {
     osgiExportAll("com.twitter.bijection.netty"),
     libraryDependencies += "io.netty" % "netty" % "3.5.5.Final"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
+  
+  
+    lazy val bijectionJodaTime = Project(
+    id = "bijection-jodatime",
+    base = file("bijection-jodatime"),
+    settings = sharedSettings
+  ).settings(
+    name := "bijection-jodatime",
+    previousArtifact := youngestForwardCompatible("jodatime"),
+    osgiExportAll("com.twitter.bijection.jodatime"),
+	libraryDependencies += "com.github.nscala-time" % "nscala-time" % "0.4.2
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
+  
 }
