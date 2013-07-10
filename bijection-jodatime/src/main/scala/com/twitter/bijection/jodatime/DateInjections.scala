@@ -1,0 +1,47 @@
+package com.twitter.bijection.jodatime
+
+import java.util._
+import com.github.nscala_time.time._
+import com.github.nscala_time.time.Imports._
+import com.twitter.bijection.Inversion.attempt
+import com.twitter.bijection.{ Injection, InversionFailure, GeneratedTupleInjections, AbstractInjection }
+
+trait DateInjections extends GeneratedTupleInjections {
+
+  implicit val date2String: Injection[Date, String] =
+    new AbstractInjection[Date, String] {
+      def apply(d: Date) = d.toString
+      override def invert(s: String) = attempt(s)(new DateTime(_).toDate())
+
+    }
+
+  implicit val date2Long: Injection[Date, Long] =
+    new AbstractInjection[Date, Long] {
+      def apply(d: Date) = new DateTime(d).getMillis()
+      override def invert(l: Long) = attempt(l)(new DateTime(_).toDate())
+    }
+
+  implicit val date2joda: Injection[Date, DateTime] =
+    new AbstractInjection[Date, DateTime] {
+      def apply(d: Date) = new DateTime(d)
+      override def invert(dt: DateTime) = attempt(dt)(_.toDate())
+    }
+
+  implicit val joda2String: Injection[DateTime, String] =
+    new AbstractInjection[DateTime, String] {
+      def apply(d: DateTime) = d.toString
+      override def invert(s: String) = attempt(s)(new DateTime(_))
+    }
+
+  implicit val joda2Long: Injection[DateTime, Long] =
+    new AbstractInjection[DateTime, Long] {
+      def apply(d: DateTime) = d.getMillis()
+      override def invert(l: Long) = attempt(l)(new DateTime(_))
+    }
+
+  implicit val joda2Date: Injection[DateTime, Date] =
+    new AbstractInjection[DateTime, Date] {
+      def apply(d: DateTime) = d.toDate()
+      override def invert(d: Date) = attempt(d)(new DateTime(_))
+    }
+}
