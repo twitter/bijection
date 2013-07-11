@@ -113,7 +113,8 @@ object BijectionBuild extends Build {
               bijectionUtil,
               bijectionClojure,
               bijectionNetty,
-              bijectionAvro)
+              bijectionAvro,
+              bijectionHbase)
 
   /** No dependencies in bijection other than java + scala */
   lazy val bijectionCore = Project(
@@ -272,6 +273,20 @@ object BijectionBuild extends Build {
     osgiExportAll("com.twitter.bijection.avro"),
     libraryDependencies ++= Seq(
       "org.apache.avro" % "avro" % "1.7.4"
+    )
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  lazy val bijectionHbase = Project(
+    id = "bijection-hbase",
+    base = file("bijection-hbase"),
+    settings = sharedSettings
+  ).settings(
+    name := "bijection-hbase",
+    previousArtifact := youngestForwardCompatible("hbase"),
+    osgiExportAll("com.twitter.bijection.hbase"),
+    libraryDependencies ++= Seq(
+      "org.apache.hbase" % "hbase" % "0.94.4" % "provided->default",
+      "org.apache.hadoop" % "hadoop-core" % "1.0.4" % "provided->default"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 }
