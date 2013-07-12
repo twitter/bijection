@@ -132,6 +132,16 @@ object Injection extends CollectionInjections
         case _ => InversionFailure.failedAttempt(e)
       }
     }
+  /**
+   * It might be nice for this to be implicit, but this seems to make ambiguous implicit Injections
+   */
+  def fromBijectionRep[A,B](implicit bij: ImplicitBijection[A, B @@ Rep[A]]): Injection[A, B] =
+    new AbstractInjection[A, B] {
+      override def apply(a: A) = bij(a)
+      override def invert(b: B) = attempt(b) { bin =>
+        bij.invert(bin.asInstanceOf[B @@ Rep[A]])
+      }
+    }
   implicit def option[A]: Injection[A, Option[A]] =
     new AbstractInjection[A, Option[A]] {
       override def apply(a: A) = Some(a)
