@@ -1,13 +1,13 @@
 package com.twitter.bijection.jodatime
 
-import com.twitter.bijection.{ Bijection,  GeneratedTupleBijections, AbstractBijection}
+import com.twitter.bijection.{ Bijection,  AbstractBijection}
 
 import com.twitter.bijection.Inversion.{ attempt, attemptWhen }
 import java.util._
 import com.github.nscala_time.time._
 import com.github.nscala_time.time.Imports._
 
-trait DateBijections extends GeneratedTupleBijections {
+trait DateBijections  {
 
   
   implicit val date2joda: Bijection[java.util.Date, DateTime] =
