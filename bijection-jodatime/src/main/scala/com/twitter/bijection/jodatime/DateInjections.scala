@@ -1,8 +1,9 @@
 package com.twitter.bijection.jodatime
 
-import java.util._
-import com.github.nscala_time.time._
-import com.github.nscala_time.time.Imports._
+import java.util.Date
+
+import org.joda.time.DateTime
+
 import com.twitter.bijection.Inversion.attempt
 import com.twitter.bijection.{ Injection, InversionFailure, AbstractInjection }
 
@@ -12,7 +13,7 @@ trait DateInjections {
     new AbstractInjection[Date, String] {
       def apply(d: Date) = d.toString
       override def invert(s: String) = attempt(s)(new DateTime(_).toDate())
-
+    
     }
 
   implicit val joda2String: Injection[DateTime, String] =
@@ -21,11 +22,6 @@ trait DateInjections {
       override def invert(s: String) = attempt(s)(new DateTime(_))
     }
 
-  implicit val joda2Long: Injection[DateTime, Long] =
-    new AbstractInjection[DateTime, Long] {
-      def apply(d: DateTime) = d.getMillis()
-      override def invert(l: Long) = attempt(l)(new DateTime(_))
-    }
 
   implicit val joda2Date: Injection[DateTime, Date] =
     new AbstractInjection[DateTime, Date] {

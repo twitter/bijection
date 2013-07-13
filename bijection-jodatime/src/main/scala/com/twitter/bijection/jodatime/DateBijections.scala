@@ -2,10 +2,10 @@ package com.twitter.bijection.jodatime
 
 import com.twitter.bijection.{ Bijection,  AbstractBijection}
 
-import com.twitter.bijection.Inversion.{ attempt, attemptWhen }
-import java.util._
-import com.github.nscala_time.time._
-import com.github.nscala_time.time.Imports._
+
+import java.util.Date
+
+import org.joda.time.DateTime
 
 trait DateBijections  {
 
@@ -16,5 +16,10 @@ trait DateBijections  {
       override def invert(joda: DateTime) = joda.toDate()
     }
 
+    implicit val joda2Long: Bijection[DateTime, Long] =
+    new AbstractBijection[DateTime, Long] {
+      def apply(d: DateTime) = d.getMillis()
+      override def invert(l: Long) = new DateTime(l)
+    }
    
 }
