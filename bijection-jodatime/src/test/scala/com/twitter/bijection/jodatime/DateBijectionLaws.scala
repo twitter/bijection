@@ -15,7 +15,10 @@ import com.twitter.bijection._
 
 
 
-object DateBijectionsLaws extends Properties("DateBijections") with BaseProperties {
+object DateBijectionsLaws extends Properties("DateBijections") with BaseProperties with DateBijections {
+  
+
+ 
   
   implicit val Long : Arbitrary [Long] = arbitraryViaFn { (s: DateTime) => (s.getMillis()) }
   property("Joda <=> Long") = isBijection[DateTime, Long]
