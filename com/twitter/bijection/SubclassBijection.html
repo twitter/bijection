@@ -31,9 +31,9 @@
       
       <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>When you have conversion between A and B where B is a subclass of A, which is often
 free, i.e. A is already an instance of A, then this can be faster
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a target="_blank" href="https://github.com/twitter/bijection/tree/develop/bijection-core/src/main/scala/com/twitter/bijection/Bijection.scala">Bijection.scala</a></dd></dl><div class="toggleContainer block">
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a target="_blank" href="https://github.com/twitter/bijection/tree/0.5.2/bijection-core/src/main/scala/com/twitter/bijection/Bijection.scala">Bijection.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a name="com.twitter.bijection.Bijection" class="extype" href="Bijection.html">Bijection</a>[A, B], <span name="java.io.Serializable" class="extype">Serializable</span>, (A) ⇒ B, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><a name="com.twitter.bijection.Bijection" class="extype" href="Bijection.html">Bijection</a>[A, B], <span name="java.io.Serializable" class="extype">Serializable</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
     
 
@@ -47,7 +47,7 @@ free, i.e. A is already an instance of A, then this can be faster
               <span class="filtertype">Inherited</span>
               <ol><li class="hideall out"><span>Hide All</span></li>
               <li class="showall in"><span>Show all</span></li></ol>
-              <ol id="linearization"><li name="com.twitter.bijection.SubclassBijection" class="in"><span>SubclassBijection</span></li><li name="com.twitter.bijection.Bijection" class="in"><span>Bijection</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.Function1" class="in"><span>Function1</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+              <ol id="linearization"><li name="com.twitter.bijection.SubclassBijection" class="in"><span>SubclassBijection</span></li><li name="com.twitter.bijection.Bijection" class="in"><span>Bijection</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
             </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -156,6 +156,18 @@ free, i.e. A is already an instance of A, then this can be faster
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="com.twitter.bijection.Bijection#andThen" data-isabs="false">
+      <a id="andThen[C]((B) ⇒ C):(A) ⇒ C"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">andThen</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="g">g: (B) ⇒ C</span>)</span><span class="result">: (A) ⇒ C</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.Bijection" class="extype" href="Bijection.html">Bijection</a></dd></dl></div>
+    </li><li visbl="pub" name="com.twitter.bijection.Bijection#andThen" data-isabs="false">
       <a id="andThen[C](Injection[B, C]):Injection[A, C]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -182,18 +194,6 @@ free, i.e. A is already an instance of A, then this can be faster
 with this one applied first.</p><div class="fullcomment"><div class="comment cmt"><p>Composes two instances of Bijection in a new Bijection,
 with this one applied first.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.Bijection" class="extype" href="Bijection.html">Bijection</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.Function1#andThen" data-isabs="false">
-      <a id="andThen[A]((B) ⇒ A):(A) ⇒ A"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">andThen</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (B) ⇒ A</span>)</span><span class="result">: (A) ⇒ A</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd></dl></div>
     </li><li visbl="pub" name="com.twitter.bijection.SubclassBijection#apply" data-isabs="false">
       <a id="apply(A):B"></a>
       <h4 class="signature">
@@ -205,7 +205,7 @@ with this one applied first.
         <span class="name">apply</span><span class="params">(<span name="a">a: A</span>)</span><span class="result">: B</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.SubclassBijection" class="extype" href="">SubclassBijection</a> → <a name="com.twitter.bijection.Bijection" class="extype" href="Bijection.html">Bijection</a> → Function1</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.SubclassBijection" class="extype" href="">SubclassBijection</a> → <a name="com.twitter.bijection.Bijection" class="extype" href="Bijection.html">Bijection</a></dd></dl></div>
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -234,6 +234,18 @@ with this one applied first.
               
         </dd></dl></div>
     </li><li visbl="pub" name="com.twitter.bijection.Bijection#compose" data-isabs="false">
+      <a id="compose[T]((T) ⇒ A):(T) ⇒ B"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compose</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="g">g: (T) ⇒ A</span>)</span><span class="result">: (T) ⇒ B</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.Bijection" class="extype" href="Bijection.html">Bijection</a></dd></dl></div>
+    </li><li visbl="pub" name="com.twitter.bijection.Bijection#compose" data-isabs="false">
       <a id="compose[T](Injection[T, A]):Injection[T, B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -260,18 +272,6 @@ with this one applied first.
 with this one applied last.</p><div class="fullcomment"><div class="comment cmt"><p>Composes two instances of Bijection in a new Bijection,
 with this one applied last.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.Bijection" class="extype" href="Bijection.html">Bijection</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.Function1#compose" data-isabs="false">
-      <a id="compose[A]((A) ⇒ A):(A) ⇒ B"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (A) ⇒ A</span>)</span><span class="result">: (A) ⇒ B</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -419,7 +419,19 @@ with this one applied last.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.Function1#toString" data-isabs="false">
+    </li><li visbl="pub" name="com.twitter.bijection.Bijection#toFunction" data-isabs="false">
+      <a id="toFunction:(A) ⇒ B"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toFunction</span><span class="result">: (A) ⇒ B</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.Bijection" class="extype" href="Bijection.html">Bijection</a></dd></dl></div>
+    </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -430,7 +442,7 @@ with this one applied last.
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1 → AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait():Unit"></a>
       <h4 class="signature">
@@ -487,8 +499,6 @@ with this one applied last.
               <h3>Inherited from <a name="com.twitter.bijection.Bijection" class="extype" href="Bijection.html">Bijection</a>[A, B]</h3>
             </div><div name="java.io.Serializable" class="parent">
               <h3>Inherited from <span name="java.io.Serializable" class="extype">Serializable</span></h3>
-            </div><div name="scala.Function1" class="parent">
-              <h3>Inherited from (A) ⇒ B</h3>
             </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">

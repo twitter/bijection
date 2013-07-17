@@ -29,7 +29,7 @@
       </span>
       </h4>
       
-      <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Source</dt><dd><a target="_blank" href="https://github.com/twitter/bijection/tree/develop/bijection-core/src/main/scala/com/twitter/bijection/Bufferable.scala">Bufferable.scala</a></dd></dl><div class="toggleContainer block">
+      <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Source</dt><dd><a target="_blank" href="https://github.com/twitter/bijection/tree/0.5.2/bijection-core/src/main/scala/com/twitter/bijection/Bufferable.scala">Bufferable.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span name="java.io.Serializable" class="extype">Serializable</span>, <a name="com.twitter.bijection.GeneratedTupleBufferable" class="extype" href="GeneratedTupleBufferable.html">GeneratedTupleBufferable</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
@@ -172,14 +172,14 @@
       </h4>
       
     </li><li visbl="pub" name="com.twitter.bijection.Bufferable#build" data-isabs="false">
-      <a id="build[T]((ByteBuffer, T) ⇒ ByteBuffer)((ByteBuffer) ⇒ Option[(ByteBuffer, T)]):Bufferable[T]"></a>
+      <a id="build[T]((ByteBuffer, T) ⇒ ByteBuffer)((ByteBuffer) ⇒ Try[(ByteBuffer, T)]):Bufferable[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">build</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="putfn">putfn: (<span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span>, T) ⇒ <span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span></span>)</span><span class="params">(<span name="getfn">getfn: (<span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span>) ⇒ <span name="scala.Option" class="extype">Option</span>[(<span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span>, T)]</span>)</span><span class="result">: <a name="com.twitter.bijection.Bufferable" class="extype" href="Bufferable.html">Bufferable</a>[T]</span>
+        <span class="name">build</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="putfn">putfn: (<span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span>, T) ⇒ <span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span></span>)</span><span class="params">(<span name="getfn">getfn: (<span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span>) ⇒ <span name="scala.util.Try" class="extype">Try</span>[(<span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span>, T)]</span>)</span><span class="result">: <a name="com.twitter.bijection.Bufferable" class="extype" href="Bufferable.html">Bufferable</a>[T]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">remember: putfn and getfn must call duplicate and not change the input ByteBuffer
@@ -349,14 +349,14 @@ We are duplicating the ByteBuffer state, not the backing array (which IS mutated
       </h4>
       
     </li><li visbl="pub" name="com.twitter.bijection.Bufferable#get" data-isabs="false">
-      <a id="get[T](ByteBuffer)(Bufferable[T]):Option[(ByteBuffer, T)]"></a>
+      <a id="get[T](ByteBuffer)(Bufferable[T]):Try[(ByteBuffer, T)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">get</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="from">from: <span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="buf">buf: <a name="com.twitter.bijection.Bufferable" class="extype" href="Bufferable.html">Bufferable</a>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[(<span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span>, T)]</span>
+        <span class="name">get</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="from">from: <span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="buf">buf: <a name="com.twitter.bijection.Bufferable" class="extype" href="Bufferable.html">Bufferable</a>[T]</span>)</span><span class="result">: <span name="scala.util.Try" class="extype">Try</span>[(<span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span>, T)]</span>
       </span>
       </h4>
       
@@ -385,14 +385,14 @@ We are duplicating the ByteBuffer state, not the backing array (which IS mutated
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="com.twitter.bijection.Bufferable#getCollection" data-isabs="false">
-      <a id="getCollection[T, C](ByteBuffer,Builder[T, C])(Bufferable[T]):Option[(ByteBuffer, C)]"></a>
+      <a id="getCollection[T, C](ByteBuffer,Builder[T, C])(Bufferable[T]):Try[(ByteBuffer, C)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">getCollection</span><span class="tparams">[<span name="T">T</span>, <span name="C">C</span>]</span><span class="params">(<span name="initbb">initbb: <span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span></span>, <span name="builder">builder: <span name="scala.collection.mutable.Builder" class="extype">Builder</span>[T, C]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="buf">buf: <a name="com.twitter.bijection.Bufferable" class="extype" href="Bufferable.html">Bufferable</a>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[(<span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span>, C)]</span>
+        <span class="name">getCollection</span><span class="tparams">[<span name="T">T</span>, <span name="C">C</span>]</span><span class="params">(<span name="initbb">initbb: <span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span></span>, <span name="builder">builder: <span name="scala.collection.mutable.Builder" class="extype">Builder</span>[T, C]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="buf">buf: <a name="com.twitter.bijection.Bufferable" class="extype" href="Bufferable.html">Bufferable</a>[T]</span>)</span><span class="result">: <span name="scala.util.Try" class="extype">Try</span>[(<span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span>, C)]</span>
       </span>
       </h4>
       

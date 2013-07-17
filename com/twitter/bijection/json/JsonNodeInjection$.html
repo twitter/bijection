@@ -29,7 +29,9 @@
       </span>
       </h4>
       
-      <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Source</dt><dd><a target="_blank" href="https://github.com/twitter/bijection/tree/develop/bijection-json/src/main/scala/com/twitter/bijection/json/JsonInjection.scala">JsonInjection.scala</a></dd></dl><div class="toggleContainer block">
+      <div class="fullcommenttop" id="comment"><div class="comment cmt"><p>You need to import all the methods of this object to get general
+Injection[T,JsonNode] to work
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a target="_blank" href="https://github.com/twitter/bijection/tree/0.5.2/bijection-json/src/main/scala/com/twitter/bijection/json/JsonInjection.scala">JsonInjection.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span name="java.io.Serializable" class="extype">Serializable</span>, <a name="com.twitter.bijection.json.LowPriorityJson" class="extype" href="LowPriorityJson.html">LowPriorityJson</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
@@ -199,14 +201,14 @@
       </h4>
       
     </li><li visbl="pub" name="com.twitter.bijection.json.JsonNodeInjection#either" data-isabs="false">
-      <a id="either[L, R](JsonNodeInjection[L],JsonNodeInjection[R]):AbstractJsonNodeInjection[Either[L, R]] { def invert(n: org.codehaus.jackson.JsonNode): Option[Product with Serializable with Either[L,R]] }"></a>
+      <a id="either[L, R](JsonNodeInjection[L],JsonNodeInjection[R]):AbstractJsonNodeInjection[Either[L, R]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">either</span><span class="tparams">[<span name="L">L</span>, <span name="R">R</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a name="com.twitter.bijection.json.JsonNodeInjection" class="extype" href="JsonNodeInjection.html">JsonNodeInjection</a>[L]</span>, <span name="arg1">arg1: <a name="com.twitter.bijection.json.JsonNodeInjection" class="extype" href="JsonNodeInjection.html">JsonNodeInjection</a>[R]</span>)</span><span class="result">: <a name="com.twitter.bijection.json.AbstractJsonNodeInjection" class="extype" href="AbstractJsonNodeInjection.html">AbstractJsonNodeInjection</a>[<span name="scala.Either" class="extype">Either</span>[L, R]] { def invert(n: org.codehaus.jackson.JsonNode): Option[Product with Serializable with Either[L,R]] }</span>
+        <span class="name">either</span><span class="tparams">[<span name="L">L</span>, <span name="R">R</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a name="com.twitter.bijection.json.JsonNodeInjection" class="extype" href="JsonNodeInjection.html">JsonNodeInjection</a>[L]</span>, <span name="arg1">arg1: <a name="com.twitter.bijection.json.JsonNodeInjection" class="extype" href="JsonNodeInjection.html">JsonNodeInjection</a>[R]</span>)</span><span class="result">: <a name="com.twitter.bijection.json.AbstractJsonNodeInjection" class="extype" href="AbstractJsonNodeInjection.html">AbstractJsonNodeInjection</a>[<span name="scala.Either" class="extype">Either</span>[L, R]]</span>
       </span>
       </h4>
       
@@ -274,14 +276,14 @@
       </h4>
       
     </li><li visbl="pub" name="com.twitter.bijection.json.JsonNodeInjection#fromJsonNode" data-isabs="false">
-      <a id="fromJsonNode[T](JsonNode)(JsonNodeInjection[T]):Option[T]"></a>
+      <a id="fromJsonNode[T](JsonNode)(JsonNodeInjection[T]):Try[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fromJsonNode</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="node">node: <span name="org.codehaus.jackson.JsonNode" class="extype">JsonNode</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="json">json: <a name="com.twitter.bijection.json.JsonNodeInjection" class="extype" href="JsonNodeInjection.html">JsonNodeInjection</a>[T]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
+        <span class="name">fromJsonNode</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="node">node: <span name="org.codehaus.jackson.JsonNode" class="extype">JsonNode</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="json">json: <a name="com.twitter.bijection.json.JsonNodeInjection" class="extype" href="JsonNodeInjection.html">JsonNodeInjection</a>[T]</span>)</span><span class="result">: <span name="scala.util.Try" class="extype">Try</span>[T]</span>
       </span>
       </h4>
       
@@ -310,14 +312,14 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="com.twitter.bijection.json.JsonNodeInjection#identity" data-isabs="false">
-      <a id="identity:AbstractJsonNodeInjection[JsonNode] { def invert(n: org.codehaus.jackson.JsonNode): Some[org.codehaus.jackson.JsonNode] }"></a>
+      <a id="identity:AbstractJsonNodeInjection[JsonNode] { def invert(n: org.codehaus.jackson.JsonNode): scala.util.Success[org.codehaus.jackson.JsonNode] }"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">identity</span><span class="result">: <a name="com.twitter.bijection.json.AbstractJsonNodeInjection" class="extype" href="AbstractJsonNodeInjection.html">AbstractJsonNodeInjection</a>[<span name="org.codehaus.jackson.JsonNode" class="extype">JsonNode</span>] { def invert(n: org.codehaus.jackson.JsonNode): Some[org.codehaus.jackson.JsonNode] }</span>
+        <span class="name">identity</span><span class="result">: <a name="com.twitter.bijection.json.AbstractJsonNodeInjection" class="extype" href="AbstractJsonNodeInjection.html">AbstractJsonNodeInjection</a>[<span name="org.codehaus.jackson.JsonNode" class="extype">JsonNode</span>] { def invert(n: org.codehaus.jackson.JsonNode): scala.util.Success[org.codehaus.jackson.JsonNode] }</span>
       </span>
       </h4>
       
@@ -525,6 +527,18 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="com.twitter.bijection.json.LowPriorityJson#tuple" data-isabs="false">
+      <a id="tuple[T&lt;:Product](Injection[T, List[JsonNode]],Injection[List[JsonNode], JsonNode]):JsonNodeInjection[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tuple</span><span class="tparams">[<span name="T">T &lt;: <span name="scala.Product" class="extype">Product</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="inj">inj: <a name="com.twitter.bijection.Injection" class="extype" href="../Injection.html">Injection</a>[T, List[<span name="org.codehaus.jackson.JsonNode" class="extype">JsonNode</span>]]</span>, <span name="ltoJ">ltoJ: <a name="com.twitter.bijection.Injection" class="extype" href="../Injection.html">Injection</a>[List[<span name="org.codehaus.jackson.JsonNode" class="extype">JsonNode</span>], <span name="org.codehaus.jackson.JsonNode" class="extype">JsonNode</span>]</span>)</span><span class="result">: <a name="com.twitter.bijection.json.JsonNodeInjection" class="extype" href="JsonNodeInjection.html">JsonNodeInjection</a>[T]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.json.LowPriorityJson" class="extype" href="LowPriorityJson.html">LowPriorityJson</a></dd></dl></div>
     </li><li visbl="pub" name="com.twitter.bijection.json.JsonNodeInjection#unparsed" data-isabs="false">
       <a id="unparsed:JsonNodeInjection[UnparsedJson]"></a>
       <h4 class="signature">

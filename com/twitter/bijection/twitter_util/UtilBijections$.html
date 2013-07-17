@@ -29,7 +29,7 @@
       </span>
       </h4>
       
-      <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Source</dt><dd><a target="_blank" href="https://github.com/twitter/bijection/tree/develop/bijection-util/src/main/scala/com/twitter/bijection/twitter_util/UtilBijections.scala">UtilBijections.scala</a></dd></dl><div class="toggleContainer block">
+      <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Source</dt><dd><a target="_blank" href="https://github.com/twitter/bijection/tree/0.5.2/bijection-util/src/main/scala/com/twitter/bijection/twitter_util/UtilBijections.scala">UtilBijections.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a name="com.twitter.bijection.twitter_util.UtilBijections" class="extype" href="UtilBijections.html">UtilBijections</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
@@ -200,8 +200,37 @@
         <span class="name">futureBijection</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="bij">bij: <a name="com.twitter.bijection.ImplicitBijection" class="extype" href="../ImplicitBijection.html">ImplicitBijection</a>[A, B]</span>)</span><span class="result">: <a name="com.twitter.bijection.Bijection" class="extype" href="../Bijection.html">Bijection</a>[<span name="com.twitter.util.Future" class="extype">Future</span>[A], <span name="com.twitter.util.Future" class="extype">Future</span>[B]]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Bijection on Future
-if the bijection throws, the result will be a Throw.</p><div class="fullcomment"><div class="comment cmt"><p>Bijection on Future
+      <p class="shortcomment cmt">Bijection on Twitter Future
+if the bijection throws, the result will be a Throw.</p><div class="fullcomment"><div class="comment cmt"><p>Bijection on Twitter Future
+if the bijection throws, the result will be a Throw.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.twitter_util.UtilBijections" class="extype" href="UtilBijections.html">UtilBijections</a></dd></dl></div>
+    </li><li visbl="pub" name="com.twitter.bijection.twitter_util.UtilBijections#futurePoolExecutionContextBijection" data-isabs="false">
+      <a id="futurePoolExecutionContextBijection:Bijection[FuturePool, ExecutionContext]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">futurePoolExecutionContextBijection</span><span class="result">: <a name="com.twitter.bijection.Bijection" class="extype" href="../Bijection.html">Bijection</a>[<span name="com.twitter.util.FuturePool" class="extype">FuturePool</span>, <span name="scala.concurrent.ExecutionContext" class="extype">ExecutionContext</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Bijection from FuturePool to ExecutionContext
+</p><div class="fullcomment"><div class="comment cmt"><p>Bijection from FuturePool to ExecutionContext
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.twitter_util.UtilBijections" class="extype" href="UtilBijections.html">UtilBijections</a></dd></dl></div>
+    </li><li visbl="pub" name="com.twitter.bijection.twitter_util.UtilBijections#futureScalaBijection" data-isabs="false">
+      <a id="futureScalaBijection[A, B](ImplicitBijection[A, B],ExecutionContext):Bijection[Future[A], Future[B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">futureScalaBijection</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="bij">bij: <a name="com.twitter.bijection.ImplicitBijection" class="extype" href="../ImplicitBijection.html">ImplicitBijection</a>[A, B]</span>, <span name="executor">executor: <span name="scala.concurrent.ExecutionContext" class="extype">ExecutionContext</span></span>)</span><span class="result">: <a name="com.twitter.bijection.Bijection" class="extype" href="../Bijection.html">Bijection</a>[<span name="scala.concurrent.Future" class="extype">Future</span>[A], <span name="scala.concurrent.Future" class="extype">Future</span>[B]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Bijection on Scala Future
+if the bijection throws, the result will be a Throw.</p><div class="fullcomment"><div class="comment cmt"><p>Bijection on Scala Future
 if the bijection throws, the result will be a Throw.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.twitter_util.UtilBijections" class="extype" href="UtilBijections.html">UtilBijections</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
@@ -313,6 +342,48 @@ if the bijection throws, the result will be a Throw.
       </h4>
       <p class="shortcomment cmt">Bijection on Try.</p><div class="fullcomment"><div class="comment cmt"><p>Bijection on Try.
 If the the bijection throws, the result will be a throw
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.twitter_util.UtilBijections" class="extype" href="UtilBijections.html">UtilBijections</a></dd></dl></div>
+    </li><li visbl="pub" name="com.twitter.bijection.twitter_util.UtilBijections#tryScalaBijection" data-isabs="false">
+      <a id="tryScalaBijection[A, B](ImplicitBijection[A, B]):Bijection[Try[A], Try[B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tryScalaBijection</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="bij">bij: <a name="com.twitter.bijection.ImplicitBijection" class="extype" href="../ImplicitBijection.html">ImplicitBijection</a>[A, B]</span>)</span><span class="result">: <a name="com.twitter.bijection.Bijection" class="extype" href="../Bijection.html">Bijection</a>[<span name="scala.util.Try" class="extype">Try</span>[A], <span name="scala.util.Try" class="extype">Try</span>[B]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Bijection on scala Try.</p><div class="fullcomment"><div class="comment cmt"><p>Bijection on scala Try.
+If the the bijection throws, the result will be a throw
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.twitter_util.UtilBijections" class="extype" href="UtilBijections.html">UtilBijections</a></dd></dl></div>
+    </li><li visbl="pub" name="com.twitter.bijection.twitter_util.UtilBijections#twitter2ScalaFuture" data-isabs="false">
+      <a id="twitter2ScalaFuture[A](ExecutionContext):Bijection[Future[A], Future[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">twitter2ScalaFuture</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="executor">executor: <span name="scala.concurrent.ExecutionContext" class="extype">ExecutionContext</span></span>)</span><span class="result">: <a name="com.twitter.bijection.Bijection" class="extype" href="../Bijection.html">Bijection</a>[<span name="com.twitter.util.Future" class="extype">Future</span>[A], <span name="scala.concurrent.Future" class="extype">Future</span>[A]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Bijection between twitter and scala style Futures
+</p><div class="fullcomment"><div class="comment cmt"><p>Bijection between twitter and scala style Futures
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.twitter_util.UtilBijections" class="extype" href="UtilBijections.html">UtilBijections</a></dd></dl></div>
+    </li><li visbl="pub" name="com.twitter.bijection.twitter_util.UtilBijections#twitter2ScalaTry" data-isabs="false">
+      <a id="twitter2ScalaTry[A]:Bijection[Try[A], Try[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">twitter2ScalaTry</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a name="com.twitter.bijection.Bijection" class="extype" href="../Bijection.html">Bijection</a>[<span name="com.twitter.util.Try" class="extype">Try</span>[A], <span name="scala.util.Try" class="extype">Try</span>[A]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Bijection between twitter and scala style Trys
+</p><div class="fullcomment"><div class="comment cmt"><p>Bijection between twitter and scala style Trys
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.twitter_util.UtilBijections" class="extype" href="UtilBijections.html">UtilBijections</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait():Unit"></a>

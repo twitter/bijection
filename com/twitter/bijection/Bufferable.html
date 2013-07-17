@@ -39,7 +39,7 @@ Always call .duplicate before using the ByteBuffer so the original is not modifi
       <span name="&quot;Cannot find Bufferable type class for ${T}&quot;" class="defval">...</span>
     </span>)</span>
               
-        </dd><dt>Source</dt><dd><a target="_blank" href="https://github.com/twitter/bijection/tree/develop/bijection-core/src/main/scala/com/twitter/bijection/Bufferable.scala">Bufferable.scala</a></dd></dl><div class="toggleContainer block">
+        </dd><dt>Source</dt><dd><a target="_blank" href="https://github.com/twitter/bijection/tree/0.5.2/bijection-core/src/main/scala/com/twitter/bijection/Bufferable.scala">Bufferable.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span name="java.io.Serializable" class="extype">Serializable</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div><div class="toggleContainer block">
@@ -75,14 +75,14 @@ Always call .duplicate before using the ByteBuffer so the original is not modifi
         <div class="values members" id="values">
               <h3>Abstract Value Members</h3>
               <ol><li visbl="pub" name="com.twitter.bijection.Bufferable#get" data-isabs="true">
-      <a id="get(ByteBuffer):Option[(ByteBuffer, T)]"></a>
+      <a id="get(ByteBuffer):Try[(ByteBuffer, T)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">get</span><span class="params">(<span name="from">from: <span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[(<span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span>, T)]</span>
+        <span class="name">get</span><span class="params">(<span name="from">from: <span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span></span>)</span><span class="result">: <span name="scala.util.Try" class="extype">Try</span>[(<span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span>, T)]</span>
       </span>
       </h4>
       
@@ -325,6 +325,18 @@ Always call .duplicate before using the ByteBuffer so the original is not modifi
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="com.twitter.bijection.Bufferable#unsafeGet" data-isabs="false">
+      <a id="unsafeGet(ByteBuffer):(ByteBuffer, T)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unsafeGet</span><span class="params">(<span name="from">from: <span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span></span>)</span><span class="result">: (<span name="java.nio.ByteBuffer" class="extype">ByteBuffer</span>, T)</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Retrieve the value of get or throw an exception if the operation fails</p>
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait():Unit"></a>
       <h4 class="signature">

@@ -29,7 +29,7 @@
       </span>
       </h4>
       
-      <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Source</dt><dd><a target="_blank" href="https://github.com/twitter/bijection/tree/develop/bijection-core/src/main/scala/com/twitter/bijection/Conversion.scala">Conversion.scala</a></dd></dl><div class="toggleContainer block">
+      <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Source</dt><dd><a target="_blank" href="https://github.com/twitter/bijection/tree/0.5.2/bijection-core/src/main/scala/com/twitter/bijection/Conversion.scala">Conversion.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a name="com.twitter.bijection.CrazyLowPriorityConversion" class="extype" href="CrazyLowPriorityConversion.html">CrazyLowPriorityConversion</a>, <span name="java.io.Serializable" class="extype">Serializable</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div><div class="toggleContainer block">
@@ -217,14 +217,26 @@
       </h4>
       
     </li><li visbl="pub" name="com.twitter.bijection.CrazyLowPriorityConversion#fromInjectionInverse" data-isabs="false">
-      <a id="fromInjectionInverse[A, B](Injection[B, A]):Conversion[A, Option[B]]"></a>
+      <a id="fromInjectionInverse[A, B](Injection[B, A]):Conversion[A, Try[B]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fromInjectionInverse</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="inj">inj: <a name="com.twitter.bijection.Injection" class="extype" href="Injection.html">Injection</a>[B, A]</span>)</span><span class="result">: <a name="com.twitter.bijection.Conversion" class="extype" href="Conversion.html">Conversion</a>[A, <span name="scala.Option" class="extype">Option</span>[B]]</span>
+        <span class="name">fromInjectionInverse</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="inj">inj: <a name="com.twitter.bijection.Injection" class="extype" href="Injection.html">Injection</a>[B, A]</span>)</span><span class="result">: <a name="com.twitter.bijection.Conversion" class="extype" href="Conversion.html">Conversion</a>[A, <span name="scala.util.Try" class="extype">Try</span>[B]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.CrazyLowPriorityConversion" class="extype" href="CrazyLowPriorityConversion.html">CrazyLowPriorityConversion</a></dd></dl></div>
+    </li><li visbl="pub" name="com.twitter.bijection.CrazyLowPriorityConversion#fromInjectionOptInverse" data-isabs="false">
+      <a id="fromInjectionOptInverse[A, B](Injection[B, A]):Conversion[A, Option[B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fromInjectionOptInverse</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="inj">inj: <a name="com.twitter.bijection.Injection" class="extype" href="Injection.html">Injection</a>[B, A]</span>)</span><span class="result">: <a name="com.twitter.bijection.Conversion" class="extype" href="Conversion.html">Conversion</a>[A, <span name="scala.Option" class="extype">Option</span>[B]]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.CrazyLowPriorityConversion" class="extype" href="CrazyLowPriorityConversion.html">CrazyLowPriorityConversion</a></dd></dl></div>

@@ -29,9 +29,9 @@
       </span>
       </h4>
       
-      <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Source</dt><dd><a target="_blank" href="https://github.com/twitter/bijection/tree/develop/bijection-thrift/src/main/scala/com/twitter/bijection/thrift/ThriftCodecs.scala">ThriftCodecs.scala</a></dd></dl><div class="toggleContainer block">
+      <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Source</dt><dd><a target="_blank" href="https://github.com/twitter/bijection/tree/0.5.2/bijection-thrift/src/main/scala/com/twitter/bijection/thrift/ThriftCodecs.scala">ThriftCodecs.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a name="com.twitter.bijection.Injection" class="extype" href="../Injection.html">Injection</a>[T, <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]], <span name="java.io.Serializable" class="extype">Serializable</span>, (T) ⇒ <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>], AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent"><a name="com.twitter.bijection.Injection" class="extype" href="../Injection.html">Injection</a>[T, <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]], <span name="java.io.Serializable" class="extype">Serializable</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
           <div class="subClasses hiddenContent"><a name="com.twitter.bijection.thrift.BinaryThriftCodec" class="extype" href="BinaryThriftCodec.html">BinaryThriftCodec</a>, <a name="com.twitter.bijection.thrift.CompactThriftCodec" class="extype" href="CompactThriftCodec.html">CompactThriftCodec</a>, <a name="com.twitter.bijection.thrift.JsonThriftCodec" class="extype" href="JsonThriftCodec.html">JsonThriftCodec</a></div>
@@ -48,7 +48,7 @@
               <span class="filtertype">Inherited</span>
               <ol><li class="hideall out"><span>Hide All</span></li>
               <li class="showall in"><span>Show all</span></li></ol>
-              <ol id="linearization"><li name="com.twitter.bijection.thrift.ThriftCodec" class="in"><span>ThriftCodec</span></li><li name="com.twitter.bijection.Injection" class="in"><span>Injection</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.Function1" class="in"><span>Function1</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+              <ol id="linearization"><li name="com.twitter.bijection.thrift.ThriftCodec" class="in"><span>ThriftCodec</span></li><li name="com.twitter.bijection.Injection" class="in"><span>Injection</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
             </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -142,6 +142,18 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="com.twitter.bijection.Injection#andThen" data-isabs="false">
+      <a id="andThen[C]((Array[Byte]) ⇒ C):(T) ⇒ C"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">andThen</span><span class="tparams">[<span name="C">C</span>]</span><span class="params">(<span name="g">g: (<span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]) ⇒ C</span>)</span><span class="result">: (T) ⇒ C</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.Injection" class="extype" href="../Injection.html">Injection</a></dd></dl></div>
+    </li><li visbl="pub" name="com.twitter.bijection.Injection#andThen" data-isabs="false">
       <a id="andThen[C](Bijection[Array[Byte], C]):Injection[T, C]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -170,18 +182,6 @@
 with this one applied first.</p><div class="fullcomment"><div class="comment cmt"><p>Composes two instances of Injection in a new Injection,
 with this one applied first.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.Injection" class="extype" href="../Injection.html">Injection</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.Function1#andThen" data-isabs="false">
-      <a id="andThen[A]((Array[Byte]) ⇒ A):(T) ⇒ A"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">andThen</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]) ⇒ A</span>)</span><span class="result">: (T) ⇒ A</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd></dl></div>
     </li><li visbl="pub" name="com.twitter.bijection.thrift.ThriftCodec#apply" data-isabs="false">
       <a id="apply(T):Array[Byte]"></a>
       <h4 class="signature">
@@ -193,7 +193,7 @@ with this one applied first.
         <span class="name">apply</span><span class="params">(<span name="item">item: T</span>)</span><span class="result">: <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.thrift.ThriftCodec" class="extype" href="">ThriftCodec</a> → <a name="com.twitter.bijection.Injection" class="extype" href="../Injection.html">Injection</a> → Function1</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.thrift.ThriftCodec" class="extype" href="">ThriftCodec</a> → <a name="com.twitter.bijection.Injection" class="extype" href="../Injection.html">Injection</a></dd></dl></div>
     </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
       <a id="asInstanceOf[T0]:T0"></a>
       <h4 class="signature">
@@ -222,6 +222,18 @@ with this one applied first.
               
         </dd></dl></div>
     </li><li visbl="pub" name="com.twitter.bijection.Injection#compose" data-isabs="false">
+      <a id="compose[T]((T) ⇒ T):(T) ⇒ Array[Byte]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compose</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="g">g: (T) ⇒ T</span>)</span><span class="result">: (T) ⇒ <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.Injection" class="extype" href="../Injection.html">Injection</a></dd></dl></div>
+    </li><li visbl="pub" name="com.twitter.bijection.Injection#compose" data-isabs="false">
       <a id="compose[T](Bijection[T, T]):Injection[T, Array[Byte]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -248,18 +260,6 @@ with this one applied first.
 with this one applied last.</p><div class="fullcomment"><div class="comment cmt"><p>Composes two instances of Injection in a new Injection,
 with this one applied last.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.Injection" class="extype" href="../Injection.html">Injection</a></dd></dl></div>
-    </li><li visbl="pub" name="scala.Function1#compose" data-isabs="false">
-      <a id="compose[A]((A) ⇒ T):(A) ⇒ Array[Byte]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">compose</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (A) ⇒ T</span>)</span><span class="result">: (A) ⇒ <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -324,14 +324,14 @@ with this one applied last.
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="com.twitter.bijection.thrift.ThriftCodec#invert" data-isabs="false">
-      <a id="invert(Array[Byte]):Option[T]"></a>
+      <a id="invert(Array[Byte]):Try[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">invert</span><span class="params">(<span name="bytes">bytes: <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[T]</span>
+        <span class="name">invert</span><span class="params">(<span name="bytes">bytes: <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]</span>)</span><span class="result">: <span name="scala.util.Try" class="extype">Try</span>[T]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.thrift.ThriftCodec" class="extype" href="">ThriftCodec</a> → <a name="com.twitter.bijection.Injection" class="extype" href="../Injection.html">Injection</a></dd></dl></div>
@@ -407,7 +407,19 @@ with this one applied last.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="scala.Function1#toString" data-isabs="false">
+    </li><li visbl="pub" name="com.twitter.bijection.Injection#toFunction" data-isabs="false">
+      <a id="toFunction:(T) ⇒ Array[Byte]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toFunction</span><span class="result">: (T) ⇒ <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.Injection" class="extype" href="../Injection.html">Injection</a></dd></dl></div>
+    </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
       <a id="toString():String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -418,7 +430,7 @@ with this one applied last.
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1 → AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
       <a id="wait():Unit"></a>
       <h4 class="signature">
@@ -475,8 +487,6 @@ with this one applied last.
               <h3>Inherited from <a name="com.twitter.bijection.Injection" class="extype" href="../Injection.html">Injection</a>[T, <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]]</h3>
             </div><div name="java.io.Serializable" class="parent">
               <h3>Inherited from <span name="java.io.Serializable" class="extype">Serializable</span></h3>
-            </div><div name="scala.Function1" class="parent">
-              <h3>Inherited from (T) ⇒ <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]</h3>
             </div><div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">

@@ -30,7 +30,10 @@
       </h4>
       
       <div class="fullcommenttop" id="comment"><div class="comment cmt"><p> Injection to cast back and forth between two types.
-</p></div><dl class="attributes block"> <dt>Source</dt><dd><a target="_blank" href="https://github.com/twitter/bijection/tree/develop/bijection-core/src/main/scala/com/twitter/bijection/ClassInjection.scala">ClassInjection.scala</a></dd></dl><div class="toggleContainer block">
+WARNING: this uses java's Class.cast, which is subject to type erasure. If you have
+a type parameterized type, like List[String] =&gt; List[Any], the cast will succeed, but
+the inner items will not be correct. This is intended for experts.
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a target="_blank" href="https://github.com/twitter/bijection/tree/0.5.2/bijection-core/src/main/scala/com/twitter/bijection/ClassInjection.scala">ClassInjection.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
@@ -263,14 +266,14 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li visbl="pub" name="com.twitter.bijection.CastInjection#of" data-isabs="false">
-      <a id="of[A, B&lt;:A]:Injection[A, B]"></a>
+      <a id="of[A, B&gt;:A](ClassManifest[A]):Injection[A, B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">of</span><span class="tparams">[<span name="A">A</span>, <span name="B">B &lt;: A</span>]</span><span class="result">: <a name="com.twitter.bijection.Injection" class="extype" href="Injection.html">Injection</a>[A, B]</span>
+        <span class="name">of</span><span class="tparams">[<span name="A">A</span>, <span name="B">B &gt;: A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="cmf">cmf: ClassManifest[A]</span>)</span><span class="result">: <a name="com.twitter.bijection.Injection" class="extype" href="Injection.html">Injection</a>[A, B]</span>
       </span>
       </h4>
       

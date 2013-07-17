@@ -29,7 +29,7 @@
       </span>
       </h4>
       
-      <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Source</dt><dd><a target="_blank" href="https://github.com/twitter/bijection/tree/develop/bijection-core/src/main/scala/com/twitter/bijection/Injection.scala">Injection.scala</a></dd></dl><div class="toggleContainer block">
+      <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Source</dt><dd><a target="_blank" href="https://github.com/twitter/bijection/tree/0.5.2/bijection-core/src/main/scala/com/twitter/bijection/Injection.scala">Injection.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span name="java.io.Serializable" class="extype">Serializable</span>, <a name="com.twitter.bijection.CollectionInjections" class="extype" href="CollectionInjections.html">CollectionInjections</a>, <a name="com.twitter.bijection.StringInjections" class="extype" href="StringInjections.html">StringInjections</a>, <a name="com.twitter.bijection.NumericInjections" class="extype" href="NumericInjections.html">NumericInjections</a>, <a name="com.twitter.bijection.GeneratedTupleInjections" class="extype" href="GeneratedTupleInjections.html">GeneratedTupleInjections</a>, <a name="com.twitter.bijection.GeneratedTupleCollectionInjections" class="extype" href="GeneratedTupleCollectionInjections.html">GeneratedTupleCollectionInjections</a>, <a name="com.twitter.bijection.LowPriorityInjections" class="extype" href="LowPriorityInjections.html">LowPriorityInjections</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
@@ -148,14 +148,14 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li visbl="pub" name="com.twitter.bijection.Injection#build" data-isabs="false">
-      <a id="build[A, B]((A) ⇒ B)((B) ⇒ Option[A]):Injection[A, B]"></a>
+      <a id="build[A, B]((A) ⇒ B)((B) ⇒ Try[A]):Injection[A, B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">build</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="to">to: (A) ⇒ B</span>)</span><span class="params">(<span name="from">from: (B) ⇒ <span name="scala.Option" class="extype">Option</span>[A]</span>)</span><span class="result">: <a name="com.twitter.bijection.Injection" class="extype" href="Injection.html">Injection</a>[A, B]</span>
+        <span class="name">build</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="to">to: (A) ⇒ B</span>)</span><span class="params">(<span name="from">from: (B) ⇒ <span name="scala.util.Try" class="extype">Try</span>[A]</span>)</span><span class="result">: <a name="com.twitter.bijection.Injection" class="extype" href="Injection.html">Injection</a>[A, B]</span>
       </span>
       </h4>
       
@@ -300,6 +300,18 @@ into a single Injection. For example,</p><p>val composed = connect[Long, Array[B
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.NumericInjections" class="extype" href="NumericInjections.html">NumericInjections</a></dd></dl></div>
+    </li><li visbl="pub" name="com.twitter.bijection.Injection#either1" data-isabs="false">
+      <a id="either1[A, B]:Injection[A, Either[B, A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">either1</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result">: <a name="com.twitter.bijection.Injection" class="extype" href="Injection.html">Injection</a>[A, <span name="scala.Either" class="extype">Either</span>[B, A]]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -387,6 +399,19 @@ into a single Injection. For example,</p><p>val composed = connect[Long, Array[B
       </span>
       </h4>
       
+    </li><li visbl="pub" name="com.twitter.bijection.Injection#fromBijectionRep" data-isabs="false">
+      <a id="fromBijectionRep[A, B](ImplicitBijection[A, @@[B, Rep[A]]]):Injection[A, B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fromBijectionRep</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="bij">bij: <a name="com.twitter.bijection.ImplicitBijection" class="extype" href="ImplicitBijection.html">ImplicitBijection</a>[A, @@[B, <a name="com.twitter.bijection.Rep" class="extype" href="Rep.html">Rep</a>[A]]]</span>)</span><span class="result">: <a name="com.twitter.bijection.Injection" class="extype" href="Injection.html">Injection</a>[A, B]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">It might be nice for this to be implicit, but this seems to make ambiguous implicit Injections
+</p>
     </li><li visbl="pub" name="com.twitter.bijection.LowPriorityInjections#fromImplicitBijection" data-isabs="false">
       <a id="fromImplicitBijection[A, B](ImplicitBijection[A, B]):Injection[A, B]"></a>
       <h4 class="signature">
@@ -484,14 +509,14 @@ into a single Injection. For example,</p><p>val composed = connect[Long, Array[B
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.NumericInjections" class="extype" href="NumericInjections.html">NumericInjections</a></dd></dl></div>
     </li><li visbl="pub" name="com.twitter.bijection.Injection#invert" data-isabs="false">
-      <a id="invert[A, B](B)(Injection[A, B]):Option[A]"></a>
+      <a id="invert[A, B](B)(Injection[A, B]):Try[A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">invert</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="b">b: B</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="inj">inj: <a name="com.twitter.bijection.Injection" class="extype" href="Injection.html">Injection</a>[A, B]</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[A]</span>
+        <span class="name">invert</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="b">b: B</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="inj">inj: <a name="com.twitter.bijection.Injection" class="extype" href="Injection.html">Injection</a>[A, B]</span>)</span><span class="result">: <span name="scala.util.Try" class="extype">Try</span>[A]</span>
       </span>
       </h4>
       
@@ -796,14 +821,14 @@ into a single Injection. For example,</p><p>val composed = connect[Long, Array[B
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.NumericInjections" class="extype" href="NumericInjections.html">NumericInjections</a></dd></dl></div>
     </li><li visbl="pub" name="com.twitter.bijection.Injection#subclass" data-isabs="false">
-      <a id="subclass[A, B&lt;:A]:Injection[A, B]"></a>
+      <a id="subclass[A, B&gt;:A](ClassManifest[A]):Injection[A, B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier">implicit </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">subclass</span><span class="tparams">[<span name="A">A</span>, <span name="B">B &lt;: A</span>]</span><span class="result">: <a name="com.twitter.bijection.Injection" class="extype" href="Injection.html">Injection</a>[A, B]</span>
+        <span class="name">subclass</span><span class="tparams">[<span name="A">A</span>, <span name="B">B &gt;: A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="cmf">cmf: ClassManifest[A]</span>)</span><span class="result">: <a name="com.twitter.bijection.Injection" class="extype" href="Injection.html">Injection</a>[A, B]</span>
       </span>
       </h4>
       
@@ -831,6 +856,18 @@ into a single Injection. For example,</p><p>val composed = connect[Long, Array[B
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.CollectionInjections" class="extype" href="CollectionInjections.html">CollectionInjections</a></dd></dl></div>
+    </li><li visbl="pub" name="com.twitter.bijection.Injection#toFunction" data-isabs="false">
+      <a id="toFunction[A, B](Injection[A, B]):(A) ⇒ B"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toFunction</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="inj">inj: <a name="com.twitter.bijection.Injection" class="extype" href="Injection.html">Injection</a>[A, B]</span>)</span><span class="result">: (A) ⇒ B</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="com.twitter.bijection.Injection#toPartial" data-isabs="false">
       <a id="toPartial[A, C, B, D]((A) ⇒ C)(Injection[A, B],Injection[C, D]):PartialFunction[B, D]"></a>
       <h4 class="signature">

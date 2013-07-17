@@ -101,8 +101,24 @@ libraries (Bijection[MyTrait, YourTrait]) and many other purposes.
         <a href="AbstractInjection.html"><span class="name">AbstractInjection</span></a><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends Injection[A, B]</span>
       </span>
       </h4>
-      <p class="comment cmt">Abstract class to ease Bijection creation from Java (and reduce instance
+      <p class="comment cmt">Abstract class to ease Injection creation from Java (and reduce instance
 size in scala).</p>
+    </li><li visbl="pub" name="com.twitter.bijection.package#Attempt" data-isabs="false">
+      <a id="Attempt:Attempt[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Attempt</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> = <span name="scala.util.Try" class="extype">Try</span>[T]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Injections may not be defined for their inverse conversion.</p><div class="fullcomment"><div class="comment cmt"><p>Injections may not be defined for their inverse conversion.
+This type represents the attempted conversion. A failure
+will result in a scala.util.Failure containing the InversionFailure. A success
+will result in a scala.util.Success containing the inverted value.</p><p>TODO: Remove in 0.6.0.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.package" class="extype" href="package$.html">package</a></dd></dl></div>
     </li><li visbl="pub" name="com.twitter.bijection.Base64String" data-isabs="false">
       <a id="Base64String:Base64String"></a>
       <h4 class="signature">
@@ -123,7 +139,7 @@ size in scala).</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Bijection.html"><span class="name">Bijection</span></a><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends (A) ⇒ B with Serializable</span>
+        <a href="Bijection.html"><span class="name">Bijection</span></a><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">A Bijection[A, B] is a pair of functions that transform an element between
@@ -177,6 +193,22 @@ and decoding from strings compressed from with gzip.</p>
       </span>
       </h4>
       <p class="comment cmt"> Injection between Class objects and string.</p>
+    </li><li visbl="pub" name="com.twitter.bijection.package#Codec" data-isabs="false">
+      <a id="Codec:Codec[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Codec</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> = <a name="com.twitter.bijection.Injection" class="extype" href="Injection.html">Injection</a>[T, <span name="scala.Array" class="extype">Array</span>[<span name="scala.Byte" class="extype">Byte</span>]]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Using Injections for serialization is a common pattern.</p><div class="fullcomment"><div class="comment cmt"><p>Using Injections for serialization is a common pattern. Currying
+the byte array parameter makes it easier to write code like
+this:</p><pre>
+    <span class="kw">def</span> getProducer[T: Codec] = ...
+</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.package" class="extype" href="package$.html">package</a></dd></dl></div>
     </li><li visbl="pub" name="com.twitter.bijection.CollectionBijections" data-isabs="true">
       <a id="CollectionBijections:CollectionBijections"></a>
       <h4 class="signature">
@@ -385,10 +417,65 @@ that goes between the two.</p>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="Injection.html"><span class="name">Injection</span></a><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends (A) ⇒ B with Serializable</span>
+        <a href="Injection.html"><span class="name">Injection</span></a><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends Serializable</span>
       </span>
       </h4>
       <p class="comment cmt">An Injection[A, B] is a function from A to B, and from some B back to A.</p>
+    </li><li visbl="pub" name="com.twitter.bijection.IntModDivInjection" data-isabs="false">
+      <a id="IntModDivInjection:IntModDivInjection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="IntModDivInjection.html"><span class="name">IntModDivInjection</span></a><span class="result"> extends Injection[Int, (Int, Int)]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">A common injection on numbers: N -&gt; (m = N mod K, (N-m)/K)
+The first element in result tuple is always [0, modulus)
+</p>
+    </li><li visbl="pub" name="com.twitter.bijection.InversionFailure" data-isabs="false">
+      <a id="InversionFailure:InversionFailure"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="InversionFailure.html"><span class="name">InversionFailure</span></a><span class="params">(<span name="failed">failed: Any</span>, <span name="ex">ex: Throwable</span>)</span><span class="result"> extends UnsupportedOperationException with Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt"> When Injection inversion attempts are known to fail,
+ the attempt will encode an InversionFailure to represent
+ that failure
+</p>
+    </li><li visbl="pub" name="com.twitter.bijection.JavaSerializationInjection" data-isabs="false">
+      <a id="JavaSerializationInjection:JavaSerializationInjection[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="JavaSerializationInjection.html"><span class="name">JavaSerializationInjection</span></a><span class="tparams">[<span name="T">T &lt;: Serializable</span>]</span><span class="result"> extends Injection[T, Array[Byte]]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Use Java serialization to write/read bytes.</p>
+    </li><li visbl="pub" name="com.twitter.bijection.LongModDivInjection" data-isabs="false">
+      <a id="LongModDivInjection:LongModDivInjection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LongModDivInjection.html"><span class="name">LongModDivInjection</span></a><span class="result"> extends Injection[Long, (Long, Long)]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">A common injection on numbers: N -&gt; (m = N mod K, (N-m)/K)
+The first element in result tuple is always [0, modulus)
+</p>
     </li><li visbl="pub" name="com.twitter.bijection.LowPriorityBijections" data-isabs="true">
       <a id="LowPriorityBijections:LowPriorityBijections"></a>
       <h4 class="signature">
@@ -712,6 +799,44 @@ free, i.</p>
       </span>
       </h4>
       
+    </li><li visbl="pub" name="com.twitter.bijection.Inversion" data-isabs="false">
+      <a id="Inversion:Inversion"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Inversion$.html"><span class="name">Inversion</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Factory for applying inversion attempts
+</p>
+    </li><li visbl="pub" name="com.twitter.bijection.InversionFailure" data-isabs="false">
+      <a id="InversionFailure:InversionFailure"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="InversionFailure$.html"><span class="name">InversionFailure</span></a><span class="result"> extends Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt"> Factory for producing InversionFailures
+</p>
+    </li><li visbl="pub" name="com.twitter.bijection.JavaSerializationInjection" data-isabs="false">
+      <a id="JavaSerializationInjection:JavaSerializationInjection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="JavaSerializationInjection$.html"><span class="name">JavaSerializationInjection</span></a><span class="result"> extends Serializable</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="com.twitter.bijection.NumberSystems" data-isabs="false">
       <a id="NumberSystems:NumberSystems"></a>
       <h4 class="signature">
@@ -798,6 +923,18 @@ and splitting them back out.</p>
       </span>
       </h4>
       
+    </li><li visbl="pub" name="com.twitter.bijection.avro" data-isabs="false">
+      <a id="avro:avro"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="avro/package.html"><span class="name">avro</span></a>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="com.twitter.bijection.clojure" data-isabs="false">
       <a id="clojure:clojure"></a>
       <h4 class="signature">
@@ -807,6 +944,18 @@ and splitting them back out.</p>
       </span>
       <span class="symbol">
         <a href="clojure/package.html"><span class="name">clojure</span></a>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="com.twitter.bijection.codec" data-isabs="false">
+      <a id="codec:codec"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="codec/package.html"><span class="name">codec</span></a>
       </span>
       </h4>
       
@@ -822,6 +971,18 @@ and splitting them back out.</p>
       </span>
       </h4>
       
+    </li><li visbl="pub" name="com.twitter.bijection.hbase" data-isabs="false">
+      <a id="hbase:hbase"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="hbase/package.html"><span class="name">hbase</span></a>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="com.twitter.bijection.json" data-isabs="false">
       <a id="json:json"></a>
       <h4 class="signature">
@@ -831,6 +992,18 @@ and splitting them back out.</p>
       </span>
       <span class="symbol">
         <a href="json/package.html"><span class="name">json</span></a>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="com.twitter.bijection.netty" data-isabs="false">
+      <a id="netty:netty"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="netty/package.html"><span class="name">netty</span></a>
       </span>
       </h4>
       
