@@ -6,10 +6,6 @@ the inverse has the same property.
 
 See the [current API documentation](http://twitter.github.com/bijection) for more information.
 
-## Maven
-
-Current version is `0.5.2`. groupid=`"com.twitter"` artifact=`"bijection-core_2.9.3"`.
-
 ## Examples:
 
 ```scala
@@ -123,6 +119,28 @@ of Java or Scala, please contribute!
 `Bufferable[T]` handles putting and getting a type `T` into a ByteBuffer in a composable way.
 `Bufferable[T]` instances for all primitives/tuples/containers are provided. Bijections and
 Injections to any of these types give you binary serialization via Bufferable.
+
+## Maven
+
+Bijection modules are available on maven central. The current groupid and version for all modules is, respectively, `"com.twitter"` and  `0.5.2`.
+
+Current published artifacts are
+
+* `bijection-core`
+* `bijection-protobuf`
+* `bijection-thrift`
+* `bijection-guava`
+* `bijection-scrooge`
+* `bijection-json`
+* `bijection-util`
+* `bijection-clojure`
+* `bijection-netty`
+* `bijection-avro`
+* `bijection-hbase`
+
+Every artifact is published against Scala `"2.9.3"` and `"2.10"`. To pull in the jars, make sure to add your desired scala version as a suffix, ie:
+
+`bijection-core_2.9.2` or `bijection-core_2.10`
 
 ## Authors
 
