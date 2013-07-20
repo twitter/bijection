@@ -1,5 +1,6 @@
 # Bijection #
 
+<<<<<<< HEAD
 ### <next version>
 
 * Move bijection-algebird to the Algebird project as "algebird-bijection"
@@ -10,6 +11,12 @@
 
 ### 0.5.1
 
+=======
+### 0.5.2
+* Remove withSources
+
+### 0.5.1
+>>>>>>> upstream/master
 * Lets bijection-util be distributed
 * Correct README
 

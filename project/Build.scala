@@ -198,9 +198,25 @@ object BijectionBuild extends Build {
     libraryDependencies += withCross("com.twitter" %% "util-core" % "6.3.0")
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
+<<<<<<< HEAD
   lazy val bijectionClojure = module("clojure").settings(
     osgiExportAll("com.twitter.bijection.clojure"),
     libraryDependencies += "org.clojure" % "clojure" % "1.5.1"
+=======
+  lazy val bijectionUtil = Project(
+    id = "bijection-util",
+    base = file("bijection-util"),
+    settings = sharedSettings
+  ).settings(
+    name := "bijection-util",
+    previousArtifact := youngestForwardCompatible("util"),
+    osgiExportAll("com.twitter.bijection.twitter_util"),
+    libraryDependencies += "com.twitter" %% "util-core" % "6.2.0" cross CrossVersion.binaryMapped {
+      case "2.9.3" => "2.9.2" // TODO: hack because twitter hasn't built things against 2.9.3
+      case version if version startsWith "2.10" => "2.10" // TODO: hack because sbt is broken
+      case x       => x
+    }
+>>>>>>> upstream/master
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   lazy val bijectionNetty = module("netty").settings(

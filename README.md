@@ -6,6 +6,13 @@ the inverse has the same property.
 
 See the [current API documentation](http://twitter.github.com/bijection) for more information.
 
+<<<<<<< HEAD
+=======
+## Maven
+
+Current version is `0.5.2`. groupid=`"com.twitter"` artifact=`"bijection-core_2.9.3"`.
+
+>>>>>>> upstream/master
 ## Examples:
 
 ```scala
@@ -15,7 +22,11 @@ res0: java.lang.Integer = 42
 
 In addition to Bijection, we have Injection. An Injection embeds a type A in a larger space of type
 B. Every item from A can be round-tripped through B, but not every B can be mapped to A. So
+<<<<<<< HEAD
 Injection is like a pair of function: `A => B, B => Try[A]`.
+=======
+Injection is like a pair of function: `A => B, B => Attempt[A]`.
+>>>>>>> upstream/master
 
 ```scala
 import com.twitter.bijection._
@@ -24,7 +35,11 @@ scala> Injection[Int, String](100)
 res0: String = 100
 
 scala> Injection.invert[Int, String](res0)
+<<<<<<< HEAD
 res1: Try[Int] = Success(100)
+=======
+res1: Attempt[Int] = Success(100)
+>>>>>>> upstream/master
 ```
 If we want to treat an Injection like a Bijection (over a restricted subspace of the larger set),
 we use the `B @@ Rep[A]` syntax, for instance: `String @@ Rep[Int]`
@@ -63,7 +78,11 @@ scala> injection(123456789L)
 res1: com.twitter.bijection.GZippedBase64String = GZippedBase64String(H4sIAAAAAAAAAGNgYGBgjz4rCgBpa5WLCAAAAA==)
 
 scala> injection.invert(res1)
+<<<<<<< HEAD
 res2: Try[Long] = Success(123456789)
+=======
+res2: Attempt[Long] = Success(123456789)
+>>>>>>> upstream/master
 ```
 
 When you have bijections between a path of items you can `Bijection.connect` or `Injection.connect` them:
@@ -85,7 +104,11 @@ scala> 243L.as[Base64String]
 res0: com.twitter.bijection.Base64String = Base64String(MjQz)
 
 scala> long2String2Bytes2B64.invert(res5)
+<<<<<<< HEAD
 res1: Try[Long] = Success(243)
+=======
+res1: Attempt[Long] = Success(243)
+>>>>>>> upstream/master
 ```
 
 ## Supported Bijections/Injections
