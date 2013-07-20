@@ -59,7 +59,7 @@ object BijectionBuild extends Build {
         Some("sonatype-snapshots" at nexus + "content/repositories/snapshots")
       else
         Some("sonatype-releases"  at nexus + "service/local/staging/deploy/maven2")
-    },
+    }
 
     pomExtra := (
       <url>https://github.com/twitter/bijection</url>
