@@ -7,12 +7,15 @@ the inverse has the same property.
 See the [current API documentation](http://twitter.github.com/bijection) for more information.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 ## Maven
 
 Current version is `0.5.2`. groupid=`"com.twitter"` artifact=`"bijection-core_2.9.3"`.
 
 >>>>>>> upstream/master
+=======
+>>>>>>> upstream/develop
 ## Examples:
 
 ```scala
@@ -23,10 +26,14 @@ res0: java.lang.Integer = 42
 In addition to Bijection, we have Injection. An Injection embeds a type A in a larger space of type
 B. Every item from A can be round-tripped through B, but not every B can be mapped to A. So
 <<<<<<< HEAD
+<<<<<<< HEAD
 Injection is like a pair of function: `A => B, B => Try[A]`.
 =======
 Injection is like a pair of function: `A => B, B => Attempt[A]`.
 >>>>>>> upstream/master
+=======
+Injection is like a pair of function: `A => B, B => Try[A]`.
+>>>>>>> upstream/develop
 
 ```scala
 import com.twitter.bijection._
@@ -36,10 +43,14 @@ res0: String = 100
 
 scala> Injection.invert[Int, String](res0)
 <<<<<<< HEAD
+<<<<<<< HEAD
 res1: Try[Int] = Success(100)
 =======
 res1: Attempt[Int] = Success(100)
 >>>>>>> upstream/master
+=======
+res1: Try[Int] = Success(100)
+>>>>>>> upstream/develop
 ```
 If we want to treat an Injection like a Bijection (over a restricted subspace of the larger set),
 we use the `B @@ Rep[A]` syntax, for instance: `String @@ Rep[Int]`
@@ -79,10 +90,14 @@ res1: com.twitter.bijection.GZippedBase64String = GZippedBase64String(H4sIAAAAAA
 
 scala> injection.invert(res1)
 <<<<<<< HEAD
+<<<<<<< HEAD
 res2: Try[Long] = Success(123456789)
 =======
 res2: Attempt[Long] = Success(123456789)
 >>>>>>> upstream/master
+=======
+res2: Try[Long] = Success(123456789)
+>>>>>>> upstream/develop
 ```
 
 When you have bijections between a path of items you can `Bijection.connect` or `Injection.connect` them:
@@ -105,10 +120,14 @@ res0: com.twitter.bijection.Base64String = Base64String(MjQz)
 
 scala> long2String2Bytes2B64.invert(res5)
 <<<<<<< HEAD
+<<<<<<< HEAD
 res1: Try[Long] = Success(243)
 =======
 res1: Attempt[Long] = Success(243)
 >>>>>>> upstream/master
+=======
+res1: Try[Long] = Success(243)
+>>>>>>> upstream/develop
 ```
 
 ## Supported Bijections/Injections
