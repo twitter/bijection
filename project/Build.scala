@@ -59,7 +59,7 @@ object BijectionBuild extends Build {
         Some("sonatype-snapshots" at nexus + "content/repositories/snapshots")
       else
         Some("sonatype-releases"  at nexus + "service/local/staging/deploy/maven2")
-    }
+    },
 
     pomExtra := (
       <url>https://github.com/twitter/bijection</url>
@@ -224,15 +224,17 @@ object BijectionBuild extends Build {
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
 
-  lazy val bijectionJodaTime = Project(
-    id = "bijection-jodatime",
-    base = file("bijection-jodatime"),
-    settings = sharedSettings}
-  ).settings(
-    name := "bijection-jodatime",
-    previousArtifact := youngestForwardCompatible("jodatime"),
+
+
+  lazy val bijectionJodaTime = module("jodatime").settings(
     osgiExportAll("com.twitter.bijection.jodatime"),
-	libraryDependencies += "com.github.nscala-time" % "nscala-time" % "0.4.2"
+    libraryDependencies ++= Seq(
+      "com.github.nscala-time" % "nscala-time" % "0.4.2"
+
+    )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+
+
   
 }
