@@ -232,7 +232,7 @@ object BijectionBuild extends Build {
     name := "bijection-jodatime",
     previousArtifact := youngestForwardCompatible("jodatime"),
     osgiExportAll("com.twitter.bijection.jodatime"),
-	libraryDependencies += "com.github.nscala-time" % "nscala-time" % "0.4.2
+	libraryDependencies += "com.github.nscala-time" % "nscala-time" % "0.4.2"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
   
 }
