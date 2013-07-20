@@ -33,6 +33,8 @@ package object bijection {
    * This type represents the attempted conversion. A failure
    * will result in a scala.util.Failure containing the InversionFailure. A success
    * will result in a scala.util.Success containing the inverted value.
+   *
+   * TODO: Remove in 0.6.0.
    */
   type Attempt[T] = Try[T]
 

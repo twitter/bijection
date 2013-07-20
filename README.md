@@ -6,10 +6,6 @@ the inverse has the same property.
 
 See the [current API documentation](http://twitter.github.com/bijection) for more information.
 
-## Maven
-
-Current version is `0.5.0`. groupid=`"com.twitter"` artifact=`"bijection-core_2.9.3"`.
-
 ## Examples:
 
 ```scala
@@ -19,7 +15,7 @@ res0: java.lang.Integer = 42
 
 In addition to Bijection, we have Injection. An Injection embeds a type A in a larger space of type
 B. Every item from A can be round-tripped through B, but not every B can be mapped to A. So
-Injection is like a pair of function: `A => B, B => Option[A]`.
+Injection is like a pair of function: `A => B, B => Try[A]`.
 
 ```scala
 import com.twitter.bijection._
@@ -28,7 +24,7 @@ scala> Injection[Int, String](100)
 res0: String = 100
 
 scala> Injection.invert[Int, String](res0)
-res1: Option[Int] = Some(100)
+res1: Try[Int] = Success(100)
 ```
 If we want to treat an Injection like a Bijection (over a restricted subspace of the larger set),
 we use the `B @@ Rep[A]` syntax, for instance: `String @@ Rep[Int]`
@@ -67,7 +63,7 @@ scala> injection(123456789L)
 res1: com.twitter.bijection.GZippedBase64String = GZippedBase64String(H4sIAAAAAAAAAGNgYGBgjz4rCgBpa5WLCAAAAA==)
 
 scala> injection.invert(res1)
-res2: Option[Long] = Some(123456789)
+res2: Try[Long] = Success(123456789)
 ```
 
 When you have bijections between a path of items you can `Bijection.connect` or `Injection.connect` them:
@@ -89,7 +85,7 @@ scala> 243L.as[Base64String]
 res0: com.twitter.bijection.Base64String = Base64String(MjQz)
 
 scala> long2String2Bytes2B64.invert(res5)
-res1: Option[Long] = Some(243)
+res1: Try[Long] = Success(243)
 ```
 
 ## Supported Bijections/Injections
@@ -123,6 +119,28 @@ of Java or Scala, please contribute!
 `Bufferable[T]` handles putting and getting a type `T` into a ByteBuffer in a composable way.
 `Bufferable[T]` instances for all primitives/tuples/containers are provided. Bijections and
 Injections to any of these types give you binary serialization via Bufferable.
+
+## Maven
+
+Bijection modules are available on maven central. The current groupid and version for all modules is, respectively, `"com.twitter"` and  `0.5.2`.
+
+Current published artifacts are
+
+* `bijection-core`
+* `bijection-protobuf`
+* `bijection-thrift`
+* `bijection-guava`
+* `bijection-scrooge`
+* `bijection-json`
+* `bijection-util`
+* `bijection-clojure`
+* `bijection-netty`
+* `bijection-avro`
+* `bijection-hbase`
+
+Every artifact is published against Scala `"2.9.3"` and `"2.10"`. To pull in the jars, make sure to add your desired scala version as a suffix, ie:
+
+`bijection-core_2.9.2` or `bijection-core_2.10`
 
 ## Authors
 

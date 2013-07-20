@@ -30,7 +30,7 @@ import java.util.concurrent.{ ConcurrentMap => JConcurrentMap }
 import scala.collection.JavaConverters._
 import scala.collection.mutable
 import scala.collection.generic.CanBuildFrom
-import scala.util.Success
+import scala.util.{ Success, Try }
 
 trait CollectionInjections extends StringInjections {
 
@@ -86,7 +86,7 @@ trait CollectionInjections extends StringInjections {
         c foreach { builder += inj(_) }
         builder.result()
       }
-      override def invert(d: D): Attempt[C] = {
+      override def invert(d: D): Try[C] = {
         val builder = dc()
         d foreach { b =>
           val thisB = inj.invert(b)

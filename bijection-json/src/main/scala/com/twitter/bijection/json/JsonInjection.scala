@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.twitter.bijection.json
 
-import com.twitter.bijection.{Attempt, Bijection, Injection, InversionFailure, ImplicitBijection}
+import com.twitter.bijection.{Bijection, Injection, InversionFailure, ImplicitBijection}
 import com.twitter.bijection.Inversion.{ attempt, attemptWhen }
 import org.codehaus.jackson.{JsonParser, JsonNode, JsonFactory}
 import org.codehaus.jackson.map.ObjectMapper
@@ -30,7 +30,7 @@ import org.codehaus.jackson.node.{
 import scala.collection.generic.CanBuildFrom
 import scala.collection.mutable.Builder
 import scala.collection.JavaConverters._
-import scala.util.Success
+import scala.util.{ Success, Try }
 import scala.util.control.NonFatal
 
 /**
@@ -75,7 +75,7 @@ object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
   def toJsonNode[T](t: T)(implicit json: JsonNodeInjection[T]): JsonNode =
     json.apply(t)
 
-  def fromJsonNode[T](node: JsonNode)(implicit json: JsonNodeInjection[T]): Attempt[T] =
+  def fromJsonNode[T](node: JsonNode)(implicit json: JsonNodeInjection[T]): Try[T] =
     json.invert(node)
 
   implicit val identity = new AbstractJsonNodeInjection[JsonNode] {
@@ -141,7 +141,7 @@ object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
         l foreach { t => ary.add(jbij(t)) }
         ary
       }
-      override def invert(n: JsonNode): Attempt[C] = {
+      override def invert(n: JsonNode): Try[C] = {
         builder.clear
         var inCount = 0
         n.getElements.asScala.foreach { jn =>
@@ -181,7 +181,7 @@ object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
         }
         obj
       }
-      override def invert(n: JsonNode): Attempt[Map[String,V]] = {
+      override def invert(n: JsonNode): Try[Map[String,V]] = {
         val builder = Map.newBuilder[String, V]
         builder.clear
         var cnt = 0
@@ -221,6 +221,6 @@ object JsonInjection {
   def toString[T](implicit json: JsonNodeInjection[T]): Injection[T, String] =
     UnparsedJson.injection[T] andThen (UnparsedJson.unwrap)
 
-  def fromString[T](s: String)(implicit json: JsonNodeInjection[T]): Attempt[T] =
+  def fromString[T](s: String)(implicit json: JsonNodeInjection[T]): Try[T] =
     toString.invert(s)
 }
