@@ -27,19 +27,5 @@ import Rep._
 
   property("round trips Joda -> Date") = isLooseInjection[DateTime, Date]
  
-//  property("round trips Date -> String") = isLooseInjection[Date, String]
-
-
-
-/**
-  implicit val DateTime: Arbitrary[DateTime] = arbitraryViaFn { (s: Date) => (new DateTime(s)) }
-  property("Date <=> Joda") = isBijection[Date, DateTime]
-
-  //injection test
-  property("round trips Date -> String") = isLooseInjection[Date, String]
-  property("round trips Joda -> String") = isLooseInjection[DateTime, String]
-  property("round trips Joda -> Date") = isLooseInjection[DateTime, Date]
-
-**/
 
 }
