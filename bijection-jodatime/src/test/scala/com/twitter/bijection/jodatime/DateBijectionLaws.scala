@@ -13,10 +13,25 @@ import com.twitter.bijection._
 
 object DateBijectionsLaws extends Properties("DateBijections") with BaseProperties with DateBijections with DateInjections {
 
-  //bijections test
-  implicit val Long: Arbitrary[Long] = arbitraryViaFn { (s: DateTime) => (s.getMillis()) }
-  property("Joda <=> Long") = isBijection[DateTime, Long]
+import Rep._
 
+  implicit val strByte = arbitraryViaBijection[Date, String @@ Rep[Date]]
+
+  implicit val date = arbitraryViaFn { (dtime: Long) => new DateTime(dtime) }
+
+  property("Long <=> Joda") = isBijection[Long, DateTime]
+
+  property("Date <=> Joda") = isBijection[Date, DateTime]
+
+  property("round trips Date -> String") = isLooseInjection[DateTime,String]
+
+  property("round trips Joda -> Date") = isLooseInjection[DateTime, Date]
+ 
+//  property("round trips Date -> String") = isLooseInjection[Date, String]
+
+
+
+/**
   implicit val DateTime: Arbitrary[DateTime] = arbitraryViaFn { (s: Date) => (new DateTime(s)) }
   property("Date <=> Joda") = isBijection[Date, DateTime]
 
@@ -24,5 +39,7 @@ object DateBijectionsLaws extends Properties("DateBijections") with BaseProperti
   property("round trips Date -> String") = isLooseInjection[Date, String]
   property("round trips Joda -> String") = isLooseInjection[DateTime, String]
   property("round trips Joda -> Date") = isLooseInjection[DateTime, Date]
+
+**/
 
 }
