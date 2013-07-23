@@ -122,7 +122,8 @@ object BijectionBuild extends Build {
     bijectionClojure,
     bijectionNetty,
     bijectionAvro,
-    bijectionHbase
+    bijectionHbase,
+    bijectionJodaTime
   )
 
   def module(name: String) = {
@@ -221,4 +222,14 @@ object BijectionBuild extends Build {
       "org.apache.hadoop" % "hadoop-core" % "1.0.4" % "provided->default"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  lazy val bijectionJodaTime = module("jodatime").settings(
+    osgiExportAll("com.twitter.bijection.jodatime"),
+    libraryDependencies ++= Seq(
+      "joda-time" % "joda-time" % "2.2",
+      "org.joda" % "joda-convert" % "1.3.1"
+    )
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  
 }
