@@ -1,14 +1,10 @@
 package com.twitter.bijection.jodatime
 
 import com.twitter.bijection.{ Bijection,  AbstractBijection}
-
-
 import java.util.Date
-
 import org.joda.time.DateTime
 
 trait DateBijections  {
-
   
   implicit val date2joda: Bijection[java.util.Date, DateTime] =
     new AbstractBijection[java.util.Date, DateTime] {
