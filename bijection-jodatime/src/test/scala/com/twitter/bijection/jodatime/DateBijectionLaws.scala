@@ -4,7 +4,6 @@ import org.scalacheck.Properties
 import org.scalacheck.Gen._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
-
 import com.twitter.bijection.{ Bijection, BaseProperties, ImplicitBijection }
 import java.util.Date
 import org.joda.time.DateTime

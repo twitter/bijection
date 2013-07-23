@@ -1,9 +1,7 @@
 package com.twitter.bijection.jodatime
 
 import java.util.Date
-
 import org.joda.time.DateTime
-
 import com.twitter.bijection.Inversion.attempt
 import com.twitter.bijection.{ Injection, InversionFailure, AbstractInjection }
 
