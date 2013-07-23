@@ -226,7 +226,8 @@ object BijectionBuild extends Build {
   lazy val bijectionJodaTime = module("jodatime").settings(
     osgiExportAll("com.twitter.bijection.jodatime"),
     libraryDependencies ++= Seq(
-      "joda-time" % "joda-time" % "2.2"
+      "joda-time" % "joda-time" % "2.2",
+      "org.joda" % "joda-convert" % "1.3.1"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
