@@ -6,7 +6,6 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
 
 import com.twitter.bijection.{ Bijection, BaseProperties, ImplicitBijection }
-//import Conversion.asMethod
 import java.util.Date
 import org.joda.time.DateTime
 import com.twitter.bijection._
