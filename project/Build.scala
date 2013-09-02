@@ -166,7 +166,7 @@ object BijectionBuild extends Build {
     previousArtifact := youngestForwardCompatible("scrooge"),
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
-      "com.twitter" % "scrooge-runtime" % "3.0.4"
+      "com.twitter" % "scrooge-serializer_2.9.2" % "3.6.0"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 

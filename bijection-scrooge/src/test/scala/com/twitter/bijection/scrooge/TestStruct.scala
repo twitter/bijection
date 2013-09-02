@@ -3,22 +3,27 @@
  */
 package com.twitter.bijection.scrooge
 
-import com.twitter.scrooge.{ThriftException, ThriftStruct, ThriftStructCodec}
+import com.twitter.scrooge.{ThriftException, ThriftStruct, ThriftStructCodec3}
 import org.apache.thrift.protocol._
 import java.nio.ByteBuffer
+import com.twitter.finagle.SourcedException
 import scala.collection.mutable
 import scala.collection.{Map, Set}
 
 
-object TestStruct extends ThriftStructCodec[TestStruct] {
+object TestStruct extends ThriftStructCodec3[TestStruct] {
   val Struct = new TStruct("TestStruct")
   val SomeIntField = new TField("someInt", TType.I32, 1)
   val SomeStringField = new TField("someString", TType.STRING, 2)
 
-  def encode(_item: TestStruct, _oproto: TProtocol) { _item.write(_oproto) }
-  def decode(_iprot: TProtocol) = Immutable.decode(_iprot)
+  /**
+   * Checks that all required fields are non-null.
+   */
+  def validate(_item: TestStruct) {
+  }
 
-  def apply(_iprot: TProtocol): TestStruct = decode(_iprot)
+  override def encode(_item: TestStruct, _oproto: TProtocol) { _item.write(_oproto) }
+  override def decode(_iprot: TProtocol) = Immutable.decode(_iprot)
 
   def apply(
     someInt: Int,
@@ -30,9 +35,9 @@ object TestStruct extends ThriftStructCodec[TestStruct] {
 
   def unapply(_item: TestStruct): Option[Product2[Int, Option[String]]] = Some(_item)
 
-  object Immutable extends ThriftStructCodec[TestStruct] {
-    def encode(_item: TestStruct, _oproto: TProtocol) { _item.write(_oproto) }
-    def decode(_iprot: TProtocol) = {
+  object Immutable extends ThriftStructCodec3[TestStruct] {
+    override def encode(_item: TestStruct, _oproto: TProtocol) { _item.write(_oproto) }
+    override def decode(_iprot: TProtocol) = {
       var someInt: Int = 0
       var _got_someInt = false
       var someString: String = null
@@ -116,7 +121,7 @@ trait TestStruct extends ThriftStruct
   def _2 = someString
 
   override def write(_oprot: TProtocol) {
-    validate()
+    TestStruct.validate(this)
     _oprot.writeStructBegin(Struct)
     if (true) {
       val someInt_item = someInt
@@ -141,12 +146,6 @@ trait TestStruct extends ThriftStruct
     someInt,
     someString
   )
-
-  /**
-   * Checks that all required fields are non-null.
-   */
-  def validate() {
-  }
 
   override def canEqual(other: Any): Boolean = other.isInstanceOf[TestStruct]
 
