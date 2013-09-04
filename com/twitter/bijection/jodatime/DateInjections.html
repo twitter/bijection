@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>com.twitter.bijection.algebird.AlgebirdBijections</title>
+          <title>com.twitter.bijection.jodatime.DateInjections</title>
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link type="text/css" media="screen" rel="stylesheet" href="../../../../lib/template.css" />
@@ -12,26 +12,26 @@
       <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
     
         </head>
-        <body onload="sh_highlightDocument('../lib/', '.min.js');" class="value">
+        <body onload="sh_highlightDocument('../lib/', '.min.js');" class="type">
       <div id="definition">
-        <a title="Go to companion" href="AlgebirdBijections.html"><img src="../../../../lib/object_to_trait_big.png" /></a>
-        <p id="owner"><a name="com" class="extype" href="../../../package.html">com</a>.<a name="com.twitter" class="extype" href="../../package.html">twitter</a>.<a name="com.twitter.bijection" class="extype" href="../package.html">bijection</a>.<a name="com.twitter.bijection.algebird" class="extype" href="package.html">algebird</a></p>
-        <h1><a title="Go to companion" href="AlgebirdBijections.html">AlgebirdBijections</a></h1>
+        <img src="../../../../lib/trait_big.png" />
+        <p id="owner"><a name="com" class="extype" href="../../../package.html">com</a>.<a name="com.twitter" class="extype" href="../../package.html">twitter</a>.<a name="com.twitter.bijection" class="extype" href="../package.html">bijection</a>.<a name="com.twitter.bijection.jodatime" class="extype" href="package.html">jodatime</a></p>
+        <h1>DateInjections</h1>
       </div>
 
       <h4 class="signature" id="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">object</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">AlgebirdBijections</span><span class="result"> extends <a name="com.twitter.bijection.algebird.AlgebirdBijections" class="extype" href="AlgebirdBijections.html">AlgebirdBijections</a></span>
+        <span class="name">DateInjections</span><span class="result"> extends AnyRef</span>
       </span>
       </h4>
       
-      <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Source</dt><dd><a target="_blank" href="https://github.com/twitter/bijection/tree/0.5.2/bijection-algebird/src/main/scala/com/twitter/bijection/algebird/AlgebirdBijections.scala">AlgebirdBijections.scala</a></dd></dl><div class="toggleContainer block">
+      <div class="fullcommenttop" id="comment"><dl class="attributes block"> <dt>Source</dt><dd><a target="_blank" href="https://github.com/twitter/bijection/tree/0.5.3/bijection-jodatime/src/main/scala/com/twitter/bijection/jodatime/DateInjections.scala">DateInjections.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a name="com.twitter.bijection.algebird.AlgebirdBijections" class="extype" href="AlgebirdBijections.html">AlgebirdBijections</a>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+          <div class="superTypes hiddenContent">AnyRef, <span name="scala.Any" class="extype">Any</span></div>
         </div></div>
     
 
@@ -45,7 +45,7 @@
               <span class="filtertype">Inherited</span>
               <ol><li class="hideall out"><span>Hide All</span></li>
               <li class="showall in"><span>Show all</span></li></ol>
-              <ol id="linearization"><li name="com.twitter.bijection.algebird.AlgebirdBijections" class="in"><span>AlgebirdBijections</span></li><li name="com.twitter.bijection.algebird.AlgebirdBijections" class="in"><span>AlgebirdBijections</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+              <ol id="linearization"><li name="com.twitter.bijection.jodatime.DateInjections" class="in"><span>DateInjections</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
             </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -150,6 +150,18 @@
                 <span class="name">@throws</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li visbl="pub" name="com.twitter.bijection.jodatime.DateInjections#date2String" data-isabs="false">
+      <a id="date2String:Injection[Date, String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">date2String</span><span class="result">: <a name="com.twitter.bijection.Injection" class="extype" href="../Injection.html">Injection</a>[<span name="java.util.Date" class="extype">Date</span>, String]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
       <a id="eq(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -174,18 +186,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="com.twitter.bijection.algebird.AlgebirdBijections#fieldBijection" data-isabs="false">
-      <a id="fieldBijection[T, U](ImplicitBijection[T, U]):Bijection[Field[T], Field[U]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">fieldBijection</span><span class="tparams">[<span name="T">T</span>, <span name="U">U</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="bij">bij: <a name="com.twitter.bijection.ImplicitBijection" class="extype" href="../ImplicitBijection.html">ImplicitBijection</a>[T, U]</span>)</span><span class="result">: <a name="com.twitter.bijection.Bijection" class="extype" href="../Bijection.html">Bijection</a>[<span name="com.twitter.algebird.Field" class="extype">Field</span>[T], <span name="com.twitter.algebird.Field" class="extype">Field</span>[U]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.algebird.AlgebirdBijections" class="extype" href="AlgebirdBijections.html">AlgebirdBijections</a></dd></dl></div>
     </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
       <a id="finalize():Unit"></a>
       <h4 class="signature">
@@ -213,18 +213,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li visbl="pub" name="com.twitter.bijection.algebird.AlgebirdBijections#groupBijection" data-isabs="false">
-      <a id="groupBijection[T, U](ImplicitBijection[T, U]):Bijection[Group[T], Group[U]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">groupBijection</span><span class="tparams">[<span name="T">T</span>, <span name="U">U</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="bij">bij: <a name="com.twitter.bijection.ImplicitBijection" class="extype" href="../ImplicitBijection.html">ImplicitBijection</a>[T, U]</span>)</span><span class="result">: <a name="com.twitter.bijection.Bijection" class="extype" href="../Bijection.html">Bijection</a>[<span name="com.twitter.algebird.Group" class="extype">Group</span>[T], <span name="com.twitter.algebird.Group" class="extype">Group</span>[U]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.algebird.AlgebirdBijections" class="extype" href="AlgebirdBijections.html">AlgebirdBijections</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
       <a id="hashCode():Int"></a>
       <h4 class="signature">
@@ -249,18 +237,30 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li visbl="pub" name="com.twitter.bijection.algebird.AlgebirdBijections#monoidBijection" data-isabs="false">
-      <a id="monoidBijection[T, U](ImplicitBijection[T, U]):Bijection[Monoid[T], Monoid[U]]"></a>
+    </li><li visbl="pub" name="com.twitter.bijection.jodatime.DateInjections#joda2Date" data-isabs="false">
+      <a id="joda2Date:Injection[DateTime, Date]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">implicit </span>
-        <span class="kind">def</span>
+        <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">monoidBijection</span><span class="tparams">[<span name="T">T</span>, <span name="U">U</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="bij">bij: <a name="com.twitter.bijection.ImplicitBijection" class="extype" href="../ImplicitBijection.html">ImplicitBijection</a>[T, U]</span>)</span><span class="result">: <a name="com.twitter.bijection.Bijection" class="extype" href="../Bijection.html">Bijection</a>[<span name="com.twitter.algebird.Monoid" class="extype">Monoid</span>[T], <span name="com.twitter.algebird.Monoid" class="extype">Monoid</span>[U]]</span>
+        <span class="name">joda2Date</span><span class="result">: <a name="com.twitter.bijection.Injection" class="extype" href="../Injection.html">Injection</a>[<span name="org.joda.time.DateTime" class="extype">DateTime</span>, <span name="java.util.Date" class="extype">Date</span>]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.algebird.AlgebirdBijections" class="extype" href="AlgebirdBijections.html">AlgebirdBijections</a></dd></dl></div>
+      
+    </li><li visbl="pub" name="com.twitter.bijection.jodatime.DateInjections#joda2String" data-isabs="false">
+      <a id="joda2String:Injection[DateTime, String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">joda2String</span><span class="result">: <a name="com.twitter.bijection.Injection" class="extype" href="../Injection.html">Injection</a>[<span name="org.joda.time.DateTime" class="extype">DateTime</span>, String]</span>
+      </span>
+      </h4>
+      
     </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
       <a id="ne(AnyRef):Boolean"></a>
       <h4 class="signature">
@@ -297,30 +297,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li visbl="pub" name="com.twitter.bijection.algebird.AlgebirdBijections#ringBijection" data-isabs="false">
-      <a id="ringBijection[T, U](ImplicitBijection[T, U]):Bijection[Ring[T], Ring[U]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ringBijection</span><span class="tparams">[<span name="T">T</span>, <span name="U">U</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="bij">bij: <a name="com.twitter.bijection.ImplicitBijection" class="extype" href="../ImplicitBijection.html">ImplicitBijection</a>[T, U]</span>)</span><span class="result">: <a name="com.twitter.bijection.Bijection" class="extype" href="../Bijection.html">Bijection</a>[<span name="com.twitter.algebird.Ring" class="extype">Ring</span>[T], <span name="com.twitter.algebird.Ring" class="extype">Ring</span>[U]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.algebird.AlgebirdBijections" class="extype" href="AlgebirdBijections.html">AlgebirdBijections</a></dd></dl></div>
-    </li><li visbl="pub" name="com.twitter.bijection.algebird.AlgebirdBijections#semigroupBijection" data-isabs="false">
-      <a id="semigroupBijection[T, U](ImplicitBijection[T, U]):Bijection[Semigroup[T], Semigroup[U]]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">semigroupBijection</span><span class="tparams">[<span name="T">T</span>, <span name="U">U</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="bij">bij: <a name="com.twitter.bijection.ImplicitBijection" class="extype" href="../ImplicitBijection.html">ImplicitBijection</a>[T, U]</span>)</span><span class="result">: <a name="com.twitter.bijection.Bijection" class="extype" href="../Bijection.html">Bijection</a>[<span name="com.twitter.algebird.Semigroup" class="extype">Semigroup</span>[T], <span name="com.twitter.algebird.Semigroup" class="extype">Semigroup</span>[U]]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="com.twitter.bijection.algebird.AlgebirdBijections" class="extype" href="AlgebirdBijections.html">AlgebirdBijections</a></dd></dl></div>
     </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
       <a id="synchronized[T0](⇒ T0):T0"></a>
       <h4 class="signature">
@@ -397,9 +373,7 @@
         </div>
 
         <div id="inheritedMembers">
-        <div name="com.twitter.bijection.algebird.AlgebirdBijections" class="parent">
-              <h3>Inherited from <a name="com.twitter.bijection.algebird.AlgebirdBijections" class="extype" href="AlgebirdBijections.html">AlgebirdBijections</a></h3>
-            </div><div name="scala.AnyRef" class="parent">
+        <div name="scala.AnyRef" class="parent">
               <h3>Inherited from AnyRef</h3>
             </div><div name="scala.Any" class="parent">
               <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>
