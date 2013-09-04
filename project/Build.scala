@@ -94,11 +94,17 @@ object BijectionBuild extends Build {
       </developers>)
   ) ++ mimaDefaultSettings
 
+    /**
+    * This returns the youngest jar we released that is compatible with
+    * the current.
+    */
+  val unreleasedModules = Set[String]()
+
   // This returns the youngest jar we released that is compatible with the current
-  def youngestForwardCompatible(subProj: String) = {
-    if(subProj == "netty") None // This is new. Update after next version
-    else Some("com.twitter" % ("bijection-" + subProj + "_2.9.3") % "0.5.1")
-  }
+  def youngestForwardCompatible(subProj: String) =
+    Some(subProj)
+      .filterNot(unreleasedModules.contains(_))
+      .map { s => "com.twitter" % ("bijection-" + s + "_2.9.3") % "0.5.3" }
 
   def osgiExportAll(packs: String*) =
     OsgiKeys.exportPackage := packs.map(_ + ".*;version=${Bundle-Version}")

@@ -122,7 +122,7 @@ Injections to any of these types give you binary serialization via Bufferable.
 
 ## Maven
 
-Bijection modules are available on maven central. The current groupid and version for all modules is, respectively, `"com.twitter"` and  `0.5.2`.
+Bijection modules are available on maven central. The current groupid and version for all modules is, respectively, `"com.twitter"` and  `0.5.3`.
 
 Current published artifacts are
 
@@ -140,7 +140,7 @@ Current published artifacts are
 
 Every artifact is published against Scala `"2.9.3"` and `"2.10"`. To pull in the jars, make sure to add your desired scala version as a suffix, ie:
 
-`bijection-core_2.9.2` or `bijection-core_2.10`
+`bijection-core_2.9.3` or `bijection-core_2.10`
 
 ## Authors
 

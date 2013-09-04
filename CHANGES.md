@@ -1,8 +1,15 @@
 # Bijection #
 
-### <next version>
+### 0.5.3
 
-* Move bijection-algebird to the Algebird project as "algebird-bijection"
+* SBT CodeGen: https://github.com/twitter/bijection/pull/128
+* Remove redundant Attempt (in favor of scala.util.Try) https://github.com/twitter/bijection/pull/133
+* Adds bijection-avro: https://github.com/twitter/bijection/pull/129
+* Adds bijection-hbase: https://github.com/twitter/bijection/pull/135
+* Injection from Bijection with Rep tag: https://github.com/twitter/bijection/pull/138
+* Move bijection-algebird to algebird: https://github.com/twitter/bijection/pull/139
+* Adds bijection-jodatime: https://github.com/twitter/bijection/pull/136
+* Replace scrooge-runtime with scrooge-serializer: https://github.com/twitter/bijection/pull/141
 
 ### 0.5.2
 
