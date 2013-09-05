@@ -126,7 +126,7 @@ To learn more and find links to tutorials and information around the web, check 
 
 The latest ScalaDocs are hosted on Bijection's [Github Project Page](http://twitter.github.io/bijection).
 
-Discussion occurs primarily on the Bijection mailing list. To join the mailing list, email [bijection@librelist.com](mailto:bijection@librelist.com). The same address is used for posting once you've joined. Issues should be reported on the [GitHub issue tracker](https://github.com/twitter/bijection/issues).
+Discussion occurs primarily on the [Bijection mailing list](http://librelist.com/browser/bijection/). To join the mailing list, email [bijection@librelist.com](mailto:bijection@librelist.com). The same address is used for posting once you've joined. Issues should be reported on the [GitHub issue tracker](https://github.com/twitter/bijection/issues).
 
 ## Maven
 
