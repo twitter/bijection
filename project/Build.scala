@@ -190,7 +190,7 @@ object BijectionBuild extends Build {
     osgiExportAll("com.twitter.bijection.scrooge"),
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
-      "com.twitter" % "scrooge-serializer_2.9.2" % "3.6.0"
+      withCross("com.twitter" %% "scrooge-serializer" % "3.6.0")
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
