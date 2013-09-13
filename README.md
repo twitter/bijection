@@ -120,6 +120,14 @@ of Java or Scala, please contribute!
 `Bufferable[T]` instances for all primitives/tuples/containers are provided. Bijections and
 Injections to any of these types give you binary serialization via Bufferable.
 
+## Community and Documentation
+
+To learn more and find links to tutorials and information around the web, check out the [Bijection Wiki](https://github.com/twitter/bijection/wiki).
+
+The latest ScalaDocs are hosted on Bijection's [Github Project Page](http://twitter.github.io/bijection).
+
+Discussion occurs primarily on the [Bijection mailing list](https://groups.google.com/forum/#!forum/bijection). Issues should be reported on the [GitHub issue tracker](https://github.com/twitter/bijection/issues).
+
 ## Maven
 
 Bijection modules are available on maven central. The current groupid and version for all modules is, respectively, `"com.twitter"` and  `0.5.3`.
