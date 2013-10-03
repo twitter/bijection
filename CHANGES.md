@@ -1,5 +1,11 @@
 # Bijection #
 
+### 0.5.4
+
+* Fix Scrooge Import for Scala 2.10: https://github.com/twitter/bijection/pull/145
+* Add Community Section to README: https://github.com/twitter/bijection/pull/143
+* Added Hbase Injections: https://github.com/twitter/bijection/pull/144
+
 ### 0.5.3
 
 * SBT CodeGen: https://github.com/twitter/bijection/pull/128
