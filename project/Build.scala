@@ -217,7 +217,7 @@ object BijectionBuild extends Build {
   lazy val bijectionAvro = module("avro").settings(
     osgiExportAll("com.twitter.bijection.avro"),
     libraryDependencies ++= Seq(
-      "org.apache.avro" % "avro" % "1.7.4"
+      "org.apache.avro" % "avro" % "1.7.5"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
