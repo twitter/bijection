@@ -55,7 +55,8 @@ object SpecificAvroCodecs {
   }
 
   /**
-   * Returns Injection capable of serializing and deserializing a generic avro record using org.apache.avro.io.JsonEncoder
+   * Returns Injection capable of serializing and deserializing a generic avro record using org.apache.avro.io.JsonEncoder to a
+   * UTF-8 String
    * @tparam T compiled Avro record
    * @return Injection
    */
@@ -87,6 +88,18 @@ object GenericAvroCodecs {
     val writer = new GenericDatumWriter[T](schema)
     val reader = new GenericDatumReader[T](schema)
     new BinaryAvroCodec[T](writer, reader)
+  }
+
+  /**
+   * Returns Injection capable of serializing and deserializing a generic avro record using org.apache.avro.io.JsonEncoder to a
+   * UTF-8 String
+   * @tparam T compiled Avro record
+   * @return Injection
+   */
+  def toJson[T <: GenericRecord](schema: Schema): Injection[T, String] = {
+    val writer = new GenericDatumWriter[T](schema)
+    val reader = new GenericDatumReader[T](schema)
+    new JsonAvroCodec[T](schema, writer, reader)
   }
 
   /**
@@ -177,9 +190,11 @@ class BinaryAvroCodec[T](writer: DatumWriter[T], reader: DatumReader[T]) extends
 
 /**
  * Provides methods to serializing and deserializing a generic and compiled avro record using org.apache.avro.io.JsonEncoder
+ * to a UTF-8 String
  * @param writer Datum writer
  * @param reader Datum reader
  * @tparam T avro record
+ * @throws RuntimeException if Avro Records cannot be converted to a UTF-8 String
  */
 class JsonAvroCodec[T](schema: Schema, writer: DatumWriter[T], reader: DatumReader[T]) extends Injection[T, String] {
   def apply(a: T): String = {
