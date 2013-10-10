@@ -101,17 +101,6 @@ object GenericAvroCodecs {
     val reader = new GenericDatumReader[T](schema)
     new JsonAvroCodec[T](schema, writer, reader)
   }
-
-  /**
-   * Returns Injection capable of serializing and deserializing a compiled avro record using org.apache.avro.io.JsonEncoder
-   * @tparam T compiled Avro record
-   * @return Injection
-   */
-  def toJson[T <: GenericRecord](schema: Schema): Injection[T, String] = {
-    val writer = new GenericDatumWriter[T](schema)
-    val reader = new GenericDatumReader[T](schema)
-    new JsonAvroCodec[T](schema, writer, reader)
-  }
 }
 
 /**
