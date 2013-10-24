@@ -17,19 +17,20 @@ package com.twitter.bijection.avro
 import com.twitter.bijection.Injection
 import org.apache.avro.specific.{SpecificDatumReader, SpecificDatumWriter, SpecificRecordBase}
 import org.apache.avro.file.{DataFileStream, DataFileWriter}
-import java.io.{UnsupportedEncodingException, ByteArrayInputStream, ByteArrayOutputStream}
+import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 import com.twitter.bijection.Inversion.attempt
 import com.twitter.bijection.Attempt
 import org.apache.avro.generic.{GenericDatumReader, GenericDatumWriter, GenericRecord}
 import org.apache.avro.Schema
 import org.apache.avro.io.{DecoderFactory, DatumReader, EncoderFactory, DatumWriter}
+import Injection.utf8
 
 /**
  * Factory providing various avro injections.
  * @author Muhammad Ashraf
  * @since 7/4/13
  */
-object AvroCodecs {
+object SpecificAvroCodecs {
   /**
    * Returns Injection capable of serializing and deserializing a compiled Avro record using SpecificDatumWriter and
    * SpecificDatumReader
@@ -39,17 +40,6 @@ object AvroCodecs {
   def apply[T <: SpecificRecordBase : Manifest]: Injection[T, Array[Byte]] = {
     val klass = manifest[T].erasure.asInstanceOf[Class[T]]
     new SpecificAvroCodec[T](klass)
-  }
-
-
-  /**
-   * Returns Injection capable of serializing and deserializing a generic record using GenericDatumReader and
-   * GenericDatumReader
-   * @tparam T generic record
-   * @return Injection
-   */
-  def apply[T <: GenericRecord](schema: Schema): Injection[T, Array[Byte]] = {
-    new GenericAvroCodec[T](schema)
   }
 
   /**
@@ -65,6 +55,31 @@ object AvroCodecs {
   }
 
   /**
+   * Returns Injection capable of serializing and deserializing a generic avro record using org.apache.avro.io.JsonEncoder to a
+   * UTF-8 String
+   * @tparam T compiled Avro record
+   * @return Injection
+   */
+  def toJson[T <: SpecificRecordBase : Manifest](schema: Schema): Injection[T, String] = {
+    val klass = manifest[T].erasure.asInstanceOf[Class[T]]
+    val writer = new SpecificDatumWriter[T](klass)
+    val reader = new SpecificDatumReader[T](klass)
+    new JsonAvroCodec[T](schema, writer, reader)
+  }
+}
+
+object GenericAvroCodecs {
+  /**
+   * Returns Injection capable of serializing and deserializing a generic record using GenericDatumReader and
+   * GenericDatumReader
+   * @tparam T generic record
+   * @return Injection
+   */
+  def apply[T <: GenericRecord](schema: Schema): Injection[T, Array[Byte]] = {
+    new GenericAvroCodec[T](schema)
+  }
+
+  /**
    * Returns Injection capable of serializing and deserializing a generic avro record using org.apache.avro.io.BinaryEncoder
    * @tparam T GenericRecord
    * @return Injection
@@ -76,25 +91,14 @@ object AvroCodecs {
   }
 
   /**
-   * Returns Injection capable of serializing and deserializing a compiled avro record using org.apache.avro.io.JsonEncoder
+   * Returns Injection capable of serializing and deserializing a generic avro record using org.apache.avro.io.JsonEncoder to a
+   * UTF-8 String
    * @tparam T compiled Avro record
    * @return Injection
    */
   def toJson[T <: GenericRecord](schema: Schema): Injection[T, String] = {
     val writer = new GenericDatumWriter[T](schema)
     val reader = new GenericDatumReader[T](schema)
-    new JsonAvroCodec[T](schema, writer, reader)
-  }
-
-  /**
-   * Returns Injection capable of serializing and deserializing a generic avro record using org.apache.avro.io.JsonEncoder
-   * @tparam T compiled Avro record
-   * @return Injection
-   */
-  def toJson[T <: SpecificRecordBase : Manifest](schema: Schema): Injection[T, String] = {
-    val klass = manifest[T].erasure.asInstanceOf[Class[T]]
-    val writer = new SpecificDatumWriter[T](klass)
-    val reader = new SpecificDatumReader[T](klass)
     new JsonAvroCodec[T](schema, writer, reader)
   }
 }
@@ -175,9 +179,11 @@ class BinaryAvroCodec[T](writer: DatumWriter[T], reader: DatumReader[T]) extends
 
 /**
  * Provides methods to serializing and deserializing a generic and compiled avro record using org.apache.avro.io.JsonEncoder
+ * to a UTF-8 String
  * @param writer Datum writer
  * @param reader Datum reader
  * @tparam T avro record
+ * @throws RuntimeException if Avro Records cannot be converted to a UTF-8 String
  */
 class JsonAvroCodec[T](schema: Schema, writer: DatumWriter[T], reader: DatumReader[T]) extends Injection[T, String] {
   def apply(a: T): String = {
@@ -185,35 +191,13 @@ class JsonAvroCodec[T](schema: Schema, writer: DatumWriter[T], reader: DatumRead
     val encoder = EncoderFactory.get().jsonEncoder(schema, stream)
     writer.write(a, encoder)
     encoder.flush()
-    newUtf8(stream.toByteArray)
+    Injection.invert[String, Array[Byte]](stream.toByteArray).get
   }
 
   def invert(str: String): Attempt[T] = attempt(str) {
     str =>
-      val decoder = DecoderFactory.get().jsonDecoder(schema, new ByteArrayInputStream(getBytesUtf8(str)))
+      val decoder = DecoderFactory.get().jsonDecoder(schema, new ByteArrayInputStream(Injection[String, Array[Byte]](str)))
       reader.read(null.asInstanceOf[T], decoder)
   }
-
-  private def newUtf8(bytes: Array[Byte]): String = {
-    try {
-      if (bytes == null) null else new String(bytes, "UTF-8")
-    }
-    catch {
-      case uee: UnsupportedEncodingException => {
-        throw new RuntimeException("UTF-8 Not supported on this platform")
-      }
-    }
-  }
-
-  private def getBytesUtf8(string: String): Array[Byte] = {
-    try {
-      if (string == null) null else string.getBytes("UTF-8")
-    }
-    catch {
-      case uee: UnsupportedEncodingException => {
-        throw new RuntimeException("UTF-8 Not supported on this platform")
-      }
-    }
-  }
-
 }
+
