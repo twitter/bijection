@@ -223,7 +223,7 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     val nextBb = reallocatingPut(bb){ _.putInt(size) }
     l.foldLeft(nextBb) { (oldbb, t) => reallocatingPut(oldbb) { buf.put(_, t) } }
   }
-  def getCollection[T,C](initbb: ByteBuffer, cbf: CanBuildFrom[Nothing,T,C])(implicit buf: Bufferable[T]):
+  def getCollection[T,C](initbb: ByteBuffer)(implicit cbf: CanBuildFrom[Nothing,T,C], buf: Bufferable[T]):
     Try[(ByteBuffer, C)] = Try {
 
     var bb: ByteBuffer = initbb.duplicate
@@ -243,7 +243,7 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
 
   def collection[C<:Traversable[T],T](implicit buf: Bufferable[T], cbf: CanBuildFrom[Nothing,T,C]):
     Bufferable[C] = build[C] { (bb, l) => putCollection(bb, l) }
-      { bb => getCollection(bb, cbf) }
+      { bb => getCollection(bb) }
 
   implicit def list[T](implicit buf: Bufferable[T]) = collection[List[T], T]
   implicit def set[T](implicit buf: Bufferable[T]) = collection[Set[T], T]
@@ -261,5 +261,5 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
   implicit def array[T](implicit buf: Bufferable[T],
                         cbf: CanBuildFrom[Nothing,T,Array[T]]): Bufferable[Array[T]] =
     build[Array[T]] { (bb, l) => putCollection(bb, l.toTraversable) }
-      { bb => getCollection(bb, cbf) }
+      { bb => getCollection(bb) }
 }
