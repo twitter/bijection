@@ -223,15 +223,13 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     val nextBb = reallocatingPut(bb){ _.putInt(size) }
     l.foldLeft(nextBb) { (oldbb, t) => reallocatingPut(oldbb) { buf.put(_, t) } }
   }
-  // Assumes the builder passed in was just created from a CanBuildFrom
-  // If the same builder is used concurrently twice anywhere, you will have bugs.
-  // TODO: remove this at the next binary change
-  def getCollection[T,C](initbb: ByteBuffer, builder: Builder[T,C])(implicit buf: Bufferable[T]):
+  def getCollection[T,C](initbb: ByteBuffer, cbf: CanBuildFrom[Nothing,T,C])(implicit buf: Bufferable[T]):
     Try[(ByteBuffer, C)] = Try {
 
     var bb: ByteBuffer = initbb.duplicate
     val size = bb.getInt
     var idx = 0
+    val builder = cbf()
     builder.clear()
     builder.sizeHint(size)
     while(idx < size) {
@@ -245,7 +243,7 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
 
   def collection[C<:Traversable[T],T](implicit buf: Bufferable[T], cbf: CanBuildFrom[Nothing,T,C]):
     Bufferable[C] = build[C] { (bb, l) => putCollection(bb, l) }
-      { bb => getCollection(bb, cbf()) }
+      { bb => getCollection(bb, cbf) }
 
   implicit def list[T](implicit buf: Bufferable[T]) = collection[List[T], T]
   implicit def set[T](implicit buf: Bufferable[T]) = collection[Set[T], T]
@@ -260,8 +258,8 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
   implicit def mset[T](implicit buf: Bufferable[T]) = collection[MSet[T], T]
 
   // TODO we could add IntBuffer/FloatBuffer etc.. to have faster implementations Array[Int]
-  implicit def array[T](implicit buf: Bufferable[T], cm: ClassManifest[T]): Bufferable[Array[T]] =
-    build[Array[T]] { (bb, l) =>
-      putCollection(bb, l.toTraversable)
-    } { bb => getCollection(bb, Array.newBuilder[T]) }
+  implicit def array[T](implicit buf: Bufferable[T],
+                        cbf: CanBuildFrom[Nothing,T,Array[T]]): Bufferable[Array[T]] =
+    build[Array[T]] { (bb, l) => putCollection(bb, l.toTraversable) }
+      { bb => getCollection(bb, cbf) }
 }
