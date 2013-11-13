@@ -148,6 +148,12 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     }
 
   // Primitives:
+  implicit val booleanBufferable: Bufferable[Boolean] =
+    buildCatchDuplicate[Boolean] { (bb, x) =>
+      val byte = if(x) 1:Byte else 0:Byte
+      reallocatingPut(bb){ _.put(byte) }
+    } { _.get == (1:Byte) }
+
   implicit val byteBufferable: Bufferable[Byte] =
     buildCatchDuplicate[Byte] { (bb, x) => reallocatingPut(bb){ _.put(x) } } { _.get }
   implicit val charBufferable: Bufferable[Char] =

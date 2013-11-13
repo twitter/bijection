@@ -61,6 +61,7 @@ object BufferableLaws extends Properties("Bufferable") with BaseBufferable {
     Bufferable.getBytes(bb).toList == bytes.toList
   }
 
+  property("Bools roundtrip") = roundTrips[Boolean]
   property("Ints roundtrip") = roundTrips[Int]
   property("Doubles roundtrip") = roundTrips[Double]
   property("Floats roundtrip") = roundTrips[Float]
