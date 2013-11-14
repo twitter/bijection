@@ -22,6 +22,7 @@ import java.nio.channels.Channel
 import scala.annotation.implicitNotFound
 import scala.annotation.tailrec
 import scala.collection.mutable.{Builder, Map => MMap, Set => MSet, Buffer => MBuffer}
+import scala.collection.generic.CanBuildFrom
 import scala.util.{ Failure, Success, Try }
 import com.twitter.bijection.Inversion.attempt
 
@@ -222,54 +223,43 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     val nextBb = reallocatingPut(bb){ _.putInt(size) }
     l.foldLeft(nextBb) { (oldbb, t) => reallocatingPut(oldbb) { buf.put(_, t) } }
   }
-  def getCollection[T,C](initbb: ByteBuffer, builder: Builder[T,C])(implicit buf: Bufferable[T]):
-    Try[(ByteBuffer, C)] = {
+  def getCollection[T,C](initbb: ByteBuffer)(implicit cbf: CanBuildFrom[Nothing,T,C], buf: Bufferable[T]):
+    Try[(ByteBuffer, C)] = Try {
 
-    val bbOpt: Try[ByteBuffer] = Try(initbb.duplicate)
-    val size = bbOpt.get.getInt
-    // We can't mutate the builder while calling other functions (not safe)
-    // so we write into this array:
-    val ary = new Array[Any](size)
-    (0 until size).foldLeft(bbOpt) { (oldBb, idx) =>
-      oldBb.flatMap { bb =>
-        buf.get(bb) match {
-          case Success((newbb, t)) =>
-            //Side-effect! scary!!!
-            ary(idx) = t
-            Success(newbb)
-          case Failure(t) => Failure(t)
-        }
-      }
+    var bb: ByteBuffer = initbb.duplicate
+    val size = bb.getInt
+    var idx = 0
+    val builder = cbf()
+    builder.clear()
+    builder.sizeHint(size)
+    while(idx < size) {
+      val tup = buf.get(bb).get
+      bb = tup._1
+      builder += tup._2
+      idx += 1
     }
-    .map { bb =>
-      // Now use the builder:
-      builder.clear()
-      builder.sizeHint(size)
-      ary.foreach { item => builder += item.asInstanceOf[T] }
-      (bb, builder.result())
-    }
+    (bb, builder.result)
   }
-  def collection[C<:Traversable[T],T](builder: Builder[T,C])(implicit buf: Bufferable[T]):
-    Bufferable[C] = build[C] { (bb, l) => putCollection(bb, l) }
-      { bb => getCollection(bb, builder) }
 
-  implicit def list[T](implicit buf: Bufferable[T]) = collection[List[T], T](List.newBuilder[T])
-  implicit def set[T](implicit buf: Bufferable[T]) = collection[Set[T], T](Set.newBuilder[T])
-  implicit def indexedSeq[T](implicit buf: Bufferable[T]) =
-    collection[IndexedSeq[T], T](IndexedSeq.newBuilder[T])
-  implicit def vector[T](implicit buf: Bufferable[T]) =
-    collection[Vector[T], T](Vector.newBuilder[T])
+  def collection[C<:Traversable[T],T](implicit buf: Bufferable[T], cbf: CanBuildFrom[Nothing,T,C]):
+    Bufferable[C] = build[C] { (bb, l) => putCollection(bb, l) }
+      { bb => getCollection(bb) }
+
+  implicit def list[T](implicit buf: Bufferable[T]) = collection[List[T], T]
+  implicit def set[T](implicit buf: Bufferable[T]) = collection[Set[T], T]
+  implicit def indexedSeq[T](implicit buf: Bufferable[T]) = collection[IndexedSeq[T], T]
+  implicit def vector[T](implicit buf: Bufferable[T]) = collection[Vector[T], T]
   implicit def map[K,V](implicit bufk: Bufferable[K], bufv: Bufferable[V]) =
-    collection[Map[K,V], (K,V)](Map.newBuilder[K,V])
+    collection[Map[K,V], (K,V)]
   // Mutable collections
   implicit def mmap[K,V](implicit bufk: Bufferable[K], bufv: Bufferable[V]) =
-    collection[MMap[K,V], (K,V)](MMap.newBuilder[K,V])
-  implicit def buffer[T](implicit buf: Bufferable[T]) = collection[MBuffer[T], T](MBuffer.newBuilder[T])
-  implicit def mset[T](implicit buf: Bufferable[T]) = collection[MSet[T], T](MSet.newBuilder[T])
+    collection[MMap[K,V], (K,V)]
+  implicit def buffer[T](implicit buf: Bufferable[T]) = collection[MBuffer[T], T]
+  implicit def mset[T](implicit buf: Bufferable[T]) = collection[MSet[T], T]
 
   // TODO we could add IntBuffer/FloatBuffer etc.. to have faster implementations Array[Int]
-  implicit def array[T](implicit buf: Bufferable[T], cm: ClassManifest[T]): Bufferable[Array[T]] =
-    build[Array[T]] { (bb, l) =>
-      putCollection(bb, l.toTraversable)
-    } { bb => getCollection(bb, Array.newBuilder[T]) }
+  implicit def array[T](implicit buf: Bufferable[T],
+                        cbf: CanBuildFrom[Nothing,T,Array[T]]): Bufferable[Array[T]] =
+    build[Array[T]] { (bb, l) => putCollection(bb, l.toTraversable) }
+      { bb => getCollection(bb) }
 }

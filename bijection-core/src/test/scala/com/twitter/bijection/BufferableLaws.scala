@@ -44,6 +44,9 @@ trait BaseBufferable {
   implicit protected def aeq[T:Equiv]: Equiv[Array[T]] = Equiv.fromFunction { (a1, a2) =>
     a1.zip(a2).forall { tup => Equiv[T].equiv(tup._1, tup._2) }
   }
+  def itereq[C <: Iterable[T], T:Equiv]: Equiv[C] = Equiv.fromFunction { (a1, a2) =>
+    a1.zip(a2).forall { tup => Equiv[T].equiv(tup._1, tup._2) }
+  }
 }
 
 object BufferableLaws extends Properties("Bufferable") with BaseBufferable {
@@ -61,6 +64,7 @@ object BufferableLaws extends Properties("Bufferable") with BaseBufferable {
     Bufferable.getBytes(bb).toList == bytes.toList
   }
 
+  implicit val laeq = itereq[List[Array[Byte]], Array[Byte]]
   property("Ints roundtrip") = roundTrips[Int]
   property("Doubles roundtrip") = roundTrips[Double]
   property("Floats roundtrip") = roundTrips[Float]
@@ -72,6 +76,7 @@ object BufferableLaws extends Properties("Bufferable") with BaseBufferable {
   property("Array[Byte] roundtrip") = roundTrips[Array[Byte]]
   property("Array[Int] roundtrip") = roundTrips[Array[Int]]
   property("List[Double] roundtrip") = roundTrips[List[Double]]
+  property("List[Array[Byte]] roundtrip") = roundTrips[List[Array[Byte]]]
   property("Set[Double] roundtrip") = roundTrips[Set[Double]]
   property("Map[String, Int] roundtrip") = roundTrips[Map[String, Int]]
   property("Option[(Long,Long)] roundtrip") = roundTrips[Option[(Long,Long)]]
