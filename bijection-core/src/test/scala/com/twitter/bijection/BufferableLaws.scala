@@ -65,6 +65,8 @@ object BufferableLaws extends Properties("Bufferable") with BaseBufferable {
   }
 
   implicit val laeq = itereq[List[Array[Byte]], Array[Byte]]
+
+  property("Bools roundtrip") = roundTrips[Boolean]
   property("Ints roundtrip") = roundTrips[Int]
   property("Doubles roundtrip") = roundTrips[Double]
   property("Floats roundtrip") = roundTrips[Float]
