@@ -34,20 +34,24 @@ object UtilBijectionLaws extends Properties("UtilBijection") with BaseProperties
 
   protected def toOption[T](f: ScalaFuture[T]): Option[T] = TwitterTry(ScalaAwait.result(f, Duration.Inf)).toOption
 
-  implicit def futureArb[T: Arbitrary] = arbitraryViaFn[T, TwitterFuture[T]] { TwitterFuture.value(_) }
-  implicit def scalaFutureArb[T: Arbitrary] = arbitraryViaFn[T, ScalaFuture[T]] { future(_) }
   implicit def tryArb[T: Arbitrary] = arbitraryViaFn[T, TwitterTry[T]] { TwitterTry(_) }
   implicit def scalaTryArb[T: Arbitrary] = arbitraryViaFn[T, ScalaTry[T]] { ScalaTry(_) }
+
+  implicit def futureArb[T: Arbitrary] =
+    arbitraryViaFn[TwitterTry[T], TwitterFuture[T]] { TwitterFuture.const(_) }
+
+  implicit def scalaFutureArb[T: Arbitrary] =
+    arbitraryViaFn[ScalaTry[T], ScalaFuture[T]] { st => future(st.get) }
 
   implicit val jIntArb = arbitraryViaBijection[Int, JInt]
   implicit val jLongArb = arbitraryViaBijection[Long, JLong]
 
   implicit protected def futureEq[T:Equiv]: Equiv[TwitterFuture[T]] = Equiv.fromFunction { (f1, f2) =>
-    Equiv[Option[T]].equiv(toOption(f1), toOption(f2))
+    Equiv[T].equiv(TwitterAwait.result(f1), TwitterAwait.result(f2))
   }
 
   implicit protected def scalaFutureEq[T:Equiv]: Equiv[ScalaFuture[T]] = Equiv.fromFunction { (f1, f2) =>
-    Equiv[Option[T]].equiv(toOption(f1), toOption(f2))
+    Equiv[T].equiv(ScalaAwait.result(f1, Duration.Inf), ScalaAwait.result(f2, Duration.Inf))
   }
 
   type FromMap = Map[Int, Long]
