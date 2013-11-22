@@ -51,7 +51,13 @@ class WrappedTFuture[+T](val asTwitter: TFuture[T]) extends SFuture[T] {
   override def isCompleted = asTwitter.isDefined
   override def value: Option[STry[T]] = asTwitter.poll.map(_.as[STry[T]])
   override def onComplete[U](func: (STry[T]) => U)(implicit executor: ExecutionContext): Unit =
-    asTwitter.respond { ttry => func(ttry.as[STry[T]]) }
+    asTwitter.respond { ttry =>
+      executor.prepare().execute {
+        new java.lang.Runnable {
+          override def run { func(ttry.as[STry[T]]) }
+        }
+      }
+    }
 
   override def ready(atMost: SDuration)(implicit permit: CanAwait) = {
     TAwait.ready(asTwitter, atMost.as[TDuration])
