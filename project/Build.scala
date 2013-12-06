@@ -58,7 +58,7 @@ object BijectionBuild extends Build {
       if (v.trim.endsWith("SNAPSHOT"))
         Some("sonatype-snapshots" at nexus + "content/repositories/snapshots")
       else
-        Some("sonatype-releases"  at nexus + "service/local/staging/deploy/maven2")
+        Some("sonatype-releases-upload"  at nexus + "service/local/staging/deploy/maven2")
     },
 
     pomExtra := (
@@ -104,7 +104,7 @@ object BijectionBuild extends Build {
   def youngestForwardCompatible(subProj: String) =
     Some(subProj)
       .filterNot(unreleasedModules.contains(_))
-      .map { s => "com.twitter" % ("bijection-" + s + "_2.9.3") % "0.5.3" }
+      .map { s => "com.twitter" % ("bijection-" + s + "_2.9.3") % "0.5.4" }
 
   def osgiExportAll(packs: String*) =
     OsgiKeys.exportPackage := packs.map(_ + ".*;version=${Bundle-Version}")
@@ -190,7 +190,7 @@ object BijectionBuild extends Build {
     osgiExportAll("com.twitter.bijection.scrooge"),
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
-      "com.twitter" % "scrooge-serializer_2.9.2" % "3.6.0"
+      withCross("com.twitter" %% "scrooge-serializer" % "3.6.0")
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
@@ -211,13 +211,13 @@ object BijectionBuild extends Build {
 
   lazy val bijectionNetty = module("netty").settings(
     osgiExportAll("com.twitter.bijection.netty"),
-    libraryDependencies += "io.netty" % "netty" % "3.5.5.Final"
+    libraryDependencies += "io.netty" % "netty" % "3.5.11.Final"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   lazy val bijectionAvro = module("avro").settings(
     osgiExportAll("com.twitter.bijection.avro"),
     libraryDependencies ++= Seq(
-      "org.apache.avro" % "avro" % "1.7.4"
+      "org.apache.avro" % "avro" % "1.7.5"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
