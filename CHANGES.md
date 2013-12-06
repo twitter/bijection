@@ -1,4 +1,8 @@
 # Bijection #
+### 0.6.0
+* Update Avro: https://github.com/twitter/bijection/pull/147/files
+* Fix a thread-safety bug with collection Bufferables: https://github.com/twitter/bijection/pull/150
+* Add Boolean support for Bufferable: https://github.com/twitter/bijection/pull/151
 
 ### 0.5.4
 
