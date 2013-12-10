@@ -114,8 +114,12 @@ object HBaseBijections {
   implicit lazy val short2BytesWritable = ImmutableBytesWritableBijection[Short]
   implicit lazy val boolean2BytesWritable = ImmutableBytesWritableBijection[Boolean]
   implicit lazy val bigDecimal2BytesWritable = ImmutableBytesWritableBijection[BigDecimal]
+  implicit lazy val bytes2BytesWritable = new AbstractBijection[Array[Byte], ImmutableBytesWritable] {
+    override def apply(a: Array[Byte]): ImmutableBytesWritable = new ImmutableBytesWritable(a)
 
-  @implicitNotFound(msg = "Cannot find Bijection type class between ${T} and [Array[Byte] @@ Rep[${T}]")
+    override def invert(b: ImmutableBytesWritable): Array[Byte] = b.get()
+  }
+
   object ImmutableBytesWritableBijection {
     def apply[T](implicit bijection: Bijection[T, Array[Byte] @@ Rep[T]]) = new ImmutableBytesWritableBijection[T](bijection)
   }
