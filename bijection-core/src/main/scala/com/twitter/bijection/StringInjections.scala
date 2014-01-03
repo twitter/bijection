@@ -16,13 +16,14 @@ limitations under the License.
 
 package com.twitter.bijection
 
-import java.net.URL
+import java.net.{URLDecoder, URLEncoder, URL}
 import java.util.UUID
 
 import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
 
 import com.twitter.bijection.Inversion.attempt
+import scala.util.Try
 
 trait StringInjections extends NumericInjections {
   implicit val utf8: Injection[String, Array[Byte]] = withEncoding("UTF-8")
@@ -46,6 +47,14 @@ trait StringInjections extends NumericInjections {
       def apply(uuid: UUID) = uuid.toString
       override def invert(s: String) = attempt(s)(UUID.fromString(_))
     }
+
+  case class URLEncodedString(s:String)
+
+  implicit val string2UrlEncodedString:Injection[String,URLEncodedString]=new AbstractInjection[String,URLEncodedString] {
+    override def apply(a: String): URLEncodedString = URLEncodedString(URLEncoder.encode(a,"UTF-8"))
+
+    override def invert(b: URLEncodedString): Try[String] = Try{URLDecoder.decode(b.s,"UTF-8")}
+  }
 }
 
 object StringCodec extends StringInjections
