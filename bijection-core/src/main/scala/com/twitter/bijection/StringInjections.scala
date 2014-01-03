@@ -48,12 +48,12 @@ trait StringInjections extends NumericInjections {
       override def invert(s: String) = attempt(s)(UUID.fromString(_))
     }
 
-  case class URLEncodedString(s:String)
+  case class URLEncodedString(encodedString:String)
 
   implicit val string2UrlEncodedString:Injection[String,URLEncodedString]=new AbstractInjection[String,URLEncodedString] {
     override def apply(a: String): URLEncodedString = URLEncodedString(URLEncoder.encode(a,"UTF-8"))
 
-    override def invert(b: URLEncodedString): Try[String] = Try{URLDecoder.decode(b.s,"UTF-8")}
+    override def invert(b: URLEncodedString): Try[String] = attempt(b)(s=>URLDecoder.decode(s.encodedString,"UTF-8"))
   }
 }
 
