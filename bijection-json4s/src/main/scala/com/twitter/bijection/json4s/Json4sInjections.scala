@@ -26,7 +26,7 @@ import org.json4s.native
  * @author Mansur Ashraf
  * @since 1/10/14
  */
-class Json4sInjections {
+object Json4sInjections {
   implicit val formats = native.Serialization.formats(NoTypeHints)
 
   /**
