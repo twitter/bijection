@@ -237,5 +237,12 @@ object BijectionBuild extends Build {
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
+  lazy val bijectionJson4s = module("json4s").settings(
+    osgiExportAll("com.twitter.bijection.json4s"),
+    libraryDependencies ++= Seq(
+      "org.json4s" %% "json4s-native" % "3.2.6"
+    )
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
+
 
 }
