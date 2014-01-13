@@ -15,7 +15,7 @@
 package com.twitter.bijection.json4s
 
 import org.json4s._
-import com.twitter.bijection.AbstractInjection
+import com.twitter.bijection.{Injection, AbstractInjection}
 import org.json4s.native.JsonMethods._
 import scala.util.Try
 import com.twitter.bijection.Inversion._
@@ -27,12 +27,12 @@ import org.json4s.native
  * @since 1/10/14
  */
 object Json4sInjections {
-  implicit val formats = native.Serialization.formats(NoTypeHints)
+  private implicit val formats = native.Serialization.formats(NoTypeHints)
 
   /**
    * JValue to Json Injection
    */
-  implicit val jvalue2Json = new AbstractInjection[JValue, String] {
+  implicit val jvalue2Json: Injection[JValue, String] = new AbstractInjection[JValue, String] {
     override def apply(a: JValue): String = compact(render(a))
 
     override def invert(b: String): Try[JValue] = attempt(b)(parse(_))
@@ -43,7 +43,7 @@ object Json4sInjections {
    * @tparam A Case Class
    * @return Json String
    */
-  implicit def cc2Json[A <: AnyRef : Manifest] = new AbstractInjection[A, String] {
+  implicit def caseClass2Json[A <: Product : Manifest]: Injection[A, String] = new AbstractInjection[A, String] {
     override def apply(a: A): String = write(a)
 
     override def invert(b: String): Try[A] = attempt(b)(read[A])
@@ -54,7 +54,7 @@ object Json4sInjections {
    * @tparam A Case Class
    * @return JValue
    */
-  implicit def cc2JValue[A <: AnyRef : Manifest] = new AbstractInjection[A, JValue] {
+  implicit def caseClass2JValue[A <: Product : Manifest]: Injection[A, JValue] = new AbstractInjection[A, JValue] {
     override def apply(a: A): JValue = Extraction.decompose(a)
 
     override def invert(b: JValue): Try[A] = attempt(b)(_.extract[A])

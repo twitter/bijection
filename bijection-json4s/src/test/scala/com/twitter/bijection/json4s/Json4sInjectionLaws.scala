@@ -46,13 +46,13 @@ with BaseProperties {
       ))
   }
 
-  def roundTripCaseClassToJson[T <: AnyRef](implicit inj: Injection[T, String], mn: Manifest[T]) = isLooseInjection[Twit, String]
+  def roundTripCaseClassToJson[T <: Product](implicit inj: Injection[T, String], mn: Manifest[T]) = isLooseInjection[Twit, String]
 
-  def roundTripCaseClassToJValue[T <: AnyRef](implicit inj: Injection[T, JValue], mn: Manifest[T]) = isLooseInjection[Twit, JValue]
+  def roundTripCaseClassToJValue[T <: Product](implicit inj: Injection[T, JValue], mn: Manifest[T]) = isLooseInjection[Twit, JValue]
 
-  def roundTripJValueToJValue(implicit inj: Injection[JValue, String]) = isLooseInjection[JValue, String]
+  def roundTripJValueToString(implicit inj: Injection[JValue, String]) = isLooseInjection[JValue, String]
 
   property("round trip Case Class to Json") = roundTripCaseClassToJson
   property("round trip Case Class to JValue") = roundTripCaseClassToJValue
-  property("round trip JValue to String") = roundTripCaseClassToJson
+  property("round trip JValue to String") = roundTripJValueToString
 }
