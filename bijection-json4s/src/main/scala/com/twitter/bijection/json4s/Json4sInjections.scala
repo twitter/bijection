@@ -27,7 +27,6 @@ import org.json4s.native
  * @since 1/10/14
  */
 object Json4sInjections {
-  private implicit val formats = native.Serialization.formats(NoTypeHints)
 
   /**
    * JValue to Json Injection
@@ -43,7 +42,7 @@ object Json4sInjections {
    * @tparam A Case Class
    * @return Json String
    */
-  implicit def caseClass2Json[A <: Product : Manifest]: Injection[A, String] = new AbstractInjection[A, String] {
+  implicit def caseClass2Json[A <: Product](implicit mf:Manifest[A],fmt:Formats): Injection[A, String] = new AbstractInjection[A, String] {
     override def apply(a: A): String = write(a)
 
     override def invert(b: String): Try[A] = attempt(b)(read[A])
@@ -54,7 +53,7 @@ object Json4sInjections {
    * @tparam A Case Class
    * @return JValue
    */
-  implicit def caseClass2JValue[A <: Product : Manifest]: Injection[A, JValue] = new AbstractInjection[A, JValue] {
+  implicit def caseClass2JValue[A <: Product ](implicit mf:Manifest[A],fmt:Formats): Injection[A, JValue] = new AbstractInjection[A, JValue] {
     override def apply(a: A): JValue = Extraction.decompose(a)
 
     override def invert(b: JValue): Try[A] = attempt(b)(_.extract[A])

@@ -19,6 +19,7 @@ import com.twitter.bijection.{Injection, BaseProperties}
 import Json4sInjections._
 import org.json4s.JsonAST._
 import org.json4s.JsonAST.JString
+import org.json4s.{native, NoTypeHints}
 
 /**
  * @author Mansur Ashraf
@@ -26,6 +27,7 @@ import org.json4s.JsonAST.JString
  */
 object Json4sInjectionLaws extends Properties("Json4sInjection")
 with BaseProperties {
+  implicit val formats = native.Serialization.formats(NoTypeHints)
 
   case class Twit(name: String, id: Int, id_str: String, indices: List[Int], screen_name: String)
 
