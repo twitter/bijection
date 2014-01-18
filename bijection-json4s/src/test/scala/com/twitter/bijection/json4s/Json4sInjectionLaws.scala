@@ -27,8 +27,6 @@ import org.json4s.{native, NoTypeHints}
  */
 object Json4sInjectionLaws extends Properties("Json4sInjection")
 with BaseProperties {
-  implicit val formats = native.Serialization.formats(NoTypeHints)
-
   case class Twit(name: String, id: Int, id_str: String, indices: List[Int], screen_name: String)
 
   def createTwit(i: (String, Int, String, List[Int], String)): Twit = Twit(i._1, i._2, i._3, i._4, i._5)
