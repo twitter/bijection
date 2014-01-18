@@ -19,7 +19,6 @@ import com.twitter.bijection.{Injection, BaseProperties}
 import Json4sInjections._
 import org.json4s.JsonAST._
 import org.json4s.JsonAST.JString
-import org.json4s.{native, NoTypeHints}
 
 /**
  * @author Mansur Ashraf
@@ -46,9 +45,9 @@ with BaseProperties {
       ))
   }
 
-  def roundTripCaseClassToJson[T <: Product](implicit inj: Injection[T, String], mn: Manifest[T]) = isLooseInjection[Twit, String]
+  def roundTripCaseClassToJson[T <: AnyRef](implicit inj: Injection[T, String], mn: Manifest[T]) = isLooseInjection[Twit, String]
 
-  def roundTripCaseClassToJValue[T <: Product](implicit inj: Injection[T, JValue], mn: Manifest[T]) = isLooseInjection[Twit, JValue]
+  def roundTripCaseClassToJValue[T <: AnyRef](implicit inj: Injection[T, JValue], mn: Manifest[T]) = isLooseInjection[Twit, JValue]
 
   def roundTripJValueToString(implicit inj: Injection[JValue, String]) = isLooseInjection[JValue, String]
 
