@@ -1,4 +1,12 @@
 # Bijection #
+
+### 0.6.1
+* Add the sbt version helper script: https://github.com/twitter/bijection/pull/160
+* Added Json4s Injections: https://github.com/twitter/bijection/pull/157
+* Added url encoded String Inection: https://github.com/twitter/bijection/pull/156
+* Added bytes2bytesWritable bijection: https://github.com/twitter/bijection/pull/154
+* Update README.md: https://github.com/twitter/bijection/pull/153
+
 ### 0.6.0
 * Update Avro: https://github.com/twitter/bijection/pull/147/files
 * Fix a thread-safety bug with collection Bufferables: https://github.com/twitter/bijection/pull/150

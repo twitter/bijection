@@ -104,7 +104,7 @@ object BijectionBuild extends Build {
   def youngestForwardCompatible(subProj: String) =
     Some(subProj)
       .filterNot(unreleasedModules.contains(_))
-      .map { s => "com.twitter" % ("bijection-" + s + "_2.9.3") % "0.5.4" }
+      .map { s => "com.twitter" % ("bijection-" + s + "_2.9.3") % "0.6.0" }
 
   def osgiExportAll(packs: String*) =
     OsgiKeys.exportPackage := packs.map(_ + ".*;version=${Bundle-Version}")
@@ -234,6 +234,14 @@ object BijectionBuild extends Build {
     libraryDependencies ++= Seq(
       "joda-time" % "joda-time" % "2.2",
       "org.joda" % "joda-convert" % "1.3.1"
+    )
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  lazy val bijectionJson4s = module("json4s").settings(
+    osgiExportAll("com.twitter.bijection.json4s"),
+    libraryDependencies ++= Seq(
+      "org.json4s" %% "json4s-native" % "3.2.6",
+      "org.json4s" %% "json4s-ext" % "3.2.6"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
