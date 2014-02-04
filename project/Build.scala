@@ -104,7 +104,7 @@ object BijectionBuild extends Build {
   def youngestForwardCompatible(subProj: String) =
     Some(subProj)
       .filterNot(unreleasedModules.contains(_))
-      .map { s => "com.twitter" % ("bijection-" + s + "_2.9.3") % "0.5.4" }
+      .map { s => "com.twitter" % ("bijection-" + s + "_2.9.3") % "0.6.0" }
 
   def osgiExportAll(packs: String*) =
     OsgiKeys.exportPackage := packs.map(_ + ".*;version=${Bundle-Version}")
