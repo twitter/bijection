@@ -130,7 +130,7 @@ Discussion occurs primarily on the [Bijection mailing list](https://groups.googl
 
 ## Maven
 
-Bijection modules are available on maven central. The current groupid and version for all modules is, respectively, `"com.twitter"` and  `0.6.1`.
+Bijection modules are available on maven central. The current groupid and version for all modules is, respectively, `"com.twitter"` and  `0.6.2`.
 
 Current published artifacts are
 
