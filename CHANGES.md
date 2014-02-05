@@ -1,5 +1,8 @@
 # Bijection #
 
+### 0.6.2
+* Added json4s to project aggregate: https://github.com/twitter/bijection/pull/161
+
 ### 0.6.1
 * Add the sbt version helper script: https://github.com/twitter/bijection/pull/160
 * Added Json4s Injections: https://github.com/twitter/bijection/pull/157
