@@ -16,7 +16,7 @@ package com.twitter.bijection.json4s
 
 import org.scalacheck.Properties
 import com.twitter.bijection.{Injection, BaseProperties}
-import Json4sInjections._
+
 import org.json4s.JsonAST._
 import org.json4s.JsonAST.JString
 
@@ -51,7 +51,16 @@ with BaseProperties {
 
   def roundTripJValueToString(implicit inj: Injection[JValue, String]) = isLooseInjection[JValue, String]
 
-  property("round trip Case Class to Json") = roundTripCaseClassToJson
-  property("round trip Case Class to JValue") = roundTripCaseClassToJValue
-  property("round trip JValue to String") = roundTripJValueToString
+  property("round trip Case Class to Json") = {
+    import Json4sInjections.caseClass2Json
+    roundTripCaseClassToJson
+  }
+  property("round trip Case Class to JValue") = {
+    import Json4sInjections.caseClass2JValue
+    roundTripCaseClassToJValue
+  }
+  property("round trip JValue to String") = {
+    import Json4sInjections.jvalue2Json
+    roundTripJValueToString
+  }
 }
