@@ -129,7 +129,8 @@ object BijectionBuild extends Build {
     bijectionNetty,
     bijectionAvro,
     bijectionHbase,
-    bijectionJodaTime
+    bijectionJodaTime,
+    bijectionJson4s
   )
 
   def module(name: String) = {
