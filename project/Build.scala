@@ -180,9 +180,10 @@ object BijectionBuild extends Build {
   lazy val bijectionGuava = module("guava").settings(
     osgiExportAll("com.twitter.bijection.guava"),
     libraryDependencies ++= Seq(
-      // This dependency is required due to a bug with guava 13.0, detailed here:
+      // This dependency is required because scalac needs access to all java
+      // runtime annotations even though javac does not as detailed here:
       // http://code.google.com/p/guava-libraries/issues/detail?id=1095
-      "com.google.code.findbugs" % "jsr305" % "1.3.+",
+      "com.google.code.findbugs" % "jsr305" % "1.3.9",
       "com.google.guava" % "guava" % "14.0"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
