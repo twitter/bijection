@@ -94,7 +94,7 @@ Bijection implicitly supplies Bijections between:
 
 * all numeric types <-> their boxed java counterparts
 * containers/primitives <-> Json (Injections via bijection-json)
-* thrift/protobuf/avro <-> Array[Byte] (Injections via bijection-protobuf/bijection-thrift/bijection-avro)
+* thrift/protobuf/avro <-> `Array[Byte]` (Injections via bijection-protobuf/bijection-thrift/bijection-avro)
 * all numeric types <-> big-endian `Array[Byte]` encodings (Injections)
 * all numeric types <-> String (Injections)
 * Bijections for all `asScala`, `asJava` pairs provided by [scala.collection.JavaConverters](http://www.scala-lang.org/api/current/scala/collection/JavaConverters$.html)
