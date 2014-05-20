@@ -17,10 +17,19 @@ limitations under the License.
 package com.twitter.bijection.twitter_util
 
 import com.twitter.bijection.{ AbstractBijection, Bijection, ImplicitBijection }
-import com.twitter.util.{ Future => TwitterFuture, Try => TwitterTry, Promise => TwitterPromise, Return, Throw, FuturePool }
+import com.twitter.util.{
+  Future => TwitterFuture,
+  Try => TwitterTry,
+  Promise => TwitterPromise,
+  Return, Throw, FuturePool,
+  Duration => TDuration
+}
 
 import scala.concurrent.{ Future => ScalaFuture, Promise => ScalaPromise, ExecutionContext }
+import scala.concurrent.duration.{Duration => SDuration}
 import scala.util.{ Success, Failure, Try => ScalaTry }
+
+import java.util.concurrent.TimeUnit
 
 /**
  * Bijection for mapping twitter-util's Future and Try onto
@@ -57,23 +66,11 @@ trait UtilBijections {
    */
   implicit def twitter2ScalaFuture[A](implicit executor: ExecutionContext): Bijection[TwitterFuture[A], ScalaFuture[A]] = {
     new AbstractBijection[TwitterFuture[A], ScalaFuture[A]] {
-      override def apply(f: TwitterFuture[A]): ScalaFuture[A] = {
-        val p = ScalaPromise[A]()
-        f.respond {
-          case Return(value) => p success value
-          case Throw(exception) => p failure exception
-        }
-        p.future
-      }
+      override def apply(f: TwitterFuture[A]): ScalaFuture[A] =
+        WrappedTFuture(f)
 
-      override def invert(f: ScalaFuture[A]): TwitterFuture[A] = {
-        val p = new TwitterPromise[A]()
-        f.onComplete {
-          case Success(value) => p.setValue(value)
-          case Failure(exception) => p.setException(exception)
-        }
-        p
-      }
+      override def invert(f: ScalaFuture[A]): TwitterFuture[A] =
+        WrappedTFuture.toTwitter(f)
     }
   }
 
@@ -121,6 +118,19 @@ trait UtilBijections {
     new AbstractBijection[FuturePool, ExecutionContext] {
       override def apply(pool: FuturePool) = new TwitterExecutionContext(pool)
       override def invert(context: ExecutionContext) = new ScalaFuturePool(context)
+    }
+  /**
+    * Bijection from Duration to Duration
+    */
+  implicit def durationBijection: Bijection[SDuration, TDuration] =
+    new AbstractBijection[SDuration, TDuration] {
+      override def apply(sd: SDuration) =
+        if(sd.isFinite) TDuration.fromNanoseconds(sd.toNanos)
+        else TDuration.Top
+
+      override def invert(td: TDuration) =
+        if(td.isFinite) SDuration.fromNanos(td.inNanoseconds)
+        else SDuration.Inf
     }
 }
 
