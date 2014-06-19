@@ -21,7 +21,7 @@ import java.util.zip.{ GZIPInputStream, GZIPOutputStream }
 import java.nio.ByteBuffer
 // copied java code from Apache commons 1.7
 import com.twitter.bijection.codec.Base64
-import java.io.{OutputStream, InputStream, ByteArrayInputStream, ByteArrayOutputStream}
+import java.io.{ OutputStream, InputStream, ByteArrayInputStream, ByteArrayOutputStream }
 import annotation.tailrec
 
 // TODO: Convert to value classes on Scala 2.10 upgrade.
@@ -64,7 +64,7 @@ trait BinaryBijections extends StringBijections {
     }
 
   @tailrec
-  private def copy(inputStream:  InputStream, outputStream: OutputStream, bufferSize: Int = 1024) {
+  private def copy(inputStream: InputStream, outputStream: OutputStream, bufferSize: Int = 1024) {
     val buf = new Array[Byte](bufferSize)
     inputStream.read(buf, 0, buf.size) match {
       case -1 => ()

@@ -42,11 +42,11 @@ object UtilBijectionLaws extends Properties("UtilBijection") with BaseProperties
   implicit val jIntArb = arbitraryViaBijection[Int, JInt]
   implicit val jLongArb = arbitraryViaBijection[Long, JLong]
 
-  implicit protected def futureEq[T:Equiv]: Equiv[TwitterFuture[T]] = Equiv.fromFunction { (f1, f2) =>
+  implicit protected def futureEq[T: Equiv]: Equiv[TwitterFuture[T]] = Equiv.fromFunction { (f1, f2) =>
     Equiv[Option[T]].equiv(toOption(f1), toOption(f2))
   }
 
-  implicit protected def scalaFutureEq[T:Equiv]: Equiv[ScalaFuture[T]] = Equiv.fromFunction { (f1, f2) =>
+  implicit protected def scalaFutureEq[T: Equiv]: Equiv[ScalaFuture[T]] = Equiv.fromFunction { (f1, f2) =>
     Equiv[Option[T]].equiv(toOption(f1), toOption(f2))
   }
 

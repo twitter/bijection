@@ -15,14 +15,14 @@ limitations under the License.
 package com.twitter.bijection.avro
 
 import com.twitter.bijection.Injection
-import org.apache.avro.specific.{SpecificDatumReader, SpecificDatumWriter, SpecificRecordBase}
-import org.apache.avro.file.{DataFileStream, DataFileWriter}
-import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
+import org.apache.avro.specific.{ SpecificDatumReader, SpecificDatumWriter, SpecificRecordBase }
+import org.apache.avro.file.{ DataFileStream, DataFileWriter }
+import java.io.{ ByteArrayInputStream, ByteArrayOutputStream }
 import com.twitter.bijection.Inversion.attempt
 import com.twitter.bijection.Attempt
-import org.apache.avro.generic.{GenericDatumReader, GenericDatumWriter, GenericRecord}
+import org.apache.avro.generic.{ GenericDatumReader, GenericDatumWriter, GenericRecord }
 import org.apache.avro.Schema
-import org.apache.avro.io.{DecoderFactory, DatumReader, EncoderFactory, DatumWriter}
+import org.apache.avro.io.{ DecoderFactory, DatumReader, EncoderFactory, DatumWriter }
 import Injection.utf8
 
 /**
@@ -37,7 +37,7 @@ object SpecificAvroCodecs {
    * @tparam T compiled Avro record
    * @return Injection
    */
-  def apply[T <: SpecificRecordBase : Manifest]: Injection[T, Array[Byte]] = {
+  def apply[T <: SpecificRecordBase: Manifest]: Injection[T, Array[Byte]] = {
     val klass = manifest[T].erasure.asInstanceOf[Class[T]]
     new SpecificAvroCodec[T](klass)
   }
@@ -47,7 +47,7 @@ object SpecificAvroCodecs {
    * @tparam T compiled Avro record
    * @return Injection
    */
-  def toBinary[T <: SpecificRecordBase : Manifest]: Injection[T, Array[Byte]] = {
+  def toBinary[T <: SpecificRecordBase: Manifest]: Injection[T, Array[Byte]] = {
     val klass = manifest[T].erasure.asInstanceOf[Class[T]]
     val writer = new SpecificDatumWriter[T](klass)
     val reader = new SpecificDatumReader[T](klass)
@@ -60,7 +60,7 @@ object SpecificAvroCodecs {
    * @tparam T compiled Avro record
    * @return Injection
    */
-  def toJson[T <: SpecificRecordBase : Manifest](schema: Schema): Injection[T, String] = {
+  def toJson[T <: SpecificRecordBase: Manifest](schema: Schema): Injection[T, String] = {
     val klass = manifest[T].erasure.asInstanceOf[Class[T]]
     val writer = new SpecificDatumWriter[T](klass)
     val reader = new SpecificDatumReader[T](klass)

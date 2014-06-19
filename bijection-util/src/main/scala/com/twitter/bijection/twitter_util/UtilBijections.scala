@@ -115,8 +115,8 @@ trait UtilBijections {
     }
 
   /**
-    * Bijection from FuturePool to ExecutionContext
-    */
+   * Bijection from FuturePool to ExecutionContext
+   */
   implicit def futurePoolExecutionContextBijection: Bijection[FuturePool, ExecutionContext] =
     new AbstractBijection[FuturePool, ExecutionContext] {
       override def apply(pool: FuturePool) = new TwitterExecutionContext(pool)

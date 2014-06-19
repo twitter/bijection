@@ -11,8 +11,7 @@ import org.apache.hadoop.hbase.util.Bytes
  * @since 7/10/13
  */
 object HBaseBijectionsLaws extends Properties("HBaseBijections")
-with BaseProperties {
-
+  with BaseProperties {
 
   property("String <=> StringBytes") = isInjective[String, StringBytes]
   property("Int <=> IntBytes") = isInjective[Int, IntBytes]

@@ -43,7 +43,7 @@ trait Bijection[A, B] extends Serializable { self =>
    * with this one applied first.
    */
   def andThen[C](g: Bijection[B, C]): Bijection[A, C] =
-    new AbstractBijection[A,C] {
+    new AbstractBijection[A, C] {
       def apply(a: A) = g(self.apply(a))
       override def invert(c: C) = self.invert(g.invert(c))
     }
@@ -70,7 +70,8 @@ abstract class AbstractBijection[A, B] extends Bijection[A, B] {
 }
 
 trait LowPriorityBijections {
-  /** Encoding half of the Cantor–Bernstein–Schroeder theorem
+  /**
+   * Encoding half of the Cantor–Bernstein–Schroeder theorem
    * http://en.wikipedia.org/wiki/Cantor%E2%80%93Bernstein%E2%80%93Schroeder_theorem
    */
   implicit def fromInjection[A, B](implicit inj: Injection[A, B]): Bijection[A, B @@ Rep[A]] =
@@ -82,7 +83,7 @@ trait LowPriorityBijections {
 }
 
 // Avoid a closure
-private [bijection] class BijectionFn[A, B](bij: Bijection[A, B]) extends (A => B) with Serializable {
+private[bijection] class BijectionFn[A, B](bij: Bijection[A, B]) extends (A => B) with Serializable {
   def apply(a: A) = bij(a)
 }
 
@@ -116,7 +117,8 @@ object Bijection extends CollectionBijections
 
   implicit def identity[A]: Bijection[A, A] = new IdentityBijection[A]
 
-  /** We check for default, and return None, else Some
+  /**
+   * We check for default, and return None, else Some
    * Note this never returns Some(default)
    */
   def filterDefault[A](default: A): Bijection[A, Option[A]] =
@@ -129,11 +131,10 @@ object Bijection extends CollectionBijections
    * Converts a function that transforms type A into a function that
    * transforms type B.
    */
-  implicit def fnBijection[A, B, C, D](implicit bij1: ImplicitBijection[A, B], bij2: ImplicitBijection[C, D]):
-    Bijection[A => C, B => D] = new AbstractBijection[A => C, B => D] {
-      def apply(fn: A => C) = { b => bij2.apply(fn(bij1.invert(b))) }
-      override def invert(fn: B => D) = { a => bij2.invert(fn(bij1.apply(a))) }
-    }
+  implicit def fnBijection[A, B, C, D](implicit bij1: ImplicitBijection[A, B], bij2: ImplicitBijection[C, D]): Bijection[A => C, B => D] = new AbstractBijection[A => C, B => D] {
+    def apply(fn: A => C) = { b => bij2.apply(fn(bij1.invert(b))) }
+    override def invert(fn: B => D) = { a => bij2.invert(fn(bij1.apply(a))) }
+  }
 
   /**
    * Converts a function that combines two arguments of type A into a function that
@@ -141,15 +142,13 @@ object Bijection extends CollectionBijections
    * input functions to "reduce".
    * TODO: codegen these up to Function22 if they turn out to be useful.
    */
-  implicit def fn2Bijection[A, B, C, D, E, F]
-    (implicit bab: ImplicitBijection[A, B], bcd: ImplicitBijection[C, D], bef: ImplicitBijection[E, F]):
-      Bijection[(A, C) => E, (B, D) => F] =
-      new AbstractBijection[(A, C) => E, (B, D) => F] {
-        def apply(fn: (A, C) => E) =
-          { (b, d) => bef.apply(fn(bab.invert(b), bcd.invert(d))) }
-        override def invert(fn:  (B, D) => F) =
-          { (a, c) => bef.invert(fn(bab.apply(a), bcd.apply(c))) }
-      }
+  implicit def fn2Bijection[A, B, C, D, E, F](implicit bab: ImplicitBijection[A, B], bcd: ImplicitBijection[C, D], bef: ImplicitBijection[E, F]): Bijection[(A, C) => E, (B, D) => F] =
+    new AbstractBijection[(A, C) => E, (B, D) => F] {
+      def apply(fn: (A, C) => E) =
+        { (b, d) => bef.apply(fn(bab.invert(b), bcd.invert(d))) }
+      override def invert(fn: (B, D) => F) =
+        { (a, c) => bef.invert(fn(bab.apply(a), bcd.apply(c))) }
+    }
 
   implicit def swap[T, U]: Bijection[(T, U), (U, T)] = SwapBijection[T, U]
 
@@ -167,7 +166,8 @@ class IdentityBijection[A] extends Bijection[A, A] {
   override def compose[T](g: Bijection[T, A]) = g
 }
 
-/** When you have conversion between A and B where B is a subclass of A, which is often
+/**
+ * When you have conversion between A and B where B is a subclass of A, which is often
  * free, i.e. A is already an instance of A, then this can be faster
  */
 abstract class SubclassBijection[A, B <: A](clb: Class[B]) extends Bijection[A, B] {
@@ -176,12 +176,11 @@ abstract class SubclassBijection[A, B <: A](clb: Class[B]) extends Bijection[A, 
     if (clb.isAssignableFrom(a.getClass)) {
       // This a is legit:
       a.asInstanceOf[B]
-    }
-    else {
+    } else {
       applyfn(a)
     }
   }
-  override def invert(b : B): A = b
+  override def invert(b: B): A = b
 }
 
 /**
@@ -189,7 +188,7 @@ abstract class SubclassBijection[A, B <: A](clb: Class[B]) extends Bijection[A, 
  */
 object SwapBijection {
   def apply[T, U] = new AbstractBijection[(T, U), (U, T)] {
-    def apply(t: (T,U)) = t.swap
-    override def invert(t: (U,T)) = t.swap
+    def apply(t: (T, U)) = t.swap
+    override def invert(t: (U, T)) = t.swap
   }
 }

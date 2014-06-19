@@ -20,7 +20,8 @@ import com.twitter.bijection.Bijection
 
 import org.jboss.netty.buffer.{ ChannelBuffer, ChannelBuffers }
 
-/** Reads from the current position to the end into an array without changing
+/**
+ * Reads from the current position to the end into an array without changing
  * the given ChannelBuffer
  */
 object ChannelBufferBijection extends Bijection[ChannelBuffer, Array[Byte]] {

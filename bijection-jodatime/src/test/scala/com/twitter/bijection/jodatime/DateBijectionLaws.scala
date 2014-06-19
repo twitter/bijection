@@ -11,7 +11,7 @@ import com.twitter.bijection._
 
 object DateBijectionsLaws extends Properties("DateBijections") with BaseProperties with DateBijections with DateInjections {
 
-import Rep._
+  import Rep._
 
   implicit val strByte = arbitraryViaBijection[Date, String @@ Rep[Date]]
 
@@ -21,9 +21,8 @@ import Rep._
 
   property("Date <=> Joda") = isBijection[Date, DateTime]
 
-  property("round trips Date -> String") = isLooseInjection[DateTime,String]
+  property("round trips Date -> String") = isLooseInjection[DateTime, String]
 
   property("round trips Joda -> Date") = isLooseInjection[DateTime, Date]
- 
 
 }

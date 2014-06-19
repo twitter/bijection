@@ -16,13 +16,14 @@ limitations under the License.
 
 package com.twitter.bijection.json
 
-import com.twitter.bijection.{Bijection, AbstractBijection, AbstractInjection, Injection}
+import com.twitter.bijection.{ Bijection, AbstractBijection, AbstractInjection, Injection }
 import com.twitter.bijection.Inversion.attempt
-import JsonNodeInjection.{fromJsonNode, toJsonNode}
+import JsonNodeInjection.{ fromJsonNode, toJsonNode }
 
 import org.codehaus.jackson.JsonNode
 
-/** Value class representing unparsed Json text
+/**
+ * Value class representing unparsed Json text
  * TODO in scala 2.10 this should be a value class
  */
 case class UnparsedJson(str: String)

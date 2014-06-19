@@ -17,47 +17,46 @@ limitations under the License.
 package com.twitter.bijection
 import scala.util.Success
 
-/** A common injection on numbers: N -> (m = N mod K, (N-m)/K)
+/**
+ * A common injection on numbers: N -> (m = N mod K, (N-m)/K)
  * The first element in result tuple is always [0, modulus)
  */
-class IntModDivInjection(val modulus: Int) extends Injection[Int, (Int,Int)] {
+class IntModDivInjection(val modulus: Int) extends Injection[Int, (Int, Int)] {
   override def apply(n: Int) = {
     val cmod = n % modulus
     val mod = if (cmod < 0) cmod + modulus else cmod
-    (mod, (n - mod)/modulus)
+    (mod, (n - mod) / modulus)
   }
 
   private val maxDiv = Int.MaxValue / modulus
   private val minDiv = Int.MinValue / modulus
 
-  override def invert(moddiv: (Int,Int)) = {
+  override def invert(moddiv: (Int, Int)) = {
     val (mod, div) = moddiv
     if (mod >= 0 && mod < modulus && div <= maxDiv && div >= minDiv) {
       Success(div * modulus + mod)
-    }
-    else InversionFailure.failedAttempt(moddiv)
+    } else InversionFailure.failedAttempt(moddiv)
   }
 }
 
-
-/** A common injection on numbers: N -> (m = N mod K, (N-m)/K)
+/**
+ * A common injection on numbers: N -> (m = N mod K, (N-m)/K)
  * The first element in result tuple is always [0, modulus)
  */
-class LongModDivInjection(val modulus: Long) extends Injection[Long, (Long,Long)] {
+class LongModDivInjection(val modulus: Long) extends Injection[Long, (Long, Long)] {
   override def apply(n: Long) = {
     val cmod = n % modulus
     val mod = if (cmod < 0) cmod + modulus else cmod
-    (mod, (n - mod)/modulus)
+    (mod, (n - mod) / modulus)
   }
 
   private val maxDiv = Long.MaxValue / modulus
   private val minDiv = Long.MinValue / modulus
 
-  override def invert(moddiv: (Long,Long)) = {
+  override def invert(moddiv: (Long, Long)) = {
     val (mod, div) = moddiv
     if (mod >= 0 && mod < modulus && div <= maxDiv && div >= minDiv) {
       Success(div * modulus + mod)
-    }
-    else InversionFailure.failedAttempt(moddiv)
+    } else InversionFailure.failedAttempt(moddiv)
   }
 }

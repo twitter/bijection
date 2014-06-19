@@ -13,10 +13,10 @@ limitations under the License.
 */
 package com.twitter.bijection.avro
 
-import com.twitter.bijection.{BaseProperties, Injection}
+import com.twitter.bijection.{ BaseProperties, Injection }
 
 import org.scalacheck.Properties
-import org.apache.avro.generic.{GenericRecord, GenericData}
+import org.apache.avro.generic.{ GenericRecord, GenericData }
 import org.apache.avro.Schema
 
 /**
@@ -24,7 +24,7 @@ import org.apache.avro.Schema
  * @since 7/5/13
  */
 object GenericAvroCodecLaws extends Properties("GenericAvroCodecs") with BaseProperties {
-  val testSchema = new Schema.Parser().parse( """{
+  val testSchema = new Schema.Parser().parse("""{
                                                    "type":"record",
                                                    "name":"FiscalRecord",
                                                    "namespace":"avro",
@@ -80,5 +80,4 @@ object GenericAvroCodecLaws extends Properties("GenericAvroCodecs") with BasePro
   property("round trips Generic Record -> String using Json Encoder/Decoder") =
     roundTripsGenericRecordToJson(GenericAvroCodecs.toJson[GenericRecord](testSchema))
 }
-
 

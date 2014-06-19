@@ -12,7 +12,6 @@
  *    limitations under the License.
  */
 
-
 package com.twitter.bijection.hbase
 
 import HBaseBijections._
@@ -26,20 +25,20 @@ import org.apache.hadoop.hbase.io.ImmutableBytesWritable
  */
 object HBaseInjections {
 
-  implicit lazy val string2BytesInj:Injection[String, StringBytes] = fromBijectionRep[String, StringBytes]
-  implicit lazy val long2BytesInj:Injection[Long, LongBytes] = fromBijectionRep[Long, LongBytes]
-  implicit lazy val boolean2BytesInj:Injection[Boolean, BooleanBytes] = fromBijectionRep[Boolean, BooleanBytes]
-  implicit lazy val int2BytesInj:Injection[Int, IntBytes] = fromBijectionRep[Int, IntBytes]
-  implicit lazy val float2BytesInj:Injection[Float, FloatBytes] = fromBijectionRep[Float, FloatBytes]
-  implicit lazy val short2BytesInj:Injection[Short, ShortBytes] = fromBijectionRep[Short, ShortBytes]
-  implicit lazy val double2BytesInj:Injection[Double, DoubleBytes] = fromBijectionRep[Double, DoubleBytes]
-  implicit lazy val bigdecimal2BytesInj:Injection[BigDecimal, BigDecimalBytes] = fromBijectionRep[BigDecimal, BigDecimalBytes]
-  implicit lazy val string2BytesWritableInj:Injection[String, ImmutableBytesWritable] = fromBijectionRep[String, ImmutableBytesWritable]
-  implicit lazy val int2BytesWritableInj:Injection[Int, ImmutableBytesWritable] = fromBijectionRep[Int, ImmutableBytesWritable]
-  implicit lazy val long2BytesWritableInj:Injection[Long, ImmutableBytesWritable] = fromBijectionRep[Long, ImmutableBytesWritable]
-  implicit lazy val double2BytesWritableInj:Injection[Double, ImmutableBytesWritable]= fromBijectionRep[Double, ImmutableBytesWritable]
-  implicit lazy val float2BytesWritableInj:Injection[Float, ImmutableBytesWritable] = fromBijectionRep[Float, ImmutableBytesWritable]
-  implicit lazy val short2BytesWritableInj:Injection[Short, ImmutableBytesWritable] = fromBijectionRep[Short, ImmutableBytesWritable]
-  implicit lazy val boolean2BytesWritableInj:Injection[Boolean, ImmutableBytesWritable] = fromBijectionRep[Boolean, ImmutableBytesWritable]
-  implicit lazy val bigDecimal2BytesWritableInj:Injection[BigDecimal, ImmutableBytesWritable] = fromBijectionRep[BigDecimal, ImmutableBytesWritable]
+  implicit lazy val string2BytesInj: Injection[String, StringBytes] = fromBijectionRep[String, StringBytes]
+  implicit lazy val long2BytesInj: Injection[Long, LongBytes] = fromBijectionRep[Long, LongBytes]
+  implicit lazy val boolean2BytesInj: Injection[Boolean, BooleanBytes] = fromBijectionRep[Boolean, BooleanBytes]
+  implicit lazy val int2BytesInj: Injection[Int, IntBytes] = fromBijectionRep[Int, IntBytes]
+  implicit lazy val float2BytesInj: Injection[Float, FloatBytes] = fromBijectionRep[Float, FloatBytes]
+  implicit lazy val short2BytesInj: Injection[Short, ShortBytes] = fromBijectionRep[Short, ShortBytes]
+  implicit lazy val double2BytesInj: Injection[Double, DoubleBytes] = fromBijectionRep[Double, DoubleBytes]
+  implicit lazy val bigdecimal2BytesInj: Injection[BigDecimal, BigDecimalBytes] = fromBijectionRep[BigDecimal, BigDecimalBytes]
+  implicit lazy val string2BytesWritableInj: Injection[String, ImmutableBytesWritable] = fromBijectionRep[String, ImmutableBytesWritable]
+  implicit lazy val int2BytesWritableInj: Injection[Int, ImmutableBytesWritable] = fromBijectionRep[Int, ImmutableBytesWritable]
+  implicit lazy val long2BytesWritableInj: Injection[Long, ImmutableBytesWritable] = fromBijectionRep[Long, ImmutableBytesWritable]
+  implicit lazy val double2BytesWritableInj: Injection[Double, ImmutableBytesWritable] = fromBijectionRep[Double, ImmutableBytesWritable]
+  implicit lazy val float2BytesWritableInj: Injection[Float, ImmutableBytesWritable] = fromBijectionRep[Float, ImmutableBytesWritable]
+  implicit lazy val short2BytesWritableInj: Injection[Short, ImmutableBytesWritable] = fromBijectionRep[Short, ImmutableBytesWritable]
+  implicit lazy val boolean2BytesWritableInj: Injection[Boolean, ImmutableBytesWritable] = fromBijectionRep[Boolean, ImmutableBytesWritable]
+  implicit lazy val bigDecimal2BytesWritableInj: Injection[BigDecimal, ImmutableBytesWritable] = fromBijectionRep[BigDecimal, ImmutableBytesWritable]
 }

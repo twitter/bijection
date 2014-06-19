@@ -41,12 +41,12 @@ trait NumericInjections extends GeneratedTupleInjections {
     def invert(l: Int) =
       attemptWhen(l)(_.isValidShort)(_.toShort)
   }
-  implicit val int2Long: Injection[Int, Long] = new AbstractInjection[Int,Long] {
+  implicit val int2Long: Injection[Int, Long] = new AbstractInjection[Int, Long] {
     def apply(i: Int) = i.toLong
     def invert(l: Long) =
       attemptWhen(l)(_.isValidInt)(_.toInt)
   }
-  implicit val long2BigInt: Injection[Long, BigInt] = new AbstractInjection[Long,BigInt] {
+  implicit val long2BigInt: Injection[Long, BigInt] = new AbstractInjection[Long, BigInt] {
     def apply(l: Long) = BigInt(l)
     def invert(bi: BigInt) =
       attemptWhen(bi)(bi => bi <= Long.MaxValue && Long.MinValue <= bi)(_.toLong)

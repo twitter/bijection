@@ -22,15 +22,15 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
 
 object CollectionLaws extends Properties("Collections")
-with BaseProperties {
+  with BaseProperties {
   import StringArbs._
 
   implicit def vectorArb[A](implicit la: Arbitrary[List[A]]) =
-    arbitraryViaFn { (l: List[A]) => Vector(l :_*) }
+    arbitraryViaFn { (l: List[A]) => Vector(l: _*) }
   implicit def seqArb[A](implicit la: Arbitrary[List[A]]) =
-    arbitraryViaFn { (l: List[A]) => Seq(l :_*) }
+    arbitraryViaFn { (l: List[A]) => Seq(l: _*) }
   implicit def indexedSeqArb[A](implicit la: Arbitrary[List[A]]) =
-    arbitraryViaFn { (l: List[A]) => IndexedSeq(l :_*) }
+    arbitraryViaFn { (l: List[A]) => IndexedSeq(l: _*) }
   implicit def traversableArb[A](implicit la: Arbitrary[List[A]]) =
     arbitraryViaFn { (l: List[A]) => l.toTraversable }
 

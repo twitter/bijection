@@ -3,13 +3,12 @@
  */
 package com.twitter.bijection.scrooge
 
-import com.twitter.scrooge.{ThriftException, ThriftStruct, ThriftStructCodec3}
+import com.twitter.scrooge.{ ThriftException, ThriftStruct, ThriftStructCodec3 }
 import org.apache.thrift.protocol._
 import java.nio.ByteBuffer
 import com.twitter.finagle.SourcedException
 import scala.collection.mutable
-import scala.collection.{Map, Set}
-
+import scala.collection.{ Map, Set }
 
 object TestStruct extends ThriftStructCodec3[TestStruct] {
   val Struct = new TStruct("TestStruct")
@@ -27,11 +26,9 @@ object TestStruct extends ThriftStructCodec3[TestStruct] {
 
   def apply(
     someInt: Int,
-    someString: Option[String] = None
-  ): TestStruct = new Immutable(
+    someString: Option[String] = None): TestStruct = new Immutable(
     someInt,
-    someString
-  )
+    someString)
 
   def unapply(_item: TestStruct): Option[Product2[Int, Option[String]]] = Some(_item)
 
@@ -81,8 +78,7 @@ object TestStruct extends ThriftStructCodec3[TestStruct] {
       if (!_got_someInt) throw new TProtocolException("Required field 'TestStruct' was not found in serialized data for struct TestStruct")
       new Immutable(
         someInt,
-        if (_got_someString) Some(someString) else None
-      )
+        if (_got_someString) Some(someString) else None)
     }
   }
 
@@ -93,8 +89,7 @@ object TestStruct extends ThriftStructCodec3[TestStruct] {
    */
   class Immutable(
     val someInt: Int,
-    val someString: Option[String] = None
-  ) extends TestStruct
+    val someString: Option[String] = None) extends TestStruct
 
   /**
    * This Proxy trait allows you to extend the TestStruct trait with additional state or
@@ -110,8 +105,7 @@ object TestStruct extends ThriftStructCodec3[TestStruct] {
 
 trait TestStruct extends ThriftStruct
   with Product2[Int, Option[String]]
-  with java.io.Serializable
-{
+  with java.io.Serializable {
   import TestStruct._
 
   def someInt: Int
@@ -141,11 +135,9 @@ trait TestStruct extends ThriftStruct
 
   def copy(
     someInt: Int = this.someInt,
-    someString: Option[String] = this.someString
-  ): TestStruct = new Immutable(
+    someString: Option[String] = this.someString): TestStruct = new Immutable(
     someInt,
-    someString
-  )
+    someString)
 
   override def canEqual(other: Any): Boolean = other.isInstanceOf[TestStruct]
 
@@ -154,7 +146,6 @@ trait TestStruct extends ThriftStruct
   override def hashCode: Int = runtime.ScalaRunTime._hashCode(this)
 
   override def toString: String = runtime.ScalaRunTime._toString(this)
-
 
   override def productArity: Int = 2
 

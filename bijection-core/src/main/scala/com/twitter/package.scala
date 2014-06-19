@@ -39,14 +39,14 @@ package object bijection {
   type Attempt[T] = Try[T]
 
   /**
-    * Using Injections for serialization is a common pattern. Currying
-    * the byte array parameter makes it easier to write code like
-    * this:
-    *
-    * {{{
-    def getProducer[T: Codec] = ...
-    * }}}
-    */
+   * Using Injections for serialization is a common pattern. Currying
+   * the byte array parameter makes it easier to write code like
+   * this:
+   *
+   * {{{
+   * def getProducer[T: Codec] = ...
+   * }}}
+   */
   type Codec[T] = Injection[T, Array[Byte]]
 
   /**
