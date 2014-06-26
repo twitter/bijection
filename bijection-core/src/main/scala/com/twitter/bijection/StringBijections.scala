@@ -26,7 +26,7 @@ trait StringBijections extends NumericBijections {
   implicit val symbol2String: Bijection[Symbol, String] =
     new AbstractBijection[Symbol, String] {
       def apply(s: Symbol) = s.name
-      override def invert(s: String ) = Symbol(s)
+      override def invert(s: String) = Symbol(s)
     }
 }
 
@@ -41,7 +41,7 @@ object StringJoinBijection {
   @tailrec
   private[bijection] def split(str: String, sep: String, acc: List[String] = Nil): List[String] = {
     str.indexOf(sep) match {
-      case -1 => (str::acc).reverse
+      case -1 => (str :: acc).reverse
       case idx: Int =>
         split(str.substring(idx + sep.size), sep, str.substring(0, idx) :: acc)
     }
@@ -65,14 +65,14 @@ object StringJoinBijection {
         }
     }
 
-  /** Convert a collection of numbers to and from a string
+  /**
+   * Convert a collection of numbers to and from a string
    * It's common to have types which we know have at least 1 character in their string
    * representation. Knowing that the empty string is not allowed we can map that to the empty
    * collection:
    * TODO add a Tag appoach to Say that N has no zero-length representations
    */
-  def nonEmptyValues[N, B <: TraversableOnce[N]](separator: String = DEFAULT_SEP)
-  (implicit bij: ImplicitBijection[N, String], ab: CanBuildFrom[Nothing, N, B]): Bijection[B, String] =
+  def nonEmptyValues[N, B <: TraversableOnce[N]](separator: String = DEFAULT_SEP)(implicit bij: ImplicitBijection[N, String], ab: CanBuildFrom[Nothing, N, B]): Bijection[B, String] =
     Bijection.toContainer[N, String, B, Iterable[String]]
       .andThen(apply(separator))
       .andThen(Bijection.filterDefault("").inverse)
@@ -91,7 +91,6 @@ object StringJoinBijection {
    *
    * viaContainer[Int,Set[Int]] andThen Bijection.getOrElse(0.as[String]): Bijection[Set[Int],String]
    */
-  def viaContainer[A, B <: TraversableOnce[A]](separator: String = DEFAULT_SEP)
-  (implicit bij: Bijection[A, String], ab: CanBuildFrom[Nothing, A, B]): Bijection[B, Option[String]] =
+  def viaContainer[A, B <: TraversableOnce[A]](separator: String = DEFAULT_SEP)(implicit bij: Bijection[A, String], ab: CanBuildFrom[Nothing, A, B]): Bijection[B, Option[String]] =
     Bijection.toContainer[A, String, B, Iterable[String]] andThen apply(separator)
 }

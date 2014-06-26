@@ -49,7 +49,6 @@ object HBaseBijections {
   /** Byte Representation of a BigDecimal value */
   type BigDecimalBytes = Array[Byte] @@ Rep[BigDecimal]
 
-
   implicit lazy val string2Bytes: Bijection[String, StringBytes] =
     new AbstractBijection[String, StringBytes] {
       def apply(str: String) = Tag[Array[Byte], Rep[String]](Bytes.toBytes(str))

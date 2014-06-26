@@ -17,11 +17,11 @@ limitations under the License.
 package com.twitter.bijection
 
 import java.io.Serializable
-import java.nio.{ByteBuffer, BufferOverflowException}
+import java.nio.{ ByteBuffer, BufferOverflowException }
 import java.nio.channels.Channel
 import scala.annotation.implicitNotFound
 import scala.annotation.tailrec
-import scala.collection.mutable.{Builder, Map => MMap, Set => MSet, Buffer => MBuffer}
+import scala.collection.mutable.{ Builder, Map => MMap, Set => MSet, Buffer => MBuffer }
 import scala.collection.generic.CanBuildFrom
 import scala.util.{ Failure, Success, Try }
 import com.twitter.bijection.Inversion.attempt
@@ -44,7 +44,8 @@ trait Bufferable[T] extends Serializable {
     }
 }
 
-/** For Java and avoiding trait bloat
+/**
+ * For Java and avoiding trait bloat
  */
 abstract class AbstractBufferable[T] extends Bufferable[T]
 
@@ -58,7 +59,8 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
   // To enable: Bufferable.on[Int] syntax
   def on[T](implicit buf: Bufferable[T]): Bufferable[T] = buf
   // Type class methods:
-  /** Serialize then deserialize
+  /**
+   * Serialize then deserialize
    */
   def deepCopy[T](t: T)(implicit buf: Bufferable[T]): T = {
     val inj = injectionOf[T]
@@ -78,7 +80,7 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     result
   }
   // With Bijections:
-  def viaBijection[A,B](implicit buf: Bufferable[B], bij: ImplicitBijection[A,B]): Bufferable[A] =
+  def viaBijection[A, B](implicit buf: Bufferable[B], bij: ImplicitBijection[A, B]): Bufferable[A] =
     Bufferable.build[A] { (bb, a) =>
       buf.put(bb, bij(a))
     } { bb =>
@@ -88,7 +90,7 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     }
 
   // TODO Bufferable should integrate with injection
-  def viaInjection[A,B](implicit buf: Bufferable[B], inj: Injection[A, B]): Bufferable[A] =
+  def viaInjection[A, B](implicit buf: Bufferable[B], inj: Injection[A, B]): Bufferable[A] =
     Bufferable.build[A] { (bb, a) =>
       buf.put(bb, inj(a))
     } { bb =>
@@ -106,7 +108,7 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
 
   def reallocate(bb: ByteBuffer): ByteBuffer = {
     // Double the buffer, copy the old one, and put:
-    val newCapacity = if (bb.capacity > (DEFAULT_SIZE/2)) bb.capacity * 2 else DEFAULT_SIZE
+    val newCapacity = if (bb.capacity > (DEFAULT_SIZE / 2)) bb.capacity * 2 else DEFAULT_SIZE
     val newBb = if (bb.isDirect) {
       ByteBuffer.allocateDirect(newCapacity)
     } else {
@@ -125,35 +127,33 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     val init = bb.duplicate
     try {
       putfn(init)
-    }
-    catch {
+    } catch {
       case ex: BufferOverflowException => reallocatingPut(reallocate(bb))(putfn)
     }
   }
 
-  /** remember: putfn and getfn must call duplicate and not change the input ByteBuffer
+  /**
+   * remember: putfn and getfn must call duplicate and not change the input ByteBuffer
    * We are duplicating the ByteBuffer state, not the backing array (which IS mutated)
    */
-  def build[T](putfn: (ByteBuffer,T) => ByteBuffer)(getfn: (ByteBuffer) => Try[(ByteBuffer, T)]):
-    Bufferable[T] = new AbstractBufferable[T] {
-      override def put(into: ByteBuffer, t: T) = putfn(into,t)
-      override def get(from: ByteBuffer) = getfn(from)
+  def build[T](putfn: (ByteBuffer, T) => ByteBuffer)(getfn: (ByteBuffer) => Try[(ByteBuffer, T)]): Bufferable[T] = new AbstractBufferable[T] {
+    override def put(into: ByteBuffer, t: T) = putfn(into, t)
+    override def get(from: ByteBuffer) = getfn(from)
+  }
+  def buildCatchDuplicate[T](putfn: (ByteBuffer, T) => ByteBuffer)(getfn: (ByteBuffer) => T): Bufferable[T] = new AbstractBufferable[T] {
+    override def put(into: ByteBuffer, t: T) = putfn(into, t)
+    override def get(from: ByteBuffer) = attempt(from) { from =>
+      val dup = from.duplicate
+      (dup, getfn(dup))
     }
-  def buildCatchDuplicate[T](putfn: (ByteBuffer,T) => ByteBuffer)(getfn: (ByteBuffer) => T):
-    Bufferable[T] = new AbstractBufferable[T] {
-      override def put(into: ByteBuffer, t: T) = putfn(into,t)
-      override def get(from: ByteBuffer) = attempt(from) { from =>
-        val dup = from.duplicate
-        (dup, getfn(dup))
-      }
-    }
+  }
 
   // Primitives:
   implicit val booleanBufferable: Bufferable[Boolean] =
     buildCatchDuplicate[Boolean] { (bb, x) =>
-      val byte = if(x) 1:Byte else 0:Byte
+      val byte = if (x) 1: Byte else 0: Byte
       reallocatingPut(bb){ _.put(byte) }
-    } { _.get == (1:Byte) }
+    } { _.get == (1: Byte) }
 
   implicit val byteBufferable: Bufferable[Byte] =
     buildCatchDuplicate[Byte] { (bb, x) => reallocatingPut(bb){ _.put(x) } } { _.get }
@@ -166,9 +166,9 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
   implicit val longBufferable: Bufferable[Long] =
     buildCatchDuplicate[Long] { (bb, x) => reallocatingPut(bb){ _.putLong(x) } } { _.getLong }
   implicit val floatBufferable: Bufferable[Float] =
-    buildCatchDuplicate[Float] { (bb, x) => reallocatingPut(bb){ _.putFloat(x) } }  { _.getFloat }
+    buildCatchDuplicate[Float] { (bb, x) => reallocatingPut(bb){ _.putFloat(x) } } { _.getFloat }
   implicit val doubleBufferable: Bufferable[Double] =
-    buildCatchDuplicate[Double] { (bb, x) => reallocatingPut(bb){ _.putDouble(x) } }  { _.getDouble }
+    buildCatchDuplicate[Double] { (bb, x) => reallocatingPut(bb){ _.putDouble(x) } } { _.getDouble }
   // Writes a length prefix, and then the bytes
   implicit val byteArray: Bufferable[Array[Byte]] =
     buildCatchDuplicate[Array[Byte]] { (bb, ary) =>
@@ -179,30 +179,30 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
       bb.get(ary)
       ary
     }
-  implicit val stringBufferable : Bufferable[String] = viaInjection[String, Array[Byte]]
-  implicit val symbolBufferable : Bufferable[Symbol] = viaBijection[Symbol, String]
+  implicit val stringBufferable: Bufferable[String] = viaInjection[String, Array[Byte]]
+  implicit val symbolBufferable: Bufferable[Symbol] = viaBijection[Symbol, String]
 
   // Collections:
   implicit def option[T](implicit buf: Bufferable[T]): Bufferable[Option[T]] =
     build[Option[T]] { (bb, opt) =>
       opt match {
-        case None => reallocatingPut(bb) { _.put(0 : Byte) }
+        case None => reallocatingPut(bb) { _.put(0: Byte) }
         case Some(v) => {
-          val nextBb = reallocatingPut(bb) { _.put(1 : Byte) }
+          val nextBb = reallocatingPut(bb) { _.put(1: Byte) }
           reallocatingPut(nextBb) { buf.put(_, opt.get) }
         }
       }
     } { bb =>
       val dup = bb.duplicate
-      val byte0 = 0 : Byte
-      if(dup.get == byte0) Success((dup, None))
+      val byte0 = 0: Byte
+      if (dup.get == byte0) Success((dup, None))
       else {
         buf.get(dup).map { tup => (tup._1, Some(tup._2)) }
       }
     }
 
-  implicit def either[L,R](implicit bufl: Bufferable[L], bufr: Bufferable[R]): Bufferable[Either[L,R]] =
-    build[Either[L,R]] { (bb, eith) =>
+  implicit def either[L, R](implicit bufl: Bufferable[L], bufr: Bufferable[R]): Bufferable[Either[L, R]] =
+    build[Either[L, R]] { (bb, eith) =>
       eith match {
         case Left(l) => {
           val nextBb = reallocatingPut(bb) { _.put(0: Byte) }
@@ -215,11 +215,10 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
       }
     } { bb =>
       val dup = bb.duplicate
-      val byte0 = 0 : Byte
+      val byte0 = 0: Byte
       if (dup.get == byte0) {
         bufl.get(dup).map { tup => (tup._1, Left(tup._2)) }
-      }
-      else {
+      } else {
         bufr.get(dup).map { tup => (tup._1, Right(tup._2)) }
       }
     }
@@ -229,8 +228,7 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     val nextBb = reallocatingPut(bb){ _.putInt(size) }
     l.foldLeft(nextBb) { (oldbb, t) => reallocatingPut(oldbb) { buf.put(_, t) } }
   }
-  def getCollection[T,C](initbb: ByteBuffer)(implicit cbf: CanBuildFrom[Nothing,T,C], buf: Bufferable[T]):
-    Try[(ByteBuffer, C)] = Try {
+  def getCollection[T, C](initbb: ByteBuffer)(implicit cbf: CanBuildFrom[Nothing, T, C], buf: Bufferable[T]): Try[(ByteBuffer, C)] = Try {
 
     var bb: ByteBuffer = initbb.duplicate
     val size = bb.getInt
@@ -238,7 +236,7 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     val builder = cbf()
     builder.clear()
     builder.sizeHint(size)
-    while(idx < size) {
+    while (idx < size) {
       val tup = buf.get(bb).get
       bb = tup._1
       builder += tup._2
@@ -247,25 +245,22 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     (bb, builder.result)
   }
 
-  def collection[C<:Traversable[T],T](implicit buf: Bufferable[T], cbf: CanBuildFrom[Nothing,T,C]):
-    Bufferable[C] = build[C] { (bb, l) => putCollection(bb, l) }
-      { bb => getCollection(bb) }
+  def collection[C <: Traversable[T], T](implicit buf: Bufferable[T], cbf: CanBuildFrom[Nothing, T, C]): Bufferable[C] = build[C] { (bb, l) => putCollection(bb, l) } { bb => getCollection(bb) }
 
   implicit def list[T](implicit buf: Bufferable[T]) = collection[List[T], T]
   implicit def set[T](implicit buf: Bufferable[T]) = collection[Set[T], T]
   implicit def indexedSeq[T](implicit buf: Bufferable[T]) = collection[IndexedSeq[T], T]
   implicit def vector[T](implicit buf: Bufferable[T]) = collection[Vector[T], T]
-  implicit def map[K,V](implicit bufk: Bufferable[K], bufv: Bufferable[V]) =
-    collection[Map[K,V], (K,V)]
+  implicit def map[K, V](implicit bufk: Bufferable[K], bufv: Bufferable[V]) =
+    collection[Map[K, V], (K, V)]
   // Mutable collections
-  implicit def mmap[K,V](implicit bufk: Bufferable[K], bufv: Bufferable[V]) =
-    collection[MMap[K,V], (K,V)]
+  implicit def mmap[K, V](implicit bufk: Bufferable[K], bufv: Bufferable[V]) =
+    collection[MMap[K, V], (K, V)]
   implicit def buffer[T](implicit buf: Bufferable[T]) = collection[MBuffer[T], T]
   implicit def mset[T](implicit buf: Bufferable[T]) = collection[MSet[T], T]
 
   // TODO we could add IntBuffer/FloatBuffer etc.. to have faster implementations Array[Int]
   implicit def array[T](implicit buf: Bufferable[T],
-                        cbf: CanBuildFrom[Nothing,T,Array[T]]): Bufferable[Array[T]] =
-    build[Array[T]] { (bb, l) => putCollection(bb, l.toTraversable) }
-      { bb => getCollection(bb) }
+    cbf: CanBuildFrom[Nothing, T, Array[T]]): Bufferable[Array[T]] =
+    build[Array[T]] { (bb, l) => putCollection(bb, l.toTraversable) } { bb => getCollection(bb) }
 }

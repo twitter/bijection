@@ -42,8 +42,7 @@ object GuavaBijectionLaws extends Properties("GuavaBijections") with BasePropert
   property("round trips Option[Long] -> Optional[Long]") =
     isBijection[Option[Long], Optional[Long]]
 
-  def roundTripsFn[A, B](fn: A => B)
-  (implicit arb: Arbitrary[A], bij: Bijection[A => B, GFn[A, B]], eqb: Equiv[B]) = {
+  def roundTripsFn[A, B](fn: A => B)(implicit arb: Arbitrary[A], bij: Bijection[A => B, GFn[A, B]], eqb: Equiv[B]) = {
     val rtFn = bij(fn)
     forAll { a: A => eqb.equiv(fn(a), rtFn.apply(a)) }
   }

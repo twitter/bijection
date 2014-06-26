@@ -2,10 +2,11 @@ package bijection
 
 import sbt._
 import Keys._
-import sbtgitflow.ReleasePlugin._
 import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 import com.typesafe.tools.mima.plugin.MimaKeys.previousArtifact
 import com.typesafe.sbt.osgi.SbtOsgi._
+import scalariform.formatter.preferences._
+import com.typesafe.sbt.SbtScalariform._
 
 object BijectionBuild extends Build {
   def withCross(dep: ModuleID) =
@@ -15,10 +16,12 @@ object BijectionBuild extends Build {
       case x => x
     }
 
-  val sharedSettings = Project.defaultSettings ++ releaseSettings ++ osgiSettings ++ Seq(
+  val sharedSettings = Project.defaultSettings ++ osgiSettings ++ scalariformSettings ++ Seq(
     organization := "com.twitter",
 
-    crossScalaVersions := Seq("2.9.3", "2.10.2"),
+    crossScalaVersions := Seq("2.9.3", "2.10.4"),
+
+    ScalariformKeys.preferences := formattingPreferences,
 
     scalaVersion := "2.9.3",
 
@@ -95,10 +98,18 @@ object BijectionBuild extends Build {
       </developers>)
   ) ++ mimaDefaultSettings
 
-    /**
-    * This returns the youngest jar we released that is compatible with
-    * the current.
-    */
+
+   lazy val formattingPreferences = {
+     import scalariform.formatter.preferences._
+     FormattingPreferences().
+       setPreference(AlignParameters, false).
+       setPreference(PreserveSpaceBeforeArguments, true)
+  }
+
+  /**
+   * This returns the youngest jar we released that is compatible with
+   * the current.
+   */
   val unreleasedModules = Set[String]()
 
   // This returns the youngest jar we released that is compatible with the current

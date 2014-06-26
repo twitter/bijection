@@ -36,7 +36,7 @@ object StringArbs extends BaseProperties {
 }
 
 object StringBijectionLaws extends Properties("StringBijections")
-with BaseProperties {
+  with BaseProperties {
   import StringArbs._
 
   property("round trips string -> Array[String]") = isLooseInjection[String, Array[Byte]]
@@ -44,8 +44,10 @@ with BaseProperties {
   property("round trips string -> symbol") = isBijection[String, Symbol]
 
   implicit val uuidArb = Arbitrary {
-    for( l <- choose(-100L, 100L);
-         u <- choose(-100L, 100L)) yield (new UUID(l,u))
+    for (
+      l <- choose(-100L, 100L);
+      u <- choose(-100L, 100L)
+    ) yield (new UUID(l, u))
   }
 
   property("UUID -> String") = isInjection[UUID, String]
@@ -55,11 +57,12 @@ with BaseProperties {
     try { Some(new URL("http://" + s + ".com")) }
     catch { case _ => None }
 
-  implicit val urlArb = Arbitrary { implicitly[Arbitrary[String]]
-    .arbitrary
-    .map { toUrl(_) }
-    .filter { _.isDefined }
-    .map { _.get }
+  implicit val urlArb = Arbitrary {
+    implicitly[Arbitrary[String]]
+      .arbitrary
+      .map { toUrl(_) }
+      .filter { _.isDefined }
+      .map { _.get }
   }
 
   // This is trivially a bijection if it injective

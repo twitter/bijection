@@ -29,7 +29,7 @@ import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.util.UUID
 
-import Bijection.{build, fromInjection}
+import Bijection.{ build, fromInjection }
 
 trait NumericBijections extends GeneratedTupleBijections {
   /**
@@ -47,10 +47,10 @@ trait NumericBijections extends GeneratedTupleBijections {
       override def invert(s: JShort) = s.shortValue
     }
 
-  implicit val short2ByteByte: Bijection[Short,(Byte,Byte)] =
-    new AbstractBijection[Short,(Byte,Byte)] {
+  implicit val short2ByteByte: Bijection[Short, (Byte, Byte)] =
+    new AbstractBijection[Short, (Byte, Byte)] {
       def apply(l: Short) = ((l >>> 8).toByte, l.toByte)
-      override def invert(tup: (Byte,Byte)) = {
+      override def invert(tup: (Byte, Byte)) = {
         val lowbits = tup._2.toInt & 0xff
         (((tup._1 << 8) | lowbits)).toShort
       }
@@ -59,13 +59,13 @@ trait NumericBijections extends GeneratedTupleBijections {
   implicit val int2Boxed: Bijection[Int, JInt] =
     new AbstractBijection[Int, JInt] {
       def apply(i: Int) = JInt.valueOf(i)
-      override def invert(i: JInt) =  i.intValue
+      override def invert(i: JInt) = i.intValue
     }
 
-  implicit val int2ShortShort: Bijection[Int,(Short,Short)] =
-    new AbstractBijection[Int,(Short,Short)] {
+  implicit val int2ShortShort: Bijection[Int, (Short, Short)] =
+    new AbstractBijection[Int, (Short, Short)] {
       def apply(l: Int) = ((l >>> 16).toShort, l.toShort)
-      override def invert(tup: (Short,Short)) =
+      override def invert(tup: (Short, Short)) =
         ((tup._1.toInt << 16) | ((tup._2.toInt << 16) >>> 16))
     }
 
@@ -75,10 +75,10 @@ trait NumericBijections extends GeneratedTupleBijections {
       override def invert(l: JLong) = l.longValue
     }
 
-  implicit val long2IntInt: Bijection[Long,(Int,Int)] =
-    new AbstractBijection[Long,(Int,Int)] {
+  implicit val long2IntInt: Bijection[Long, (Int, Int)] =
+    new AbstractBijection[Long, (Int, Int)] {
       def apply(l: Long) = ((l >>> 32).toInt, l.toInt)
-      override def invert(tup: (Int,Int)) =
+      override def invert(tup: (Int, Int)) =
         ((tup._1.toLong << 32) | ((tup._2.toLong << 32) >>> 32))
     }
 
@@ -113,11 +113,11 @@ trait NumericBijections extends GeneratedTupleBijections {
     }
 
   /* Other types to and from Numeric types */
-  implicit val uid2LongLong: Bijection[UUID, (Long,Long)] =
-    new AbstractBijection[UUID, (Long,Long)] { uid =>
+  implicit val uid2LongLong: Bijection[UUID, (Long, Long)] =
+    new AbstractBijection[UUID, (Long, Long)] { uid =>
       def apply(uid: UUID) =
         (uid.getMostSignificantBits, uid.getLeastSignificantBits)
-      override def invert(ml: (Long,Long)) = new UUID(ml._1, ml._2)
+      override def invert(ml: (Long, Long)) = new UUID(ml._1, ml._2)
     }
 
   implicit val date2Long: Bijection[java.util.Date, Long] =

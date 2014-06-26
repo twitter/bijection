@@ -14,7 +14,7 @@
 
 package com.twitter.bijection.guava
 
-import com.twitter.bijection.{AbstractBijection, Bijection}
+import com.twitter.bijection.{ AbstractBijection, Bijection }
 import com.google.common.io.BaseEncoding
 
 /**
@@ -49,7 +49,6 @@ object GuavaBinaryBijections {
       override def invert(b64: Base64String) = BaseEncoding.base64().decode(b64.str)
     }
 
-
   implicit lazy val bytes2Base64Url: Bijection[Array[Byte], Base64URLString] =
     new AbstractBijection[Array[Byte], Base64URLString] {
       def apply(bytes: Array[Byte]) = Base64URLString(BaseEncoding.base64Url().encode(bytes))
@@ -57,14 +56,12 @@ object GuavaBinaryBijections {
       override def invert(b64: Base64URLString) = BaseEncoding.base64Url().decode(b64.str)
     }
 
-
   implicit lazy val bytes2Base32: Bijection[Array[Byte], Base32String] =
     new AbstractBijection[Array[Byte], Base32String] {
       def apply(bytes: Array[Byte]) = Base32String(BaseEncoding.base32().encode(bytes))
 
       override def invert(b32: Base32String) = BaseEncoding.base32().decode(b32.str)
     }
-
 
   implicit lazy val bytes2Base32HEX: Bijection[Array[Byte], Base32HEXString] =
     new AbstractBijection[Array[Byte], Base32HEXString] {

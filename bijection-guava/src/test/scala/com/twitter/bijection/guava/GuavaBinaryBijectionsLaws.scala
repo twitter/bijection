@@ -20,13 +20,12 @@ import com.twitter.bijection.guava.GuavaBinaryBijections._
 import com.twitter.bijection.guava.GuavaBinaryBijections.Base64String
 import com.twitter.bijection.guava.GuavaBinaryBijections.Base64URLString
 
-
 /**
  * @author Muhammad Ashraf
  * @since 7/7/13
  */
 object GuavaBinaryBijectionsLaws extends Properties("GuavaBinaryBijections")
-with BaseProperties {
+  with BaseProperties {
 
   property("rts Array[Byte] -> Base64String") = isInjective[Array[Byte], Base64String]
   property("rts Array[Byte] -> Base64URLString") = isInjective[Array[Byte], Base64URLString]

@@ -11,7 +11,7 @@ trait DateInjections {
     new AbstractInjection[Date, String] {
       def apply(d: Date) = d.toString
       override def invert(s: String) = attempt(s)(new DateTime(_).toDate())
-    
+
     }
 
   implicit val joda2String: Injection[DateTime, String] =
@@ -19,7 +19,6 @@ trait DateInjections {
       def apply(d: DateTime) = d.toString
       override def invert(s: String) = attempt(s)(new DateTime(_))
     }
-
 
   implicit val joda2Date: Injection[DateTime, Date] =
     new AbstractInjection[DateTime, Date] {

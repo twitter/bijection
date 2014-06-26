@@ -15,7 +15,7 @@
 package com.twitter.bijection.hbase
 
 import org.specs.Specification
-import com.twitter.bijection.{Bijection, BaseProperties}
+import com.twitter.bijection.{ Bijection, BaseProperties }
 import HBaseBijections._
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
 

@@ -40,7 +40,8 @@ trait Injection[A, B] extends Serializable { self =>
       override def apply(a: A) = g(self.apply(a))
       override def invert(c: C) = g.invert(c).flatMap { b => self.invert(b) }
     }
-  /** Follow the Injection with a Bijection
+  /**
+   * Follow the Injection with a Bijection
    */
   def andThen[C](bij: Bijection[B, C]): Injection[A, C] =
     new AbstractInjection[A, C] {
@@ -65,7 +66,7 @@ trait Injection[A, B] extends Serializable { self =>
 }
 
 // Avoid a closure
-private [bijection] class InjectionFn[A, B](inj: Injection[A, B]) extends (A => B) with Serializable {
+private[bijection] class InjectionFn[A, B](inj: Injection[A, B]) extends (A => B) with Serializable {
   def apply(a: A) = inj(a)
 }
 
@@ -80,7 +81,7 @@ abstract class AbstractInjection[A, B] extends Injection[A, B] {
 
 trait LowPriorityInjections {
   // All Bijections are Injections
-  implicit def fromImplicitBijection[A,B](implicit bij: ImplicitBijection[A, B]): Injection[A,B] =
+  implicit def fromImplicitBijection[A, B](implicit bij: ImplicitBijection[A, B]): Injection[A, B] =
     new AbstractInjection[A, B] {
       override def apply(a: A) = bij(a)
       override def invert(b: B) = Success(bij.invert(b))
@@ -90,7 +91,7 @@ trait LowPriorityInjections {
 object Injection extends CollectionInjections
   with Serializable {
 
-  implicit def toFunction[A,B](inj: Injection[A, B]): (A => B) = inj.toFunction
+  implicit def toFunction[A, B](inj: Injection[A, B]): (A => B) = inj.toFunction
 
   def apply[A, B](a: A)(implicit inj: Injection[A, B]): B = inj(a)
   def invert[A, B](b: B)(implicit inj: Injection[A, B]): Try[A] = inj.invert(b)
@@ -101,7 +102,8 @@ object Injection extends CollectionInjections
       override def invert(b: B) = from(b)
     }
 
-  /** Like build, but you give a function from B => A which may throw
+  /**
+   * Like build, but you give a function from B => A which may throw
    * If you never expect from to throw, use Bijection.build
    */
   def buildCatchInvert[A, B](to: A => B)(from: B => A): Injection[A, B] =
@@ -124,10 +126,10 @@ object Injection extends CollectionInjections
   def connect[A, B, C, D, E](implicit bij: Injection[A, B], bij2: Injection[B, C], bij3: Injection[C, D], bij4: Injection[D, E]): Injection[A, E] =
     connect[A, B, C, D] andThen bij4
 
-  implicit def either1[A,B]: Injection[A, Either[B,A]] =
-    new AbstractInjection[A, Either[B,A]] {
+  implicit def either1[A, B]: Injection[A, Either[B, A]] =
+    new AbstractInjection[A, Either[B, A]] {
       override def apply(a: A) = Right(a)
-      override def invert(e: Either[B,A]) = e match {
+      override def invert(e: Either[B, A]) = e match {
         case Right(a) => Success(a)
         case _ => InversionFailure.failedAttempt(e)
       }
@@ -135,7 +137,7 @@ object Injection extends CollectionInjections
   /**
    * It might be nice for this to be implicit, but this seems to make ambiguous implicit Injections
    */
-  def fromBijectionRep[A,B](implicit bij: ImplicitBijection[A, B @@ Rep[A]]): Injection[A, B] =
+  def fromBijectionRep[A, B](implicit bij: ImplicitBijection[A, B @@ Rep[A]]): Injection[A, B] =
     new AbstractInjection[A, B] {
       override def apply(a: A) = bij(a)
       override def invert(b: B) = attempt(b) { bin =>
@@ -157,7 +159,7 @@ object Injection extends CollectionInjections
   implicit def class2String[T]: Injection[Class[T], String] = new ClassInjection[T]
 
   // Build an injection from a Bijection
-  def fromBijection[A,B](bij: Bijection[A, B]): Injection[A,B] =
+  def fromBijection[A, B](bij: Bijection[A, B]): Injection[A, B] =
     new AbstractInjection[A, B] {
       override def apply(a: A) = bij(a)
       override def invert(b: B) = Success(bij.invert(b))
@@ -176,16 +178,16 @@ object Injection extends CollectionInjections
   /**
    * Get a partial from B => D from injections and a function from A => C
    */
-  def toPartial[A, C, B, D](fn: A => C)(implicit inj1: Injection[A, B], inj2: Injection[C, D]):
-    PartialFunction[B, D] = new PartialFunction[B, D] {
-      override def isDefinedAt(b: B) = inj1.invert(b).isSuccess
-      override def apply(b: B): D = inj2.apply(fn(inj1.invert(b).get))
-    }
+  def toPartial[A, C, B, D](fn: A => C)(implicit inj1: Injection[A, B], inj2: Injection[C, D]): PartialFunction[B, D] = new PartialFunction[B, D] {
+    override def isDefinedAt(b: B) = inj1.invert(b).isSuccess
+    override def apply(b: B): D = inj2.apply(fn(inj1.invert(b).get))
+  }
 
-  /** Use of this implies you want exceptions when the inverse is undefined
+  /**
+   * Use of this implies you want exceptions when the inverse is undefined
    */
-  def unsafeToBijection[A,B](implicit inj: Injection[A,B]): Bijection[A,B] =
-    new AbstractBijection[A,B] {
+  def unsafeToBijection[A, B](implicit inj: Injection[A, B]): Bijection[A, B] =
+    new AbstractBijection[A, B] {
       def apply(a: A) = inj(a)
       override def invert(b: B) =
         inj.invert(b) match {

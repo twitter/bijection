@@ -16,7 +16,7 @@
 
 package com.twitter.bijection.scrooge
 
-import com.twitter.bijection.{Bijection, Injection}
+import com.twitter.bijection.{ Bijection, Injection }
 import com.twitter.bijection.Inversion.attempt
 import com.twitter.scrooge.{
   CompactThriftSerializer,
@@ -26,7 +26,7 @@ import com.twitter.scrooge.{
 }
 
 class ScalaCodec[T <: ThriftStruct](ser: ThriftStructSerializer[T])
-    extends Injection[T, Array[Byte]] {
+  extends Injection[T, Array[Byte]] {
   override def apply(item: T) = ser.toBytes(item)
   override def invert(bytes: Array[Byte]) = attempt(bytes)(ser.fromBytes(_))
 }
@@ -37,11 +37,10 @@ object BinaryScalaCodec {
 }
 
 class BinaryScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
-    extends ScalaCodec(new ThriftStructSerializer[T] {
-      override def codec = c
-      val protocolFactory = new TBinaryProtocol.Factory
-    }
-)
+  extends ScalaCodec(new ThriftStructSerializer[T] {
+    override def codec = c
+    val protocolFactory = new TBinaryProtocol.Factory
+  })
 
 object CompactScalaCodec {
   def apply[T <: ThriftStruct](c: ThriftStructCodec[T]) =
@@ -49,9 +48,8 @@ object CompactScalaCodec {
 }
 
 class CompactScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
-    extends ScalaCodec(new CompactThriftSerializer[T] {
-      override def codec = c
-    }
-  )
+  extends ScalaCodec(new CompactThriftSerializer[T] {
+    override def codec = c
+  })
 
 // TODO: add JSON and ThriftEnum codecs

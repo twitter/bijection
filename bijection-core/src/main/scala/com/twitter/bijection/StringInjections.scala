@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.twitter.bijection
 
-import java.net.{URLDecoder, URLEncoder, URL}
+import java.net.{ URLDecoder, URLEncoder, URL }
 import java.util.UUID
 
 import scala.annotation.tailrec

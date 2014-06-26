@@ -42,8 +42,7 @@ class JavaSerializationInjection[T <: Serializable](klass: Class[T]) extends Inj
     try {
       out.writeObject(t)
       bos.toByteArray
-    }
-    finally {
+    } finally {
       out.close
       bos.close
     }
@@ -53,11 +52,9 @@ class JavaSerializationInjection[T <: Serializable](klass: Class[T]) extends Inj
     val inOpt = Try(new ObjectInputStream(bis))
     try {
       inOpt.map { in => klass.cast(in.readObject) }.recoverWith(InversionFailure.partialFailure(bytes))
-    }
-    catch {
+    } catch {
       case t: Throwable => Failure(InversionFailure(bytes, t))
-    }
-    finally {
+    } finally {
       bis.close
       inOpt.map { _.close }
     }

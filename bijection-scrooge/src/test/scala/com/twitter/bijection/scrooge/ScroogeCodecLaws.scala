@@ -25,7 +25,7 @@ object ScroogeCodecLaws extends Properties("ScroogeCodecs") with BaseProperties 
   def buildScrooge(i: (Int, String)) =
     TestStruct(i._1, Some(i._2))
 
-  implicit val testScrooge = arbitraryViaFn { is: (Int,String) => buildScrooge(is) }
+  implicit val testScrooge = arbitraryViaFn { is: (Int, String) => buildScrooge(is) }
 
   // Code generator for thrift instances.
   def roundTripsScrooge(bijection: Injection[TestStruct, Array[Byte]]) = {

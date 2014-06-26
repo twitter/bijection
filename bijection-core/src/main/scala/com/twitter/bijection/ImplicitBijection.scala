@@ -16,7 +16,8 @@ limitations under the License.
 
 package com.twitter.bijection
 
-/** Deals with the type-system issue around resolving implicit bijections.
+/**
+ * Deals with the type-system issue around resolving implicit bijections.
  * Bijection[A,B] or Bijection[B,A], which should
  * be equivalent. Only use this type as an implicit parameter.
  */
@@ -27,7 +28,7 @@ sealed trait ImplicitBijection[A, B] extends (A => B) with java.io.Serializable 
   def apply(a: A) = bijection.apply(a)
   def invert(b: B) = bijection.invert(b)
 }
-case class Forward[A, B](override val bijection: Bijection[A,B]) extends ImplicitBijection[A, B]
+case class Forward[A, B](override val bijection: Bijection[A, B]) extends ImplicitBijection[A, B]
 case class Reverse[A, B](inv: Bijection[B, A]) extends ImplicitBijection[A, B] {
   lazy val bijection = inv.inverse
 }
