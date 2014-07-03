@@ -1,5 +1,12 @@
 # Bijection #
 
+### 0.6.3
+* Sbt => 0.13, use scalariform: https://github.com/twitter/bijection/pull/170
+* Backtick Array[Byte] in README: https://github.com/twitter/bijection/pull/168
+* Update README to include bijection-avro: https://github.com/twitter/bijection/pull/167
+* Update build publishTo to be consistent with scalding: https://github.com/twitter/bijection/pull/165
+* Pin bijection-guava to jsr305 1.3.9.: https://github.com/twitter/bijection/pull/164
+
 ### 0.6.2
 * Added json4s to project aggregate: https://github.com/twitter/bijection/pull/161
 
