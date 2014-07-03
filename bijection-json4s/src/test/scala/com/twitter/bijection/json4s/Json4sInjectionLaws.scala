@@ -15,7 +15,7 @@
 package com.twitter.bijection.json4s
 
 import org.scalacheck.Properties
-import com.twitter.bijection.{Injection, BaseProperties}
+import com.twitter.bijection.{ Injection, BaseProperties }
 
 import org.json4s.JsonAST._
 import org.json4s.JsonAST.JString
@@ -25,7 +25,7 @@ import org.json4s.JsonAST.JString
  * @since 1/10/14
  */
 object Json4sInjectionLaws extends Properties("Json4sInjection")
-with BaseProperties {
+  with BaseProperties {
   case class Twit(name: String, id: Int, id_str: String, indices: List[Int], screen_name: String)
 
   def createTwit(i: (String, Int, String, List[Int], String)): Twit = Twit(i._1, i._2, i._3, i._4, i._5)
@@ -34,15 +34,15 @@ with BaseProperties {
     in: (String, Int, String, List[Int], String) => createTwit(in)
   }
 
-  implicit val testJValueToJson = arbitraryViaFn[(String, Int, String, List[Int], String),JValue] {
-    in: (String, Int, String, List[Int], String) => JObject(
-      List(
-        JField("name", JString(in._1)),
-        JField("id", JInt(in._2)),
-        JField("id_String", JString(in._3)),
-        JField("indices", JArray(in._4.map(JInt(_)))),
-        JField("screen_name", JString(in._5))
-      ))
+  implicit val testJValueToJson = arbitraryViaFn[(String, Int, String, List[Int], String), JValue] {
+    in: (String, Int, String, List[Int], String) =>
+      JObject(
+        List(
+          JField("name", JString(in._1)),
+          JField("id", JInt(in._2)),
+          JField("id_String", JString(in._3)),
+          JField("indices", JArray(in._4.map(JInt(_)))),
+          JField("screen_name", JString(in._5))))
   }
 
   def roundTripCaseClassToJson(implicit inj: Injection[Twit, String], mn: Manifest[Twit]) = isLooseInjection[Twit, String]

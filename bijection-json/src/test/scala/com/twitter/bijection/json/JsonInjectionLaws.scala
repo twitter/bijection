@@ -24,16 +24,16 @@ import org.scalacheck.Prop.forAll
 import org.scalacheck.Arbitrary
 
 import org.codehaus.jackson.JsonNode
-import com.twitter.bijection.json.JsonNodeInjection.{fromJsonNode, toJsonNode}
+import com.twitter.bijection.json.JsonNodeInjection.{ fromJsonNode, toJsonNode }
 import scala.util.Try
 
 object JsonInjectionLaws extends Properties("JsonInjection") with BaseProperties {
   // Needed from some recursive injections (like tuples)
   import JsonNodeInjection._
 
-  def roundTripJson[T: JsonNodeInjection : Arbitrary: Equiv] = {
-    implicit val bij: Injection[T,String] = JsonInjection.toString[T]
-    isLooseInjection[T,String]
+  def roundTripJson[T: JsonNodeInjection: Arbitrary: Equiv] = {
+    implicit val bij: Injection[T, String] = JsonInjection.toString[T]
+    isLooseInjection[T, String]
   }
 
   property("Short") = roundTripJson[Short]
@@ -44,21 +44,21 @@ object JsonInjectionLaws extends Properties("JsonInjection") with BaseProperties
   property("String") = roundTripJson[String]
   property("Array[Byte]") = roundTripJson[Array[Byte]]
   // Collections
-  property("(String,Int)") = roundTripJson[(String,Int)]
-  property("(String,Int,Long)") = roundTripJson[(String,Int,Long)]
-  property("(String,(String,Int))") = roundTripJson[(String,(String,Int))]
-  property("Either[String,Int]") = roundTripJson[Either[String,Int]]
-  property("Map[String, Either[String,Int]]") = roundTripJson[Map[String, Either[String,Int]]]
-  property("Map[String,Int]") = roundTripJson[Map[String,Int]]
-  property("Map[String,Long]") = roundTripJson[Map[String,Long]]
-  property("Map[String,String]") = roundTripJson[Map[String,String]]
-  property("Map[String,Map[String,Int]]") = roundTripJson[Map[String,Map[String,Int]]]
+  property("(String,Int)") = roundTripJson[(String, Int)]
+  property("(String,Int,Long)") = roundTripJson[(String, Int, Long)]
+  property("(String,(String,Int))") = roundTripJson[(String, (String, Int))]
+  property("Either[String,Int]") = roundTripJson[Either[String, Int]]
+  property("Map[String, Either[String,Int]]") = roundTripJson[Map[String, Either[String, Int]]]
+  property("Map[String,Int]") = roundTripJson[Map[String, Int]]
+  property("Map[String,Long]") = roundTripJson[Map[String, Long]]
+  property("Map[String,String]") = roundTripJson[Map[String, String]]
+  property("Map[String,Map[String,Int]]") = roundTripJson[Map[String, Map[String, Int]]]
   property("List[String]") = roundTripJson[List[String]]
   property("List[Int]") = roundTripJson[List[Int]]
   property("List[List[String]]") = roundTripJson[List[List[String]]]
   property("Set[Int]") = roundTripJson[Set[Int]]
 
-  implicit val jsonOpt = JsonNodeInjection.viaInjection[Option[Int],List[Int]]
+  implicit val jsonOpt = JsonNodeInjection.viaInjection[Option[Int], List[Int]]
   property("Option[Int]") = roundTripJson[Option[Int]]
 
   implicit val arbSeq: Arbitrary[Seq[Int]] = arbitraryViaFn { s: List[Int] => s.toSeq }
@@ -71,19 +71,19 @@ object JsonInjectionLaws extends Properties("JsonInjection") with BaseProperties
 
   // Handle Mixed values:
   property("Mixed values") = forAll { (kv: List[(String, Int, List[String])]) =>
-    val mixedMap = kv.map { case (key, intv, lv) =>
-      if (scala.math.random < 0.5) { (key + "i", toJsonNode(intv)) }
-      else { (key + "l", toJsonNode(lv)) }
+    val mixedMap = kv.map {
+      case (key, intv, lv) =>
+        if (scala.math.random < 0.5) { (key + "i", toJsonNode(intv)) }
+        else { (key + "l", toJsonNode(lv)) }
     }.toMap
 
     val jsonMixed = mixedMap.as[UnparsedJson]
 
-    jsonMixed.as[Try[Map[String, JsonNode]]].get.map({ kup : (String, JsonNode) =>
+    jsonMixed.as[Try[Map[String, JsonNode]]].get.map({ kup: (String, JsonNode) =>
       val (k, up) = kup
       if (k.endsWith("i")) {
         fromJsonNode[Int](up).get == fromJsonNode[Int](mixedMap(k)).get
-      }
-      else {
+      } else {
         fromJsonNode[List[String]](up).get == fromJsonNode[List[String]](mixedMap(k)).get
       }
     }).forall { x => x }

@@ -34,21 +34,21 @@ import org.scalacheck.Prop.forAll
 import Conversion.asMethod // get the .as syntax
 
 object JavaNumArbs {
-  import NumericBijectionLaws.{arbitraryViaFn => viaFn}
+  import NumericBijectionLaws.{ arbitraryViaFn => viaFn }
 
   implicit val byteA = viaFn { v: Byte => JByte.valueOf(v) }
   implicit val shortA = viaFn { v: Short => JShort.valueOf(v) }
   implicit val longA = viaFn { v: Long => JLong.valueOf(v) }
   implicit val intA = viaFn { v: Int => JInt.valueOf(v) }
   implicit val floatA = viaFn { v: Float => JFloat.valueOf(v) }
-  implicit val doubleA = viaFn { v:Double => JDouble.valueOf(v) }
-  implicit val bigInteger = viaFn { (l1l2: (Long, Long))  =>
+  implicit val doubleA = viaFn { v: Double => JDouble.valueOf(v) }
+  implicit val bigInteger = viaFn { (l1l2: (Long, Long)) =>
     (new BigInteger(l1l2._1.toString)).multiply(new BigInteger(l1l2._2.toString))
   }
 }
 
 object NumericBijectionLaws extends Properties("NumericBijections")
-with BaseProperties {
+  with BaseProperties {
   import StringArbs._
   import JavaNumArbs._
 
@@ -67,9 +67,9 @@ with BaseProperties {
   property("round trips float -> string") = isBijection[Float, String @@ Rep[Float]]
   property("round trips double -> string") = isBijection[Double, String @@ Rep[Double]]
   // Embedding in larger numbers:
-  property("round trips Short <-> (Byte,Byte)") = isBijection[Short,(Byte,Byte)]
-  property("round trips Int <-> (Short,Short)") = isBijection[Int,(Short,Short)]
-  property("round trips Long <-> (Int,Int)") = isBijection[Long,(Int,Int)]
+  property("round trips Short <-> (Byte,Byte)") = isBijection[Short, (Byte, Byte)]
+  property("round trips Int <-> (Short,Short)") = isBijection[Int, (Short, Short)]
+  property("round trips Long <-> (Int,Int)") = isBijection[Long, (Int, Int)]
   // Upcasting:
   property("byte -> short") = isInjection[Byte, Short]
   property("short -> int") = isInjection[Short, Int]
@@ -79,12 +79,12 @@ with BaseProperties {
   property("float -> double") = isLooseInjection[Float, Double]
   // ModDiv
   property("Int -> (Int,Int) by ModDiv") = {
-    implicit val modDiv: Injection[Int,(Int,Int)] = new IntModDivInjection(128)
-    isInjection[Int, (Int,Int)]
+    implicit val modDiv: Injection[Int, (Int, Int)] = new IntModDivInjection(128)
+    isInjection[Int, (Int, Int)]
   }
   property("Long -> (Long,Long) by ModDiv") = {
-    implicit val modDiv: Injection[Long,(Long,Long)] = new LongModDivInjection(10040L)
-    isInjection[Long, (Long,Long)]
+    implicit val modDiv: Injection[Long, (Long, Long)] = new LongModDivInjection(10040L)
+    isInjection[Long, (Long, Long)]
   }
 
   // TODO need Rep[Int], etc... on the Array[Byte]
@@ -94,9 +94,9 @@ with BaseProperties {
   property("round trips float -> Array[Byte]") = isLooseInjection[Float, Array[Byte]]
   property("round trips double -> Array[Byte]") = isLooseInjection[Double, Array[Byte]]
   // Some other types through numbers:
-  implicit val uuid = arbitraryViaFn { (uplow: (Long,Long)) => new UUID(uplow._1, uplow._2) }
+  implicit val uuid = arbitraryViaFn { (uplow: (Long, Long)) => new UUID(uplow._1, uplow._2) }
   implicit val date = arbitraryViaFn { (dtime: Long) => new java.util.Date(dtime) }
-  property("round trips (Long,Long) -> UUID") = isBijection[(Long,Long), UUID]
+  property("round trips (Long,Long) -> UUID") = isBijection[(Long, Long), UUID]
   property("round trips Long -> Date") = isBijection[Long, java.util.Date]
 
   property("as works") = forAll { (i: Int) =>

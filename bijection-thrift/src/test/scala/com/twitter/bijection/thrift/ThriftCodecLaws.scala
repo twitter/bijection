@@ -25,7 +25,7 @@ object ThriftCodecLaws extends Properties("ThriftCodecs") with BaseProperties {
   def buildThrift(i: (Int, String)) =
     new TestThriftStructure().setANumber(i._1).setAString(i._2)
 
-  implicit val testThrift = arbitraryViaFn { is: (Int,String) => buildThrift(is) }
+  implicit val testThrift = arbitraryViaFn { is: (Int, String) => buildThrift(is) }
 
   // Code generator for thrift instances.
   def roundTripsThrift(implicit injection: Injection[TestThriftStructure, Array[Byte]]) = {

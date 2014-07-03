@@ -1,7 +1,7 @@
 package com.twitter.bijection.avro
 
 import org.scalacheck.Properties
-import com.twitter.bijection.{Injection, BaseProperties}
+import com.twitter.bijection.{ Injection, BaseProperties }
 import org.apache.avro.Schema
 import avro.FiscalRecord
 
@@ -10,7 +10,7 @@ import avro.FiscalRecord
  * @since 10/5/13
  */
 object SpecificAvroCodecLaws extends Properties("SpecificAvroCodecs") with BaseProperties {
-  val testSchema = new Schema.Parser().parse( """{
+  val testSchema = new Schema.Parser().parse("""{
                                                    "type":"record",
                                                    "name":"FiscalRecord",
                                                    "namespace":"avro",
@@ -35,7 +35,6 @@ object SpecificAvroCodecLaws extends Properties("SpecificAvroCodecs") with BaseP
                                                       }
                                                    ]
                                                 }""")
-
 
   def buildSpecificAvroRecord(i: (String, Int, Int)): FiscalRecord = {
     FiscalRecord.newBuilder()
@@ -67,5 +66,4 @@ object SpecificAvroCodecLaws extends Properties("SpecificAvroCodecs") with BaseP
     roundTripsSpecificRecordToJson(SpecificAvroCodecs.toJson[FiscalRecord](testSchema))
 
 }
-
 

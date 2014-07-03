@@ -14,7 +14,7 @@
 
 package com.twitter.bijection
 
-import org.json4s.{NoTypeHints, native}
+import org.json4s.{ NoTypeHints, native }
 
 /**
  * @author Mansur Ashraf

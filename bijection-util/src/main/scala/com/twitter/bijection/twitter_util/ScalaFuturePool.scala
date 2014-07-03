@@ -1,7 +1,7 @@
 package com.twitter.bijection.twitter_util
 
 import scala.concurrent.ExecutionContext
-import com.twitter.util.{FuturePool, Future, Try, Return, Throw, Promise}
+import com.twitter.util.{ FuturePool, Future, Try, Return, Throw, Promise }
 
 /**
  * FuturePool adapter for ExecutionContext

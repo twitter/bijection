@@ -26,58 +26,60 @@ import java.util.Arrays
 trait BaseProperties {
   implicit def barrEq[T](implicit eqt: Equiv[T]): Equiv[Array[T]] = new Equiv[Array[T]] {
     def equiv(a1: Array[T], a2: Array[T]) =
-      a1.zip(a2).forall { tup: (T,T) => eqt.equiv(tup._1, tup._2) }
+      a1.zip(a2).forall { tup: (T, T) => eqt.equiv(tup._1, tup._2) }
   }
 
-  def rt[A, B](a: A)(implicit bij: Bijection[A, B]): A = rtInjective[A,B](a)
+  def rt[A, B](a: A)(implicit bij: Bijection[A, B]): A = rtInjective[A, B](a)
 
   def rtInjective[A, B](a: A)(implicit bij: Bijection[A, B]): A = bij.invert(bij(a))
 
-  /** Checks that we can always invert all A
+  /**
+   * Checks that we can always invert all A
    * does not requires that all B that return Some[A] return to exact same B
    */
-  def isLooseInjection[A,B](implicit arba: Arbitrary[A],
+  def isLooseInjection[A, B](implicit arba: Arbitrary[A],
     inj: Injection[A, B], eqa: Equiv[A]) =
     forAll { (a: A) =>
       val b = inj(a)
-        b != null &&
-        { val bofa = inj.invert(b)
+      b != null &&
+        {
+          val bofa = inj.invert(b)
           bofa != null &&
-          bofa.isSuccess &&
-          eqa.equiv(bofa.get, a)
+            bofa.isSuccess &&
+            eqa.equiv(bofa.get, a)
         }
     }
 
- def invertIsStrict[A,B](implicit arbb: Arbitrary[B], inj: Injection[A,B], eqb: Equiv[B]) =
-   forAll { (b: B) =>
-     inj.invert(b) match {
-       case Success(aofb) =>
-         assert(aofb != null, "aofb was null")
-         eqb.equiv(b, inj(aofb))
-       case _ => true // the failing case of None previously returned true?
-     }
-   }
-
-  def isInjection[A,B](implicit a: Arbitrary[A],
-    inj: Injection[A, B], barb: Arbitrary[B], eqa: Equiv[A], eqb: Equiv[B]) =
-    isLooseInjection[A,B] && invertIsStrict[A,B]
-
-  def isInjective[A,B](implicit a: Arbitrary[A], bij: ImplicitBijection[A, B], eqa: Equiv[A]) =
-      forAll { (a: A) => eqa.equiv(a, rt(a)(bij.bijection)) }
-
-  def invertIsInjection[A,B](implicit b: Arbitrary[B], bij: ImplicitBijection[A, B], eqb: Equiv[B]) =
-      forAll { b: B => eqb.equiv(b, rtInjective(b)(bij.bijection.inverse)) }
-
-  def isBijection[A,B](implicit arba: Arbitrary[A],
-    arbb: Arbitrary[B], bij: ImplicitBijection[A, B], eqa: Equiv[A], eqb: Equiv[B]) = {
-      implicit val inj = Injection.fromBijection(bij.bijection)
-      isInjective[A,B] && invertIsInjection[A,B]
+  def invertIsStrict[A, B](implicit arbb: Arbitrary[B], inj: Injection[A, B], eqb: Equiv[B]) =
+    forAll { (b: B) =>
+      inj.invert(b) match {
+        case Success(aofb) =>
+          assert(aofb != null, "aofb was null")
+          eqb.equiv(b, inj(aofb))
+        case _ => true // the failing case of None previously returned true?
+      }
     }
 
-  def arbitraryViaBijection[A,B](implicit bij: Bijection[A,B], arb: Arbitrary[A]): Arbitrary[B] =
+  def isInjection[A, B](implicit a: Arbitrary[A],
+    inj: Injection[A, B], barb: Arbitrary[B], eqa: Equiv[A], eqb: Equiv[B]) =
+    isLooseInjection[A, B] && invertIsStrict[A, B]
+
+  def isInjective[A, B](implicit a: Arbitrary[A], bij: ImplicitBijection[A, B], eqa: Equiv[A]) =
+    forAll { (a: A) => eqa.equiv(a, rt(a)(bij.bijection)) }
+
+  def invertIsInjection[A, B](implicit b: Arbitrary[B], bij: ImplicitBijection[A, B], eqb: Equiv[B]) =
+    forAll { b: B => eqb.equiv(b, rtInjective(b)(bij.bijection.inverse)) }
+
+  def isBijection[A, B](implicit arba: Arbitrary[A],
+    arbb: Arbitrary[B], bij: ImplicitBijection[A, B], eqa: Equiv[A], eqb: Equiv[B]) = {
+    implicit val inj = Injection.fromBijection(bij.bijection)
+    isInjective[A, B] && invertIsInjection[A, B]
+  }
+
+  def arbitraryViaBijection[A, B](implicit bij: Bijection[A, B], arb: Arbitrary[A]): Arbitrary[B] =
     Arbitrary { arb.arbitrary.map { bij(_) } }
-  def arbitraryViaFn[A,B](fn: A => B)(implicit arb: Arbitrary[A]): Arbitrary[B] =
+  def arbitraryViaFn[A, B](fn: A => B)(implicit arb: Arbitrary[A]): Arbitrary[B] =
     Arbitrary { arb.arbitrary.map { fn(_) } }
-  def arbitraryViaInjection[A,B](implicit inj: Injection[A,B], arb: Arbitrary[A]): Arbitrary[B] =
+  def arbitraryViaInjection[A, B](implicit inj: Injection[A, B], arb: Arbitrary[A]): Arbitrary[B] =
     Arbitrary { arb.arbitrary.map { inj(_) } }
 }

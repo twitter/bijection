@@ -21,7 +21,7 @@ import org.scalacheck.Properties
 import org.scalacheck.Prop._
 
 object BinaryBijectionLaws extends Properties("BinaryBijections")
-with BaseProperties {
+  with BaseProperties {
   implicit val arbBB = arbitraryViaFn[Array[Byte], ByteBuffer] { ByteBuffer.wrap(_) }
 
   // TODO: These are all bijections,

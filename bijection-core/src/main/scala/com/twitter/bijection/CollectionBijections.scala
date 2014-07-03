@@ -32,7 +32,7 @@ import scala.collection.mutable
 import collection.generic.CanBuildFrom
 
 trait CollectionBijections extends BinaryBijections {
-import Conversion.asMethod
+  import Conversion.asMethod
 
   /**
    * Bijections between collection types defined in scala.collection.JavaConverters.
@@ -63,7 +63,7 @@ import Conversion.asMethod
       override def apply(t: mutable.Map[K, V]) = t.asJava
       override def invert(t: JMap[K, V]) = t.asScala
     }
-  implicit def iterable2jcollection[T]:  Bijection[Iterable[T], JCollection[T]] =
+  implicit def iterable2jcollection[T]: Bijection[Iterable[T], JCollection[T]] =
     new AbstractBijection[Iterable[T], JCollection[T]] {
       override def apply(t: Iterable[T]) = t.asJavaCollection
       override def invert(u: JCollection[T]) = u.asScala
@@ -143,8 +143,7 @@ import Conversion.asMethod
    * Bijection[Iterable[A], Set[B]] is inaccurate, and really makes
    * no sense.
    */
-  def toContainer[A, B, C <: TraversableOnce[A], D <: TraversableOnce[B]]
-  (implicit bij: ImplicitBijection[A, B], cd: CanBuildFrom[Nothing, B, D], dc: CanBuildFrom[Nothing, A, C]): Bijection[C, D] =
+  def toContainer[A, B, C <: TraversableOnce[A], D <: TraversableOnce[B]](implicit bij: ImplicitBijection[A, B], cd: CanBuildFrom[Nothing, B, D], dc: CanBuildFrom[Nothing, A, C]): Bijection[C, D] =
     new AbstractBijection[C, D] {
       def apply(c: C) = {
         val builder = cd()
@@ -178,23 +177,23 @@ import Conversion.asMethod
       override def invert(optu: Option[U]) = optu.map(bij.invert(_))
     }
   // Always requires a copy
-  implicit def vector2List[A,B](implicit bij: ImplicitBijection[A,B]): Bijection[Vector[A], List[B]]
-    = toContainer[A, B, Vector[A], List[B]]
+  implicit def vector2List[A, B](implicit bij: ImplicitBijection[A, B]): Bijection[Vector[A], List[B]] = toContainer[A, B, Vector[A], List[B]]
 
-  implicit def indexedSeq2List[A,B](implicit bij: ImplicitBijection[A,B]): Bijection[IndexedSeq[A], List[B]]
-    = toContainer[A, B, IndexedSeq[A], List[B]]
+  implicit def indexedSeq2List[A, B](implicit bij: ImplicitBijection[A, B]): Bijection[IndexedSeq[A], List[B]] = toContainer[A, B, IndexedSeq[A], List[B]]
 
-  /** This doesn't actually copy the Array, only wraps/unwraps with WrappedArray
+  /**
+   * This doesn't actually copy the Array, only wraps/unwraps with WrappedArray
    */
-  implicit def array2Traversable[T:ClassManifest]: Bijection[Array[T], Traversable[T]] =
+  implicit def array2Traversable[T: ClassManifest]: Bijection[Array[T], Traversable[T]] =
     new AbstractBijection[Array[T], Traversable[T]] {
       override def apply(a: Array[T]) = a.toTraversable
       override def invert(t: Traversable[T]) = t.toArray
     }
 
-  /** This doesn't actually copy the Array, only wraps/unwraps with WrappedArray
+  /**
+   * This doesn't actually copy the Array, only wraps/unwraps with WrappedArray
    */
-  implicit def array2Seq[T:ClassManifest]: Bijection[Array[T], Seq[T]] =
+  implicit def array2Seq[T: ClassManifest]: Bijection[Array[T], Seq[T]] =
     new AbstractBijection[Array[T], Seq[T]] {
       override def apply(a: Array[T]) = a.toSeq
       override def invert(t: Seq[T]) = t.toArray

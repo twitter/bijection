@@ -29,16 +29,16 @@ import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
 
 object TupleBijectionLaws extends Properties("TupleBijections")
-with BaseProperties {
+  with BaseProperties {
   import StringArbs._
 
   property("round trips (Int,Long) -> (String,String)") =
-    isBijection[(Int,Long), (String @@ Rep[Int],String @@ Rep[Long])]
+    isBijection[(Int, Long), (String @@ Rep[Int], String @@ Rep[Long])]
   property("round trips (Int,Long,String) -> (String,String,String)") =
-    isBijection[(Int,Long,String), (String @@ Rep[Int],String @@ Rep[Long],String)]
+    isBijection[(Int, Long, String), (String @@ Rep[Int], String @@ Rep[Long], String)]
   property("round trips (Int,Long,String,Long) -> (String,String,String,Array[Byte])") =
     //This needs a tag on Array[Byte] @@ Rep[Long]
-    isInjection[(Int,Long,String,Long), (String,String,String,Array[Byte])]
+    isInjection[(Int, Long, String, Long), (String, String, String, Array[Byte])]
   property("Tuple to list") =
     isLooseInjection[(Int, Long, String), List[Array[Byte]]]
 }

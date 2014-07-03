@@ -2,10 +2,11 @@ package bijection
 
 import sbt._
 import Keys._
-import sbtgitflow.ReleasePlugin._
 import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 import com.typesafe.tools.mima.plugin.MimaKeys.previousArtifact
 import com.typesafe.sbt.osgi.SbtOsgi._
+import scalariform.formatter.preferences._
+import com.typesafe.sbt.SbtScalariform._
 
 object BijectionBuild extends Build {
   def withCross(dep: ModuleID) =
@@ -15,10 +16,12 @@ object BijectionBuild extends Build {
       case x => x
     }
 
-  val sharedSettings = Project.defaultSettings ++ releaseSettings ++ osgiSettings ++ Seq(
+  val sharedSettings = Project.defaultSettings ++ osgiSettings ++ scalariformSettings ++ Seq(
     organization := "com.twitter",
 
-    crossScalaVersions := Seq("2.9.3", "2.10.2"),
+    crossScalaVersions := Seq("2.9.3", "2.10.4"),
+
+    ScalariformKeys.preferences := formattingPreferences,
 
     scalaVersion := "2.9.3",
 
@@ -53,12 +56,13 @@ object BijectionBuild extends Build {
 
     pomIncludeRepository := { x => false },
 
-    publishTo <<= version { (v: String) =>
-      val nexus = "https://oss.sonatype.org/"
-      if (v.trim.endsWith("SNAPSHOT"))
-        Some("sonatype-snapshots" at nexus + "content/repositories/snapshots")
-      else
-        Some("sonatype-releases-upload"  at nexus + "service/local/staging/deploy/maven2")
+    publishTo <<= version { v =>
+      Some(
+        if (v.trim.endsWith("SNAPSHOT"))
+          Opts.resolver.sonatypeSnapshots
+        else
+          Opts.resolver.sonatypeStaging
+      )
     },
 
     pomExtra := (
@@ -94,10 +98,18 @@ object BijectionBuild extends Build {
       </developers>)
   ) ++ mimaDefaultSettings
 
-    /**
-    * This returns the youngest jar we released that is compatible with
-    * the current.
-    */
+
+   lazy val formattingPreferences = {
+     import scalariform.formatter.preferences._
+     FormattingPreferences().
+       setPreference(AlignParameters, false).
+       setPreference(PreserveSpaceBeforeArguments, true)
+  }
+
+  /**
+   * This returns the youngest jar we released that is compatible with
+   * the current.
+   */
   val unreleasedModules = Set[String]()
 
   // This returns the youngest jar we released that is compatible with the current
@@ -180,9 +192,10 @@ object BijectionBuild extends Build {
   lazy val bijectionGuava = module("guava").settings(
     osgiExportAll("com.twitter.bijection.guava"),
     libraryDependencies ++= Seq(
-      // This dependency is required due to a bug with guava 13.0, detailed here:
+      // This dependency is required because scalac needs access to all java
+      // runtime annotations even though javac does not as detailed here:
       // http://code.google.com/p/guava-libraries/issues/detail?id=1095
-      "com.google.code.findbugs" % "jsr305" % "1.3.+",
+      "com.google.code.findbugs" % "jsr305" % "1.3.9",
       "com.google.guava" % "guava" % "14.0"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")

@@ -31,7 +31,7 @@ object ProtobufCodecLaws extends Properties("ProtobufCodec") with BaseProperties
       .build
 
   implicit val fatigueCount: Arbitrary[FatigueCount] =
-    arbitraryViaFn { input: (Long,Long,Int) => buildFatigueCount(input) }
+    arbitraryViaFn { input: (Long, Long, Int) => buildFatigueCount(input) }
 
   property("round trips protobuf -> Array[Byte]") = {
     implicit val b = ProtobufCodec[FatigueCount]

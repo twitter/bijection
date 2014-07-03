@@ -15,17 +15,17 @@ limitations under the License.
 package com.twitter.bijection.avro
 
 import org.specs.Specification
-import com.twitter.bijection.{Injection, BaseProperties}
+import com.twitter.bijection.{ Injection, BaseProperties }
 import org.apache.avro.Schema
 import avro.FiscalRecord
-import org.apache.avro.generic.{GenericData, GenericRecord}
+import org.apache.avro.generic.{ GenericData, GenericRecord }
 
 /**
  * @author Muhammad Ashraf
  * @since 7/6/13
  */
 object GenericAvroCodecsSpecification extends Specification with BaseProperties {
-  val testSchema = new Schema.Parser().parse( """{
+  val testSchema = new Schema.Parser().parse("""{
                                                    "type":"record",
                                                    "name":"FiscalRecord",
                                                    "namespace":"avro",
@@ -50,7 +50,6 @@ object GenericAvroCodecsSpecification extends Specification with BaseProperties 
                                                       }
                                                    ]
                                                 }""")
-
 
   "Generic Avro codec" should {
 

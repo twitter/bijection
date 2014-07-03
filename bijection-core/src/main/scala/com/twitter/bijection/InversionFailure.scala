@@ -50,4 +50,4 @@ object InversionFailure {
  *  that failure
  */
 case class InversionFailure(val failed: Any, ex: Throwable)
-  extends UnsupportedOperationException("Failed to invert: %s" format(failed), ex)
+  extends UnsupportedOperationException("Failed to invert: %s" format (failed), ex)
