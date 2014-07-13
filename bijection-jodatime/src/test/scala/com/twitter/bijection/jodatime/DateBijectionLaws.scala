@@ -6,7 +6,7 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
 import com.twitter.bijection.{ Bijection, BaseProperties, ImplicitBijection }
 import java.util.Date
-import org.joda.time.DateTime
+import org.joda.time.{ DateTime, LocalDate, LocalTime }
 import com.twitter.bijection._
 
 object DateBijectionsLaws extends Properties("DateBijections") with BaseProperties with DateBijections with DateInjections {
@@ -17,6 +17,10 @@ object DateBijectionsLaws extends Properties("DateBijections") with BaseProperti
 
   implicit val date = arbitraryViaFn { (dtime: Long) => new DateTime(dtime) }
 
+  implicit val localDate = arbitraryViaFn { (dtime: Long) => new LocalDate(dtime) }
+
+  implicit val localTime = arbitraryViaFn { (dtime: Long) => new LocalTime(dtime) }
+
   property("Long <=> Joda") = isBijection[Long, DateTime]
 
   property("Date <=> Joda") = isBijection[Date, DateTime]
@@ -24,5 +28,9 @@ object DateBijectionsLaws extends Properties("DateBijections") with BaseProperti
   property("round trips Date -> String") = isLooseInjection[DateTime, String]
 
   property("round trips Joda -> Date") = isLooseInjection[DateTime, Date]
+
+  property("round trips LocalDate -> String") = isLooseInjection[LocalDate, String]
+
+  property("round trips LocalTime -> String") = isLooseInjection[LocalTime, String]
 
 }
