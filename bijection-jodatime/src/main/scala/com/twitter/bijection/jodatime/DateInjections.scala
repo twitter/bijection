@@ -1,7 +1,7 @@
 package com.twitter.bijection.jodatime
 
 import java.util.Date
-import org.joda.time.{ DateTime, LocalDate, LocalTime }
+import org.joda.time.{ DateTime, LocalDate, LocalTime, YearMonth, MonthDay }
 import com.twitter.bijection.Inversion.attempt
 import com.twitter.bijection.{ Injection, InversionFailure, AbstractInjection }
 
@@ -36,5 +36,17 @@ trait DateInjections {
     new AbstractInjection[LocalTime, String] {
       def apply(d: LocalTime) = d.toString
       override def invert(s: String) = attempt(s)(LocalTime.parse(_))
+    }
+
+  implicit val jodaYearMonth2String: Injection[YearMonth, String] =
+    new AbstractInjection[YearMonth, String] {
+      def apply(d: YearMonth) = d.toString
+      override def invert(s: String) = attempt(s)(YearMonth.parse(_))
+    }
+
+  implicit val jodaMonthDay2String: Injection[MonthDay, String] =
+    new AbstractInjection[MonthDay, String] {
+      def apply(d: MonthDay) = d.toString
+      override def invert(s: String) = attempt(s)(MonthDay.parse(_))
     }
 }
