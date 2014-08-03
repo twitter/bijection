@@ -58,6 +58,18 @@ trait Bijection[A, B] extends Serializable { self =>
   def compose[T](g: Injection[T, A]): Injection[T, B] = g andThen this
   def compose[T](g: (T => A)): (T => B) = g andThen (this.toFunction)
 
+  def bridge[A, B, C](implicit bij: ImplicitBijection[A, C], bij2: ImplicitBijection[B, C]): Bijection[A, B] = new AbstractBijection[A, B] {
+    override def apply(a: A): B = bij2.invert(bij(a))
+
+    override def invert(b: B): A = bij.invert(bij2(b))
+  }
+
+  def join[A, B, C](implicit bij: ImplicitBijection[A, B], bij2: ImplicitBijection[A, C]): Bijection[B, C] = new AbstractBijection[B, C] {
+    override def apply(b: B): C = bij2(bij.invert(b))
+
+    override def invert(c: C): B = bij(bij2.invert(c))
+  }
+
   def toFunction: (A => B) = new BijectionFn(self)
 }
 
