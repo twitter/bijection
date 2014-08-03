@@ -47,7 +47,7 @@ object CompactScalaCodec {
 
 class JsonScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
   extends Injection[T, String] {
-  val ser = new JsonThriftSerializer[T] {
+  val ser = new ThriftStructSerializer[T] {
     override def codec = c
     override val protocolFactory = new TJSONProtocol.Factory
   }
@@ -60,7 +60,6 @@ object JsonScalaCodec {
   def apply[T <: ThriftStruct](c: ThriftStructCodec[T]) =
     new JsonScalaCodec[T](c)
 }
-
 
 class CompactScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
   extends ScalaCodec(new CompactThriftSerializer[T] {
