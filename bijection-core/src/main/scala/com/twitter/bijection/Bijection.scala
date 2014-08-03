@@ -58,18 +58,6 @@ trait Bijection[A, B] extends Serializable { self =>
   def compose[T](g: Injection[T, A]): Injection[T, B] = g andThen this
   def compose[T](g: (T => A)): (T => B) = g andThen (this.toFunction)
 
-  def bridge[A, B, C](implicit bij: ImplicitBijection[A, C], bij2: ImplicitBijection[B, C]): Bijection[A, B] = new AbstractBijection[A, B] {
-    override def apply(a: A): B = bij2.invert(bij(a))
-
-    override def invert(b: B): A = bij.invert(bij2(b))
-  }
-
-  def join[A, B, C](implicit bij: ImplicitBijection[A, B], bij2: ImplicitBijection[A, C]): Bijection[B, C] = new AbstractBijection[B, C] {
-    override def apply(b: B): C = bij2(bij.invert(b))
-
-    override def invert(c: C): B = bij(bij2.invert(c))
-  }
-
   def toFunction: (A => B) = new BijectionFn(self)
 }
 
@@ -127,7 +115,21 @@ object Bijection extends CollectionBijections
   def connect[A, B, C, D, E](implicit bij1: ImplicitBijection[A, B], bij2: ImplicitBijection[B, C], bij3: ImplicitBijection[C, D], bij4: ImplicitBijection[D, E]): Bijection[A, E] =
     connect[A, B, C, D] andThen (bij4.bijection)
 
+  def bridge[A, B, C](implicit bij: ImplicitBijection[A, C], bij2: ImplicitBijection[B, C]): Bijection[A, B] = new AbstractBijection[A, B] {
+    override def apply(a: A): B = bij2.invert(bij(a))
+
+    override def invert(b: B): A = bij.invert(bij2(b))
+  }
+
+  def join[A, B, C](implicit bij: ImplicitBijection[A, B], bij2: ImplicitBijection[A, C]): Bijection[B, C] = new AbstractBijection[B, C] {
+    override def apply(b: B): C = bij2(bij.invert(b))
+
+    override def invert(c: C): B = bij(bij2.invert(c))
+  }
+
   implicit def identity[A]: Bijection[A, A] = new IdentityBijection[A]
+
+
 
   /**
    * We check for default, and return None, else Some
