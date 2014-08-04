@@ -129,8 +129,6 @@ object Bijection extends CollectionBijections
 
   implicit def identity[A]: Bijection[A, A] = new IdentityBijection[A]
 
-
-
   /**
    * We check for default, and return None, else Some
    * Note this never returns Some(default)
