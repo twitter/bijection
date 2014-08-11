@@ -61,6 +61,46 @@ object GenericAvroCodecsSpecification extends Specification with BaseProperties 
       attempt.get must_== testRecord
     }
 
+    "Round trip generic record using Generic Injection with Bzip2 compression" in {
+      implicit val genericInjection = GenericAvroCodecs.withBzip2Compression[GenericRecord](testSchema)
+      val testRecord = buildGenericAvroRecord(("2012-01-01", 1, 12))
+      val bytes = Injection[GenericRecord, Array[Byte]](testRecord)
+      val attempt = Injection.invert[GenericRecord, Array[Byte]](bytes)
+      attempt.get must_== testRecord
+    }
+
+    "Round trip generic record using Generic Injection with Deflate compression (default compression level)" in {
+      implicit val genericInjection = GenericAvroCodecs.withDeflateCompression[GenericRecord](testSchema)
+      val testRecord = buildGenericAvroRecord(("2012-01-01", 1, 12))
+      val bytes = Injection[GenericRecord, Array[Byte]](testRecord)
+      val attempt = Injection.invert[GenericRecord, Array[Byte]](bytes)
+      attempt.get must_== testRecord
+    }
+
+    "Round trip generic record using Generic Injection with Deflate compression (custom compression level)" in {
+      implicit val genericInjection = GenericAvroCodecs.withDeflateCompression[GenericRecord](testSchema, 9)
+      val testRecord = buildGenericAvroRecord(("2012-01-01", 1, 12))
+      val bytes = Injection[GenericRecord, Array[Byte]](testRecord)
+      val attempt = Injection.invert[GenericRecord, Array[Byte]](bytes)
+      attempt.get must_== testRecord
+    }
+
+    "Cannot create Generic Injection with Deflate compression if compression level is set too low" in {
+      GenericAvroCodecs.withDeflateCompression[FiscalRecord](testSchema, 0) must throwA[IllegalArgumentException]
+    }
+
+    "Cannot create Generic Injection with Deflate compression if compression level is set too high" in {
+      GenericAvroCodecs.withDeflateCompression[FiscalRecord](testSchema, 10) must throwA[IllegalArgumentException]
+    }
+
+    "Round trip generic record using Generic Injection with Snappy compression" in {
+      implicit val genericInjection = GenericAvroCodecs.withSnappyCompression[GenericRecord](testSchema)
+      val testRecord = buildGenericAvroRecord(("2012-01-01", 1, 12))
+      val bytes = Injection[GenericRecord, Array[Byte]](testRecord)
+      val attempt = Injection.invert[GenericRecord, Array[Byte]](bytes)
+      attempt.get must_== testRecord
+    }
+
     "Round trip generic record using Binary Injection" in {
       implicit val genericBinaryInjection = GenericAvroCodecs.toBinary[GenericRecord](testSchema)
       val testRecord = buildGenericAvroRecord(("2012-01-01", 1, 12))
