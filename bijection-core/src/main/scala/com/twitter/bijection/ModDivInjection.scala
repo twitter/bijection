@@ -22,20 +22,25 @@ import scala.util.Success
  * The first element in result tuple is always [0, modulus)
  */
 class IntModDivInjection(val modulus: Int) extends Injection[Int, (Int, Int)] {
+  require(modulus > 0, "Modulus must be positive: " + modulus)
   override def apply(n: Int) = {
     val cmod = n % modulus
     val mod = if (cmod < 0) cmod + modulus else cmod
-    (mod, (n - mod) / modulus)
+    val div = n / modulus
+    val toNegInf = if ((n < 0) && (mod != 0)) div - 1 else div
+    (mod, toNegInf)
   }
 
   private val maxDiv = Int.MaxValue / modulus
-  private val minDiv = Int.MinValue / modulus
+  private val minDiv = (Int.MinValue / modulus) - 1
 
   override def invert(moddiv: (Int, Int)) = {
     val (mod, div) = moddiv
-    if (mod >= 0 && mod < modulus && div <= maxDiv && div >= minDiv) {
-      Success(div * modulus + mod)
-    } else InversionFailure.failedAttempt(moddiv)
+    val res = div * modulus + mod
+    if (mod >= 0 && mod < modulus && div <= maxDiv && div >= minDiv &&
+      // We could wrap around if we get bad input:
+      ((res >= 0) == (div >= 0))) Success(res)
+    else InversionFailure.failedAttempt(moddiv)
   }
 }
 
@@ -44,19 +49,23 @@ class IntModDivInjection(val modulus: Int) extends Injection[Int, (Int, Int)] {
  * The first element in result tuple is always [0, modulus)
  */
 class LongModDivInjection(val modulus: Long) extends Injection[Long, (Long, Long)] {
+  require(modulus > 0, "Modulus must be positive: " + modulus)
   override def apply(n: Long) = {
     val cmod = n % modulus
     val mod = if (cmod < 0) cmod + modulus else cmod
-    (mod, (n - mod) / modulus)
+    val div = n / modulus
+    val toNegInf = if ((n < 0) && (mod != 0)) div - 1L else div
+    (mod, toNegInf)
   }
 
   private val maxDiv = Long.MaxValue / modulus
-  private val minDiv = Long.MinValue / modulus
+  private val minDiv = (Long.MinValue / modulus) - 1L
 
   override def invert(moddiv: (Long, Long)) = {
     val (mod, div) = moddiv
-    if (mod >= 0 && mod < modulus && div <= maxDiv && div >= minDiv) {
-      Success(div * modulus + mod)
-    } else InversionFailure.failedAttempt(moddiv)
+    val res = div * modulus + mod
+    if (mod >= 0 && mod < modulus && div <= maxDiv && div >= minDiv &&
+      ((res >= 0) == (div >= 0))) Success(res)
+    else InversionFailure.failedAttempt(moddiv)
   }
 }
