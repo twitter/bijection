@@ -9,6 +9,8 @@ See the [current API documentation](http://twitter.github.com/bijection) for mor
 ## Examples:
 
 ```scala
+> ./sbt bijection-core/console
+scala> import com.twitter.bijection._
 scala> Bijection[Int, java.lang.Integer](42)
 res0: java.lang.Integer = 42
 ```
