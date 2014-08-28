@@ -28,7 +28,7 @@ import java.lang.{
 import java.math.BigInteger
 import java.util.UUID
 
-import org.scalacheck.Properties
+import org.scalacheck.{ Gen, Properties }
 import org.scalacheck.Prop.forAll
 
 import Conversion.asMethod // get the .as syntax
@@ -78,12 +78,12 @@ object NumericBijectionLaws extends Properties("NumericBijections")
   property("int -> double") = isLooseInjection[Int, Double]
   property("float -> double") = isLooseInjection[Float, Double]
   // ModDiv
-  property("Int -> (Int,Int) by ModDiv") = {
-    implicit val modDiv: Injection[Int, (Int, Int)] = new IntModDivInjection(128)
+  property("Int -> (Int,Int) by ModDiv") = forAll(Gen.choose(1, Int.MaxValue)) { mod =>
+    implicit val modDiv: Injection[Int, (Int, Int)] = new IntModDivInjection(mod)
     isInjection[Int, (Int, Int)]
   }
-  property("Long -> (Long,Long) by ModDiv") = {
-    implicit val modDiv: Injection[Long, (Long, Long)] = new LongModDivInjection(10040L)
+  property("Long -> (Long,Long) by ModDiv") = forAll(Gen.choose(1L, Long.MaxValue)) { mod =>
+    implicit val modDiv: Injection[Long, (Long, Long)] = new LongModDivInjection(mod)
     isInjection[Long, (Long, Long)]
   }
 
