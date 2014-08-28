@@ -19,7 +19,7 @@ package com.twitter.bijection.thrift
 import com.twitter.bijection.{ BaseProperties, Bijection, Injection }
 import org.scalacheck.Properties
 import org.scalacheck.Arbitrary
-import org.specs._
+import org.scalatest._
 
 object ThriftCodecLaws extends Properties("ThriftCodecs") with BaseProperties {
   def buildThrift(i: (Int, String)) =
@@ -44,7 +44,7 @@ object ThriftCodecLaws extends Properties("ThriftCodecs") with BaseProperties {
   }
 }
 
-class TEnumTest extends Specification with BaseProperties {
+class TEnumTest extends WordSpec with BaseProperties {
   "TEnum should roundtrip through TEnumCodec" in {
     implicit val b = TEnumCodec[Gender]
     val male = Gender.findByValue(0)

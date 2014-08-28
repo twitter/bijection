@@ -14,7 +14,7 @@ limitations under the License.
 */
 package com.twitter.bijection.avro
 
-import org.specs.Specification
+import org.scalatest.WordSpec
 import com.twitter.bijection.{ Injection, BaseProperties }
 import org.apache.avro.Schema
 import avro.FiscalRecord
@@ -24,7 +24,7 @@ import org.apache.avro.generic.{ GenericData, GenericRecord }
  * @author Muhammad Ashraf
  * @since 7/6/13
  */
-object GenericAvroCodecsSpecification extends Specification with BaseProperties {
+object GenericAvroCodecsSpecification extends WordSpec with BaseProperties {
   val testSchema = new Schema.Parser().parse("""{
                                                    "type":"record",
                                                    "name":"FiscalRecord",

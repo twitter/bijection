@@ -20,7 +20,7 @@ import com.twitter.bijection.{ BaseProperties, Bijection }
 import com.twitter.bijection.protobuf.TestMessages.{ FatigueCount, Gender }
 import org.scalacheck.Properties
 import org.scalacheck.Arbitrary
-import org.specs._
+import org.scalatest._
 
 object ProtobufCodecLaws extends Properties("ProtobufCodec") with BaseProperties {
   def buildFatigueCount(tuple: (Long, Long, Int)) =
@@ -39,7 +39,7 @@ object ProtobufCodecLaws extends Properties("ProtobufCodec") with BaseProperties
   }
 }
 
-class ProtobufEnumTest extends Specification with BaseProperties {
+class ProtobufEnumTest extends WordSpec with BaseProperties {
   "ProtocolMessageEnum should roundtrip through ProtobufCodec" in {
     implicit val b = ProtobufEnumCodec[Gender]
     val male = Gender.valueOf(0)

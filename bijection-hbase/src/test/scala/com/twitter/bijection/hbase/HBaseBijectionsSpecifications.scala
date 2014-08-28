@@ -14,7 +14,7 @@
 
 package com.twitter.bijection.hbase
 
-import org.specs.Specification
+import org.scalatest.WordSpec
 import com.twitter.bijection.{ Bijection, BaseProperties }
 import HBaseBijections._
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
@@ -23,7 +23,7 @@ import org.apache.hadoop.hbase.io.ImmutableBytesWritable
  * @author Muhammad Ashraf
  * @since 7/10/13
  */
-object HBaseBijectionsSpecifications extends Specification with BaseProperties {
+object HBaseBijectionsSpecifications extends WordSpec with BaseProperties {
 
   "HBaseBijections" should {
     "round trip String -> Array[Byte]" in {

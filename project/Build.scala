@@ -9,29 +9,23 @@ import scalariform.formatter.preferences._
 import com.typesafe.sbt.SbtScalariform._
 
 object BijectionBuild extends Build {
-  def withCross(dep: ModuleID) =
-    dep cross CrossVersion.binaryMapped {
-      case "2.9.3" => "2.9.2" // TODO: hack because twitter hasn't built things against 2.9.3
-      case version if version startsWith "2.10" => "2.10" // TODO: hack because sbt is broken
-      case x => x
-    }
 
   val sharedSettings = Project.defaultSettings ++ osgiSettings ++ scalariformSettings ++ Seq(
     organization := "com.twitter",
 
-    crossScalaVersions := Seq("2.9.3", "2.10.4"),
+    crossScalaVersions := Seq("2.10.4", "2.11.2"),
 
     ScalariformKeys.preferences := formattingPreferences,
 
-    scalaVersion := "2.9.3",
+    scalaVersion := "2.10.4",
 
     javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
 
     javacOptions in doc := Seq("-source", "1.6"),
 
     libraryDependencies ++= Seq(
-      "org.scalacheck" %% "scalacheck" % "1.10.0" % "test",
-      "org.scala-tools.testing" %% "specs" % "1.6.9" % "test"
+      "org.scalacheck" %% "scalacheck" % "1.11.5" % "test",
+      "org.scalatest" %% "scalatest" % "2.2.2" % "test"
     ),
 
     resolvers ++= Seq(
@@ -41,7 +35,14 @@ object BijectionBuild extends Build {
 
     parallelExecution in Test := true,
 
-    scalacOptions ++= Seq("-unchecked", "-deprecation"),
+    scalacOptions ++= Seq("-unchecked", "-deprecation", "-language:implicitConversions", "-language:higherKinds", "-language:existentials"),
+
+    scalacOptions <++= (scalaVersion) map { sv =>
+        if (sv startsWith "2.10")
+          Seq("-Xdivergence211")
+        else
+          Seq()
+    },
 
     OsgiKeys.importPackage <<= scalaVersion { sv => Seq("""scala.*;version="$<range;[==,=+);%s>"""".format(sv)) },
 
@@ -204,7 +205,7 @@ object BijectionBuild extends Build {
     osgiExportAll("com.twitter.bijection.scrooge"),
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
-      withCross("com.twitter" %% "scrooge-serializer" % "3.6.0")
+      "com.twitter" %% "scrooge-serializer" % "3.6.0"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
@@ -215,7 +216,7 @@ object BijectionBuild extends Build {
 
   lazy val bijectionUtil = module("util").settings(
     osgiExportAll("com.twitter.bijection.twitter_util"),
-    libraryDependencies += withCross("com.twitter" %% "util-core" % "6.3.0")
+    libraryDependencies += "com.twitter" %% "util-core" % "6.3.0"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   lazy val bijectionClojure = module("clojure").settings(

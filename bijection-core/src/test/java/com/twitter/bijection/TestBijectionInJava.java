@@ -1,6 +1,7 @@
 package com.twitter.bijection;
 
 import org.junit.Test;
+import org.scalatest.junit.JUnitSuite;
 import scala.util.Failure;
 import scala.util.Success;
 import scala.util.Try;
@@ -10,7 +11,7 @@ import static junit.framework.Assert.assertEquals;
  * Bijection is as useful in Java as in Scala, so these tests ensure correct
  * functionality while providing an example of use and implementation from Java.
  */
-public class TestBijectionInJava {
+public class TestBijectionInJava extends JUnitSuite {
     @Test
     public void testBasicBijection() {
         Bijection<String,Long> s2l = new StringToLong();
