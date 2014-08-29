@@ -10,6 +10,11 @@ import com.typesafe.sbt.SbtScalariform._
 
 object BijectionBuild extends Build {
 
+  def isScala210x(scalaVersion: String) = scalaVersion match {
+      case version if version startsWith "2.10" => true
+      case _ => false
+  }
+
   val sharedSettings = Project.defaultSettings ++ osgiSettings ++ scalariformSettings ++ Seq(
     organization := "com.twitter",
 
@@ -203,12 +208,22 @@ object BijectionBuild extends Build {
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
+  def scroogeBuildDeps(scalaVersion: String): Seq[sbt.ModuleID] = isScala210x(scalaVersion) match {
+      case false => Seq()
+      case true => Seq(
+        "com.twitter" %% "scrooge-serializer" % "3.6.0"
+     )
+  }
+
   lazy val bijectionScrooge = module("scrooge").settings(
+    skip in compile := !isScala210x(scalaVersion.value),
+    skip in test := !isScala210x(scalaVersion.value),
+    publishArtifact := isScala210x(scalaVersion.value),
+
     osgiExportAll("com.twitter.bijection.scrooge"),
     libraryDependencies ++= Seq(
-      "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
-      "com.twitter" %% "scrooge-serializer" % "3.6.0"
-    )
+      "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit")
+    ) ++ scroogeBuildDeps(scalaVersion.value)
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   lazy val bijectionJson = module("json").settings(
