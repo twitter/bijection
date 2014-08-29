@@ -174,8 +174,8 @@ trait CollectionBijections extends BinaryBijections {
 
   implicit def option[T, U](implicit bij: ImplicitBijection[T, U]): Bijection[Option[T], Option[U]] =
     new AbstractBijection[Option[T], Option[U]] {
-      override def apply(optt: Option[T]) = optt.map(bij)
-      override def invert(optu: Option[U]) = optu.map(bij.invert(_))
+      override def apply(optt: Option[T]) = optt.map(bij.bijection)
+      override def invert(optu: Option[U]) = optu.map(bij.bijection.inverse)
     }
   // Always requires a copy
   implicit def vector2List[A, B](implicit bij: ImplicitBijection[A, B]): Bijection[Vector[A], List[B]] = toContainer[A, B, Vector[A], List[B]]

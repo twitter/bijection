@@ -24,14 +24,13 @@ import com.twitter.bijection.codec.Base64
 import java.io.{ OutputStream, InputStream, ByteArrayInputStream, ByteArrayOutputStream }
 import annotation.tailrec
 
-// TODO: Convert to value classes on Scala 2.10 upgrade.
-case class GZippedBytes(bytes: Array[Byte]) {
+case class GZippedBytes(bytes: Array[Byte]) extends AnyVal {
   override def toString = bytes.mkString("GZippedBytes(", ", ", ")")
 }
 
-case class GZippedBase64String(str: String)
+case class GZippedBase64String(str: String) extends AnyVal
 
-case class Base64String(str: String)
+case class Base64String(str: String) extends AnyVal
 
 object Base64String {
   implicit val unwrap: Injection[Base64String, String] =
