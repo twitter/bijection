@@ -216,7 +216,7 @@ object BijectionBuild extends Build {
 
   lazy val bijectionUtil = module("util").settings(
     osgiExportAll("com.twitter.bijection.twitter_util"),
-    libraryDependencies += "com.twitter" %% "util-core" % "6.3.0"
+    libraryDependencies += "com.twitter" %% "util-core" % "6.20.0"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   lazy val bijectionClojure = module("clojure").settings(
@@ -255,8 +255,8 @@ object BijectionBuild extends Build {
   lazy val bijectionJson4s = module("json4s").settings(
     osgiExportAll("com.twitter.bijection.json4s"),
     libraryDependencies ++= Seq(
-      "org.json4s" %% "json4s-native" % "3.2.6",
-      "org.json4s" %% "json4s-ext" % "3.2.6"
+      "org.json4s" %% "json4s-native" % "3.2.10",
+      "org.json4s" %% "json4s-ext" % "3.2.10"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 

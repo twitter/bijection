@@ -1,6 +1,6 @@
 package com.twitter.bijection.avro
 
-import org.scalatest.WordSpec
+import org.scalatest._
 import com.twitter.bijection.{ Injection, BaseProperties }
 import org.apache.avro.Schema
 import avro.FiscalRecord
@@ -9,7 +9,7 @@ import avro.FiscalRecord
  * @author Muhammad Ashraf
  * @since 10/5/13
  */
-object SpecificAvroCodecsSpecification extends WordSpec with BaseProperties {
+object SpecificAvroCodecsSpecification extends WordSpec with Matchers with BaseProperties {
   val testSchema = new Schema.Parser().parse("""{
                                                    "type":"record",
                                                    "name":"FiscalRecord",
@@ -43,7 +43,7 @@ object SpecificAvroCodecsSpecification extends WordSpec with BaseProperties {
       val testRecord = buildSpecificAvroRecord(("2012-01-01", 1, 12))
       val bytes = Injection[FiscalRecord, Array[Byte]](testRecord)
       val attempt = Injection.invert[FiscalRecord, Array[Byte]](bytes)
-      attempt.get must_== testRecord
+      attempt.get shouldEqual testRecord
     }
 
     "Round trip specific record using Binary Injection" in {
@@ -51,7 +51,7 @@ object SpecificAvroCodecsSpecification extends WordSpec with BaseProperties {
       val testRecord = buildSpecificAvroRecord(("2012-01-01", 1, 12))
       val bytes = Injection[FiscalRecord, Array[Byte]](testRecord)
       val attempt = Injection.invert[FiscalRecord, Array[Byte]](bytes)
-      attempt.get must_== testRecord
+      attempt.get shouldEqual testRecord
     }
 
     "Round trip specific record using Json Injection" in {
@@ -59,7 +59,7 @@ object SpecificAvroCodecsSpecification extends WordSpec with BaseProperties {
       val testRecord = buildSpecificAvroRecord(("2012-01-01", 1, 12))
       val jsonString = Injection[FiscalRecord, String](testRecord)
       val attempt = Injection.invert[FiscalRecord, String](jsonString)
-      attempt.get must_== testRecord
+      attempt.get shouldEqual testRecord
     }
   }
 

@@ -44,15 +44,15 @@ object ThriftCodecLaws extends Properties("ThriftCodecs") with BaseProperties {
   }
 }
 
-class TEnumTest extends WordSpec with BaseProperties {
+class TEnumTest extends WordSpec with Matchers with BaseProperties {
   "TEnum should roundtrip through TEnumCodec" in {
     implicit val b = TEnumCodec[Gender]
     val male = Gender.findByValue(0)
-    male must_== rt(male)
+    male shouldEqual rt(male)
 
     val female = Gender.findByValue(1)
-    female must_== rt(female)
+    female shouldEqual rt(female)
 
-    b.invert(2).isFailure must beTrue
+    b.invert(2).isFailure shouldEqual true
   }
 }

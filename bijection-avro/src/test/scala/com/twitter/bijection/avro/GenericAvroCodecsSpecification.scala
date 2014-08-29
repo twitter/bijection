@@ -14,7 +14,7 @@ limitations under the License.
 */
 package com.twitter.bijection.avro
 
-import org.scalatest.WordSpec
+import org.scalatest._
 import com.twitter.bijection.{ Injection, BaseProperties }
 import org.apache.avro.Schema
 import avro.FiscalRecord
@@ -24,7 +24,7 @@ import org.apache.avro.generic.{ GenericData, GenericRecord }
  * @author Muhammad Ashraf
  * @since 7/6/13
  */
-object GenericAvroCodecsSpecification extends WordSpec with BaseProperties {
+object GenericAvroCodecsSpecification extends WordSpec with Matchers with BaseProperties {
   val testSchema = new Schema.Parser().parse("""{
                                                    "type":"record",
                                                    "name":"FiscalRecord",
@@ -58,7 +58,7 @@ object GenericAvroCodecsSpecification extends WordSpec with BaseProperties {
       val testRecord = buildGenericAvroRecord(("2012-01-01", 1, 12))
       val bytes = Injection[GenericRecord, Array[Byte]](testRecord)
       val attempt = Injection.invert[GenericRecord, Array[Byte]](bytes)
-      attempt.get must_== testRecord
+      attempt.get shouldEqual testRecord
     }
 
     "Round trip generic record using Binary Injection" in {
@@ -66,7 +66,7 @@ object GenericAvroCodecsSpecification extends WordSpec with BaseProperties {
       val testRecord = buildGenericAvroRecord(("2012-01-01", 1, 12))
       val bytes = Injection[GenericRecord, Array[Byte]](testRecord)
       val attempt = Injection.invert[GenericRecord, Array[Byte]](bytes)
-      attempt.get must_== testRecord
+      attempt.get shouldEqual testRecord
     }
 
     "Round trip generic record using Json Injection" in {
@@ -74,7 +74,7 @@ object GenericAvroCodecsSpecification extends WordSpec with BaseProperties {
       val testRecord = buildGenericAvroRecord(("2012-01-01", 1, 12))
       val jsonString = Injection[GenericRecord, String](testRecord)
       val attempt = Injection.invert[GenericRecord, String](jsonString)
-      attempt.get must_== testRecord
+      attempt.get shouldEqual testRecord
     }
   }
 

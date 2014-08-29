@@ -39,15 +39,15 @@ object ProtobufCodecLaws extends Properties("ProtobufCodec") with BaseProperties
   }
 }
 
-class ProtobufEnumTest extends WordSpec with BaseProperties {
+class ProtobufEnumTest extends WordSpec with Matchers with BaseProperties {
   "ProtocolMessageEnum should roundtrip through ProtobufCodec" in {
     implicit val b = ProtobufEnumCodec[Gender]
     val male = Gender.valueOf(0)
-    male must_== rt(male)
+    male shouldEqual rt(male)
 
     val female = Gender.valueOf(1)
-    female must_== rt(female)
+    female shouldEqual rt(female)
 
-    b.invert(2).isFailure must beTrue
+    b.invert(2).isFailure shouldEqual true
   }
 }
