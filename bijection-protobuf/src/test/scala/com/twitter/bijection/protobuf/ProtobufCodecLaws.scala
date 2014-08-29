@@ -43,11 +43,11 @@ class ProtobufEnumTest extends WordSpec with Matchers with BaseProperties {
   "ProtocolMessageEnum should roundtrip through ProtobufCodec" in {
     implicit val b = ProtobufEnumCodec[Gender]
     val male = Gender.valueOf(0)
-    male shouldEqual rt(male)
+    assert(male == rt(male))
 
     val female = Gender.valueOf(1)
-    female shouldEqual rt(female)
+    assert(female == rt(female))
 
-    b.invert(2).isFailure shouldEqual true
+    assert(b.invert(2).isFailure == true)
   }
 }

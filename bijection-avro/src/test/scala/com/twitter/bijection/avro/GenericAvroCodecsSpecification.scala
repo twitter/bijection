@@ -58,7 +58,7 @@ object GenericAvroCodecsSpecification extends WordSpec with Matchers with BasePr
       val testRecord = buildGenericAvroRecord(("2012-01-01", 1, 12))
       val bytes = Injection[GenericRecord, Array[Byte]](testRecord)
       val attempt = Injection.invert[GenericRecord, Array[Byte]](bytes)
-      attempt.get shouldEqual testRecord
+      assert(attempt.get == testRecord)
     }
 
     "Round trip generic record using Generic Injection with Bzip2 compression" in {
@@ -66,7 +66,7 @@ object GenericAvroCodecsSpecification extends WordSpec with Matchers with BasePr
       val testRecord = buildGenericAvroRecord(("2012-01-01", 1, 12))
       val bytes = Injection[GenericRecord, Array[Byte]](testRecord)
       val attempt = Injection.invert[GenericRecord, Array[Byte]](bytes)
-      attempt.get shouldEqual testRecord
+      assert(attempt.get == testRecord)
     }
 
     "Round trip generic record using Generic Injection with Deflate compression (default compression level)" in {
@@ -74,7 +74,7 @@ object GenericAvroCodecsSpecification extends WordSpec with Matchers with BasePr
       val testRecord = buildGenericAvroRecord(("2012-01-01", 1, 12))
       val bytes = Injection[GenericRecord, Array[Byte]](testRecord)
       val attempt = Injection.invert[GenericRecord, Array[Byte]](bytes)
-      attempt.get shouldEqual testRecord
+      assert(attempt.get == testRecord)
     }
 
     "Round trip generic record using Generic Injection with Deflate compression (custom compression level)" in {
@@ -82,7 +82,7 @@ object GenericAvroCodecsSpecification extends WordSpec with Matchers with BasePr
       val testRecord = buildGenericAvroRecord(("2012-01-01", 1, 12))
       val bytes = Injection[GenericRecord, Array[Byte]](testRecord)
       val attempt = Injection.invert[GenericRecord, Array[Byte]](bytes)
-      attempt.get shouldEqual testRecord
+      assert(attempt.get == testRecord)
     }
 
     "Cannot create Generic Injection with Deflate compression if compression level is set too low" in {
@@ -98,7 +98,7 @@ object GenericAvroCodecsSpecification extends WordSpec with Matchers with BasePr
       val testRecord = buildGenericAvroRecord(("2012-01-01", 1, 12))
       val bytes = Injection[GenericRecord, Array[Byte]](testRecord)
       val attempt = Injection.invert[GenericRecord, Array[Byte]](bytes)
-      attempt.get shouldEqual testRecord
+      assert(attempt.get == testRecord)
     }
 
     "Round trip generic record using Binary Injection" in {
@@ -106,7 +106,7 @@ object GenericAvroCodecsSpecification extends WordSpec with Matchers with BasePr
       val testRecord = buildGenericAvroRecord(("2012-01-01", 1, 12))
       val bytes = Injection[GenericRecord, Array[Byte]](testRecord)
       val attempt = Injection.invert[GenericRecord, Array[Byte]](bytes)
-      attempt.get shouldEqual testRecord
+      assert(attempt.get == testRecord)
     }
 
     "Round trip generic record using Json Injection" in {
@@ -114,7 +114,7 @@ object GenericAvroCodecsSpecification extends WordSpec with Matchers with BasePr
       val testRecord = buildGenericAvroRecord(("2012-01-01", 1, 12))
       val jsonString = Injection[GenericRecord, String](testRecord)
       val attempt = Injection.invert[GenericRecord, String](jsonString)
-      attempt.get shouldEqual testRecord
+      assert(attempt.get == testRecord)
     }
   }
 

@@ -55,7 +55,7 @@ object StringBijectionLaws extends Properties("StringBijections")
 
   def toUrl(s: String): Option[URL] =
     try { Some(new URL("http://" + s + ".com")) }
-    catch { case _ => None }
+    catch { case _: Throwable => None }
 
   implicit val urlArb = Arbitrary {
     implicitly[Arbitrary[String]]

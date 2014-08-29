@@ -48,11 +48,11 @@ class TEnumTest extends WordSpec with Matchers with BaseProperties {
   "TEnum should roundtrip through TEnumCodec" in {
     implicit val b = TEnumCodec[Gender]
     val male = Gender.findByValue(0)
-    male shouldEqual rt(male)
+    assert(male == rt(male))
 
     val female = Gender.findByValue(1)
-    female shouldEqual rt(female)
+    assert(female == rt(female))
 
-    b.invert(2).isFailure shouldEqual true
+    assert(b.invert(2).isFailure == true)
   }
 }

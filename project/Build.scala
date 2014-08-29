@@ -177,7 +177,9 @@ object BijectionBuild extends Build {
 
   lazy val bijectionProtobuf = module("protobuf").settings(
     osgiExportAll("com.twitter.bijection.protobuf"),
-    libraryDependencies += "com.google.protobuf" % "protobuf-java" % "2.4.1"
+    libraryDependencies ++= Seq(
+      "com.google.protobuf" % "protobuf-java" % "2.4.1"
+      )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   val jsonParser = "org.codehaus.jackson" % "jackson-mapper-asl" % "1.8.1"
@@ -255,6 +257,7 @@ object BijectionBuild extends Build {
   lazy val bijectionJson4s = module("json4s").settings(
     osgiExportAll("com.twitter.bijection.json4s"),
     libraryDependencies ++= Seq(
+      "org.scala-lang" % "scala-reflect" % scalaVersion.value,
       "org.json4s" %% "json4s-native" % "3.2.10",
       "org.json4s" %% "json4s-ext" % "3.2.10"
     )

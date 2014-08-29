@@ -43,7 +43,7 @@ object SpecificAvroCodecsSpecification extends WordSpec with Matchers with BaseP
       val testRecord = buildSpecificAvroRecord(("2012-01-01", 1, 12))
       val bytes = Injection[FiscalRecord, Array[Byte]](testRecord)
       val attempt = Injection.invert[FiscalRecord, Array[Byte]](bytes)
-      attempt.get shouldEqual testRecord
+      assert(attempt.get == testRecord)
     }
 
     "Round trip specific record using Specific Injection with Bzip2 compression" in {
@@ -51,7 +51,7 @@ object SpecificAvroCodecsSpecification extends WordSpec with Matchers with BaseP
       val testRecord = buildSpecificAvroRecord(("2012-01-01", 1, 12))
       val bytes = Injection[FiscalRecord, Array[Byte]](testRecord)
       val attempt = Injection.invert[FiscalRecord, Array[Byte]](bytes)
-      attempt.get shouldEqual testRecord
+      assert(attempt.get == testRecord)
     }
 
     "Round trip specific record using Specific Injection with Deflate compression (default compression level)" in {
@@ -59,7 +59,7 @@ object SpecificAvroCodecsSpecification extends WordSpec with Matchers with BaseP
       val testRecord = buildSpecificAvroRecord(("2012-01-01", 1, 12))
       val bytes = Injection[FiscalRecord, Array[Byte]](testRecord)
       val attempt = Injection.invert[FiscalRecord, Array[Byte]](bytes)
-      attempt.get shouldEqual testRecord
+      assert(attempt.get == testRecord)
     }
 
     "Round trip specific record using Specific Injection with Deflate compression (custom compression level)" in {
@@ -67,7 +67,7 @@ object SpecificAvroCodecsSpecification extends WordSpec with Matchers with BaseP
       val testRecord = buildSpecificAvroRecord(("2012-01-01", 1, 12))
       val bytes = Injection[FiscalRecord, Array[Byte]](testRecord)
       val attempt = Injection.invert[FiscalRecord, Array[Byte]](bytes)
-      attempt.get shouldEqual testRecord
+      assert(attempt.get == testRecord)
     }
 
     "Cannot create Specific Injection with Deflate compression if compression level is set too low" in {
@@ -83,7 +83,7 @@ object SpecificAvroCodecsSpecification extends WordSpec with Matchers with BaseP
       val testRecord = buildSpecificAvroRecord(("2012-01-01", 1, 12))
       val bytes = Injection[FiscalRecord, Array[Byte]](testRecord)
       val attempt = Injection.invert[FiscalRecord, Array[Byte]](bytes)
-      attempt.get shouldEqual testRecord
+      assert(attempt.get == testRecord)
     }
 
     "Round trip specific record using Binary Injection" in {
@@ -91,7 +91,7 @@ object SpecificAvroCodecsSpecification extends WordSpec with Matchers with BaseP
       val testRecord = buildSpecificAvroRecord(("2012-01-01", 1, 12))
       val bytes = Injection[FiscalRecord, Array[Byte]](testRecord)
       val attempt = Injection.invert[FiscalRecord, Array[Byte]](bytes)
-      attempt.get shouldEqual testRecord
+      assert(attempt.get == testRecord)
     }
 
     "Round trip specific record using Json Injection" in {
@@ -99,7 +99,7 @@ object SpecificAvroCodecsSpecification extends WordSpec with Matchers with BaseP
       val testRecord = buildSpecificAvroRecord(("2012-01-01", 1, 12))
       val jsonString = Injection[FiscalRecord, String](testRecord)
       val attempt = Injection.invert[FiscalRecord, String](jsonString)
-      attempt.get shouldEqual testRecord
+      assert(attempt.get == testRecord)
     }
   }
 

@@ -24,6 +24,7 @@ import org.apache.avro.generic.{ GenericDatumReader, GenericDatumWriter, Generic
 import org.apache.avro.Schema
 import org.apache.avro.io.{ DecoderFactory, DatumReader, EncoderFactory, DatumWriter }
 import Injection.utf8
+import scala.reflect._
 
 /**
  * Factory providing various avro injections.
@@ -37,8 +38,8 @@ object SpecificAvroCodecs {
    * @tparam T compiled Avro record
    * @return Injection
    */
-  def apply[T <: SpecificRecordBase: Manifest]: Injection[T, Array[Byte]] = {
-    val klass = manifest[T].erasure.asInstanceOf[Class[T]]
+  def apply[T <: SpecificRecordBase: ClassTag]: Injection[T, Array[Byte]] = {
+    val klass = classTag[T].runtimeClass.asInstanceOf[Class[T]]
     new SpecificAvroCodec[T](klass)
   }
 
@@ -49,8 +50,8 @@ object SpecificAvroCodecs {
    * @tparam T compiled Avro record
    * @return Injection
    */
-  def withCompression[T <: SpecificRecordBase: Manifest](codecFactory: CodecFactory): Injection[T, Array[Byte]] = {
-    val klass = manifest[T].erasure.asInstanceOf[Class[T]]
+  def withCompression[T <: SpecificRecordBase: ClassTag](codecFactory: CodecFactory): Injection[T, Array[Byte]] = {
+    val klass = classTag[T].runtimeClass.asInstanceOf[Class[T]]
     new SpecificAvroCodec[T](klass, Some(codecFactory))
   }
 
@@ -60,7 +61,7 @@ object SpecificAvroCodecs {
    * @tparam T compiled Avro record
    * @return Injection
    */
-  def withBzip2Compression[T <: SpecificRecordBase: Manifest]: Injection[T, Array[Byte]] =
+  def withBzip2Compression[T <: SpecificRecordBase: ClassTag]: Injection[T, Array[Byte]] =
     withCompression(CodecFactory.bzip2Codec())
 
   /**
@@ -71,7 +72,7 @@ object SpecificAvroCodecs {
    * @tparam T compiled Avro record
    * @return Injection
    */
-  def withDeflateCompression[T <: SpecificRecordBase: Manifest](compressionLevel: Int): Injection[T, Array[Byte]] = {
+  def withDeflateCompression[T <: SpecificRecordBase: ClassTag](compressionLevel: Int): Injection[T, Array[Byte]] = {
     require(1 <= compressionLevel && compressionLevel <= 9, "Compression level should be between 1 and 9, inclusive")
     withCompression(CodecFactory.deflateCodec(compressionLevel))
   }
@@ -84,7 +85,7 @@ object SpecificAvroCodecs {
    */
   // Allows to create deflate-compressing Injection's without requiring parentheses similar to `apply`,
   // `withSnappyCompression`, etc. to achieve API consistency.
-  def withDeflateCompression[T <: SpecificRecordBase: Manifest]: Injection[T, Array[Byte]] = withDeflateCompression(5)
+  def withDeflateCompression[T <: SpecificRecordBase: ClassTag]: Injection[T, Array[Byte]] = withDeflateCompression(5)
 
   /**
    * Returns Injection capable of serializing and deserializing a compiled Avro record using SpecificDatumWriter and
@@ -92,7 +93,7 @@ object SpecificAvroCodecs {
    * @tparam T compiled Avro record
    * @return Injection
    */
-  def withSnappyCompression[T <: SpecificRecordBase: Manifest]: Injection[T, Array[Byte]] =
+  def withSnappyCompression[T <: SpecificRecordBase: ClassTag]: Injection[T, Array[Byte]] =
     withCompression(CodecFactory.snappyCodec())
 
   /**
@@ -100,8 +101,8 @@ object SpecificAvroCodecs {
    * @tparam T compiled Avro record
    * @return Injection
    */
-  def toBinary[T <: SpecificRecordBase: Manifest]: Injection[T, Array[Byte]] = {
-    val klass = manifest[T].erasure.asInstanceOf[Class[T]]
+  def toBinary[T <: SpecificRecordBase: ClassTag]: Injection[T, Array[Byte]] = {
+    val klass = classTag[T].runtimeClass.asInstanceOf[Class[T]]
     val writer = new SpecificDatumWriter[T](klass)
     val reader = new SpecificDatumReader[T](klass)
     new BinaryAvroCodec[T](writer, reader)
@@ -113,8 +114,8 @@ object SpecificAvroCodecs {
    * @tparam T compiled Avro record
    * @return Injection
    */
-  def toJson[T <: SpecificRecordBase: Manifest](schema: Schema): Injection[T, String] = {
-    val klass = manifest[T].erasure.asInstanceOf[Class[T]]
+  def toJson[T <: SpecificRecordBase: ClassTag](schema: Schema): Injection[T, String] = {
+    val klass = classTag[T].runtimeClass.asInstanceOf[Class[T]]
     val writer = new SpecificDatumWriter[T](klass)
     val reader = new SpecificDatumReader[T](klass)
     new JsonAvroCodec[T](schema, writer, reader)
@@ -139,7 +140,7 @@ object GenericAvroCodecs {
    * @tparam T generic record
    * @return Injection
    */
-  def withCompression[T <: GenericRecord: Manifest](schema: Schema, codecFactory: CodecFactory): Injection[T, Array[Byte]] =
+  def withCompression[T <: GenericRecord: ClassTag](schema: Schema, codecFactory: CodecFactory): Injection[T, Array[Byte]] =
     new GenericAvroCodec[T](schema, Some(codecFactory))
 
   /**
@@ -148,7 +149,7 @@ object GenericAvroCodecs {
    * @tparam T generic record
    * @return Injection
    */
-  def withBzip2Compression[T <: GenericRecord: Manifest](schema: Schema): Injection[T, Array[Byte]] =
+  def withBzip2Compression[T <: GenericRecord: ClassTag](schema: Schema): Injection[T, Array[Byte]] =
     withCompression(schema, CodecFactory.bzip2Codec())
 
   /**
@@ -159,7 +160,7 @@ object GenericAvroCodecs {
    * @tparam T generic record
    * @return Injection
    */
-  def withDeflateCompression[T <: GenericRecord: Manifest](schema: Schema, compressionLevel: Int = 5): Injection[T, Array[Byte]] = {
+  def withDeflateCompression[T <: GenericRecord: ClassTag](schema: Schema, compressionLevel: Int = 5): Injection[T, Array[Byte]] = {
     require(1 <= compressionLevel && compressionLevel <= 9, "Compression level should be between 1 and 9, inclusive")
     withCompression(schema, CodecFactory.deflateCodec(compressionLevel))
   }
@@ -170,7 +171,7 @@ object GenericAvroCodecs {
    * @tparam T generic record
    * @return Injection
    */
-  def withSnappyCompression[T <: GenericRecord: Manifest](schema: Schema): Injection[T, Array[Byte]] =
+  def withSnappyCompression[T <: GenericRecord: ClassTag](schema: Schema): Injection[T, Array[Byte]] =
     withCompression(schema, CodecFactory.snappyCodec())
 
   /**

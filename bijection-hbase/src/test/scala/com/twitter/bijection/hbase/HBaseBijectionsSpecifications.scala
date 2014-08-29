@@ -30,105 +30,105 @@ object HBaseBijectionsSpecifications extends WordSpec with Matchers with BasePro
       val expected = "Bonjour le monde"
       val bytes = Bijection[String, StringBytes](expected)
       val result = Bijection.invert[String, StringBytes](bytes)
-      result shouldEqual expected
+      assert(result == expected)
     }
 
     "round trip Long -> Array[Byte]" in {
       val expected = 42L
       val bytes = Bijection[Long, LongBytes](expected)
       val result = Bijection.invert[Long, LongBytes](bytes)
-      result shouldEqual expected
+      assert(result == expected)
     }
 
     "round trip Int -> Array[Byte]" in {
       val expected = 42
       val bytes = Bijection[Int, IntBytes](expected)
       val result = Bijection.invert[Int, IntBytes](bytes)
-      result shouldEqual expected
+      assert(result == expected)
     }
 
     "round trip Double -> Array[Byte]" in {
       val expected = 42.0
       val bytes = Bijection[Double, DoubleBytes](expected)
       val result = Bijection.invert[Double, DoubleBytes](bytes)
-      result shouldEqual expected
+      assert(result == expected)
     }
 
     "round trip Float -> Array[Byte]" in {
       val expected = 42.0F
       val bytes = Bijection[Float, FloatBytes](expected)
       val result = Bijection.invert[Float, FloatBytes](bytes)
-      result shouldEqual expected
+      assert(result == expected)
     }
 
     "round trip Short -> Array[Byte]" in {
       val expected = 1.toShort
       val bytes = Bijection[Short, ShortBytes](expected)
       val result = Bijection.invert[Short, ShortBytes](bytes)
-      result shouldEqual expected
+      assert(result == expected)
     }
 
     "round trip BigDecimal -> Array[Byte]" in {
       val expected = BigDecimal(1)
       val bytes = Bijection[BigDecimal, BigDecimalBytes](expected)
       val result = Bijection.invert[BigDecimal, BigDecimalBytes](bytes)
-      result shouldEqual expected
+      assert(result == expected)
     }
 
     "round trip Boolean -> Array[Byte]" in {
       val expected = true
       val bytes = Bijection[Boolean, BooleanBytes](expected)
       val result = Bijection.invert[Boolean, BooleanBytes](bytes)
-      result shouldEqual expected
+      assert(result == expected)
     }
 
     "round trip String -> ImmutableBytesWritable" in {
       val expected = "Bonjour le monde"
       val bytes = Bijection[String, ImmutableBytesWritable](expected)
       val result = Bijection.invert[String, ImmutableBytesWritable](bytes)
-      result shouldEqual expected
+      assert(result == expected)
     }
 
     "round trip Long -> ImmutableBytesWritable" in {
       val expected = 1L
       val bytes = Bijection[Long, ImmutableBytesWritable](expected)
       val result = Bijection.invert[Long, ImmutableBytesWritable](bytes)
-      result shouldEqual expected
+      assert(result == expected)
     }
 
     "round trip Int -> ImmutableBytesWritable" in {
       val expected = 42
       val bytes = Bijection[Int, ImmutableBytesWritable](expected)
       val result = Bijection.invert[Int, ImmutableBytesWritable](bytes)
-      result shouldEqual expected
+      assert(result == expected)
     }
 
     "round trip Double -> ImmutableBytesWritable" in {
       val expected = 42.0
       val bytes = Bijection[Double, ImmutableBytesWritable](expected)
       val result = Bijection.invert[Double, ImmutableBytesWritable](bytes)
-      result shouldEqual expected
+      assert(result == expected)
     }
 
     "round trip Float -> ImmutableBytesWritable" in {
       val expected = 42.0F
       val bytes = Bijection[Float, ImmutableBytesWritable](expected)
       val result = Bijection.invert[Float, ImmutableBytesWritable](bytes)
-      result shouldEqual expected
+      assert(result == expected)
     }
 
     "round trip Short -> ImmutableBytesWritable" in {
       val expected = 1.toShort
       val bytes = Bijection[Short, ImmutableBytesWritable](expected)
       val result = Bijection.invert[Short, ImmutableBytesWritable](bytes)
-      result shouldEqual expected
+      assert(result == expected)
     }
 
     "round trip BigDecimal -> ImmutableBytesWritable" in {
       val expected = BigDecimal(1)
       val bytes = Bijection[BigDecimal, ImmutableBytesWritable](expected)
       val result = Bijection.invert[BigDecimal, ImmutableBytesWritable](bytes)
-      result shouldEqual expected
+      assert(result == expected)
     }
   }
 

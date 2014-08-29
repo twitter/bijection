@@ -45,9 +45,9 @@ object Json4sInjectionLaws extends Properties("Json4sInjection")
           JField("screen_name", JString(in._5))))
   }
 
-  def roundTripCaseClassToJson(implicit inj: Injection[Twit, String], mn: Manifest[Twit]) = isLooseInjection[Twit, String]
+  def roundTripCaseClassToJson(implicit inj: Injection[Twit, String], mn: TypeTag[Twit]) = isLooseInjection[Twit, String]
 
-  def roundTripCaseClassToJValue(implicit inj: Injection[Twit, JValue], mn: Manifest[Twit]) = isLooseInjection[Twit, JValue]
+  def roundTripCaseClassToJValue(implicit inj: Injection[Twit, JValue], mn: TypeTag[Twit]) = isLooseInjection[Twit, JValue]
 
   def roundTripJValueToString(implicit inj: Injection[JValue, String]) = isLooseInjection[JValue, String]
 

@@ -15,6 +15,7 @@ import org.codehaus.jackson.map.MappingJsonFactory
 import java.lang.{ Integer => JInt }
 import scala.collection.mutable.{ Map => MMap }
 import scala.util.{ Failure, Success }
+import scala.reflect._
 
 /**
  * Codecs for use in serializing and deserializing Thrift structures.
@@ -23,9 +24,9 @@ object ThriftCodec {
   /**
    * For scala instantiation. Uses reflection.
    */
-  def apply[T <: TBase[_, _]: Manifest, P <: TProtocolFactory: Manifest]: Injection[T, Array[Byte]] = {
-    val klass = manifest[T].erasure.asInstanceOf[Class[T]]
-    val factory = manifest[P].erasure.asInstanceOf[Class[P]].newInstance
+  def apply[T <: TBase[_, _]: ClassTag, P <: TProtocolFactory: ClassTag]: Injection[T, Array[Byte]] = {
+    val klass = classTag[T].runtimeClass.asInstanceOf[Class[T]]
+    val factory = classTag[P].runtimeClass.asInstanceOf[Class[P]].newInstance
     apply(klass, factory)
   }
 
@@ -35,9 +36,9 @@ object ThriftCodec {
   def apply[T <: TBase[_, _], P <: TProtocolFactory](klass: Class[T], factory: P): Injection[T, Array[Byte]] =
     new ThriftCodec[T, P](klass, factory)
 
-  implicit def toBinary[T <: TBase[_, _]: Manifest]: Injection[T, Array[Byte]] = BinaryThriftCodec[T]
-  def toCompact[T <: TBase[_, _]: Manifest]: Injection[T, Array[Byte]] = CompactThriftCodec[T]
-  def toJson[T <: TBase[_, _]: Manifest]: Injection[T, String] = JsonThriftCodec[T]
+  implicit def toBinary[T <: TBase[_, _]: ClassTag]: Injection[T, Array[Byte]] = BinaryThriftCodec[T]
+  def toCompact[T <: TBase[_, _]: ClassTag]: Injection[T, Array[Byte]] = CompactThriftCodec[T]
+  def toJson[T <: TBase[_, _]: ClassTag]: Injection[T, String] = JsonThriftCodec[T]
 }
 
 class ThriftCodec[T <: TBase[_, _], P <: TProtocolFactory](klass: Class[T], factory: P)
@@ -57,7 +58,7 @@ class ThriftCodec[T <: TBase[_, _], P <: TProtocolFactory](klass: Class[T], fact
 }
 
 object BinaryThriftCodec {
-  def apply[T <: TBase[_, _]: Manifest]: Injection[T, Array[Byte]] = fromClass(manifest[T].erasure.asInstanceOf[Class[T]])
+  def apply[T <: TBase[_, _]: ClassTag]: Injection[T, Array[Byte]] = fromClass(classTag[T].runtimeClass.asInstanceOf[Class[T]])
   def fromClass[T <: TBase[_, _]](klass: Class[T]): Injection[T, Array[Byte]] = new BinaryThriftCodec(klass)
 }
 
@@ -65,7 +66,7 @@ class BinaryThriftCodec[T <: TBase[_, _]](klass: Class[T])
   extends ThriftCodec[T, TBinaryProtocol.Factory](klass, new TBinaryProtocol.Factory)
 
 object CompactThriftCodec {
-  def apply[T <: TBase[_, _]: Manifest]: Injection[T, Array[Byte]] = fromClass(manifest[T].erasure.asInstanceOf[Class[T]])
+  def apply[T <: TBase[_, _]: ClassTag]: Injection[T, Array[Byte]] = fromClass(classTag[T].runtimeClass.asInstanceOf[Class[T]])
   def fromClass[T <: TBase[_, _]](klass: Class[T]): Injection[T, Array[Byte]] = new CompactThriftCodec(klass)
 }
 
@@ -73,7 +74,7 @@ class CompactThriftCodec[T <: TBase[_, _]](klass: Class[T])
   extends ThriftCodec[T, TCompactProtocol.Factory](klass, new TCompactProtocol.Factory)
 
 object JsonThriftCodec {
-  def apply[T <: TBase[_, _]: Manifest]: Injection[T, String] = fromClass(manifest[T].erasure.asInstanceOf[Class[T]])
+  def apply[T <: TBase[_, _]: ClassTag]: Injection[T, String] = fromClass(classTag[T].runtimeClass.asInstanceOf[Class[T]])
   def fromClass[T <: TBase[_, _]](klass: Class[T]): Injection[T, String] =
     // This is not really unsafe because we know JsonThriftCodec gives utf8 bytes as output
     (new JsonThriftCodec[T](klass))
@@ -94,8 +95,8 @@ object TEnumCodec {
   /**
    * For scala instantiation. Uses reflection.
    */
-  implicit def apply[T <: TEnum: Manifest]: Injection[T, Int] = {
-    val klass = manifest[T].erasure.asInstanceOf[Class[T]]
+  implicit def apply[T <: TEnum: ClassTag]: Injection[T, Int] = {
+    val klass = classTag[T].runtimeClass.asInstanceOf[Class[T]]
     fromClass(klass)
   }
   /**
@@ -107,7 +108,7 @@ object TEnumCodec {
   /**
    * Implicit conversions between TEnum and common types.
    */
-  implicit def toBinary[T <: TEnum: Manifest]: Injection[T, Array[Byte]] =
+  implicit def toBinary[T <: TEnum: ClassTag]: Injection[T, Array[Byte]] =
     Injection.connect[T, Int, Array[Byte]]
 }
 
