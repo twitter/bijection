@@ -28,7 +28,6 @@ import java.lang.{
 import org.scalatest.{ PropSpec, MustMatchers }
 import org.scalatest.prop.PropertyChecks
 
-import org.scalacheck.Prop.forAll
 
 class TupleBijectionLaws extends PropSpec with PropertyChecks with MustMatchers
   with BaseProperties {
@@ -43,7 +42,6 @@ class TupleBijectionLaws extends PropSpec with PropertyChecks with MustMatchers
   }
 
   property("round trips (Int,Long,String,Long) -> (String,String,String,Array[Byte])") {
-    //This needs a tag on Array[Byte] @@ Rep[Long]
     isInjection[(Int, Long, String, Long), (String, String, String, Array[Byte])]
   }
 

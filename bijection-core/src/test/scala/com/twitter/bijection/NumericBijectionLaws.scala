@@ -193,7 +193,6 @@ class NumericBijectionLaws extends PropSpec with PropertyChecks with MustMatcher
 
   property("as works") {
     forAll { (i: Int) =>
-      // TODO: once we have the .as fix, i.as[String] should work:
       assert((i.as[String @@ Rep[Int]] == i.toString) && (Tag[String, Rep[Int]](i.toString).as[Int] == i))
     }
   }
