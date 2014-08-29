@@ -18,11 +18,13 @@ package com.twitter.bijection.protobuf
 
 import com.twitter.bijection.{ BaseProperties, Bijection }
 import com.twitter.bijection.protobuf.TestMessages.{ FatigueCount, Gender }
-import org.scalacheck.Properties
+import org.scalatest.{ PropSpec, MustMatchers }
+import org.scalatest.prop.PropertyChecks
+
 import org.scalacheck.Arbitrary
 import org.scalatest._
 
-object ProtobufCodecLaws extends Properties("ProtobufCodec") with BaseProperties {
+class ProtobufCodecLaws extends PropSpec with PropertyChecks with MustMatchers with BaseProperties {
   def buildFatigueCount(tuple: (Long, Long, Int)) =
     FatigueCount.newBuilder()
       .setTargetId(tuple._1)
@@ -33,7 +35,7 @@ object ProtobufCodecLaws extends Properties("ProtobufCodec") with BaseProperties
   implicit val fatigueCount: Arbitrary[FatigueCount] =
     arbitraryViaFn { input: (Long, Long, Int) => buildFatigueCount(input) }
 
-  property("round trips protobuf -> Array[Byte]") = {
+  property("round trips protobuf -> Array[Byte]") {
     implicit val b = ProtobufCodec[FatigueCount]
     isLooseInjection[FatigueCount, Array[Byte]]
   }
