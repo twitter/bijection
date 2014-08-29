@@ -17,11 +17,13 @@
 package com.twitter.bijection.thrift
 
 import com.twitter.bijection.{ BaseProperties, Bijection, Injection }
-import org.scalacheck.Properties
-import org.scalacheck.Arbitrary
-import org.specs._
+import org.scalatest.{ PropSpec, MustMatchers }
+import org.scalatest.prop.PropertyChecks
 
-object ThriftCodecLaws extends Properties("ThriftCodecs") with BaseProperties {
+import org.scalacheck.Arbitrary
+import org.scalatest._
+
+class ThriftCodecLaws extends PropSpec with PropertyChecks with MustMatchers with BaseProperties {
   def buildThrift(i: (Int, String)) =
     new TestThriftStructure().setANumber(i._1).setAString(i._2)
 
@@ -32,27 +34,29 @@ object ThriftCodecLaws extends Properties("ThriftCodecs") with BaseProperties {
     isLooseInjection[TestThriftStructure, Array[Byte]]
   }
 
-  property("round trips thrift -> Array[Byte] through binary") =
+  property("round trips thrift -> Array[Byte] through binary") {
     roundTripsThrift(BinaryThriftCodec[TestThriftStructure])
+  }
 
-  property("round trips thrift -> Array[Byte] through compact") =
+  property("round trips thrift -> Array[Byte] through compact") {
     roundTripsThrift(CompactThriftCodec[TestThriftStructure])
+  }
 
-  property("round trips thrift -> String through json") = {
+  property("round trips thrift -> String through json") {
     implicit val b = JsonThriftCodec[TestThriftStructure]
     isLooseInjection[TestThriftStructure, String]
   }
 }
 
-class TEnumTest extends Specification with BaseProperties {
+class TEnumTest extends WordSpec with Matchers with BaseProperties {
   "TEnum should roundtrip through TEnumCodec" in {
     implicit val b = TEnumCodec[Gender]
     val male = Gender.findByValue(0)
-    male must_== rt(male)
+    assert(male == rt(male))
 
     val female = Gender.findByValue(1)
-    female must_== rt(female)
+    assert(female == rt(female))
 
-    b.invert(2).isFailure must beTrue
+    assert(b.invert(2).isFailure == true)
   }
 }

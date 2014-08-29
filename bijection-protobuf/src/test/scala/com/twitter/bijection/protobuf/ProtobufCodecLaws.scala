@@ -18,11 +18,13 @@ package com.twitter.bijection.protobuf
 
 import com.twitter.bijection.{ BaseProperties, Bijection }
 import com.twitter.bijection.protobuf.TestMessages.{ FatigueCount, Gender }
-import org.scalacheck.Properties
-import org.scalacheck.Arbitrary
-import org.specs._
+import org.scalatest.{ PropSpec, MustMatchers }
+import org.scalatest.prop.PropertyChecks
 
-object ProtobufCodecLaws extends Properties("ProtobufCodec") with BaseProperties {
+import org.scalacheck.Arbitrary
+import org.scalatest._
+
+class ProtobufCodecLaws extends PropSpec with PropertyChecks with MustMatchers with BaseProperties {
   def buildFatigueCount(tuple: (Long, Long, Int)) =
     FatigueCount.newBuilder()
       .setTargetId(tuple._1)
@@ -33,21 +35,21 @@ object ProtobufCodecLaws extends Properties("ProtobufCodec") with BaseProperties
   implicit val fatigueCount: Arbitrary[FatigueCount] =
     arbitraryViaFn { input: (Long, Long, Int) => buildFatigueCount(input) }
 
-  property("round trips protobuf -> Array[Byte]") = {
+  property("round trips protobuf -> Array[Byte]") {
     implicit val b = ProtobufCodec[FatigueCount]
     isLooseInjection[FatigueCount, Array[Byte]]
   }
 }
 
-class ProtobufEnumTest extends Specification with BaseProperties {
+class ProtobufEnumTest extends WordSpec with Matchers with BaseProperties {
   "ProtocolMessageEnum should roundtrip through ProtobufCodec" in {
     implicit val b = ProtobufEnumCodec[Gender]
     val male = Gender.valueOf(0)
-    male must_== rt(male)
+    assert(male == rt(male))
 
     val female = Gender.valueOf(1)
-    female must_== rt(female)
+    assert(female == rt(female))
 
-    b.invert(2).isFailure must beTrue
+    assert(b.invert(2).isFailure == true)
   }
 }

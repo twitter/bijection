@@ -1,14 +1,17 @@
 package com.twitter.bijection.jodatime
 
-import org.scalacheck.{ Arbitrary, Gen, Properties }
-import org.scalacheck.Gen._
+import org.scalacheck.{ Arbitrary, Gen }
 import org.scalacheck.Prop._
+
+import org.scalatest.{ PropSpec, MustMatchers }
+import org.scalatest.prop.PropertyChecks
+
 import com.twitter.bijection.{ Bijection, BaseProperties, ImplicitBijection }
 import java.util.Date
 import org.joda.time.{ DateTime, LocalDate, LocalTime, YearMonth, MonthDay }
 import com.twitter.bijection._
 
-object DateBijectionsLaws extends Properties("DateBijections") with BaseProperties with DateBijections with DateInjections {
+class DateBijectionsLaws extends PropSpec with PropertyChecks with MustMatchers with BaseProperties with DateBijections with DateInjections {
 
   import Rep._
 
@@ -31,20 +34,36 @@ object DateBijectionsLaws extends Properties("DateBijections") with BaseProperti
 
   implicit val monthDay = arbitraryViaFn { (dtime: Timestamp) => new MonthDay(dtime.ts) }
 
-  property("Long <=> Joda") = isBijection[Long, DateTime]
+  property("Long <=> Joda") {
+    isBijection[Long, DateTime]
+  }
 
-  property("Date <=> Joda") = isBijection[Date, DateTime]
+  property("Date <=> Joda") {
+    isBijection[Date, DateTime]
+  }
 
-  property("round trips Date -> String") = isLooseInjection[DateTime, String]
+  property("round trips Date -> String") {
+    isLooseInjection[DateTime, String]
+  }
 
-  property("round trips Joda -> Date") = isLooseInjection[DateTime, Date]
+  property("round trips Joda -> Date") {
+    isLooseInjection[DateTime, Date]
+  }
 
-  property("round trips LocalDate -> String") = isLooseInjection[LocalDate, String]
+  property("round trips LocalDate -> String") {
+    isLooseInjection[LocalDate, String]
+  }
 
-  property("round trips LocalTime -> String") = isLooseInjection[LocalTime, String]
+  property("round trips LocalTime -> String") {
+    isLooseInjection[LocalTime, String]
+  }
 
-  property("round trips YearMonth -> String") = isLooseInjection[YearMonth, String]
+  property("round trips YearMonth -> String") {
+    isLooseInjection[YearMonth, String]
+  }
 
-  property("round trips MonthDay -> String") = isLooseInjection[MonthDay, String]
+  property("round trips MonthDay -> String") {
+    isLooseInjection[MonthDay, String]
+  }
 
 }

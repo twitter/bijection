@@ -30,6 +30,7 @@ import java.util.concurrent.{ ConcurrentMap => JConcurrentMap }
 import scala.collection.JavaConverters._
 import scala.collection.mutable
 import collection.generic.CanBuildFrom
+import scala.reflect.ClassTag
 
 trait CollectionBijections extends BinaryBijections {
   import Conversion.asMethod
@@ -184,7 +185,7 @@ trait CollectionBijections extends BinaryBijections {
   /**
    * This doesn't actually copy the Array, only wraps/unwraps with WrappedArray
    */
-  implicit def array2Traversable[T: ClassManifest]: Bijection[Array[T], Traversable[T]] =
+  implicit def array2Traversable[T: ClassTag]: Bijection[Array[T], Traversable[T]] =
     new AbstractBijection[Array[T], Traversable[T]] {
       override def apply(a: Array[T]) = a.toTraversable
       override def invert(t: Traversable[T]) = t.toArray
@@ -193,7 +194,7 @@ trait CollectionBijections extends BinaryBijections {
   /**
    * This doesn't actually copy the Array, only wraps/unwraps with WrappedArray
    */
-  implicit def array2Seq[T: ClassManifest]: Bijection[Array[T], Seq[T]] =
+  implicit def array2Seq[T: ClassTag]: Bijection[Array[T], Seq[T]] =
     new AbstractBijection[Array[T], Seq[T]] {
       override def apply(a: Array[T]) = a.toSeq
       override def invert(t: Seq[T]) = t.toArray

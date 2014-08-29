@@ -14,17 +14,21 @@
 
 package com.twitter.bijection.json4s
 
-import org.scalacheck.Properties
+import org.scalatest.PropSpec
+import org.scalatest.prop.PropertyChecks
 import com.twitter.bijection.{ Injection, BaseProperties }
 
 import org.json4s.JsonAST._
 import org.json4s.JsonAST.JString
 
+import scala.reflect.runtime.universe.TypeTag
+import scala.reflect.ClassTag
+
 /**
  * @author Mansur Ashraf
  * @since 1/10/14
  */
-object Json4sInjectionLaws extends Properties("Json4sInjection")
+class Json4sInjectionLaws extends PropSpec with PropertyChecks
   with BaseProperties {
   case class Twit(name: String, id: Int, id_str: String, indices: List[Int], screen_name: String)
 
@@ -45,21 +49,21 @@ object Json4sInjectionLaws extends Properties("Json4sInjection")
           JField("screen_name", JString(in._5))))
   }
 
-  def roundTripCaseClassToJson(implicit inj: Injection[Twit, String], mn: Manifest[Twit]) = isLooseInjection[Twit, String]
+  def roundTripCaseClassToJson(implicit inj: Injection[Twit, String], tt: TypeTag[Twit], ct: ClassTag[Twit]) = isLooseInjection[Twit, String]
 
-  def roundTripCaseClassToJValue(implicit inj: Injection[Twit, JValue], mn: Manifest[Twit]) = isLooseInjection[Twit, JValue]
+  def roundTripCaseClassToJValue(implicit inj: Injection[Twit, JValue], tt: TypeTag[Twit], ct: ClassTag[Twit]) = isLooseInjection[Twit, JValue]
 
   def roundTripJValueToString(implicit inj: Injection[JValue, String]) = isLooseInjection[JValue, String]
 
-  property("round trip Case Class to Json") = {
+  property("round trip Case Class to Json") {
     import Json4sInjections.caseClass2Json
     roundTripCaseClassToJson
   }
-  property("round trip Case Class to JValue") = {
+  property("round trip Case Class to JValue") {
     import Json4sInjections.caseClass2JValue
     roundTripCaseClassToJValue
   }
-  property("round trip JValue to String") = {
+  property("round trip JValue to String") {
     import Json4sInjections.jvalue2Json
     roundTripJValueToString
   }

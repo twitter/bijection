@@ -27,7 +27,9 @@ import java.lang.{
 
 import java.nio.ByteBuffer
 
-import org.scalacheck.Properties
+import org.scalatest.{ PropSpec, MustMatchers }
+import org.scalatest.prop.PropertyChecks
+
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.forAll
 
@@ -49,44 +51,99 @@ trait BaseBufferable {
   }
 }
 
-object BufferableLaws extends Properties("Bufferable") with BaseBufferable {
-  property("Reallocate works properly") = forAll { (bytes: Array[Byte]) =>
-    val bb = ByteBuffer.wrap(bytes)
-    bb.position(bytes.size)
-    val newBb = Bufferable.reallocate(bb)
-    (Bufferable.getBytes(bb).toList == Bufferable.getBytes(newBb).toList) &&
-      (newBb.capacity > bb.capacity) &&
-      (newBb.position == bb.position)
+class BufferableLaws extends PropSpec with PropertyChecks with MustMatchers with BaseBufferable {
+  property("Reallocate works properly") {
+    forAll { (bytes: Array[Byte]) =>
+      val bb = ByteBuffer.wrap(bytes)
+      bb.position(bytes.size)
+      val newBb = Bufferable.reallocate(bb)
+      assert(Bufferable.getBytes(bb).toList == Bufferable.getBytes(newBb).toList)
+      assert(newBb.capacity > bb.capacity)
+      assert(newBb.position == bb.position)
+    }
   }
-  property("getBytes works") = forAll { (bytes: Array[Byte]) =>
-    val bb = ByteBuffer.wrap(bytes)
-    bb.position(bytes.size)
-    Bufferable.getBytes(bb).toList == bytes.toList
+
+  property("getBytes works") {
+    forAll { (bytes: Array[Byte]) =>
+      val bb = ByteBuffer.wrap(bytes)
+      bb.position(bytes.size)
+      assert(Bufferable.getBytes(bb).toList == bytes.toList)
+    }
   }
 
   implicit val laeq = itereq[List[Array[Byte]], Array[Byte]]
 
-  property("Bools roundtrip") = roundTrips[Boolean]
-  property("Ints roundtrip") = roundTrips[Int]
-  property("Doubles roundtrip") = roundTrips[Double]
-  property("Floats roundtrip") = roundTrips[Float]
-  property("Shorts roundtrip") = roundTrips[Int]
-  property("Longs roundtrip") = roundTrips[Long]
-  property("(Int,Long) roundtrip") = roundTrips[(Int, Long)]
-  property("(Int,Long,String) roundtrip") = roundTrips[(Int, Long, String)]
-  property("(Int,Long,String,(Int,Long)) roundtrip") = roundTrips[(Int, Long, String, (Int, Long))]
-  property("Array[Byte] roundtrip") = roundTrips[Array[Byte]]
-  property("Array[Int] roundtrip") = roundTrips[Array[Int]]
-  property("List[Double] roundtrip") = roundTrips[List[Double]]
-  property("List[Array[Byte]] roundtrip") = roundTrips[List[Array[Byte]]]
-  property("Set[Double] roundtrip") = roundTrips[Set[Double]]
-  property("Map[String, Int] roundtrip") = roundTrips[Map[String, Int]]
-  property("Option[(Long,Long)] roundtrip") = roundTrips[Option[(Long, Long)]]
-  property("Either[Long,String] roundtrip") = roundTrips[Either[Long, String]]
+  property("Bools roundtrip") {
+    roundTrips[Boolean]
+  }
+
+  property("Ints roundtrip") {
+    roundTrips[Int]
+  }
+
+  property("Doubles roundtrip") {
+    roundTrips[Double]
+  }
+
+  property("Floats roundtrip") {
+    roundTrips[Float]
+  }
+  property("Shorts roundtrip") {
+    roundTrips[Int]
+  }
+  property("Longs roundtrip") {
+    roundTrips[Long]
+  }
+  property("(Int,Long) roundtrip") {
+    roundTrips[(Int, Long)]
+  }
+
+  property("(Int,Long,String) roundtrip") {
+    roundTrips[(Int, Long, String)]
+  }
+
+  property("(Int,Long,String,(Int,Long)) roundtrip") {
+    roundTrips[(Int, Long, String, (Int, Long))]
+  }
+
+  property("Array[Byte] roundtrip") {
+    roundTrips[Array[Byte]]
+  }
+
+  property("Array[Int] roundtrip") {
+    roundTrips[Array[Int]]
+  }
+
+  property("List[Double] roundtrip") {
+    roundTrips[List[Double]]
+  }
+
+  property("List[Array[Byte]] roundtrip") {
+    roundTrips[List[Array[Byte]]]
+  }
+
+  property("Set[Double] roundtrip") {
+    roundTrips[Set[Double]]
+  }
+
+  property("Map[String, Int] roundtrip") {
+    roundTrips[Map[String, Int]]
+  }
+
+  property("Option[(Long,Long)] roundtrip") {
+    roundTrips[Option[(Long, Long)]]
+  }
+
+  property("Either[Long,String] roundtrip") {
+    roundTrips[Either[Long, String]]
+  }
 
   implicit val symbolArb = Arbitrary {
     implicitly[Arbitrary[String]]
       .arbitrary.map { Symbol(_) }
   }
-  property("Symbol roundtrip") = roundTrips[Symbol]
+
+  property("Symbol roundtrip") {
+    roundTrips[Symbol]
+  }
 }
