@@ -23,14 +23,14 @@ package com.twitter.bijection
  */
 import scala.annotation.implicitNotFound
 @implicitNotFound(msg = "Cannot find ImplicitBijection type class from ${A} to ${B}")
-sealed trait ImplicitBijection[A, B] extends (A => B) with java.io.Serializable {
+sealed trait ImplicitBijection[A, B] extends java.io.Serializable {
   def bijection: Bijection[A, B]
   def apply(a: A) = bijection.apply(a)
   def invert(b: B) = bijection.invert(b)
 }
 case class Forward[A, B](override val bijection: Bijection[A, B]) extends ImplicitBijection[A, B]
 case class Reverse[A, B](inv: Bijection[B, A]) extends ImplicitBijection[A, B] {
-  lazy val bijection = inv.inverse
+  val bijection = inv.inverse
 }
 
 trait LowPriorityImplicitBijection extends java.io.Serializable {
