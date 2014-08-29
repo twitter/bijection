@@ -187,7 +187,7 @@ object BijectionBuild extends Build {
       )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
-  val jsonParser = "org.codehaus.jackson" % "jackson-mapper-asl" % "1.8.1"
+  val jsonParser = "org.codehaus.jackson" % "jackson-mapper-asl" % "1.9.2"
 
   lazy val bijectionThrift = module("thrift").settings(
     osgiExportAll("com.twitter.bijection.thrift"),
