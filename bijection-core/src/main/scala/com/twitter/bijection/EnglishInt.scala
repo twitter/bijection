@@ -13,7 +13,7 @@
 
 package com.twitter.bijection
 
-case class EnglishInt(get: String)
+case class EnglishInt(get: String) extends AnyVal
 
 object EnglishInt {
   implicit val bijectionToInt: Bijection[Int, EnglishInt] = new AbstractBijection[Int, EnglishInt] {

@@ -6,9 +6,9 @@
 package com.twitter.bijection
 
 object NumberSystems {
-  case class BinaryString(get: String)
-  case class HexString(get: String)
-  case class OctalString(get: String)
+  case class BinaryString(get: String) extends AnyVal
+  case class HexString(get: String) extends AnyVal
+  case class OctalString(get: String) extends AnyVal
   case class ArbitBaseString(get: String, base: Int)
 
   implicit val binary: Bijection[Int, BinaryString] = new AbstractBijection[Int, BinaryString] {

@@ -24,9 +24,8 @@ import org.codehaus.jackson.JsonNode
 
 /**
  * Value class representing unparsed Json text
- * TODO in scala 2.10 this should be a value class
  */
-case class UnparsedJson(str: String)
+case class UnparsedJson(str: String) extends AnyVal
 
 object UnparsedJson {
 
