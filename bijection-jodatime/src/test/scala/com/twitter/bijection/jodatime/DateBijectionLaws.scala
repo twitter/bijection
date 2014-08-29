@@ -1,8 +1,7 @@
 package com.twitter.bijection.jodatime
 
-import org.scalacheck.Properties
+import org.scalacheck.{ Arbitrary, Gen, Properties }
 import org.scalacheck.Gen._
-import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
 import com.twitter.bijection.{ Bijection, BaseProperties, ImplicitBijection }
 import java.util.Date
@@ -15,15 +14,22 @@ object DateBijectionsLaws extends Properties("DateBijections") with BaseProperti
 
   implicit val strByte = arbitraryViaBijection[Date, String @@ Rep[Date]]
 
-  implicit val date = arbitraryViaFn { (dtime: Long) => new DateTime(dtime) }
+  /**
+   * If we generate times too close to the Max, timezone issues will push us over
+   */
+  case class Timestamp(ts: Long)
+  implicit val arbtimeStamp: Arbitrary[Timestamp] =
+    Arbitrary(Gen.choose(Long.MinValue / 4, Long.MaxValue / 4).map(Timestamp(_)))
 
-  implicit val localDate = arbitraryViaFn { (dtime: Long) => new LocalDate(dtime) }
+  implicit val date = arbitraryViaFn { (dtime: Timestamp) => new DateTime(dtime.ts) }
 
-  implicit val localTime = arbitraryViaFn { (dtime: Long) => new LocalTime(dtime) }
+  implicit val localDate = arbitraryViaFn { (dtime: Timestamp) => new LocalDate(dtime.ts) }
 
-  implicit val yearMonth = arbitraryViaFn { (dtime: Long) => new YearMonth(dtime) }
+  implicit val localTime = arbitraryViaFn { (dtime: Timestamp) => new LocalTime(dtime.ts) }
 
-  implicit val monthDay = arbitraryViaFn { (dtime: Long) => new MonthDay(dtime) }
+  implicit val yearMonth = arbitraryViaFn { (dtime: Timestamp) => new YearMonth(dtime.ts) }
+
+  implicit val monthDay = arbitraryViaFn { (dtime: Timestamp) => new MonthDay(dtime.ts) }
 
   property("Long <=> Joda") = isBijection[Long, DateTime]
 
