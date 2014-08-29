@@ -30,9 +30,9 @@ class ScroogeCodecLaws extends PropSpec with PropertyChecks with MustMatchers wi
   implicit val testScrooge = arbitraryViaFn { is: (Int, String) => buildScrooge(is) }
 
   // Code generator for thrift instances.
-  def roundTripsScrooge(bijection: Injection[TestStruct, Array[Byte]]) = {
+  def roundTripsScrooge[B](bijection: Injection[TestStruct, B]) = {
     implicit val b = bijection
-    isLooseInjection[TestStruct, Array[Byte]]
+    isLooseInjection[TestStruct, B]
   }
 
   property("round trips thrift -> Array[Byte] through binary") {
@@ -42,4 +42,8 @@ class ScroogeCodecLaws extends PropSpec with PropertyChecks with MustMatchers wi
   property("round trips thrift -> Array[Byte] through compact") {
     roundTripsScrooge(CompactScalaCodec(TestStruct))
   }
+  property("round trips thrift -> Json through json codec") {
+    roundTripsScrooge[String](JsonScalaCodec(TestStruct))
+  }
 }
+

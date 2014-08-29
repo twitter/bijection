@@ -18,12 +18,10 @@ package com.twitter.bijection.scrooge
 
 import com.twitter.bijection.{ Bijection, Injection }
 import com.twitter.bijection.Inversion.attempt
-import com.twitter.scrooge.{
-  CompactThriftSerializer,
-  ThriftStruct,
-  ThriftStructCodec,
-  ThriftStructSerializer
-}
+import com.twitter.scrooge._
+import org.apache.thrift.protocol.TJSONProtocol
+
+import scala.util.Try
 
 class ScalaCodec[T <: ThriftStruct](ser: ThriftStructSerializer[T])
   extends Injection[T, Array[Byte]] {
@@ -47,9 +45,25 @@ object CompactScalaCodec {
     new CompactScalaCodec[T](c)
 }
 
+class JsonScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
+  extends Injection[T, String] {
+  val ser = new ThriftStructSerializer[T] {
+    override def codec = c
+    override val protocolFactory = new TJSONProtocol.Factory
+  }
+
+  override def apply(a: T): String = ser.toString(a)
+  override def invert(b: String): Try[T] = attempt(b)(ser.fromString)
+}
+
+object JsonScalaCodec {
+  def apply[T <: ThriftStruct](c: ThriftStructCodec[T]) =
+    new JsonScalaCodec[T](c)
+}
+
 class CompactScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
   extends ScalaCodec(new CompactThriftSerializer[T] {
     override def codec = c
   })
 
-// TODO: add JSON and ThriftEnum codecs
+// TODO: add  ThriftEnum codecs
