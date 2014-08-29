@@ -46,6 +46,46 @@ object SpecificAvroCodecsSpecification extends WordSpec with Matchers with BaseP
       attempt.get shouldEqual testRecord
     }
 
+    "Round trip specific record using Specific Injection with Bzip2 compression" in {
+      implicit val specificInjection = SpecificAvroCodecs.withBzip2Compression[FiscalRecord]
+      val testRecord = buildSpecificAvroRecord(("2012-01-01", 1, 12))
+      val bytes = Injection[FiscalRecord, Array[Byte]](testRecord)
+      val attempt = Injection.invert[FiscalRecord, Array[Byte]](bytes)
+      attempt.get shouldEqual testRecord
+    }
+
+    "Round trip specific record using Specific Injection with Deflate compression (default compression level)" in {
+      implicit val specificInjection = SpecificAvroCodecs.withDeflateCompression[FiscalRecord]
+      val testRecord = buildSpecificAvroRecord(("2012-01-01", 1, 12))
+      val bytes = Injection[FiscalRecord, Array[Byte]](testRecord)
+      val attempt = Injection.invert[FiscalRecord, Array[Byte]](bytes)
+      attempt.get shouldEqual testRecord
+    }
+
+    "Round trip specific record using Specific Injection with Deflate compression (custom compression level)" in {
+      implicit val specificInjection = SpecificAvroCodecs.withDeflateCompression[FiscalRecord](9)
+      val testRecord = buildSpecificAvroRecord(("2012-01-01", 1, 12))
+      val bytes = Injection[FiscalRecord, Array[Byte]](testRecord)
+      val attempt = Injection.invert[FiscalRecord, Array[Byte]](bytes)
+      attempt.get shouldEqual testRecord
+    }
+
+    "Cannot create Specific Injection with Deflate compression if compression level is set too low" in {
+      an[IllegalArgumentException] should be thrownBy SpecificAvroCodecs.withDeflateCompression[FiscalRecord](0)
+    }
+
+    "Cannot create Specific Injection with Deflate compression if compression level is set too high" in {
+      an[IllegalArgumentException] should be thrownBy SpecificAvroCodecs.withDeflateCompression[FiscalRecord](10)
+    }
+
+    "Round trip specific record using Specific Injection with Snappy compression" in {
+      implicit val specificInjection = SpecificAvroCodecs.withSnappyCompression[FiscalRecord]
+      val testRecord = buildSpecificAvroRecord(("2012-01-01", 1, 12))
+      val bytes = Injection[FiscalRecord, Array[Byte]](testRecord)
+      val attempt = Injection.invert[FiscalRecord, Array[Byte]](bytes)
+      attempt.get shouldEqual testRecord
+    }
+
     "Round trip specific record using Binary Injection" in {
       implicit val specificBinaryInjection = SpecificAvroCodecs.toBinary[FiscalRecord]
       val testRecord = buildSpecificAvroRecord(("2012-01-01", 1, 12))
