@@ -28,7 +28,6 @@ import java.lang.{
 import org.scalatest.{ PropSpec, MustMatchers }
 import org.scalatest.prop.PropertyChecks
 
-
 class TupleBijectionLaws extends PropSpec with PropertyChecks with MustMatchers
   with BaseProperties {
   import StringArbs._
