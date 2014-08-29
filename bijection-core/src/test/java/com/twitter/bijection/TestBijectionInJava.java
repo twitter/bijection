@@ -49,12 +49,16 @@ public class TestBijectionInJava extends JUnitSuite {
     //TODO include a cleaner way to get to the scala Bijections than Bijection$.MODULE$.
     @Test
     public void testBase64Bijection() {
-        Bijection<byte[],Base64String> bytes2Base64 = Bijection$.MODULE$.bytes2Base64();
+        // Note, value classes return the underlying types in Java. But Java users usually
+        // don't care much about type safety, so punting on this for now
+        Bijection<byte[], String> bytes2Base64 = Bijection$.MODULE$.bytes2Base64();
     }
 
     @Test
     public void testBase64BijectionGzip() {
-        Bijection<byte[],GZippedBase64String> bytes2GZippedBase64 = Bijection$.MODULE$.bytes2GZippedBase64();
+        // Note, value classes return the underlying types in Java. But Java users usually
+        // don't care much about type safety, so punting on this for now
+        Bijection<byte[], String> bytes2GZippedBase64 = Bijection$.MODULE$.bytes2GZippedBase64();
     }
 
     // Instantiate a Bijection to String // Looks like the Long is erased
