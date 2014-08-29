@@ -1,6 +1,7 @@
 package com.twitter.bijection.avro
 
-import org.scalacheck.Properties
+import org.scalatest.{ PropSpec, MustMatchers }
+import org.scalatest.prop.PropertyChecks
 import com.twitter.bijection.{ Injection, BaseProperties }
 import org.apache.avro.Schema
 import avro.FiscalRecord
@@ -9,7 +10,7 @@ import avro.FiscalRecord
  * @author Muhammad Ashraf
  * @since 10/5/13
  */
-object SpecificAvroCodecLaws extends Properties("SpecificAvroCodecs") with BaseProperties {
+class SpecificAvroCodecLaws extends PropSpec with PropertyChecks with MustMatchers with BaseProperties {
   val testSchema = new Schema.Parser().parse("""{
                                                    "type":"record",
                                                    "name":"FiscalRecord",
@@ -56,14 +57,17 @@ object SpecificAvroCodecLaws extends Properties("SpecificAvroCodecs") with BaseP
     isLooseInjection[FiscalRecord, String]
   }
 
-  property("round trips Specific Record -> Array[Byte]") =
+  property("round trips Specific Record -> Array[Byte]") {
     roundTripsSpecificRecord(SpecificAvroCodecs[FiscalRecord])
+  }
 
-  property("round trips Specific Record -> Array[Byte] using Binary Encoder/Decoder") =
+  property("round trips Specific Record -> Array[Byte] using Binary Encoder/Decoder") {
     roundTripsSpecificRecord(SpecificAvroCodecs.toBinary[FiscalRecord])
+  }
 
-  property("round trips Specific Record -> String using Json Encoder/Decoder") =
+  property("round trips Specific Record -> String using Json Encoder/Decoder") {
     roundTripsSpecificRecordToJson(SpecificAvroCodecs.toJson[FiscalRecord](testSchema))
+  }
 
 }
 

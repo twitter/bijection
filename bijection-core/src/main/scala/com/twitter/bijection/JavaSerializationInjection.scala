@@ -20,13 +20,14 @@ import java.io._
 import scala.util.{ Failure, Try }
 import scala.util.control.Exception.allCatch
 import com.twitter.bijection.Inversion.attempt
+import scala.reflect.ClassTag
 
 object JavaSerializationInjection extends Serializable {
   /**
    * Construct a new JavaSerializationInjection instance
    */
-  def apply[T <: Serializable](implicit cmf: ClassManifest[T]): JavaSerializationInjection[T] = {
-    val cls = cmf.erasure.asInstanceOf[Class[T]]
+  def apply[T <: Serializable](implicit ct: ClassTag[T]): JavaSerializationInjection[T] = {
+    val cls = ct.runtimeClass.asInstanceOf[Class[T]]
     new JavaSerializationInjection[T](cls)
   }
 }

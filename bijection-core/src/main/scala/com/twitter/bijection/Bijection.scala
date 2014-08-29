@@ -18,6 +18,7 @@ package com.twitter.bijection
 
 import java.io.Serializable
 import scala.annotation.implicitNotFound
+import scala.reflect.ClassTag
 
 /**
  * A Bijection[A, B] is a pair of functions that transform an element between
@@ -152,8 +153,8 @@ object Bijection extends CollectionBijections
 
   implicit def swap[T, U]: Bijection[(T, U), (U, T)] = SwapBijection[T, U]
 
-  def subclass[A, B <: A](afn: A => B)(implicit mf: ClassManifest[B]): Bijection[A, B] =
-    new SubclassBijection[A, B](mf.erasure.asInstanceOf[Class[B]]) {
+  def subclass[A, B <: A](afn: A => B)(implicit ct: ClassTag[B]): Bijection[A, B] =
+    new SubclassBijection[A, B](ct.runtimeClass.asInstanceOf[Class[B]]) {
       def applyfn(a: A) = afn(a)
     }
 }
