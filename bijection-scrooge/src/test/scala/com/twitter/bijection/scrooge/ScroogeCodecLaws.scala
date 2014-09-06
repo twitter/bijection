@@ -18,24 +18,32 @@ package com.twitter.bijection.scrooge
 
 import com.twitter.bijection.{ BaseProperties, Bijection, Injection }
 
-import org.scalacheck.Properties
+import org.scalatest.{ PropSpec, MustMatchers }
+import org.scalatest.prop.PropertyChecks
+
 import org.scalacheck.Arbitrary
 
-object ScroogeCodecLaws extends Properties("ScroogeCodecs") with BaseProperties {
+class ScroogeCodecLaws extends PropSpec with PropertyChecks with MustMatchers with BaseProperties {
   def buildScrooge(i: (Int, String)) =
     TestStruct(i._1, Some(i._2))
 
   implicit val testScrooge = arbitraryViaFn { is: (Int, String) => buildScrooge(is) }
 
   // Code generator for thrift instances.
-  def roundTripsScrooge(bijection: Injection[TestStruct, Array[Byte]]) = {
+  def roundTripsScrooge[B](bijection: Injection[TestStruct, B]) = {
     implicit val b = bijection
-    isLooseInjection[TestStruct, Array[Byte]]
+    isLooseInjection[TestStruct, B]
   }
 
-  property("round trips thrift -> Array[Byte] through binary") =
+  property("round trips thrift -> Array[Byte] through binary") {
     roundTripsScrooge(BinaryScalaCodec(TestStruct))
+  }
 
-  property("round trips thrift -> Array[Byte] through compact") =
+  property("round trips thrift -> Array[Byte] through compact") {
     roundTripsScrooge(CompactScalaCodec(TestStruct))
+  }
+  property("round trips thrift -> Json through json codec") {
+    roundTripsScrooge[String](JsonScalaCodec(TestStruct))
+  }
 }
+

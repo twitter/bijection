@@ -23,19 +23,19 @@ import com.google.common.io.BaseEncoding
  */
 object GuavaBinaryBijections {
 
-  trait BaseEncoding {
-    val str: String
+  trait BaseEncoding extends Any {
+    def str: String
   }
 
-  case class Base16String(str: String) extends BaseEncoding
+  case class Base16String(str: String) extends AnyVal with BaseEncoding
 
-  case class Base32String(str: String) extends BaseEncoding
+  case class Base32String(str: String) extends AnyVal with BaseEncoding
 
-  case class Base32HEXString(str: String) extends BaseEncoding
+  case class Base32HEXString(str: String) extends AnyVal with BaseEncoding
 
-  case class Base64String(str: String) extends BaseEncoding
+  case class Base64String(str: String) extends AnyVal with BaseEncoding
 
-  case class Base64URLString(str: String) extends BaseEncoding
+  case class Base64URLString(str: String) extends AnyVal with BaseEncoding
 
   implicit def unwrap(encodedString: BaseEncoding): String = Option(encodedString) match {
     case Some(x) => x.str

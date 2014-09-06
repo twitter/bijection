@@ -9,6 +9,8 @@ See the [current API documentation](http://twitter.github.com/bijection) for mor
 ## Examples:
 
 ```scala
+> ./sbt bijection-core/console
+scala> import com.twitter.bijection._
 scala> Bijection[Int, java.lang.Integer](42)
 res0: java.lang.Integer = 42
 ```
@@ -130,7 +132,7 @@ Discussion occurs primarily on the [Bijection mailing list](https://groups.googl
 
 ## Maven
 
-Bijection modules are available on maven central. The current groupid and version for all modules is, respectively, `"com.twitter"` and  `0.6.2`.
+Bijection modules are available on maven central. The current groupid and version for all modules is, respectively, `"com.twitter"` and  `0.7.0`.
 
 Current published artifacts are
 
@@ -146,9 +148,9 @@ Current published artifacts are
 * `bijection-avro`
 * `bijection-hbase`
 
-Every artifact is published against Scala `"2.9.3"` and `"2.10"`. To pull in the jars, make sure to add your desired scala version as a suffix, ie:
+Every artifact is published against Scala `"2.10"` and `"2.11"`. To pull in the jars, make sure to add your desired scala version as a suffix, ie:
 
-`bijection-core_2.9.3` or `bijection-core_2.10`
+`bijection-core_2.10` or `bijection-core_2.11`
 
 ## Authors
 

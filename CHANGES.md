@@ -1,5 +1,15 @@
 # Bijection #
 
+### 0.7.0
+* Added thrift json injections: https://github.com/twitter/bijection/pull/172
+* Make almost all the case classes extend AnyVal: https://github.com/twitter/bijection/pull/178
+* Fix ImplicitBijection issue: https://github.com/twitter/bijection/pull/177
+* Update jackson-mapper-asl to version 1.9.2: https://github.com/twitter/bijection/pull/155
+* Moves to 2.10.x as the default and to scalatest: https://github.com/twitter/bijection/pull/176
+* Fix some bugs in ModDivInjections: https://github.com/twitter/bijection/pull/175
+* Add compression support to bijection-avro: https://github.com/twitter/bijection/pull/174
+* Injections from jodatime LocalDate / LocalTime / YearMonth / MonthDay to String: https://github.com/twitter/bijection/pull/171
+
 ### 0.6.3
 * Sbt => 0.13, use scalariform: https://github.com/twitter/bijection/pull/170
 * Backtick Array[Byte] in README: https://github.com/twitter/bijection/pull/168

@@ -20,6 +20,7 @@ import java.io.Serializable
 import scala.annotation.implicitNotFound
 import scala.util.{ Failure, Success, Try }
 import com.twitter.bijection.Inversion.attempt
+import scala.reflect.ClassTag
 
 /**
  * An Injection[A, B] is a function from A to B, and from some B back to A.
@@ -173,7 +174,7 @@ object Injection extends CollectionInjections
    * due to the above. Only use this in instances where A has no type parameters, or you can prove
    * that the cast from B to A succeeding is enough to prove correctness.
    */
-  def subclass[A, B >: A](implicit cmf: ClassManifest[A]): Injection[A, B] = CastInjection.of[A, B]
+  def subclass[A, B >: A](implicit cmf: ClassTag[A]): Injection[A, B] = CastInjection.of[A, B]
 
   /**
    * Get a partial from B => D from injections and a function from A => C

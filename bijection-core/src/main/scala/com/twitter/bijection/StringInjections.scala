@@ -26,6 +26,8 @@ import com.twitter.bijection.Inversion.attempt
 import scala.util.Try
 
 trait StringInjections extends NumericInjections {
+  import StringCodec.URLEncodedString
+
   implicit val utf8: Injection[String, Array[Byte]] = withEncoding("UTF-8")
 
   def withEncoding(encoding: String): Injection[String, Array[Byte]] =
@@ -48,8 +50,6 @@ trait StringInjections extends NumericInjections {
       override def invert(s: String) = attempt(s)(UUID.fromString(_))
     }
 
-  case class URLEncodedString(encodedString: String)
-
   implicit val string2UrlEncodedString: Injection[String, URLEncodedString] = new AbstractInjection[String, URLEncodedString] {
     override def apply(a: String): URLEncodedString = URLEncodedString(URLEncoder.encode(a, "UTF-8"))
 
@@ -57,4 +57,6 @@ trait StringInjections extends NumericInjections {
   }
 }
 
-object StringCodec extends StringInjections
+object StringCodec extends StringInjections {
+  case class URLEncodedString(encodedString: String) extends AnyVal
+}

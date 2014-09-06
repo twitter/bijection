@@ -16,7 +16,10 @@ limitations under the License.
 
 package com.twitter.bijection
 
-import org.scalacheck.{ Arbitrary, Properties }
+import org.scalacheck.Arbitrary
+import org.scalatest.{ PropSpec, MustMatchers }
+import org.scalatest.prop.PropertyChecks
+
 import org.scalacheck.Prop.forAll
 
 import scala.math.Equiv

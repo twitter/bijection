@@ -29,9 +29,8 @@ import scala.util.{ Success, Try }
  * Thanks to
  * [hylotech](https://github.com/hylotech/suits/blob/master/src/main/scala/hylotech/util/Bijection.scala)
  * for the following "as" pattern.
- * TODO: this should be a value class in scala 2.10
  */
-sealed class Convert[A](a: A) extends Serializable {
+case class Convert[A](a: A) extends AnyVal {
   // Not clear to me why this fails on the String @@ Rep[T] pattern, but it seems to:
   // TODO: fix this?
   //def as[B](implicit bij: Bijection[A, _ <: B]): B = bij(a)
@@ -56,9 +55,6 @@ trait CrazyLowPriorityConversion extends Serializable {
     new Conversion[A, Try[B]] {
       def apply(a: A) = inj.invert(a)
     }
-  implicit def fromBijectionInv[A, B](implicit fn: ImplicitBijection[B, A]) = new Conversion[A, B] {
-    def apply(a: A) = fn.bijection.invert(a)
-  }
 }
 
 trait SuperLowPriorityConversion extends CrazyLowPriorityConversion {
@@ -67,7 +63,13 @@ trait SuperLowPriorityConversion extends CrazyLowPriorityConversion {
   }
 }
 
-trait LowPriorityConversion extends SuperLowPriorityConversion {
+trait NotSuperLowPriorityConversion extends SuperLowPriorityConversion {
+  implicit def fromBijectionInv[A, B](implicit fn: ImplicitBijection[B, A]) = new Conversion[A, B] {
+    def apply(a: A) = fn.bijection.invert(a)
+  }
+}
+
+trait LowPriorityConversion extends NotSuperLowPriorityConversion {
   implicit def fromBijection[A, B](implicit fn: ImplicitBijection[A, B]) = new Conversion[A, B] {
     def apply(a: A) = fn.bijection.apply(a)
   }

@@ -41,6 +41,7 @@ trait Bufferable[T] extends Serializable {
     get(from) match {
       case Success(tup @ _) => tup
       case Failure(InversionFailure(_, t)) => throw t
+      case Failure(t) => throw t
     }
 }
 

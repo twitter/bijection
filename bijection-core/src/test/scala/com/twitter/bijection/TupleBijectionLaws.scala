@@ -25,20 +25,26 @@ import java.lang.{
   Byte => JByte
 }
 
-import org.scalacheck.Properties
-import org.scalacheck.Prop.forAll
+import org.scalatest.{ PropSpec, MustMatchers }
+import org.scalatest.prop.PropertyChecks
 
-object TupleBijectionLaws extends Properties("TupleBijections")
+class TupleBijectionLaws extends PropSpec with PropertyChecks with MustMatchers
   with BaseProperties {
   import StringArbs._
 
-  property("round trips (Int,Long) -> (String,String)") =
+  property("round trips (Int,Long) -> (String,String)") {
     isBijection[(Int, Long), (String @@ Rep[Int], String @@ Rep[Long])]
-  property("round trips (Int,Long,String) -> (String,String,String)") =
+  }
+
+  property("round trips (Int,Long,String) -> (String,String,String)") {
     isBijection[(Int, Long, String), (String @@ Rep[Int], String @@ Rep[Long], String)]
-  property("round trips (Int,Long,String,Long) -> (String,String,String,Array[Byte])") =
-    //This needs a tag on Array[Byte] @@ Rep[Long]
+  }
+
+  property("round trips (Int,Long,String,Long) -> (String,String,String,Array[Byte])") {
     isInjection[(Int, Long, String, Long), (String, String, String, Array[Byte])]
-  property("Tuple to list") =
+  }
+
+  property("Tuple to list") {
     isLooseInjection[(Int, Long, String), List[Array[Byte]]]
+  }
 }

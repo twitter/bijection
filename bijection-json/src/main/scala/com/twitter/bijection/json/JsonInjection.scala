@@ -81,31 +81,31 @@ object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
   }
   implicit val booleanJson = new AbstractJsonNodeInjection[Boolean] {
     def apply(b: Boolean) = JsonNodeFactory.instance.booleanNode(b)
-    override def invert(n: JsonNode) = attemptWhen(n)(_.isBoolean)(_.getValueAsBoolean)
+    override def invert(n: JsonNode) = attemptWhen(n)(_.isBoolean)(_.asBoolean)
   }
   implicit val shortJson = new AbstractJsonNodeInjection[Short] {
     def apply(i: Short) = JsonNodeFactory.instance.numberNode(i)
-    override def invert(n: JsonNode) = attemptWhen(n)(_.isInt)(_.getValueAsInt.toShort)
+    override def invert(n: JsonNode) = attemptWhen(n)(_.isInt)(_.asInt.toShort)
   }
   implicit val intJson = new AbstractJsonNodeInjection[Int] {
     def apply(i: Int) = JsonNodeFactory.instance.numberNode(i)
-    override def invert(n: JsonNode) = if (n.isInt) Success(n.getValueAsInt) else InversionFailure.failedAttempt(n)
+    override def invert(n: JsonNode) = if (n.isInt) Success(n.asInt) else InversionFailure.failedAttempt(n)
   }
   implicit val longJson = new AbstractJsonNodeInjection[Long] {
     def apply(i: Long) = JsonNodeFactory.instance.numberNode(i)
-    override def invert(n: JsonNode) = if (n.isLong || n.isInt) Success(n.getValueAsLong) else InversionFailure.failedAttempt(n)
+    override def invert(n: JsonNode) = if (n.isLong || n.isInt) Success(n.asLong) else InversionFailure.failedAttempt(n)
   }
   implicit val floatJson = new AbstractJsonNodeInjection[Float] {
     def apply(i: Float) = JsonNodeFactory.instance.numberNode(i)
-    override def invert(n: JsonNode) = attempt(n)(_.getValueAsDouble.toFloat)
+    override def invert(n: JsonNode) = attempt(n)(_.asDouble.toFloat)
   }
   implicit val doubleJson = new AbstractJsonNodeInjection[Double] {
     def apply(i: Double) = JsonNodeFactory.instance.numberNode(i)
-    override def invert(n: JsonNode) = if (n.isDouble) Success(n.getValueAsDouble) else InversionFailure.failedAttempt(n)
+    override def invert(n: JsonNode) = if (n.isDouble) Success(n.asDouble) else InversionFailure.failedAttempt(n)
   }
   implicit val stringJson = new AbstractJsonNodeInjection[String] {
     def apply(s: String) = JsonNodeFactory.instance.textNode(s)
-    override def invert(n: JsonNode) = if (n.isTextual) Success(n.getValueAsText) else InversionFailure.failedAttempt(n)
+    override def invert(n: JsonNode) = if (n.isTextual) Success(n.asText) else InversionFailure.failedAttempt(n)
   }
   implicit val byteArray = new AbstractJsonNodeInjection[Array[Byte]] {
     def apply(b: Array[Byte]) = JsonNodeFactory.instance.binaryNode(b)

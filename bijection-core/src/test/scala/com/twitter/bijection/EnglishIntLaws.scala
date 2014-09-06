@@ -16,12 +16,14 @@ limitations under the License.
 
 package com.twitter.bijection
 
-import org.scalacheck.{ Prop, Gen, Properties }
+import org.scalacheck.{ Prop, Gen }
 import org.scalacheck.Prop.forAll
+import org.scalatest.{ PropSpec, MustMatchers }
+import org.scalatest.prop.PropertyChecks
 
 import Conversion.asMethod // get the .as syntax
 
-object EnglishIntLaws extends Properties("EnglishIntBijections")
+class EnglishIntLaws extends PropSpec with PropertyChecks with MustMatchers
   with BaseProperties {
   var ct = 0
 
@@ -34,5 +36,8 @@ object EnglishIntLaws extends Properties("EnglishIntBijections")
   }
 
   val (tiny, small, medium, large) = (Gen.choose(0, 100), Gen.choose(100, 1000), Gen.choose(1000, 100 * 1000), Gen.choose(100 * 1000, 1000 * 1000 * 1000))
-  property("as works") = List(tiny, small, medium, large).map(test).reduceLeft((a, b) => a && b)
+  property("as works") {
+    List(tiny, small, medium, large).map(test).reduceLeft((a, b) => a && b)
+  }
+
 }

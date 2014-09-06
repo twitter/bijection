@@ -15,7 +15,9 @@ package com.twitter.bijection.avro
 
 import com.twitter.bijection.{ BaseProperties, Injection }
 
-import org.scalacheck.Properties
+import org.scalatest.PropSpec
+import org.scalatest.prop.PropertyChecks
+
 import org.apache.avro.generic.{ GenericRecord, GenericData }
 import org.apache.avro.Schema
 
@@ -23,7 +25,7 @@ import org.apache.avro.Schema
  * @author Muhammad Ashraf
  * @since 7/5/13
  */
-object GenericAvroCodecLaws extends Properties("GenericAvroCodecs") with BaseProperties {
+class GenericAvroCodecLaws extends PropSpec with PropertyChecks with BaseProperties {
   val testSchema = new Schema.Parser().parse("""{
                                                    "type":"record",
                                                    "name":"FiscalRecord",
@@ -71,13 +73,16 @@ object GenericAvroCodecLaws extends Properties("GenericAvroCodecs") with BasePro
     isLooseInjection[GenericRecord, String]
   }
 
-  property("round trips Generic Record -> Array[Byte]") =
+  property("round trips Generic Record -> Array[Byte]") {
     roundTripsGenericRecord(GenericAvroCodecs[GenericRecord](testSchema))
+  }
 
-  property("round trips Generic Record -> Array[Byte] using Binary Encoder/Decoder") =
+  property("round trips Generic Record -> Array[Byte] using Binary Encoder/Decoder") {
     roundTripsGenericRecord(GenericAvroCodecs.toBinary[GenericRecord](testSchema))
+  }
 
-  property("round trips Generic Record -> String using Json Encoder/Decoder") =
+  property("round trips Generic Record -> String using Json Encoder/Decoder") {
     roundTripsGenericRecordToJson(GenericAvroCodecs.toJson[GenericRecord](testSchema))
+  }
 }
 

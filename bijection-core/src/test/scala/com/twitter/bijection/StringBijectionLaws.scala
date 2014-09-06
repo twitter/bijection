@@ -16,7 +16,9 @@ limitations under the License.
 
 package com.twitter.bijection
 
-import org.scalacheck.Properties
+import org.scalatest.{ PropSpec, MustMatchers }
+import org.scalatest.prop.PropertyChecks
+
 import org.scalacheck.Gen._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop._
@@ -35,13 +37,18 @@ object StringArbs extends BaseProperties {
   implicit val strDouble = arbitraryViaBijection[Double, String @@ Rep[Double]]
 }
 
-object StringBijectionLaws extends Properties("StringBijections")
+class StringBijectionLaws extends PropSpec with PropertyChecks with MustMatchers
   with BaseProperties {
   import StringArbs._
 
-  property("round trips string -> Array[String]") = isLooseInjection[String, Array[Byte]]
+  property("round trips string -> Array[String]") {
+    isLooseInjection[String, Array[Byte]]
+  }
+
   implicit val symbol = arbitraryViaFn { (s: String) => Symbol(s) }
-  property("round trips string -> symbol") = isBijection[String, Symbol]
+  property("round trips string -> symbol") {
+    isBijection[String, Symbol]
+  }
 
   implicit val uuidArb = Arbitrary {
     for (
@@ -50,12 +57,17 @@ object StringBijectionLaws extends Properties("StringBijections")
     ) yield (new UUID(l, u))
   }
 
-  property("UUID -> String") = isInjection[UUID, String]
-  //property("UUID <-> String @@ Rep[UUID]") = isBijection[UUID, String @@ Rep[UUID]]()
+  property("UUID -> String") {
+    isInjection[UUID, String]
+  }
+
+  //property("UUID <-> String @@ Rep[UUID]") {
+  // isBijection[UUID, String @@ Rep[UUID]]()
+  // }
 
   def toUrl(s: String): Option[URL] =
     try { Some(new URL("http://" + s + ".com")) }
-    catch { case _ => None }
+    catch { case _: Throwable => None }
 
   implicit val urlArb = Arbitrary {
     implicitly[Arbitrary[String]]
@@ -66,19 +78,26 @@ object StringBijectionLaws extends Properties("StringBijections")
   }
 
   // This is trivially a bijection if it injective
-  property("URL -> String") = isInjection[URL, String]
+  property("URL -> String") {
+    isInjection[URL, String]
+  }
 
-  property("rts through StringJoinBijection") =
+  property("rts through StringJoinBijection") {
     forAll { (sep: String, xs: List[String]) =>
       val sjBij = StringJoinBijection(sep)
       val iter = xs.toIterable
-      (!iter.exists(_.contains(sep))) ==> (iter == rt(iter)(sjBij))
+      whenever(!iter.exists(_.contains(sep))) {
+        assert(iter == rt(iter)(sjBij))
+      }
     }
+  }
 
   //implicit val listOpt = StringJoinBijection.viaContainer[Int, List[Int]]()
   //property("viaCollection List[Int] -> Option[String]") =
   //roundTrips[List[Int], Option[String @@ Rep[List[Int]]]]()
   // implicit val listStr = StringJoinBijection.nonEmptyValues[Int, List[Int]]()
-  // property("viaCollection List[Int] -> String") = roundTrips[List[Int], String @@ Rep[List[Int]]]()
+  // property("viaCollection List[Int] -> String") {
+  // roundTrips[List[Int], String @@ Rep[List[Int]]]()
+  // }
 
 }

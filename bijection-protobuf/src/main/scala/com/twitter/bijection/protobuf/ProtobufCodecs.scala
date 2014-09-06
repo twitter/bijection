@@ -7,6 +7,7 @@ import com.google.protobuf.ProtocolMessageEnum
 import java.lang.{ Integer => JInt }
 import scala.collection.mutable.{ Map => MMap }
 import scala.util.{ Failure, Success }
+import scala.reflect._
 
 /**
  * Bijections for use in serializing and deserializing Protobufs.
@@ -15,8 +16,8 @@ object ProtobufCodec {
   /**
    * For scala instantiation. Uses reflection.
    */
-  implicit def apply[T <: Message: Manifest]: Injection[T, Array[Byte]] = {
-    val klass = manifest[T].erasure.asInstanceOf[Class[T]]
+  implicit def apply[T <: Message: ClassTag]: Injection[T, Array[Byte]] = {
+    val klass = classTag[T].runtimeClass.asInstanceOf[Class[T]]
     fromClass(klass)
   }
 
@@ -38,8 +39,8 @@ object ProtobufEnumCodec {
   /**
    * For scala instantiation. Uses reflection.
    */
-  implicit def apply[T <: ProtocolMessageEnum: Manifest]: Injection[T, Int] = {
-    val klass = manifest[T].erasure.asInstanceOf[Class[T]]
+  implicit def apply[T <: ProtocolMessageEnum: ClassTag]: Injection[T, Int] = {
+    val klass = classTag[T].runtimeClass.asInstanceOf[Class[T]]
     fromClass(klass)
   }
   /**
@@ -50,7 +51,7 @@ object ProtobufEnumCodec {
   /**
    * Implicit conversions between ProtocolMessageEnum and common types.
    */
-  implicit def toBinary[T <: ProtocolMessageEnum: Manifest]: Injection[T, Array[Byte]] =
+  implicit def toBinary[T <: ProtocolMessageEnum: ClassTag]: Injection[T, Array[Byte]] =
     Injection.connect[T, Int, Array[Byte]]
 }
 

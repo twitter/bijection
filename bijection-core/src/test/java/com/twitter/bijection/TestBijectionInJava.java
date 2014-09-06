@@ -1,6 +1,7 @@
 package com.twitter.bijection;
 
 import org.junit.Test;
+import org.scalatest.junit.JUnitSuite;
 import scala.util.Failure;
 import scala.util.Success;
 import scala.util.Try;
@@ -10,7 +11,7 @@ import static junit.framework.Assert.assertEquals;
  * Bijection is as useful in Java as in Scala, so these tests ensure correct
  * functionality while providing an example of use and implementation from Java.
  */
-public class TestBijectionInJava {
+public class TestBijectionInJava extends JUnitSuite {
     @Test
     public void testBasicBijection() {
         Bijection<String,Long> s2l = new StringToLong();
@@ -48,12 +49,16 @@ public class TestBijectionInJava {
     //TODO include a cleaner way to get to the scala Bijections than Bijection$.MODULE$.
     @Test
     public void testBase64Bijection() {
-        Bijection<byte[],Base64String> bytes2Base64 = Bijection$.MODULE$.bytes2Base64();
+        // Note, value classes return the underlying types in Java. But Java users usually
+        // don't care much about type safety, so punting on this for now
+        Bijection<byte[], String> bytes2Base64 = Bijection$.MODULE$.bytes2Base64();
     }
 
     @Test
     public void testBase64BijectionGzip() {
-        Bijection<byte[],GZippedBase64String> bytes2GZippedBase64 = Bijection$.MODULE$.bytes2GZippedBase64();
+        // Note, value classes return the underlying types in Java. But Java users usually
+        // don't care much about type safety, so punting on this for now
+        Bijection<byte[], String> bytes2GZippedBase64 = Bijection$.MODULE$.bytes2GZippedBase64();
     }
 
     // Instantiate a Bijection to String // Looks like the Long is erased
