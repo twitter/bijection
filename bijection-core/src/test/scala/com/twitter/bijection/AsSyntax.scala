@@ -30,7 +30,7 @@ class AsSyntax extends WordSpec with Matchers {
     "work on bijections" in {
       List(1, 2, 3).as[Vector[Int]] should be (Vector(1, 2, 3))
     }
-    "work on bijections on subtypes" in {
+    "Conversion.asMethod works on subtypes" in {
       class Foo
       class Bar extends Foo
       class Baz
