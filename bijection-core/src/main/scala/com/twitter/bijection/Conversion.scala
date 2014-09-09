@@ -38,7 +38,7 @@ case class Convert[A](a: A) extends AnyVal {
 }
 
 // Looks like a function, but we don't want a subclass relationship
-trait Conversion[A, B] extends Serializable {
+trait Conversion[-A, B] extends Serializable {
   def apply(a: A): B
 }
 

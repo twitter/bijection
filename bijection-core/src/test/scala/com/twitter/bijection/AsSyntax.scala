@@ -30,6 +30,18 @@ class AsSyntax extends WordSpec with Matchers {
     "work on bijections" in {
       List(1, 2, 3).as[Vector[Int]] should be (Vector(1, 2, 3))
     }
+    "work on bijections on subtypes" in {
+      class Foo
+      class Bar extends Foo
+      class Baz
+
+      implicit val conv = new Conversion[Foo, Baz] {
+        def apply(foo: Foo): Baz = new Baz
+      }
+
+      (new Bar).as[Baz] // just care if this compiles
+      assert(true)
+    }
     "work on functions" in {
       implicit def toS(i: Int): String = i.toString
       23.as[String] should be ("23")
