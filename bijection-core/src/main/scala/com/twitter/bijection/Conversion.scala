@@ -42,7 +42,14 @@ trait Conversion[A, B] extends Serializable {
   def apply(a: A): B
 }
 
-trait CrazyLowPriorityConversion extends Serializable {
+trait EvenLowerStillPriorityConversion extends Serializable {
+  implicit def contravariantConversion[A, B >: A, C](implicit inj: Injection[A, C]): Conversion[B, C] =
+    new Conversion[B, C] {
+      override def apply(b: B) = inj(b.asInstanceOf[A])
+    }
+}
+
+trait CrazyLowPriorityConversion extends EvenLowerStillPriorityConversion {
   // If you want to an Option[B]
   implicit def fromInjectionOptInverse[A, B](implicit inj: Injection[B, A]): Conversion[A, Option[B]] =
     new Conversion[A, Option[B]] {
