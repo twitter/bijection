@@ -9,4 +9,5 @@ object MacroImplicits {
    * This method provides proof that the given type is a case class.
    */
   implicit def isCaseClass[T]: IsCaseClass[T] = macro MacroImpl.isCaseClassImpl[T]
+  implicit def typesNotEqual[A, B]: TypesNotEqual[A, B] = macro MacroImpl.typesNotEqualImpl[A, B]
 }

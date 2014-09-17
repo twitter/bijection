@@ -5,7 +5,7 @@ import scala.reflect.macros.Context
 import scala.reflect.runtime.universe._
 import scala.util.{ Try => BasicTry }
 
-import com.twitter.bijection.macros.common.{ IsCaseClass, MacroGenerated }
+import com.twitter.bijection.macros.common.{ IsCaseClass, MacroGenerated, TypesNotEqual }
 
 object MacroImpl {
   def isCaseClassImpl[T](c: Context)(implicit T: c.WeakTypeTag[T]): c.Expr[IsCaseClass[T]] = {
@@ -24,6 +24,15 @@ object MacroImpl {
 
   def isCaseClassType(c: Context)(tpe: c.universe.Type): Boolean =
     BasicTry { tpe.typeSymbol.asClass.isCaseClass }.toOption.getOrElse(false)
+
+  def typesNotEqualImpl[A, B](c: Context)(implicit A: c.WeakTypeTag[A], B: c.WeakTypeTag[B]): c.Expr[TypesNotEqual[A, B]] = {
+    import c.universe._
+    val a = A.tpe
+    val b = B.tpe
+    if (a =:= b) c.abort(c.enclosingPosition, s"Types A[$a] and B[$b] are equal")
+    c.Expr[TypesNotEqual[A, B]](q"""_root_.com.twitter.bijection.macros.common.impl.MacroGeneratedTypesNotEqual[$A, $B]()""")
+  }
 }
 
 case class MacroGeneratedIsCaseClass[T]() extends IsCaseClass[T] with MacroGenerated
+case class MacroGeneratedTypesNotEqual[A, B]() extends TypesNotEqual[A, B] with MacroGenerated

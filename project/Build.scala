@@ -40,7 +40,7 @@ object BijectionBuild extends Build {
 
     parallelExecution in Test := true,
 
-    scalacOptions ++= Seq("-unchecked", "-deprecation", "-language:implicitConversions", "-language:higherKinds", "-language:existentials"),
+    scalacOptions ++= Seq("-unchecked", "-deprecation", "-language:implicitConversions", "-language:higherKinds", "-language:existentials", "-Xlog-implicits"),
 
     scalacOptions <++= (scalaVersion) map { sv =>
         if (sv startsWith "2.10")
@@ -301,4 +301,11 @@ object BijectionBuild extends Build {
   },
   addCompilerPlugin("org.scalamacros" % "paradise" % "2.0.1" cross CrossVersion.full)
   ).dependsOn(bijectionCore, bijectionMacrosCommon)
+
+  //TODO remove this is just for debugging the divering implicit
+  lazy val bijectionDebug = module("debug").settings(
+    libraryDependencies <++= (scalaVersion) { scalaVersion => Seq(
+    )
+  }
+  ).dependsOn(bijectionCore, bijectionMacros)
 }
