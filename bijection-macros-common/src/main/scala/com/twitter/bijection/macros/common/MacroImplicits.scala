@@ -1,0 +1,14 @@
+package com.twitter.bijection.macros.common
+
+import scala.language.experimental.macros
+
+import com.twitter.bijection.macros.common.impl.MacroImpl
+
+object MacroImplicits {
+  /**
+   * This method provides proof that the given type is a case class.
+   */
+  implicit def isCaseClass[T]: IsCaseClass[T] = macro MacroImpl.isCaseClassImpl[T]
+  implicit def typesNotEqual[A, B]: TypesNotEqual[A, B] = macro MacroImpl.typesNotEqualImpl[A, B]
+  implicit def notDerived[T]: NotDerived[T] = macro MacroImpl.notDerivedImpl[T]
+}
