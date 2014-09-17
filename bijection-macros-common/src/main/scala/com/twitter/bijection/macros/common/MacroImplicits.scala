@@ -10,4 +10,5 @@ object MacroImplicits {
    */
   implicit def isCaseClass[T]: IsCaseClass[T] = macro MacroImpl.isCaseClassImpl[T]
   implicit def typesNotEqual[A, B]: TypesNotEqual[A, B] = macro MacroImpl.typesNotEqualImpl[A, B]
+  implicit def notDerived[T]: NotDerived[T] = macro MacroImpl.notDerivedImpl[T]
 }

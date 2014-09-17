@@ -11,3 +11,11 @@ trait IsCaseClass[T]
 trait MacroGenerated
 
 trait TypesNotEqual[A, B]
+
+trait NotDerived[T]
+
+object Derived {
+  implicit def toDerived[T](implicit notDerived: NotDerived[T], t: T): Derived[T] = Derived(t)
+  def derive[T](implicit t: Derived[T]): T = t.get
+}
+case class Derived[T](get: T)

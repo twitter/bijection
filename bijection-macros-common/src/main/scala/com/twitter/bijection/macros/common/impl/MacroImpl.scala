@@ -5,7 +5,7 @@ import scala.reflect.macros.Context
 import scala.reflect.runtime.universe._
 import scala.util.{ Try => BasicTry }
 
-import com.twitter.bijection.macros.common.{ IsCaseClass, MacroGenerated, TypesNotEqual }
+import com.twitter.bijection.macros.common.{ Derived, IsCaseClass, MacroGenerated, NotDerived, TypesNotEqual }
 
 object MacroImpl {
   def isCaseClassImpl[T](c: Context)(implicit T: c.WeakTypeTag[T]): c.Expr[IsCaseClass[T]] = {
@@ -32,7 +32,15 @@ object MacroImpl {
     if (a =:= b) c.abort(c.enclosingPosition, s"Types A[$a] and B[$b] are equal")
     c.Expr[TypesNotEqual[A, B]](q"""_root_.com.twitter.bijection.macros.common.impl.MacroGeneratedTypesNotEqual[$A, $B]()""")
   }
+
+  def notDerivedImpl[T](c: Context)(implicit T: c.WeakTypeTag[T]): c.Expr[NotDerived[T]] = {
+    import c.universe._
+    val t = T.tpe
+    if (t <:< typeOf[Derived[_]]) c.abort(c.enclosingPosition, s"Type T[$t] is Derived")
+    c.Expr[NotDerived[T]](q"""_root_.com.twitter.bijection.macros.common.impl.MacroGeneratedNotDerived[$T]()""")
+  }
 }
 
 case class MacroGeneratedIsCaseClass[T]() extends IsCaseClass[T] with MacroGenerated
 case class MacroGeneratedTypesNotEqual[A, B]() extends TypesNotEqual[A, B] with MacroGenerated
+case class MacroGeneratedNotDerived[T]() extends NotDerived[T] with MacroGenerated
