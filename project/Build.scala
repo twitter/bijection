@@ -40,7 +40,7 @@ object BijectionBuild extends Build {
 
     parallelExecution in Test := true,
 
-    scalacOptions ++= Seq("-unchecked", "-deprecation", "-language:implicitConversions", "-language:higherKinds", "-language:existentials", "-Xlog-implicits"),
+    scalacOptions ++= Seq("-unchecked", "-deprecation", "-language:implicitConversions", "-language:higherKinds", "-language:existentials"),
 
     scalacOptions <++= (scalaVersion) map { sv =>
         if (sv startsWith "2.10")
