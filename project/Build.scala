@@ -140,7 +140,6 @@ object BijectionBuild extends Build {
     bijectionProtobuf,
     bijectionThrift,
     bijectionGuava,
-    bijectionScrooge,
     bijectionJson,
     bijectionUtil,
     bijectionClojure,
@@ -149,7 +148,6 @@ object BijectionBuild extends Build {
     bijectionHbase,
     bijectionJodaTime,
     bijectionJson4s,
-    bijectionMacrosCommon,
     bijectionMacros
   )
 
@@ -210,24 +208,6 @@ object BijectionBuild extends Build {
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
-  def scroogeBuildDeps(scalaVersion: String): Seq[sbt.ModuleID] = isScala210x(scalaVersion) match {
-      case false => Seq()
-      case true => Seq(
-        "com.twitter" %% "scrooge-serializer" % "3.6.0"
-     )
-  }
-
-  lazy val bijectionScrooge = module("scrooge").settings(
-    skip in compile := !isScala210x(scalaVersion.value),
-    skip in test := !isScala210x(scalaVersion.value),
-    publishArtifact := isScala210x(scalaVersion.value),
-
-    osgiExportAll("com.twitter.bijection.scrooge"),
-    libraryDependencies ++= Seq(
-      "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit")
-    ) ++ scroogeBuildDeps(scalaVersion.value)
-  ).dependsOn(bijectionCore % "test->test;compile->compile")
-
   lazy val bijectionJson = module("json").settings(
     osgiExportAll("com.twitter.bijection.json"),
     libraryDependencies += jsonParser
@@ -280,17 +260,6 @@ object BijectionBuild extends Build {
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
-  lazy val bijectionMacrosCommon = module("macros-common").settings(
-    libraryDependencies <++= (scalaVersion) { scalaVersion => Seq(
-      "org.scala-lang" % "scala-library" % scalaVersion,
-      "org.scala-lang" % "scala-reflect" % scalaVersion,
-      "org.scalatest" %% "scalatest" % "2.2.2",
-      "com.twitter" %% "chill" % "0.5.0" % "test"
-    ) ++ (if (scalaVersion.startsWith("2.10")) Seq("org.scalamacros" %% "quasiquotes" % "2.0.1") else Seq())
-  },
-  addCompilerPlugin("org.scalamacros" % "paradise" % "2.0.1" cross CrossVersion.full)
-  ).dependsOn(bijectionCore)
-
   lazy val bijectionMacros = module("macros").settings(
     libraryDependencies <++= (scalaVersion) { scalaVersion => Seq(
       "org.scala-lang" % "scala-library" % scalaVersion,
@@ -300,5 +269,5 @@ object BijectionBuild extends Build {
     ) ++ (if (scalaVersion.startsWith("2.10")) Seq("org.scalamacros" %% "quasiquotes" % "2.0.1") else Seq())
   },
   addCompilerPlugin("org.scalamacros" % "paradise" % "2.0.1" cross CrossVersion.full)
-  ).dependsOn(bijectionCore, bijectionMacrosCommon)
+  ).dependsOn(bijectionCore)
 }
