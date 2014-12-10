@@ -12,7 +12,7 @@ import com.twitter.bijection.macros.{ IsCaseClass, MacroGenerated }
 private[bijection] object CaseClassToMap {
   def caseClassToMapImplWithOption[T](c: Context)(recursivelyApply: c.Expr[Boolean])(proof: c.Expr[IsCaseClass[T]])(implicit T: c.WeakTypeTag[T]): c.Expr[Injection[T, Map[String, Any]]] = {
     import c.universe._
-    recursivelyApply match {
+    recursivelyApply.tree match {
       case q"""true""" => caseClassToMapNoProofImpl(c)(T)
       case q"""false""" => caseClassToMapNoProofImplNonRecursive(c)(T)
     }
