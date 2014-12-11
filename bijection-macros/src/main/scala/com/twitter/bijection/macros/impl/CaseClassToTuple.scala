@@ -70,27 +70,17 @@ private[bijection] object CaseClassToTuple {
     val converters = getPutConv.flatMap(_._3)
 
     c.Expr[Bijection[T, Tup]](q"""
-    _root_.com.twitter.bijection.macros.impl.MacroGeneratedBijection[$T,$Tup](
-      { t: $T =>
+    new Bijection[$T,$Tup] with MacroGenerated {
+      override def apply(t: $T) = {
         ..$converters
         (..$putters)
-      },
-      { tup: $Tup =>
+      }
+      override def invert(tup: $Tup) = {
         ..$converters
         $companion(..$getters)
       }
-    )
+    }
     """)
   }
 }
-
-case class MacroGeneratedBijection[A, B](fn: A => B, inv: B => A) extends Bijection[A, B] with MacroGenerated {
-  override def apply(a: A) = fn(a)
-  override def invert(b: B) = inv(b)
-}
-case class MacroGeneratedInjection[A, B](fn: A => B, inv: B => Try[A]) extends Injection[A, B] with MacroGenerated {
-  override def apply(a: A) = fn(a)
-  override def invert(b: B) = inv(b)
-}
-
 //TODO test serialization of them

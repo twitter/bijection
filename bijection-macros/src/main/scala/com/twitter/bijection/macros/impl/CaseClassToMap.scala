@@ -56,16 +56,17 @@ private[bijection] object CaseClassToMap {
     val converters = getPutConv.flatMap(_._3)
 
     c.Expr[Injection[T, Map[String, Any]]](q"""
-    _root_.com.twitter.bijection.macros.impl.MacroGeneratedInjection[$T, _root_.scala.collection.immutable.Map[String, Any]](
-      { t: $T =>
+    new Injection[$T, _root_.scala.collection.immutable.Map[String, Any]] with MacroGenerated {
+      override def apply(t: $T) = {
         ..$converters
         _root_.scala.collection.immutable.Map[String, Any](..$putters)
-      },
-      { m: _root_.scala.collection.immutable.Map[String, Any] =>
+      }
+      override def invert(m: _root_.scala.collection.immutable.Map[String, Any]) = {
         ..$converters
         try { _root_.scala.util.Success($companion(..$getters)) } catch { case _root_.scala.util.control.NonFatal(e) => _root_.scala.util.Failure(e) }
       }
-    )
+    }
     """)
+
   }
 }
