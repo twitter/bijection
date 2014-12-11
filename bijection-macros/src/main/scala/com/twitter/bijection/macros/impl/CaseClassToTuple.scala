@@ -75,7 +75,7 @@ private[bijection] object CaseClassToTuple {
         ..$converters
         (..$putters)
       }
-      override def invert(tup: $Tup): Try[$T] = {
+      override def invert(tup: $Tup): $T = {
         ..$converters
         $companion(..$getters)
       }

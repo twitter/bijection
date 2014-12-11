@@ -57,11 +57,11 @@ private[bijection] object CaseClassToMap {
 
     c.Expr[Injection[T, Map[String, Any]]](q"""
     new Injection[$T, _root_.scala.collection.immutable.Map[String, Any]] with MacroGenerated {
-      override def apply(t: $T) = {
+      override def apply(t: $T): _root_.scala.collection.immutable.Map[String, Any] = {
         ..$converters
         _root_.scala.collection.immutable.Map[String, Any](..$putters)
       }
-      override def invert(m: _root_.scala.collection.immutable.Map[String, Any]) = {
+      override def invert(m: _root_.scala.collection.immutable.Map[String, Any]): _root_.scala.util.Try[ $T ] = {
         ..$converters
         try { _root_.scala.util.Success($companion(..$getters)) } catch { case _root_.scala.util.control.NonFatal(e) => _root_.scala.util.Failure(e) }
       }
