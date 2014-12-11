@@ -140,6 +140,7 @@ object BijectionBuild extends Build {
     bijectionProtobuf,
     bijectionThrift,
     bijectionGuava,
+    bijectionScrooge,
     bijectionJson,
     bijectionUtil,
     bijectionClojure,
@@ -206,6 +207,24 @@ object BijectionBuild extends Build {
       "com.google.code.findbugs" % "jsr305" % "1.3.9",
       "com.google.guava" % "guava" % "14.0"
     )
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  def scroogeBuildDeps(scalaVersion: String): Seq[sbt.ModuleID] = isScala210x(scalaVersion) match {
+      case false => Seq()
+      case true => Seq(
+        "com.twitter" %% "scrooge-serializer" % "3.6.0"
+     )
+  }
+
+  lazy val bijectionScrooge = module("scrooge").settings(
+    skip in compile := !isScala210x(scalaVersion.value),
+    skip in test := !isScala210x(scalaVersion.value),
+    publishArtifact := isScala210x(scalaVersion.value),
+
+    osgiExportAll("com.twitter.bijection.scrooge"),
+    libraryDependencies ++= Seq(
+      "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit")
+    ) ++ scroogeBuildDeps(scalaVersion.value)
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   lazy val bijectionJson = module("json").settings(
