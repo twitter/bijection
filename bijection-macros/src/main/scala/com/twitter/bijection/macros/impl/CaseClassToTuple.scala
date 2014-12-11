@@ -71,11 +71,11 @@ private[bijection] object CaseClassToTuple {
 
     c.Expr[Bijection[T, Tup]](q"""
     new Bijection[$T,$Tup] with MacroGenerated {
-      override def apply(t: $T) = {
+      override def apply(t: $T): $Tup = {
         ..$converters
         (..$putters)
       }
-      override def invert(tup: $Tup) = {
+      override def invert(tup: $Tup): Try[$T] = {
         ..$converters
         $companion(..$getters)
       }
