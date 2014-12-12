@@ -63,7 +63,9 @@ private[bijection] object CaseClassToMap {
       }
       override def invert(m: _root_.scala.collection.immutable.Map[String, Any]): _root_.scala.util.Try[ $T ] = {
         ..$converters
-        try { _root_.scala.util.Success($companion(..$getters)) } catch { case _root_.scala.util.control.NonFatal(e) => _root_.scala.util.Failure(e) }
+        try { _root_.scala.util.Success($companion(..$getters)) }
+        catch { case _root_.scala.util.control.NonFatal(e) =>
+          _root_.scala.util.Failure(new _root_.com.twitter.bijection.InversionFailure(m, e)) }
       }
     }
     """)
