@@ -12,6 +12,12 @@ object IsCaseClass {
 
 trait IsCaseClass[T]
 
+object IsPrimitiveCaseClass {
+  implicit def isPrimitiveCaseClass[T]: IsPrimitiveCaseClass[T] = macro IsPrimitiveCaseClassImpl.isPrimitiveCaseClassImpl[T]
+}
+
+trait IsPrimitiveCaseClass[T] extends IsCaseClass[T]
+
 /**
  * This is a tag trait to allow macros to signal, in a uniform way, that a piece of code was generated.
  */
