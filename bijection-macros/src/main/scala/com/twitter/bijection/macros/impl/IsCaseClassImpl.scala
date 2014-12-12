@@ -1,13 +1,13 @@
-package com.twitter.bijection.macros.common.impl
+package com.twitter.bijection.macros.impl
 
 import scala.language.experimental.macros
 import scala.reflect.macros.Context
 import scala.reflect.runtime.universe._
 import scala.util.{ Try => BasicTry }
 
-import com.twitter.bijection.macros.common.{ IsCaseClass, MacroGenerated }
+import com.twitter.bijection.macros.{ IsCaseClass, MacroGenerated }
 
-object MacroImpl {
+private[bijection] object IsCaseClassImpl {
   def isCaseClassImpl[T](c: Context)(implicit T: c.WeakTypeTag[T]): c.Expr[IsCaseClass[T]] = {
     import c.universe._
     if (isCaseClassType(c)(T.tpe)) {
@@ -15,7 +15,7 @@ object MacroImpl {
       if (T.tpe.typeConstructor.takesTypeArgs) {
         c.abort(c.enclosingPosition, "Case class with type parameters currently not supported")
       } else {
-        c.Expr[IsCaseClass[T]](q"""_root_.com.twitter.bijection.macros.common.impl.MacroGeneratedIsCaseClass[$T]()""")
+        c.Expr[IsCaseClass[T]](q"""_root_.com.twitter.bijection.macros.impl.MacroGeneratedIsCaseClass[$T]()""")
       }
     } else {
       c.abort(c.enclosingPosition, "Type parameter is not a case class")
