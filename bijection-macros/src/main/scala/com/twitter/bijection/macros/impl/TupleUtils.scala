@@ -5,7 +5,7 @@ import scala.language.experimental.macros
 import scala.reflect.macros.Context
 import scala.reflect.runtime.universe._
 
-private[bijection] class TupleUtils[C <: Context](val c: C) {
+class TupleUtils[C <: Context](val c: C) {
   import c.universe._
   private[this] val tupleCaseClassCache = MMap.empty[Type, Tree]
 
