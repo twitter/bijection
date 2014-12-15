@@ -148,7 +148,8 @@ object BijectionBuild extends Build {
     bijectionAvro,
     bijectionHbase,
     bijectionJodaTime,
-    bijectionJson4s
+    bijectionJson4s,
+    bijectionMacros
   )
 
   def module(name: String) = {
@@ -278,5 +279,14 @@ object BijectionBuild extends Build {
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
-
+  lazy val bijectionMacros = module("macros").settings(
+    libraryDependencies <++= (scalaVersion) { scalaVersion => Seq(
+      "org.scala-lang" % "scala-library" % scalaVersion,
+      "org.scala-lang" % "scala-reflect" % scalaVersion,
+      "org.scalatest" %% "scalatest" % "2.2.2",
+      "com.twitter" %% "chill" % "0.5.0" % "test"
+    ) ++ (if (scalaVersion.startsWith("2.10")) Seq("org.scalamacros" %% "quasiquotes" % "2.0.1") else Seq())
+  },
+  addCompilerPlugin("org.scalamacros" % "paradise" % "2.0.1" cross CrossVersion.full)
+  ).dependsOn(bijectionCore)
 }

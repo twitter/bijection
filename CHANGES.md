@@ -1,5 +1,12 @@
 # Bijection #
 
+### 0.7.1
+* Remove some package privacy so these things can be used in scalding and ...: https://github.com/twitter/bijection/pull/190
+* Add macros to create Trys: https://github.com/twitter/bijection/pull/187
+* Refactor macros: https://github.com/twitter/bijection/pull/186
+* Add TypeclassBijection: https://github.com/twitter/bijection/pull/183
+* Generate some useful case class conversions with macros: https://github.com/twitter/bijection/pull/179
+
 ### 0.7.0
 * Added thrift json injections: https://github.com/twitter/bijection/pull/172
 * Make almost all the case classes extend AnyVal: https://github.com/twitter/bijection/pull/178
