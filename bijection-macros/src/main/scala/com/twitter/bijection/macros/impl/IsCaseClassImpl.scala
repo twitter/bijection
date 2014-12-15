@@ -7,7 +7,7 @@ import scala.util.{ Try => BasicTry }
 
 import com.twitter.bijection.macros.{ IsCaseClass, MacroGenerated }
 
-private[bijection] object IsCaseClassImpl {
+object IsCaseClassImpl {
   def isCaseClassImpl[T](c: Context)(implicit T: c.WeakTypeTag[T]): c.Expr[IsCaseClass[T]] = {
     import c.universe._
     if (isCaseClassType(c)(T.tpe)) {
