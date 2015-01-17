@@ -81,12 +81,14 @@ trait BinaryBijections extends StringBijections {
         val baos = new ByteArrayOutputStream
         val gos = new GZIPOutputStream(baos)
         gos.write(bytes)
-        gos.finish()
+        gos.close()
         GZippedBytes(baos.toByteArray)
       }
       override def invert(gz: GZippedBytes) = {
         val baos = new ByteArrayOutputStream
-        copy(new GZIPInputStream(new ByteArrayInputStream(gz.bytes)), baos)
+        val is = new GZIPInputStream(new ByteArrayInputStream(gz.bytes))
+        copy(is, baos)
+        is.close()
         baos.toByteArray
       }
     }

@@ -124,6 +124,8 @@ Injections to any of these types give you binary serialization via Bufferable.
 
 ## Community and Documentation
 
+This, and all github.com/twitter projects, are under the [Twitter Open Source Code of Conduct](https://engineering.twitter.com/opensource/code-of-conduct). Additionally, see the [Typelevel Code of Conduct](http://typelevel.org/conduct) for specific examples of harassing behavior that are not tolerated.
+
 To learn more and find links to tutorials and information around the web, check out the [Bijection Wiki](https://github.com/twitter/bijection/wiki).
 
 The latest ScalaDocs are hosted on Bijection's [Github Project Page](http://twitter.github.io/bijection).
@@ -132,7 +134,7 @@ Discussion occurs primarily on the [Bijection mailing list](https://groups.googl
 
 ## Maven
 
-Bijection modules are available on maven central. The current groupid and version for all modules is, respectively, `"com.twitter"` and  `0.7.1`.
+Bijection modules are available on maven central. The current groupid and version for all modules is, respectively, `"com.twitter"` and  `0.7.2`.
 
 Current published artifacts are
 
