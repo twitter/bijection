@@ -143,6 +143,7 @@ object BijectionBuild extends Build {
     bijectionScrooge,
     bijectionJson,
     bijectionUtil,
+    bijectionFinagle,
     bijectionClojure,
     bijectionNetty,
     bijectionAvro,
@@ -235,6 +236,11 @@ object BijectionBuild extends Build {
   lazy val bijectionUtil = module("util").settings(
     osgiExportAll("com.twitter.bijection.twitter_util"),
     libraryDependencies += "com.twitter" %% "util-core" % "6.20.0"
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  lazy val bijectionFinagle = module("finagle").settings(
+    osgiExportAll("com.twitter.bijection.twitter_finagle"),
+    libraryDependencies += "com.twitter" %% "finagle-mysql" % "6.24.0"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   lazy val bijectionClojure = module("clojure").settings(
