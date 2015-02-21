@@ -17,4 +17,3 @@ trait IsCaseClass[T]
  */
 trait MacroGenerated
 
-trait Blah
