@@ -16,7 +16,7 @@ package com.twitter.bijection.json4s
 
 import org.scalatest.PropSpec
 import org.scalatest.prop.PropertyChecks
-import com.twitter.bijection.{ Injection, BaseProperties }
+import com.twitter.bijection.{ CheckProperties, Injection, BaseProperties }
 
 import org.json4s.JsonAST._
 import org.json4s.JsonAST.JString
@@ -28,7 +28,7 @@ import scala.reflect.ClassTag
  * @author Mansur Ashraf
  * @since 1/10/14
  */
-class Json4sInjectionLaws extends PropSpec with PropertyChecks
+class Json4sInjectionLaws extends CheckProperties
   with BaseProperties {
   case class Twit(name: String, id: Int, id_str: String, indices: List[Int], screen_name: String)
 

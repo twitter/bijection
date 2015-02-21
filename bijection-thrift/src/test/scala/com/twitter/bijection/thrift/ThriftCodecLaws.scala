@@ -16,14 +16,14 @@
 
 package com.twitter.bijection.thrift
 
-import com.twitter.bijection.{ BaseProperties, Bijection, Injection }
+import com.twitter.bijection.{ CheckProperties, BaseProperties, Bijection, Injection }
 import org.scalatest.{ PropSpec, MustMatchers }
 import org.scalatest.prop.PropertyChecks
 
 import org.scalacheck.Arbitrary
 import org.scalatest._
 
-class ThriftCodecLaws extends PropSpec with PropertyChecks with MustMatchers with BaseProperties {
+class ThriftCodecLaws extends CheckProperties with BaseProperties {
   def buildThrift(i: (Int, String)) =
     new TestThriftStructure().setANumber(i._1).setAString(i._2)
 
@@ -52,11 +52,9 @@ class TEnumTest extends WordSpec with Matchers with BaseProperties {
   "TEnum should roundtrip through TEnumCodec" in {
     implicit val b = TEnumCodec[Gender]
     val male = Gender.findByValue(0)
-    assert(male == rt(male))
-
     val female = Gender.findByValue(1)
-    assert(female == rt(female))
-
-    assert(b.invert(2).isFailure == true)
+    male == rt(male) &&
+      female == rt(female) &&
+      b.invert(2).isFailure
   }
 }

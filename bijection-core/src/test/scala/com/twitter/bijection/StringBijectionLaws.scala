@@ -16,18 +16,14 @@ limitations under the License.
 
 package com.twitter.bijection
 
-import org.scalatest.{ PropSpec, MustMatchers }
-import org.scalatest.prop.PropertyChecks
+import java.net.URL
+import java.util.UUID
 
-import org.scalacheck.Gen._
 import org.scalacheck.Arbitrary
+import org.scalacheck.Gen._
 import org.scalacheck.Prop._
 
-import java.util.UUID
-import java.net.URL
-
 object StringArbs extends BaseProperties {
-  import Rep._
 
   implicit val strByte = arbitraryViaBijection[Byte, String @@ Rep[Byte]]
   implicit val strShort = arbitraryViaBijection[Short, String @@ Rep[Short]]
@@ -37,9 +33,7 @@ object StringArbs extends BaseProperties {
   implicit val strDouble = arbitraryViaBijection[Double, String @@ Rep[Double]]
 }
 
-class StringBijectionLaws extends PropSpec with PropertyChecks with MustMatchers
-  with BaseProperties {
-  import StringArbs._
+class StringBijectionLaws extends CheckProperties with BaseProperties {
 
   property("round trips string -> Array[String]") {
     isLooseInjection[String, Array[Byte]]
@@ -86,9 +80,7 @@ class StringBijectionLaws extends PropSpec with PropertyChecks with MustMatchers
     forAll { (sep: String, xs: List[String]) =>
       val sjBij = StringJoinBijection(sep)
       val iter = xs.toIterable
-      whenever(!iter.exists(_.contains(sep))) {
-        assert(iter == rt(iter)(sjBij))
-      }
+      (!iter.exists(_.contains(sep))) ==> (iter == rt(iter)(sjBij))
     }
   }
 

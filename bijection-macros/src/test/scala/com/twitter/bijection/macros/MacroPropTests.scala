@@ -1,18 +1,15 @@
 package com.twitter.bijection.macros
 
-import scala.util.Success
-
-import org.scalacheck.Arbitrary
-import org.scalatest.{ Matchers, PropSpec }
-import org.scalatest.prop.PropertyChecks
-
 import com.twitter.bijection._
-import com.twitter.bijection.macros._
-import com.twitter.chill.Externalizer
+import org.scalacheck.Arbitrary
+import org.scalatest.prop.{ Checkers, PropertyChecks }
+import org.scalatest.{ Matchers, PropSpec }
 
-trait MacroPropTests extends PropSpec with PropertyChecks with Matchers with MacroTestHelper {
-  import MacroImplicits._
-  import MacroCaseClasses._
+import scala.util.Success
+import org.scalacheck.Prop.forAll
+
+trait MacroPropTests extends PropSpec with Checkers with Matchers with MacroTestHelper {
+  import com.twitter.bijection.macros.MacroCaseClasses._
 
   //TODO make a macro to autogenerate arbitraries for case classes
   implicit def arbA: Arbitrary[SampleClassA] = Arbitrary[SampleClassA] {
@@ -42,21 +39,20 @@ trait MacroPropTests extends PropSpec with PropertyChecks with Matchers with Mac
 }
 
 trait CaseClassToTuplePropTests extends MacroPropTests {
-  def shouldRoundTrip[A, B <: Product](t: A)(implicit proof: IsCaseClass[A], bij: Bijection[A, B]) {
-    bij shouldBe a[MacroGenerated]
-    t shouldBe bij.invert(bij(t))
+  def shouldRoundTrip[A, B <: Product](t: A)(implicit proof: IsCaseClass[A], bij: Bijection[A, B]) = {
+    bij === a[MacroGenerated] &&
+      t === bij.invert(bij(t))
   }
 
-  def shouldRoundTrip[A, B <: Product](t: B)(implicit proof: IsCaseClass[A], bij: Bijection[A, B]) {
-    bij shouldBe a[MacroGenerated]
-    t shouldBe bij(bij.invert(t))
+  def shouldRoundTrip[A, B <: Product](t: B)(implicit proof: IsCaseClass[A], bij: Bijection[A, B]) = {
+    bij === a[MacroGenerated] &&
+      t === bij(bij.invert(t))
   }
 }
 
 class CaseClassToTupleRecurisvelyAppliedPropTests extends CaseClassToTuplePropTests {
-  import MacroImplicits._
-  import MacroImplicits._
-  import MacroCaseClasses._
+  import com.twitter.bijection.macros.MacroCaseClasses._
+  import com.twitter.bijection.macros.MacroImplicits._
 
   property("case class A(Int, String) should round trip") {
     forAll { v: SampleClassA => shouldRoundTrip[SampleClassA, Atup](v) }
@@ -84,8 +80,8 @@ class CaseClassToTupleRecurisvelyAppliedPropTests extends CaseClassToTuplePropTe
 }
 
 class CaseClassToTupleNonRecursivelyAppliedPropTests extends CaseClassToTuplePropTests {
-  import MacroImplicits._
-  import MacroCaseClasses._
+  import com.twitter.bijection.macros.MacroCaseClasses._
+  import com.twitter.bijection.macros.MacroImplicits._
 
   property("case class A(Int, String) should round trip") {
     forAll { v: SampleClassA => shouldRoundTrip[SampleClassA, Atupnr](v) }
@@ -113,22 +109,21 @@ class CaseClassToTupleNonRecursivelyAppliedPropTests extends CaseClassToTuplePro
 }
 
 trait CaseClassToMapPropTests extends MacroPropTests {
-  def shouldRoundTrip[A](t: A)(implicit proof: IsCaseClass[A], inj: Injection[A, Map[String, Any]]) {
-    inj shouldBe a[MacroGenerated]
-    Success(t) shouldEqual inj.invert(inj(t))
+  def shouldRoundTrip[A](t: A)(implicit proof: IsCaseClass[A], inj: Injection[A, Map[String, Any]]) = {
+    inj === a[MacroGenerated] &&
+      Success(t) === inj.invert(inj(t))
   }
 
-  def shouldRoundTrip[A](t: Map[String, Any])(implicit proof: IsCaseClass[A], inj: Injection[A, Map[String, Any]]) {
-    inj shouldBe a[MacroGenerated]
+  def shouldRoundTrip[A](t: Map[String, Any])(implicit proof: IsCaseClass[A], inj: Injection[A, Map[String, Any]]) = {
     inj.invert(t).get
-    Success(t) shouldEqual inj.invert(t).map { inj(_) }
+    inj === a[MacroGenerated] &&
+      Success(t) === inj.invert(t).map { inj(_) }
   }
 }
 
 class CaseClassToMapRecursivelyAppliedPropTests extends CaseClassToMapPropTests {
-  import MacroImplicits._
-  import MacroImplicits._
-  import MacroCaseClasses._
+  import com.twitter.bijection.macros.MacroCaseClasses._
+  import com.twitter.bijection.macros.MacroImplicits._
 
   property("case class A(Int, String) should round trip") {
     forAll { v: SampleClassA => shouldRoundTrip[SampleClassA](v) }
@@ -179,8 +174,8 @@ class CaseClassToMapRecursivelyAppliedPropTests extends CaseClassToMapPropTests 
 }
 
 class CaseClassToMapNonRecursivelyAppliedPropTests extends CaseClassToMapPropTests {
-  import MacroImplicits._
-  import MacroCaseClasses._
+  import com.twitter.bijection.macros.MacroCaseClasses._
+  import com.twitter.bijection.macros.MacroImplicits._
 
   property("case class A(Int, String) should round trip") {
     forAll { v: SampleClassA => shouldRoundTrip[SampleClassA](v) }

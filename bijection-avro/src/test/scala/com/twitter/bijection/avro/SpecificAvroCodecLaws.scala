@@ -1,16 +1,14 @@
 package com.twitter.bijection.avro
 
-import org.scalatest.{ PropSpec, MustMatchers }
-import org.scalatest.prop.PropertyChecks
-import com.twitter.bijection.{ Injection, BaseProperties }
-import org.apache.avro.Schema
 import avro.FiscalRecord
+import com.twitter.bijection.{ BaseProperties, CheckProperties, Injection }
+import org.apache.avro.Schema
 
 /**
  * @author Muhammad Ashraf
  * @since 10/5/13
  */
-class SpecificAvroCodecLaws extends PropSpec with PropertyChecks with MustMatchers with BaseProperties {
+class SpecificAvroCodecLaws extends CheckProperties with BaseProperties {
   val testSchema = new Schema.Parser().parse("""{
                                                    "type":"record",
                                                    "name":"FiscalRecord",

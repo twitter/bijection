@@ -23,7 +23,7 @@ import org.scalatest.prop.PropertyChecks
 
 import Conversion.asMethod // get the .as syntax
 
-class EnglishIntLaws extends PropSpec with PropertyChecks with MustMatchers
+class EnglishIntLaws extends CheckProperties with MustMatchers
   with BaseProperties {
   var ct = 0
 

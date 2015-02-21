@@ -3,7 +3,7 @@ package com.twitter.bijection.hbase
 import org.scalatest.{ PropSpec, MustMatchers }
 import org.scalatest.prop.PropertyChecks
 
-import com.twitter.bijection.BaseProperties
+import com.twitter.bijection.{ CheckProperties, BaseProperties }
 import HBaseBijections._
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
 import org.apache.hadoop.hbase.util.Bytes
@@ -12,8 +12,7 @@ import org.apache.hadoop.hbase.util.Bytes
  * @author Muhammad Ashraf
  * @since 7/10/13
  */
-class HBaseBijectionsLaws extends PropSpec with PropertyChecks with MustMatchers
-  with BaseProperties {
+class HBaseBijectionsLaws extends CheckProperties with BaseProperties {
 
   property("String <=> StringBytes") {
     isInjective[String, StringBytes]

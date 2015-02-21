@@ -18,7 +18,7 @@ package com.twitter.bijection.json
 
 import com.twitter.bijection.Conversion.asMethod
 
-import com.twitter.bijection.{ BaseProperties, Bijection, Injection }
+import com.twitter.bijection.{ CheckProperties, BaseProperties, Bijection, Injection }
 import org.scalatest.{ PropSpec, MustMatchers }
 import org.scalatest.prop.PropertyChecks
 
@@ -29,7 +29,7 @@ import org.codehaus.jackson.JsonNode
 import com.twitter.bijection.json.JsonNodeInjection.{ fromJsonNode, toJsonNode }
 import scala.util.Try
 
-class JsonInjectionLaws extends PropSpec with PropertyChecks with MustMatchers with BaseProperties {
+class JsonInjectionLaws extends CheckProperties with BaseProperties {
   // Needed from some recursive injections (like tuples)
   import JsonNodeInjection._
 
@@ -152,12 +152,12 @@ class JsonInjectionLaws extends PropSpec with PropertyChecks with MustMatchers w
 
       val jsonMixed = mixedMap.as[UnparsedJson]
 
-      jsonMixed.as[Try[Map[String, JsonNode]]].get.foreach { kup: (String, JsonNode) =>
+      jsonMixed.as[Try[Map[String, JsonNode]]].get.forall{ kup: (String, JsonNode) =>
         val (k, up) = kup
         if (k.endsWith("i")) {
-          assert(fromJsonNode[Int](up).get == fromJsonNode[Int](mixedMap(k)).get)
+          fromJsonNode[Int](up).get == fromJsonNode[Int](mixedMap(k)).get
         } else {
-          assert(fromJsonNode[List[String]](up).get == fromJsonNode[List[String]](mixedMap(k)).get)
+          fromJsonNode[List[String]](up).get == fromJsonNode[List[String]](mixedMap(k)).get
         }
       }
     }

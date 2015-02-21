@@ -16,19 +16,8 @@ limitations under the License.
 
 package com.twitter.bijection
 
-import java.lang.{
-  Short => JShort,
-  Integer => JInt,
-  Long => JLong,
-  Float => JFloat,
-  Double => JDouble,
-  Byte => JByte
-}
-
+import java.lang.{ Byte => JByte, Double => JDouble, Float => JFloat, Integer => JInt, Long => JLong, Short => JShort }
 import java.nio.ByteBuffer
-
-import org.scalatest.{ PropSpec, MustMatchers }
-import org.scalatest.prop.PropertyChecks
 
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.forAll
@@ -51,15 +40,16 @@ trait BaseBufferable {
   }
 }
 
-class BufferableLaws extends PropSpec with PropertyChecks with MustMatchers with BaseBufferable {
+class BufferableLaws extends CheckProperties with BaseBufferable {
+
   property("Reallocate works properly") {
     forAll { (bytes: Array[Byte]) =>
       val bb = ByteBuffer.wrap(bytes)
       bb.position(bytes.size)
       val newBb = Bufferable.reallocate(bb)
-      assert(Bufferable.getBytes(bb).toList == Bufferable.getBytes(newBb).toList)
-      assert(newBb.capacity > bb.capacity)
-      assert(newBb.position == bb.position)
+      Bufferable.getBytes(bb).toList == Bufferable.getBytes(newBb).toList &&
+        newBb.capacity > bb.capacity &&
+        newBb.position == bb.position
     }
   }
 
@@ -67,7 +57,7 @@ class BufferableLaws extends PropSpec with PropertyChecks with MustMatchers with
     forAll { (bytes: Array[Byte]) =>
       val bb = ByteBuffer.wrap(bytes)
       bb.position(bytes.size)
-      assert(Bufferable.getBytes(bb).toList == bytes.toList)
+      Bufferable.getBytes(bb).toList == bytes.toList
     }
   }
 

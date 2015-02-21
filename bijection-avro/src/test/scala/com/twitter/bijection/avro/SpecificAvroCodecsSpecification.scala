@@ -9,7 +9,7 @@ import avro.FiscalRecord
  * @author Muhammad Ashraf
  * @since 10/5/13
  */
-object SpecificAvroCodecsSpecification extends WordSpec with Matchers with BaseProperties {
+class SpecificAvroCodecsSpecification extends WordSpec with Matchers with BaseProperties {
   val testSchema = new Schema.Parser().parse("""{
                                                    "type":"record",
                                                    "name":"FiscalRecord",
