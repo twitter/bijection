@@ -20,14 +20,21 @@ import com.twitter.bijection.{ CheckProperties, BaseProperties, Bijection, Injec
 import org.scalatest.{ PropSpec, MustMatchers }
 import org.scalatest.prop.PropertyChecks
 
-import org.scalacheck.Arbitrary
+import org.scalacheck.{ Gen, Arbitrary }
 import org.scalatest._
 
 class ThriftCodecLaws extends CheckProperties with BaseProperties {
   def buildThrift(i: (Int, String)) =
     new TestThriftStructure().setANumber(i._1).setAString(i._2)
 
-  implicit val testThrift = arbitraryViaFn { is: (Int, String) => buildThrift(is) }
+  implicit val testThrift: Arbitrary[TestThriftStructure] = Arbitrary {
+    for {
+      l <- Gen.oneOf('a' to 'z')
+      u <- Gen.oneOf('A' to 'Z')
+      s <- Gen.listOf(Gen.oneOf(l, u, Gen.numChar)).map(_.mkString)
+      i <- Arbitrary.arbitrary[Int]
+    } yield buildThrift(i, s)
+  }
 
   // Code generator for thrift instances.
   def roundTripsThrift(implicit injection: Injection[TestThriftStructure, Array[Byte]]) = {
