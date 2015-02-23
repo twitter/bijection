@@ -23,6 +23,8 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Gen._
 import org.scalacheck.Prop._
 
+import scala.util.Try
+
 object StringArbs extends BaseProperties {
 
   implicit val strByte = arbitraryViaBijection[Byte, String @@ Rep[Byte]]
@@ -59,17 +61,10 @@ class StringBijectionLaws extends CheckProperties with BaseProperties {
   // isBijection[UUID, String @@ Rep[UUID]]()
   // }
 
-  def toUrl(s: String): Option[URL] =
-    try { Some(new URL("http://" + s + ".com")) }
-    catch { case _: Throwable => None }
+  def toUrl(s: String): Try[URL] = Try(new URL("http://" + s + ".com"))
 
-  implicit val urlArb = Arbitrary {
-    implicitly[Arbitrary[String]]
-      .arbitrary
-      .map { toUrl(_) }
-      .filter { _.isDefined }
-      .map { _.get }
-  }
+  implicit val urlArb: Arbitrary[URL] =
+    Arbitrary { Arbitrary.arbitrary[String] map (toUrl(_)) suchThat (_.isSuccess) map (_.get) }
 
   // This is trivially a bijection if it injective
   property("URL -> String") {
