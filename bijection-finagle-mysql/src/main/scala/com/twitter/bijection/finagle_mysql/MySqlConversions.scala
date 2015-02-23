@@ -1,5 +1,5 @@
 /*
-Copyright 2012 Twitter, Inc.
+Copyright 2015 Twitter, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,11 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package com.twitter.bijection.twitter_finagle
+package com.twitter.bijection.finagle_mysql
 
 import com.twitter.finagle.exp.mysql._
 import com.twitter.bijection._
-import scala.util.Try
 import java.sql.Timestamp
 
 /**
@@ -76,19 +75,19 @@ trait MySqlInjections {
       private val UTC = java.util.TimeZone.getTimeZone("UTC")
       private val timestampValue = new TimestampValue(UTC, UTC)
       def apply(t: Timestamp) = timestampValue(t)
-      override def invert(v: Value) = Try(timestampValue.unapply(v).get)
+      override def invert(v: Value) = Inversion.attempt(v) { v => timestampValue.unapply(v).get }
     }
 
   implicit def nullValue[A]: Injection[NullValue.type, Option[A]] =
     new AbstractInjection[NullValue.type, Option[A]] {
       def apply(n: NullValue.type) = None
-      override def invert(n: Option[A]) = Try(n.map(_ => NullValue).get)
+      override def invert(n: Option[A]) = Inversion.attempt(n){ n => n.map(_ => NullValue).get }
     }
 
   implicit def emptyValue[A]: Injection[EmptyValue.type, Option[A]] =
     new AbstractInjection[EmptyValue.type, Option[A]] {
       def apply(n: EmptyValue.type) = None
-      override def invert(n: Option[A]) = Try(n.map(_ => EmptyValue).get)
+      override def invert(n: Option[A]) = Inversion.attempt(n){ n => n.map(_ => EmptyValue).get }
     }
 }
 
