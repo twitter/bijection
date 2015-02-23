@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.twitter.bijection.finagle_mysql
 
-import com.twitter.bijection.{ BaseProperties, Bijection }
+import com.twitter.bijection.{ CheckProperties, BaseProperties, Bijection }
 import org.scalacheck.Arbitrary
 import org.scalatest.{ PropSpec, MustMatchers }
 import org.scalatest.prop.PropertyChecks
