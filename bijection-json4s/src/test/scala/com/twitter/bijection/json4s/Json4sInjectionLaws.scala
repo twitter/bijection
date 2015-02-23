@@ -14,15 +14,11 @@
 
 package com.twitter.bijection.json4s
 
-import org.scalatest.PropSpec
-import org.scalatest.prop.PropertyChecks
-import com.twitter.bijection.{ CheckProperties, Injection, BaseProperties }
+import com.twitter.bijection.{ BaseProperties, CheckProperties, Injection }
+import org.json4s.JsonAST.{ JString, _ }
 
-import org.json4s.JsonAST._
-import org.json4s.JsonAST.JString
-
-import scala.reflect.runtime.universe.TypeTag
 import scala.reflect.ClassTag
+import scala.reflect.runtime.universe.TypeTag
 
 /**
  * @author Mansur Ashraf
@@ -30,7 +26,6 @@ import scala.reflect.ClassTag
  */
 class Json4sInjectionLaws extends CheckProperties
   with BaseProperties {
-  case class Twit(name: String, id: Int, id_str: String, indices: List[Int], screen_name: String)
 
   def createTwit(i: (String, Int, String, List[Int], String)): Twit = Twit(i._1, i._2, i._3, i._4, i._5)
 
@@ -56,15 +51,17 @@ class Json4sInjectionLaws extends CheckProperties
   def roundTripJValueToString(implicit inj: Injection[JValue, String]) = isLooseInjection[JValue, String]
 
   property("round trip Case Class to Json") {
-    import Json4sInjections.caseClass2Json
+    import com.twitter.bijection.json4s.Json4sInjections.caseClass2Json
     roundTripCaseClassToJson
   }
   property("round trip Case Class to JValue") {
-    import Json4sInjections.caseClass2JValue
+    import com.twitter.bijection.json4s.Json4sInjections.caseClass2JValue
     roundTripCaseClassToJValue
   }
   property("round trip JValue to String") {
-    import Json4sInjections.jvalue2Json
+    import com.twitter.bijection.json4s.Json4sInjections.jvalue2Json
     roundTripJValueToString
   }
 }
+
+case class Twit(name: String, id: Int, id_str: String, indices: List[Int], screen_name: String)
