@@ -16,7 +16,7 @@
 
 package com.twitter.bijection.protobuf
 
-import com.twitter.bijection.{ BaseProperties, Bijection }
+import com.twitter.bijection.{ CheckProperties, BaseProperties, Bijection }
 import com.twitter.bijection.protobuf.TestMessages.{ FatigueCount, Gender }
 import org.scalatest.{ PropSpec, MustMatchers }
 import org.scalatest.prop.PropertyChecks
@@ -24,7 +24,7 @@ import org.scalatest.prop.PropertyChecks
 import org.scalacheck.Arbitrary
 import org.scalatest._
 
-class ProtobufCodecLaws extends PropSpec with PropertyChecks with MustMatchers with BaseProperties {
+class ProtobufCodecLaws extends CheckProperties with BaseProperties {
   def buildFatigueCount(tuple: (Long, Long, Int)) =
     FatigueCount.newBuilder()
       .setTargetId(tuple._1)
@@ -45,11 +45,10 @@ class ProtobufEnumTest extends WordSpec with Matchers with BaseProperties {
   "ProtocolMessageEnum should roundtrip through ProtobufCodec" in {
     implicit val b = ProtobufEnumCodec[Gender]
     val male = Gender.valueOf(0)
-    assert(male == rt(male))
-
     val female = Gender.valueOf(1)
-    assert(female == rt(female))
 
-    assert(b.invert(2).isFailure == true)
+    male == rt(male) &&
+      female == rt(female) &&
+      b.invert(2).isFailure
   }
 }

@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.twitter.bijection.twitter_util
 
-import com.twitter.bijection.{ BaseProperties, Bijection }
+import com.twitter.bijection.{ CheckProperties, BaseProperties, Bijection }
 import com.twitter.util.{ Future => TwitterFuture, Try => TwitterTry, Await => TwitterAwait }
 import java.lang.{ Integer => JInt, Long => JLong }
 import org.scalacheck.Arbitrary
@@ -30,7 +30,7 @@ import scala.util.{ Try => ScalaTry }
 import scala.concurrent.future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class UtilBijectionLaws extends PropSpec with PropertyChecks with MustMatchers with BaseProperties {
+class UtilBijectionLaws extends CheckProperties with BaseProperties {
   import UtilBijections._
 
   protected def toOption[T](f: TwitterFuture[T]): Option[T] = TwitterTry(TwitterAwait.result(f)).toOption

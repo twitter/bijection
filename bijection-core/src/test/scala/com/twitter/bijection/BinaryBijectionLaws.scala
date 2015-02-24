@@ -22,7 +22,7 @@ import org.scalatest.prop.PropertyChecks
 
 import org.scalacheck.Prop._
 
-class BinaryBijectionLaws extends PropSpec with PropertyChecks with MustMatchers
+class BinaryBijectionLaws extends CheckProperties with MustMatchers
   with BaseProperties {
   implicit val arbBB = arbitraryViaFn[Array[Byte], ByteBuffer] { ByteBuffer.wrap(_) }
 

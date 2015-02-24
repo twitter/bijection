@@ -28,8 +28,7 @@ import java.lang.{
 import org.scalatest.{ PropSpec, MustMatchers }
 import org.scalatest.prop.PropertyChecks
 
-class TupleBijectionLaws extends PropSpec with PropertyChecks with MustMatchers
-  with BaseProperties {
+class TupleBijectionLaws extends CheckProperties with BaseProperties {
   import StringArbs._
 
   property("round trips (Int,Long) -> (String,String)") {

@@ -16,16 +16,11 @@ limitations under the License.
 
 package com.twitter.bijection
 
-import org.scalatest.{ PropSpec, MustMatchers }
-import org.scalatest.prop.PropertyChecks
-
-import org.scalacheck.Gen._
 import org.scalacheck.Arbitrary
-import org.scalacheck.Prop._
+import org.scalatest.MustMatchers
 
-class CollectionLaws extends PropSpec with PropertyChecks with MustMatchers
-  with BaseProperties {
-  import StringArbs._
+class CollectionLaws extends CheckProperties with BaseProperties {
+  import com.twitter.bijection.StringArbs._
 
   implicit def vectorArb[A](implicit la: Arbitrary[List[A]]) =
     arbitraryViaFn { (l: List[A]) => Vector(l: _*) }
