@@ -16,24 +16,16 @@
 
 package com.twitter.bijection.guava
 
-import com.google.common.base.Optional
-import com.google.common.base.{ Function => GFn, Predicate, Supplier }
-import com.twitter.bijection.{ @@, BaseProperties, Bijection, Rep, Conversion }
-import com.twitter.bijection.Rep._
-
-import org.scalacheck.Arbitrary
-import org.scalatest.{ PropSpec, MustMatchers }
-import org.scalatest.prop.PropertyChecks
-
-import org.scalacheck.Prop.forAll
-
 import java.lang.{ Long => JLong }
 
-import Bijection.connect
-import Conversion.asMethod
+import com.google.common.base.{ Function => GFn, Optional, Predicate, Supplier }
+import com.twitter.bijection.Conversion.asMethod
+import com.twitter.bijection._
+import org.scalacheck.Arbitrary
+import org.scalacheck.Prop.forAll
 
-class GuavaBijectionLaws extends PropSpec with PropertyChecks with MustMatchers with BaseProperties {
-  import GuavaBijections._
+class GuavaBijectionLaws extends CheckProperties with BaseProperties {
+  import com.twitter.bijection.guava.GuavaBijections._
 
   implicit def arbOptional[T: Arbitrary] =
     arbitraryViaFn[T, Optional[T]] { Optional.of(_) }
@@ -48,7 +40,7 @@ class GuavaBijectionLaws extends PropSpec with PropertyChecks with MustMatchers 
 
   def roundTripsFn[A, B](fn: A => B)(implicit arb: Arbitrary[A], bij: Bijection[A => B, GFn[A, B]], eqb: Equiv[B]) = {
     val rtFn = bij(fn)
-    forAll { a: A => assert(eqb.equiv(fn(a), rtFn.apply(a))) }
+    forAll { a: A => eqb.equiv(fn(a), rtFn.apply(a)) }
   }
 
   property("round trips Int => Long -> GuavaFn[Int, Long]") {
@@ -58,14 +50,14 @@ class GuavaBijectionLaws extends PropSpec with PropertyChecks with MustMatchers 
   property("round trips () => Long -> Supplier[JLong]") {
     forAll { l: Long =>
       val fn = { () => l }
-      assert(fn() == fn.as[Supplier[JLong]].get.as[Long])
+      fn() == fn.as[Supplier[JLong]].get.as[Long]
     }
   }
 
   property("round trips Long => Boolean -> Predicate[JLong]") {
     forAll { l: Long =>
       val isEven = { l: Long => l % 2 == 0 }
-      assert(isEven(l) == isEven.as[Predicate[JLong]].apply(l.as[JLong]))
+      isEven(l) == isEven.as[Predicate[JLong]].apply(l.as[JLong])
     }
   }
 }

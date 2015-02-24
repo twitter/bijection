@@ -13,19 +13,15 @@ limitations under the License.
 */
 package com.twitter.bijection.avro
 
-import com.twitter.bijection.{ BaseProperties, Injection }
-
-import org.scalatest.PropSpec
-import org.scalatest.prop.PropertyChecks
-
-import org.apache.avro.generic.{ GenericRecord, GenericData }
+import com.twitter.bijection.{ BaseProperties, CheckProperties, Injection }
 import org.apache.avro.Schema
+import org.apache.avro.generic.{ GenericData, GenericRecord }
 
 /**
  * @author Muhammad Ashraf
  * @since 7/5/13
  */
-class GenericAvroCodecLaws extends PropSpec with PropertyChecks with BaseProperties {
+class GenericAvroCodecLaws extends CheckProperties with BaseProperties {
   val testSchema = new Schema.Parser().parse("""{
                                                    "type":"record",
                                                    "name":"FiscalRecord",

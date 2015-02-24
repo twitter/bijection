@@ -16,14 +16,14 @@
 
 package com.twitter.bijection.scrooge
 
-import com.twitter.bijection.{ BaseProperties, Bijection, Injection }
+import com.twitter.bijection.{ CheckProperties, BaseProperties, Bijection, Injection }
 
 import org.scalatest.{ PropSpec, MustMatchers }
 import org.scalatest.prop.PropertyChecks
 
 import org.scalacheck.Arbitrary
 
-class ScroogeCodecLaws extends PropSpec with PropertyChecks with MustMatchers with BaseProperties {
+class ScroogeCodecLaws extends CheckProperties with BaseProperties {
   def buildScrooge(i: (Int, String)) =
     TestStruct(i._1, Some(i._2))
 

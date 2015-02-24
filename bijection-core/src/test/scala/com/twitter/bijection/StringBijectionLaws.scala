@@ -16,18 +16,16 @@ limitations under the License.
 
 package com.twitter.bijection
 
-import org.scalatest.{ PropSpec, MustMatchers }
-import org.scalatest.prop.PropertyChecks
+import java.net.URL
+import java.util.UUID
 
-import org.scalacheck.Gen._
 import org.scalacheck.Arbitrary
+import org.scalacheck.Gen._
 import org.scalacheck.Prop._
 
-import java.util.UUID
-import java.net.URL
+import scala.util.Try
 
 object StringArbs extends BaseProperties {
-  import Rep._
 
   implicit val strByte = arbitraryViaBijection[Byte, String @@ Rep[Byte]]
   implicit val strShort = arbitraryViaBijection[Short, String @@ Rep[Short]]
@@ -37,9 +35,7 @@ object StringArbs extends BaseProperties {
   implicit val strDouble = arbitraryViaBijection[Double, String @@ Rep[Double]]
 }
 
-class StringBijectionLaws extends PropSpec with PropertyChecks with MustMatchers
-  with BaseProperties {
-  import StringArbs._
+class StringBijectionLaws extends CheckProperties with BaseProperties {
 
   property("round trips string -> Array[String]") {
     isLooseInjection[String, Array[Byte]]
@@ -65,17 +61,10 @@ class StringBijectionLaws extends PropSpec with PropertyChecks with MustMatchers
   // isBijection[UUID, String @@ Rep[UUID]]()
   // }
 
-  def toUrl(s: String): Option[URL] =
-    try { Some(new URL("http://" + s + ".com")) }
-    catch { case _: Throwable => None }
+  def toUrl(s: String): Try[URL] = Try(new URL("http://" + s + ".com"))
 
-  implicit val urlArb = Arbitrary {
-    implicitly[Arbitrary[String]]
-      .arbitrary
-      .map { toUrl(_) }
-      .filter { _.isDefined }
-      .map { _.get }
-  }
+  implicit val urlArb: Arbitrary[URL] =
+    Arbitrary { Arbitrary.arbitrary[String] map (toUrl(_)) suchThat (_.isSuccess) map (_.get) }
 
   // This is trivially a bijection if it injective
   property("URL -> String") {
@@ -86,9 +75,7 @@ class StringBijectionLaws extends PropSpec with PropertyChecks with MustMatchers
     forAll { (sep: String, xs: List[String]) =>
       val sjBij = StringJoinBijection(sep)
       val iter = xs.toIterable
-      whenever(!iter.exists(_.contains(sep))) {
-        assert(iter == rt(iter)(sjBij))
-      }
+      (!iter.exists(_.contains(sep))) ==> (iter == rt(iter)(sjBij))
     }
   }
 

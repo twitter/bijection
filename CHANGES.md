@@ -1,5 +1,9 @@
 # Bijection #
 
+### 0.7.2
+* FIX: gzip Bijection resource leak. https://github.com/twitter/bijection/pull/193
+* Use new Travis CI infrastructure https://github.com/twitter/bijection/pull/191
+
 ### 0.7.1
 * Remove some package privacy so these things can be used in scalding and ...: https://github.com/twitter/bijection/pull/190
 * Add macros to create Trys: https://github.com/twitter/bijection/pull/187
