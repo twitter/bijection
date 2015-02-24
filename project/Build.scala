@@ -22,7 +22,7 @@ object BijectionBuild extends Build {
 
     ScalariformKeys.preferences := formattingPreferences,
 
-    scalaVersion := "2.10.4",
+    scalaVersion := "2.11.5",
 
     javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
 
