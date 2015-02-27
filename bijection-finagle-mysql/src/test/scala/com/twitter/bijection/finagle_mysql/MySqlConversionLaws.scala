@@ -18,8 +18,6 @@ package com.twitter.bijection.finagle_mysql
 
 import com.twitter.bijection.{ CheckProperties, BaseProperties, Bijection }
 import org.scalacheck.Arbitrary
-import org.scalatest.{ PropSpec, MustMatchers }
-import org.scalatest.prop.PropertyChecks
 import com.twitter.finagle.exp.mysql._
 import java.sql.Timestamp
 import java.util.Date
@@ -29,28 +27,43 @@ import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
 
-class MySqlConversionLaws extends PropSpec with PropertyChecks with MustMatchers with BaseProperties {
+class MySqlConversionLaws extends CheckProperties with BaseProperties {
   import MySqlConversions._
 
-  implicit val byteValueArb = Arbitrary(arbitrary[Byte].map(ByteValue.apply))
-  implicit val shortValueArb = Arbitrary(arbitrary[Short].map(ShortValue.apply))
-  implicit val intValueArb = Arbitrary(arbitrary[Int].map(IntValue.apply))
-  implicit val longValueArb = Arbitrary(arbitrary[Long].map(LongValue.apply))
-  implicit val floatValueArb = Arbitrary(arbitrary[Float].map(FloatValue.apply))
-  implicit val doubleValueArb = Arbitrary(arbitrary[Double].map(DoubleValue.apply))
-  implicit val stringValueArb = Arbitrary(arbitrary[String].map(StringValue.apply))
-  implicit val timestampValueArb = Arbitrary(arbitrary[Date].map(d => new Timestamp(d.getTime)))
-  implicit val nullValueArb = Arbitrary(Gen.const(NullValue))
-  implicit val emptyValueArb = Arbitrary(Gen.const(EmptyValue))
-  implicit val valueArb: Arbitrary[Value] = Arbitrary(Gen.oneOf(arbitrary[ByteValue],
-    arbitrary[NullValue.type],
-    arbitrary[EmptyValue.type],
-    arbitrary[ShortValue],
-    arbitrary[IntValue],
-    arbitrary[LongValue],
-    arbitrary[FloatValue],
-    arbitrary[DoubleValue],
-    arbitrary[StringValue]))
+  implicit val byteValueArb: Arbitrary[ByteValue] =
+    Arbitrary(arbitrary[Byte].map(ByteValue.apply))
+  implicit val shortValueArb: Arbitrary[ShortValue] =
+    Arbitrary(arbitrary[Short].map(ShortValue.apply))
+  implicit val intValueArb: Arbitrary[IntValue] =
+    Arbitrary(arbitrary[Int].map(IntValue.apply))
+  implicit val longValueArb: Arbitrary[LongValue] =
+    Arbitrary(arbitrary[Long].map(LongValue.apply))
+  implicit val floatValueArb: Arbitrary[FloatValue] =
+    Arbitrary(arbitrary[Float].map(FloatValue.apply))
+  implicit val doubleValueArb: Arbitrary[DoubleValue] =
+    Arbitrary(arbitrary[Double].map(DoubleValue.apply))
+  implicit val stringValueArb: Arbitrary[StringValue] =
+    Arbitrary(arbitrary[String].map(StringValue.apply))
+  implicit val nullValueArb: Arbitrary[NullValue.type] =
+    Arbitrary(Gen.const(NullValue))
+  implicit val emptyValueArb: Arbitrary[EmptyValue.type] =
+    Arbitrary(Gen.const(EmptyValue))
+
+  val timeGenerator: Gen[Long] = Gen.choose(1L, 253375661380264L) // until year 9999
+
+  implicit val timestampValueArb: Arbitrary[Value] = Arbitrary {
+    val UTC = java.util.TimeZone.getTimeZone("UTC")
+    val timestampValue = new TimestampValue(UTC, UTC)
+    for {
+      x <- timeGenerator
+    } yield timestampValue(new Timestamp(x))
+  }
+
+  implicit val timestampArb: Arbitrary[Timestamp] = Arbitrary {
+    for {
+      x <- timeGenerator
+    } yield new Timestamp(x)
+  }
 
   property("Byte") {
     isBijection[ByteValue, Byte]
@@ -73,17 +86,30 @@ class MySqlConversionLaws extends PropSpec with PropertyChecks with MustMatchers
   property("String") {
     isBijection[StringValue, String]
   }
-  property("Boolean") {
-    isBijection[ByteValue, Boolean]
-  }
 
-  property("Timestamp") {
-    isInjection[Timestamp, Value]
+  property("Boolean") {
+    isInjection[Boolean, ByteValue]
   }
   property("Empty") {
     isInjection[EmptyValue.type, Option[Int]]
   }
   property("Null") {
     isInjection[NullValue.type, Option[String]]
+  }
+  property("Timestamp") {
+    /** Custom equivalence typeclass for RawValue
+      * This is here to compare two RawValues generated from Timestamps.
+      * Because they contain byte arrays, just =='ing them does not work as expected.
+      */
+    implicit val valueEquiv = new scala.math.Equiv[Value] {
+      override def equiv(a: Value, b: Value) = (a, b) match {
+        case (RawValue(Type.Timestamp, Charset.Binary, true, bytes1),
+          RawValue(Type.Timestamp, Charset.Binary, true, bytes2)) =>
+          bytes1.toList == bytes2.toList
+        case _ => false
+      }
+    }
+
+    isInjection[Timestamp, Value]
   }
 }
