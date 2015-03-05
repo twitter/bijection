@@ -19,6 +19,7 @@ package com.twitter.bijection.scrooge
 import com.twitter.bijection.{ Bijection, Injection }
 import com.twitter.bijection.Inversion.attempt
 import com.twitter.scrooge._
+import com.twitter.util.StringEncoder
 import org.apache.thrift.protocol.TJSONProtocol
 
 import scala.util.Try
@@ -49,6 +50,7 @@ class JsonScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
   extends Injection[T, String] {
   val ser = new ThriftStructSerializer[T] {
     override def codec = c
+    override def encoder = StringEncoder
     override val protocolFactory = new TJSONProtocol.Factory
   }
 
