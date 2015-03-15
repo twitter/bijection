@@ -30,13 +30,21 @@ case class GZippedBytes(bytes: Array[Byte]) extends AnyVal {
 
 case class GZippedBase64String(str: String) extends AnyVal
 
+object GZippedBase64String {
+  implicit val unwrap: Injection[GZippedBase64String, String] =
+    new AbstractInjection[GZippedBase64String, String] {
+      override def apply(gzbs: GZippedBase64String) = gzbs.str
+      override def invert(str: String) = attemptWhen(str)(Base64.isBase64)(GZippedBase64String(_))
+    }
+}
+
 case class Base64String(str: String) extends AnyVal
 
 object Base64String {
   implicit val unwrap: Injection[Base64String, String] =
     new AbstractInjection[Base64String, String] {
       override def apply(bs: Base64String) = bs.str
-      override def invert(str: String) = attemptWhen(str)(Base64.isBase64(_))(Base64String(_))
+      override def invert(str: String) = attemptWhen(str)(Base64.isBase64)(Base64String(_))
     }
 }
 
