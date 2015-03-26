@@ -86,7 +86,7 @@ string2Long2Bytes2B64: com.twitter.bijection.Bijection[String,com.twitter.biject
 scala> 243L.as[Base64String]
 res0: com.twitter.bijection.Base64String = Base64String(MjQz)
 
-scala> long2String2Bytes2B64.invert(res5)
+scala> long2String2Bytes2B64.invert(res0)
 res1: Try[Long] = Success(243)
 ```
 
