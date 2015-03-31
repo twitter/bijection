@@ -6,7 +6,7 @@ import com.google.protobuf.Message
 import com.google.protobuf.ProtocolMessageEnum
 import java.lang.{ Integer => JInt }
 import scala.collection.mutable.{ Map => MMap }
-import scala.util.{ Failure, Success }
+import scala.util.{ Failure, Success, Try }
 import scala.reflect._
 
 /**
@@ -61,7 +61,7 @@ class ProtobufEnumCodec[T <: ProtocolMessageEnum](klass: Class[T]) extends Injec
   lazy val valueOf = klass.getMethod("valueOf", classOf[Int])
   val cache = MMap[Int, T]()
   override def apply(enum: T) = enum.getNumber
-  override def invert(i: Int) = Option {
+  override def invert(i: Int): Try[T] = Option {
     cache.getOrElseUpdate(i, valueOf.invoke(null, i.as[JInt]).asInstanceOf[T])
-  }.toRight(InversionFailure(i)).fold(Failure(_), Success(_))
+  }.toRight(InversionFailure(i)).fold[Try[T]](Failure(_), Success(_))
 }

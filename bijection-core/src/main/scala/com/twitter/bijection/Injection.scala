@@ -148,8 +148,8 @@ object Injection extends CollectionInjections
   implicit def option[A]: Injection[A, Option[A]] =
     new AbstractInjection[A, Option[A]] {
       override def apply(a: A) = Some(a)
-      override def invert(b: Option[A]) =
-        b.toRight(InversionFailure(b, new NoSuchElementException())).fold(Failure(_), Success(_))
+      override def invert(b: Option[A]): Try[A] =
+        b.toRight[InversionFailure](InversionFailure(b, new NoSuchElementException())).fold[Try[A]](Failure(_), Success(_))
     }
   implicit def identity[A]: Injection[A, A] =
     new AbstractInjection[A, A] {

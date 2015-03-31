@@ -81,16 +81,22 @@ trait CollectionInjections extends StringInjections {
       }
       override def invert(d: D): Try[C] = {
         val builder = dc()
-        d foreach { b =>
-          val thisB = inj.invert(b)
+        var failed = false
+        val iter = d.toIterator
+        while (iter.hasNext && !failed) {
+          val thisB = inj.invert(iter.next)
           if (thisB.isSuccess) {
             builder += thisB.get
           } else {
-            return InversionFailure.failedAttempt(d)
+            failed = true
           }
         }
-        val res = builder.result()
-        if (goodInv(d, res)) Success(res) else InversionFailure.failedAttempt(d)
+        if (failed) {
+          InversionFailure.failedAttempt(d)
+        } else {
+          val res = builder.result()
+          if (goodInv(d, res)) Success(res) else InversionFailure.failedAttempt(d)
+        }
       }
     }
 }

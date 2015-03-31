@@ -14,7 +14,7 @@ import org.apache.thrift.transport.TIOStreamTransport
 import org.codehaus.jackson.map.MappingJsonFactory
 import java.lang.{ Integer => JInt }
 import scala.collection.mutable.{ Map => MMap }
-import scala.util.{ Failure, Success }
+import scala.util.{ Failure, Success, Try }
 import scala.reflect._
 
 /**
@@ -118,7 +118,7 @@ class TEnumCodec[T <: TEnum](klass: Class[T]) extends Injection[T, Int] {
   lazy val findByValue = klass.getMethod("findByValue", classOf[Int])
   val cache = MMap[Int, T]()
   override def apply(enum: T) = enum.getValue
-  override def invert(i: Int) = Option {
+  override def invert(i: Int): Try[T] = Option {
     cache.getOrElseUpdate(i, findByValue.invoke(null, i.as[JInt]).asInstanceOf[T])
-  }.toRight(InversionFailure(i)).fold(Failure(_), Success(_))
+  }.toRight(InversionFailure(i)).fold[Try[T]](Failure(_), Success(_))
 }

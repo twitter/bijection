@@ -7,6 +7,7 @@ import com.typesafe.tools.mima.plugin.MimaKeys.previousArtifact
 import com.typesafe.sbt.osgi.SbtOsgi._
 import scalariform.formatter.preferences._
 import com.typesafe.sbt.SbtScalariform._
+import wartremover._
 
 object BijectionBuild extends Build {
 
@@ -15,7 +16,9 @@ object BijectionBuild extends Build {
       case _ => false
   }
 
-  val sharedSettings = Project.defaultSettings ++ osgiSettings ++ scalariformSettings ++ Seq(
+
+
+  val sharedSettings = Project.defaultSettings ++ osgiSettings ++ scalariformSettings ++ wartremoverSettings ++ Seq(
     organization := "com.twitter",
 
     crossScalaVersions := Seq("2.10.4", "2.11.5"),
@@ -48,6 +51,8 @@ object BijectionBuild extends Build {
         else
           Seq()
     },
+
+    wartremoverErrors ++= Seq(Wart.Serializable, Wart.Any2StringAdd),
 
     OsgiKeys.importPackage <<= scalaVersion { sv => Seq("""scala.*;version="$<range;[==,=+);%s>"""".format(sv)) },
 
@@ -164,6 +169,11 @@ object BijectionBuild extends Build {
   /** No dependencies in bijection other than java + scala */
   lazy val bijectionCore = module("core").settings(
     osgiExportAll("com.twitter.bijection"),
+    wartremoverErrors ++= Seq(Wart.Any, Wart.Product, Wart.Return),
+
+    // Excluded since it contains Any which we want to allow in an Exception
+    wartremoverExcluded += baseDirectory.value / "src" / "main" / "scala" / "com" / "twitter" / "bijection" / "InversionFailure.scala",
+
     libraryDependencies ++= Seq(
       "com.novocode" % "junit-interface" % "0.10-M1" % "test",
       "org.scalatest" %% "scalatest" % "1.9.1" % "test"

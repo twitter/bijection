@@ -10,3 +10,5 @@ addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "0.1.6")
 addSbtPlugin("com.typesafe.sbt" % "sbt-osgi" % "0.7.0")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.3.0")
+
+addSbtPlugin("org.brianmckenna" % "sbt-wartremover" % "0.12")
