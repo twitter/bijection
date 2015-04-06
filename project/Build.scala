@@ -29,8 +29,8 @@ object BijectionBuild extends Build {
     javacOptions in doc := Seq("-source", "1.6"),
 
     libraryDependencies ++= Seq(
-      "org.scalacheck" %% "scalacheck" % "1.11.5" % "test",
-      "org.scalatest" %% "scalatest" % "2.2.2" % "test"
+      "org.scalacheck" %% "scalacheck" % "1.12.2" % "test",
+      "org.scalatest" %% "scalatest" % "2.2.4" % "test"
     ),
 
     resolvers ++= Seq(
