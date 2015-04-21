@@ -17,6 +17,7 @@ limitations under the License.
 package com.twitter.bijection.twitter_util
 
 import com.twitter.bijection.{ CheckProperties, BaseProperties, Bijection }
+import com.twitter.io.Buf
 import com.twitter.util.{ Future => TwitterFuture, Try => TwitterTry, Await => TwitterAwait }
 import java.lang.{ Integer => JInt, Long => JLong }
 import org.scalacheck.Arbitrary
@@ -44,6 +45,7 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties {
 
   implicit val jIntArb = arbitraryViaBijection[Int, JInt]
   implicit val jLongArb = arbitraryViaBijection[Long, JLong]
+  implicit val bufArb: Arbitrary[Buf] = arbitraryViaFn[Array[Byte], Buf](Buf.ByteArray.Owned.apply)
 
   implicit protected def futureEq[T: Equiv]: Equiv[TwitterFuture[T]] = Equiv.fromFunction { (f1, f2) =>
     Equiv[Option[T]].equiv(toOption(f1), toOption(f2))
@@ -78,6 +80,10 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties {
 
   property("round trips com.twitter.util.Future[Map[JInt, JLong]] -> scala.concurrent.Future[Map[JInt, JLong]]") {
     isBijection[TwitterFuture[ToMap], ScalaFuture[ToMap]]
+  }
+
+  property("round trips com.twitter.io.Buf -> Array[Byte]") {
+    isBijection[Array[Byte], Buf]
   }
 
 }
