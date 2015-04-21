@@ -125,6 +125,10 @@ trait UtilBijections {
     }
 
   object Owned {
+    /**
+     * A bijection using Buf's Owned api which minimizes copying of the underlying
+     * array data but places the onus of immutability on the user.
+     */
     implicit def byteArrayBufBijection: Bijection[Array[Byte], Buf] =
       new AbstractBijection[Array[Byte], Buf] {
         override def apply(bytes: Array[Byte]) = Buf.ByteArray.Owned(bytes)
@@ -133,6 +137,10 @@ trait UtilBijections {
   }
 
   object Shared {
+    /**
+     * A bijection using Buf's Shared api which avoids sharing state at the cost
+     * added allocations for defensive copies.
+     */
     implicit def byteArrayBufBijection: Bijection[Array[Byte], Buf] =
       new AbstractBijection[Array[Byte], Buf] {
         override def apply(bytes: Array[Byte]) = Buf.ByteArray.Shared(bytes)
