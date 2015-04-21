@@ -82,8 +82,15 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties {
     isBijection[TwitterFuture[ToMap], ScalaFuture[ToMap]]
   }
 
-  property("round trips com.twitter.io.Buf -> Array[Byte]") {
+  property("round trips shared com.twitter.io.Buf -> Array[Byte]") {
+    import Shared.byteArrayBufBijection
+
     isBijection[Array[Byte], Buf]
   }
 
+  property("round trips owned com.twitter.io.Buf -> Array[Byte]") {
+    import Owned.byteArrayBufBijection
+
+    isBijection[Array[Byte], Buf]
+  }
 }

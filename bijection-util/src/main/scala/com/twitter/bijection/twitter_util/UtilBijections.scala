@@ -124,11 +124,21 @@ trait UtilBijections {
       override def invert(context: ExecutionContext) = new ScalaFuturePool(context)
     }
 
-  implicit def byteArrayBufBijection: Bijection[Array[Byte], Buf] =
-    new AbstractBijection[Array[Byte], Buf] {
-      override def apply(bytes: Array[Byte]) = Buf.ByteArray.Owned(bytes)
-      override def invert(buf: Buf) = Buf.ByteArray.Owned.extract(buf)
-    }
+  object Owned {
+    implicit def byteArrayBufBijection: Bijection[Array[Byte], Buf] =
+      new AbstractBijection[Array[Byte], Buf] {
+        override def apply(bytes: Array[Byte]) = Buf.ByteArray.Owned(bytes)
+        override def invert(buf: Buf) = Buf.ByteArray.Owned.extract(buf)
+      }
+  }
+
+  object Shared {
+    implicit def byteArrayBufBijection: Bijection[Array[Byte], Buf] =
+      new AbstractBijection[Array[Byte], Buf] {
+        override def apply(bytes: Array[Byte]) = Buf.ByteArray.Shared(bytes)
+        override def invert(buf: Buf) = Buf.ByteArray.Shared.extract(buf)
+      }
+  }
 }
 
 object UtilBijections extends UtilBijections
