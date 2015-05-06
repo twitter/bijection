@@ -39,12 +39,12 @@ private[bijection] object CaseClassToMap {
         val returnType = m.returnType
         val accStr = m.name.toTermName.toString
         returnType match {
-          case tpe if recursivelyApply && IsCaseClassImpl.isCaseClassType(c)(tpe) =>
+          case innerTpe if recursivelyApply && IsCaseClassImpl.isCaseClassType(c)(innerTpe) =>
             val conv = newTermName("c2m_" + idx)
             (q"""$conv.invert(m($accStr).asInstanceOf[_root_.scala.collection.immutable.Map[String, Any]]).get""",
               q"""($accStr, $conv(t.$m))""",
-              Some(q"""val $conv = implicitly[_root_.com.twitter.bijection.Injection[$tpe, _root_.scala.collection.immutable.Map[String, Any]]]""")) //TODO cache these
-          case tpe =>
+              Some(q"""val $conv = implicitly[_root_.com.twitter.bijection.Injection[$innerTpe, _root_.scala.collection.immutable.Map[String, Any]]]""")) //TODO cache these
+          case innerTpe =>
             (q"""m($accStr).asInstanceOf[$returnType]""",
               q"""($accStr, t.$m)""",
               None)
