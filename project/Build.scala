@@ -29,8 +29,8 @@ object BijectionBuild extends Build {
     javacOptions in doc := Seq("-source", "1.6"),
 
     libraryDependencies ++= Seq(
-      "org.scalacheck" %% "scalacheck" % "1.11.5" % "test",
-      "org.scalatest" %% "scalatest" % "2.2.2" % "test"
+      "org.scalacheck" %% "scalacheck" % "1.12.2" % "test",
+      "org.scalatest" %% "scalatest" % "2.2.4" % "test"
     ),
 
     resolvers ++= Seq(
@@ -226,7 +226,7 @@ object BijectionBuild extends Build {
 
   lazy val bijectionUtil = module("util").settings(
     osgiExportAll("com.twitter.bijection.twitter_util"),
-    libraryDependencies += "com.twitter" %% "util-core" % "6.20.0"
+    libraryDependencies += "com.twitter" %% "util-core" % "6.23.0"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   lazy val bijectionFinagleMySql = module("finagle-mysql").settings(

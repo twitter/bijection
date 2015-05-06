@@ -19,6 +19,7 @@ package com.twitter.bijection.finagle_mysql
 import com.twitter.finagle.exp.mysql._
 import com.twitter.bijection._
 import java.sql.Timestamp
+import scala.util.{ Try, Success, Failure }
 
 /**
  * Bijections and injections for mapping twitter-finagle's MySql datatypes to Scala datatypes
@@ -62,32 +63,45 @@ trait MySqlBijections {
     def apply(s: StringValue) = s.s
     override def invert(s: String) = StringValue(s)
   }
-
-  implicit val boolean: Bijection[ByteValue, Boolean] = new AbstractBijection[ByteValue, Boolean] {
-    def apply(t: ByteValue) = t.b == 1
-    override def invert(b: Boolean) = ByteValue(if (b) 1 else 0)
-  }
 }
 
 trait MySqlInjections {
+  implicit val boolean: Injection[Boolean, ByteValue] = new AbstractInjection[Boolean, ByteValue] {
+    def apply(b: Boolean) = ByteValue(if (b) 1 else 0)
+    override def invert(t: ByteValue) = t match {
+      case ByteValue(0) => Success(false)
+      case ByteValue(1) => Success(true)
+      case ByteValue(x) => Failure(new RuntimeException(s"Cannot cast ByteValue holding $x to Boolean"))
+    }
+  }
+
   implicit val timestamp: Injection[Timestamp, Value] =
     new AbstractInjection[Timestamp, Value] {
       private val UTC = java.util.TimeZone.getTimeZone("UTC")
       private val timestampValue = new TimestampValue(UTC, UTC)
       def apply(t: Timestamp) = timestampValue(t)
-      override def invert(v: Value) = Inversion.attempt(v) { v => timestampValue.unapply(v).get }
+      override def invert(v: Value) =
+        Inversion.attempt(v) { v =>
+          timestampValue.unapply(v).get
+        }
     }
 
   implicit def nullValue[A]: Injection[NullValue.type, Option[A]] =
     new AbstractInjection[NullValue.type, Option[A]] {
       def apply(n: NullValue.type) = None
-      override def invert(n: Option[A]) = Inversion.attempt(n){ n => n.map(_ => NullValue).get }
+      override def invert(n: Option[A]) = n match {
+        case Some(_) => Failure(new RuntimeException("Cannot convert non-empty option to NullValue"))
+        case None => Success(NullValue)
+      }
     }
 
   implicit def emptyValue[A]: Injection[EmptyValue.type, Option[A]] =
     new AbstractInjection[EmptyValue.type, Option[A]] {
       def apply(n: EmptyValue.type) = None
-      override def invert(n: Option[A]) = Inversion.attempt(n){ n => n.map(_ => EmptyValue).get }
+      override def invert(n: Option[A]) = n match {
+        case Some(_) => Failure(new RuntimeException("Cannot convert non-empty option to EmptyValue"))
+        case None => Success(EmptyValue)
+      }
     }
 }
 
