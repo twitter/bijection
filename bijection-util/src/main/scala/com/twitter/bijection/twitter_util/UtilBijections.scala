@@ -17,6 +17,7 @@ limitations under the License.
 package com.twitter.bijection.twitter_util
 
 import com.twitter.bijection.{ AbstractBijection, Bijection, ImplicitBijection }
+import com.twitter.io.Buf
 import com.twitter.util.{ Future => TwitterFuture, Try => TwitterTry, Promise => TwitterPromise, Return, Throw, FuturePool }
 
 import scala.concurrent.{ Future => ScalaFuture, Promise => ScalaPromise, ExecutionContext }
@@ -122,6 +123,30 @@ trait UtilBijections {
       override def apply(pool: FuturePool) = new TwitterExecutionContext(pool)
       override def invert(context: ExecutionContext) = new ScalaFuturePool(context)
     }
+
+  object Owned {
+    /**
+     * A bijection using Buf's Owned api which minimizes copying of the underlying
+     * array data but places the onus of immutability on the user.
+     */
+    implicit def byteArrayBufBijection: Bijection[Array[Byte], Buf] =
+      new AbstractBijection[Array[Byte], Buf] {
+        override def apply(bytes: Array[Byte]) = Buf.ByteArray.Owned(bytes)
+        override def invert(buf: Buf) = Buf.ByteArray.Owned.extract(buf)
+      }
+  }
+
+  object Shared {
+    /**
+     * A bijection using Buf's Shared api which avoids sharing state at the cost
+     * added allocations for defensive copies.
+     */
+    implicit def byteArrayBufBijection: Bijection[Array[Byte], Buf] =
+      new AbstractBijection[Array[Byte], Buf] {
+        override def apply(bytes: Array[Byte]) = Buf.ByteArray.Shared(bytes)
+        override def invert(buf: Buf) = Buf.ByteArray.Shared.extract(buf)
+      }
+  }
 }
 
 object UtilBijections extends UtilBijections

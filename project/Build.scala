@@ -226,7 +226,7 @@ object BijectionBuild extends Build {
 
   lazy val bijectionUtil = module("util").settings(
     osgiExportAll("com.twitter.bijection.twitter_util"),
-    libraryDependencies += "com.twitter" %% "util-core" % "6.20.0"
+    libraryDependencies += "com.twitter" %% "util-core" % "6.23.0"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   lazy val bijectionFinagleMySql = module("finagle-mysql").settings(
