@@ -18,11 +18,11 @@ object BijectionBuild extends Build {
   val sharedSettings = Project.defaultSettings ++ osgiSettings ++ scalariformSettings ++ Seq(
     organization := "com.twitter",
 
-    crossScalaVersions := Seq("2.10.4", "2.11.5"),
+    crossScalaVersions := Seq("2.10.5", "2.11.5"),
 
     ScalariformKeys.preferences := formattingPreferences,
 
-    scalaVersion := "2.10.4",
+    scalaVersion := "2.10.5",
 
     javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
 
@@ -122,7 +122,7 @@ object BijectionBuild extends Build {
   def youngestForwardCompatible(subProj: String) =
     Some(subProj)
       .filterNot(unreleasedModules.contains(_))
-      .map { s => "com.twitter" % ("bijection-" + s + "_2.10") % "0.7.0" }
+      .map { s => "com.twitter" % ("bijection-" + s + "_2.10") % "0.8.0" }
 
   def osgiExportAll(packs: String*) =
     OsgiKeys.exportPackage := packs.map(_ + ".*;version=${Bundle-Version}")
