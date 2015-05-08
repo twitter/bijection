@@ -1,5 +1,13 @@
 # Bijection #
 
+### 0.8.0
+* add twitter util Buf <-> Array[Byte] bijection https://github.com/twitter/bijection/pull/208
+* upgrade testing libraries https://github.com/twitter/bijection/pull/207
+* Add implicit conversion for GZippedBase64String to String https://github.com/twitter/bijection/pull/203
+* Make property tests work again https://github.com/twitter/bijection/pull/198
+* Add a module for finagle-mysql bijections. https://github.com/twitter/bijection/pull/197
+* Build bijection-scrooge for scala 2.11 https://github.com/twitter/bijection/pull/196
+
 ### 0.7.2
 * FIX: gzip Bijection resource leak. https://github.com/twitter/bijection/pull/193
 * Use new Travis CI infrastructure https://github.com/twitter/bijection/pull/191
