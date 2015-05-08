@@ -11,7 +11,7 @@ import java.util.Date
 import org.joda.time.{ DateTime, LocalDate, LocalTime, YearMonth, MonthDay }
 import com.twitter.bijection._
 
-class DateBijectionsLaws extends PropSpec with PropertyChecks with MustMatchers with BaseProperties with DateBijections with DateInjections {
+class DateBijectionsLaws extends CheckProperties with BaseProperties with DateBijections with DateInjections {
 
   import Rep._
 

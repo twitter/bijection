@@ -17,14 +17,14 @@ limitations under the License.
 package com.twitter.bijection
 
 import java.nio.ByteBuffer
-import org.scalatest.{ PropSpec, MustMatchers }
-import org.scalatest.prop.PropertyChecks
 
-import org.scalacheck.Prop._
+import com.twitter.bijection.codec.Base64
+import org.scalacheck.Arbitrary
+import org.scalatest.MustMatchers
 
-class BinaryBijectionLaws extends PropSpec with PropertyChecks with MustMatchers
+class BinaryBijectionLaws extends CheckProperties with MustMatchers
   with BaseProperties {
-  implicit val arbBB = arbitraryViaFn[Array[Byte], ByteBuffer] { ByteBuffer.wrap(_) }
+  implicit val arbBB = arbitraryViaFn[Array[Byte], ByteBuffer] { ByteBuffer.wrap }
 
   // TODO: These are all bijections,
   property("Array[Byte] <=> ByteBuffer") {
@@ -40,8 +40,22 @@ class BinaryBijectionLaws extends PropSpec with PropertyChecks with MustMatchers
     isInjective[Array[Byte], Base64String]
   }
 
+  property("Base64String -> String") {
+    implicit val arbB64: Arbitrary[Base64String] = arbitraryViaFn { s: String =>
+      Base64String(Base64.encodeBase64String(s.getBytes("UTF-8")))
+    }
+    isInjection[Base64String, String]
+  }
+
   property("rts Array[Byte] -> GZippedBase64String") {
     isInjective[Array[Byte], GZippedBase64String]
+  }
+
+  property("GZippedBase64String -> String") {
+    implicit val arbGzB64: Arbitrary[GZippedBase64String] = arbitraryViaFn { s: String =>
+      GZippedBase64String(Base64.encodeBase64String(s.getBytes("UTF-8")))
+    }
+    isInjection[GZippedBase64String, String]
   }
 
   implicit val optSer = JavaSerializationInjection[Option[Int]]

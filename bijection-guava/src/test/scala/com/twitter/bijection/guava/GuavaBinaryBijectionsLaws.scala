@@ -14,7 +14,7 @@
 
 package com.twitter.bijection.guava
 
-import com.twitter.bijection.BaseProperties
+import com.twitter.bijection.{ CheckProperties, BaseProperties }
 import org.scalatest.{ PropSpec, MustMatchers }
 import org.scalatest.prop.PropertyChecks
 
@@ -26,7 +26,7 @@ import com.twitter.bijection.guava.GuavaBinaryBijections.Base64URLString
  * @author Muhammad Ashraf
  * @since 7/7/13
  */
-class GuavaBinaryBijectionsLaws extends PropSpec with PropertyChecks with MustMatchers
+class GuavaBinaryBijectionsLaws extends CheckProperties
   with BaseProperties {
 
   property("rts Array[Byte] -> Base64String") {

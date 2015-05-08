@@ -23,7 +23,7 @@ import org.apache.hadoop.hbase.io.ImmutableBytesWritable
  * @author Muhammad Ashraf
  * @since 7/10/13
  */
-object HBaseBijectionsSpecifications extends WordSpec with Matchers with BaseProperties {
+class HBaseBijectionsSpecifications extends WordSpec with Matchers with BaseProperties {
 
   "HBaseBijections" should {
     "round trip String -> Array[Byte]" in {

@@ -18,19 +18,19 @@ object BijectionBuild extends Build {
   val sharedSettings = Project.defaultSettings ++ osgiSettings ++ scalariformSettings ++ Seq(
     organization := "com.twitter",
 
-    crossScalaVersions := Seq("2.10.4", "2.11.5"),
+    crossScalaVersions := Seq("2.10.5", "2.11.5"),
 
     ScalariformKeys.preferences := formattingPreferences,
 
-    scalaVersion := "2.10.4",
+    scalaVersion := "2.10.5",
 
     javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
 
     javacOptions in doc := Seq("-source", "1.6"),
 
     libraryDependencies ++= Seq(
-      "org.scalacheck" %% "scalacheck" % "1.11.5" % "test",
-      "org.scalatest" %% "scalatest" % "2.2.2" % "test"
+      "org.scalacheck" %% "scalacheck" % "1.12.2" % "test",
+      "org.scalatest" %% "scalatest" % "2.2.4" % "test"
     ),
 
     resolvers ++= Seq(
@@ -122,7 +122,7 @@ object BijectionBuild extends Build {
   def youngestForwardCompatible(subProj: String) =
     Some(subProj)
       .filterNot(unreleasedModules.contains(_))
-      .map { s => "com.twitter" % ("bijection-" + s + "_2.10") % "0.7.0" }
+      .map { s => "com.twitter" % ("bijection-" + s + "_2.10") % "0.8.0" }
 
   def osgiExportAll(packs: String*) =
     OsgiKeys.exportPackage := packs.map(_ + ".*;version=${Bundle-Version}")
@@ -143,6 +143,7 @@ object BijectionBuild extends Build {
     bijectionScrooge,
     bijectionJson,
     bijectionUtil,
+    bijectionFinagleMySql,
     bijectionClojure,
     bijectionNetty,
     bijectionAvro,
@@ -209,22 +210,13 @@ object BijectionBuild extends Build {
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
-  def scroogeBuildDeps(scalaVersion: String): Seq[sbt.ModuleID] = isScala210x(scalaVersion) match {
-      case false => Seq()
-      case true => Seq(
-        "com.twitter" %% "scrooge-serializer" % "3.6.0"
-     )
-  }
-
   lazy val bijectionScrooge = module("scrooge").settings(
-    skip in compile := !isScala210x(scalaVersion.value),
-    skip in test := !isScala210x(scalaVersion.value),
-    publishArtifact := isScala210x(scalaVersion.value),
-
     osgiExportAll("com.twitter.bijection.scrooge"),
     libraryDependencies ++= Seq(
-      "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit")
-    ) ++ scroogeBuildDeps(scalaVersion.value)
+      "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
+      "com.twitter" %% "scrooge-serializer" % "3.17.0",
+      "com.twitter" %% "finagle-core" % "6.24.0" % "test"
+    )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   lazy val bijectionJson = module("json").settings(
@@ -234,7 +226,12 @@ object BijectionBuild extends Build {
 
   lazy val bijectionUtil = module("util").settings(
     osgiExportAll("com.twitter.bijection.twitter_util"),
-    libraryDependencies += "com.twitter" %% "util-core" % "6.20.0"
+    libraryDependencies += "com.twitter" %% "util-core" % "6.23.0"
+  ).dependsOn(bijectionCore % "test->test;compile->compile")
+
+  lazy val bijectionFinagleMySql = module("finagle-mysql").settings(
+    osgiExportAll("com.twitter.bijection.finagle_mysql"),
+    libraryDependencies += "com.twitter" %% "finagle-mysql" % "6.24.0"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   lazy val bijectionClojure = module("clojure").settings(

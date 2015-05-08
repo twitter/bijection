@@ -24,7 +24,7 @@ import org.apache.avro.generic.{ GenericData, GenericRecord }
  * @author Muhammad Ashraf
  * @since 7/6/13
  */
-object GenericAvroCodecsSpecification extends WordSpec with Matchers with BaseProperties {
+class GenericAvroCodecsSpecification extends WordSpec with Matchers with BaseProperties {
   val testSchema = new Schema.Parser().parse("""{
                                                    "type":"record",
                                                    "name":"FiscalRecord",
