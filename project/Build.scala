@@ -215,7 +215,8 @@ object BijectionBuild extends Build {
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude("junit", "junit"),
       "com.twitter" %% "scrooge-serializer" % "3.17.0",
-      "com.twitter" %% "finagle-core" % "6.24.0" % "test"
+      "com.twitter" %% "util-core" % "6.24.0",
+      "com.twitter" %% "finagle-core" % "6.25.0" % "test"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
@@ -226,12 +227,15 @@ object BijectionBuild extends Build {
 
   lazy val bijectionUtil = module("util").settings(
     osgiExportAll("com.twitter.bijection.twitter_util"),
-    libraryDependencies += "com.twitter" %% "util-core" % "6.23.0"
+    libraryDependencies += "com.twitter" %% "util-core" % "6.24.0"
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   lazy val bijectionFinagleMySql = module("finagle-mysql").settings(
     osgiExportAll("com.twitter.bijection.finagle_mysql"),
-    libraryDependencies += "com.twitter" %% "finagle-mysql" % "6.24.0"
+    libraryDependencies ++= Seq(
+      "com.twitter" %% "finagle-mysql" % "6.25.0",
+      "com.twitter" %% "util-core" % "6.24.0"
+    )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
   lazy val bijectionClojure = module("clojure").settings(
@@ -254,7 +258,7 @@ object BijectionBuild extends Build {
   lazy val bijectionHbase = module("hbase").settings(
     osgiExportAll("com.twitter.bijection.hbase"),
     libraryDependencies ++= Seq(
-      "org.apache.hbase" % "hbase" % "0.94.4" % "provided->default",
+      "org.apache.hbase" % "hbase" % "0.94.4" % "provided->default" exclude("org.jruby", "jruby-complete"),
       "org.apache.hadoop" % "hadoop-core" % "1.0.4" % "provided->default"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
@@ -262,8 +266,8 @@ object BijectionBuild extends Build {
   lazy val bijectionJodaTime = module("jodatime").settings(
     osgiExportAll("com.twitter.bijection.jodatime"),
     libraryDependencies ++= Seq(
-      "joda-time" % "joda-time" % "2.2",
-      "org.joda" % "joda-convert" % "1.3.1"
+      "joda-time" % "joda-time" % "2.3",
+      "org.joda" % "joda-convert" % "1.6"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
 
