@@ -1,0 +1,1708 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>bijection - com.twitter.bijection</title>
+          <meta name="description" content="bijection - com.twitter.bijection" />
+          <meta name="keywords" content="bijection com.twitter.bijection" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'com.twitter.bijection.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="com">com</a>.<a href="../package.html" class="extype" name="com.twitter">twitter</a></p>
+        <h1>bijection</h1><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bijection</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Bijection trait with numerous implementations.</p><p>A Bijection[A, B] is an invertible function from A -&gt; B.
+Knowing that two types have this relationship can be very helpful
+for serialization (Bijection[T, Array[Byte]]]), communication between
+libraries (Bijection[MyTrait, YourTrait]) and many other purposes.
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/twitter/bijection/tree/0.8.0/bijection-core/src/main/scala/com/twitter/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="com.twitter.bijection"><span>bijection</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.twitter.bijection.@@" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="@@[T,Tag]=Twithcom.twitter.bijection.package.Tagged[Tag]"></a>
+      <a id="@@[T,Tag]:@@[T,Tag]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $at$at" class="name">@@</span><span class="tparams">[<span name="T">T</span>, <span name="Tag">Tag</span>]</span><span class="result"> = <span class="extype" name="com.twitter.bijection.@@.T">T</span> with <a href="#Tagged[T]=AnyRef{typeTag=T}" class="extmbr" name="com.twitter.bijection.Tagged">Tagged</a>[<span class="extype" name="com.twitter.bijection.@@.Tag">Tag</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@@@[T,Tag]=Twithcom.twitter.bijection.package.Tagged[Tag]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Tag a type <code>T</code> with <code>Tag</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Tag a type <code>T</code> with <code>Tag</code>. The resulting type is a subtype of <code>T</code>.</p><p> The resulting type is used to discriminate between type class instances.
+</p></div></div>
+    </li><li name="com.twitter.bijection.AbstractBijection" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AbstractBijection[A,B]extendsBijection[A,B]"></a>
+      <a id="AbstractBijection[A,B]:AbstractBijection[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AbstractBijection.html"><span class="name">AbstractBijection</span></a><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends <a href="Bijection.html" class="extype" name="com.twitter.bijection.Bijection">Bijection</a>[<span class="extype" name="com.twitter.bijection.AbstractBijection.A">A</span>, <span class="extype" name="com.twitter.bijection.AbstractBijection.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@AbstractBijection[A,B]extendsBijection[A,B]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Abstract class to ease Bijection creation from Java.</p>
+    </li><li name="com.twitter.bijection.AbstractBufferable" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AbstractBufferable[T]extendsBufferable[T]"></a>
+      <a id="AbstractBufferable[T]:AbstractBufferable[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AbstractBufferable.html"><span class="name">AbstractBufferable</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="Bufferable.html" class="extype" name="com.twitter.bijection.Bufferable">Bufferable</a>[<span class="extype" name="com.twitter.bijection.AbstractBufferable.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@AbstractBufferable[T]extendsBufferable[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">For Java and avoiding trait bloat
+</p>
+    </li><li name="com.twitter.bijection.AbstractInjection" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="AbstractInjection[A,B]extendsInjection[A,B]"></a>
+      <a id="AbstractInjection[A,B]:AbstractInjection[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AbstractInjection.html"><span class="name">AbstractInjection</span></a><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends <a href="Injection.html" class="extype" name="com.twitter.bijection.Injection">Injection</a>[<span class="extype" name="com.twitter.bijection.AbstractInjection.A">A</span>, <span class="extype" name="com.twitter.bijection.AbstractInjection.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@AbstractInjection[A,B]extendsInjection[A,B]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Abstract class to ease Injection creation from Java (and reduce instance
+size in scala).</p><div class="fullcomment"><div class="comment cmt"><p>Abstract class to ease Injection creation from Java (and reduce instance
+size in scala). Prefer to subclass this for anonymous instances.
+</p></div></div>
+    </li><li name="com.twitter.bijection.Attempt" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Attempt[T]=scala.util.Try[T]"></a>
+      <a id="Attempt[T]:Attempt[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Attempt</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> = <span class="extype" name="scala.util.Try">Try</span>[<span class="extype" name="com.twitter.bijection.Attempt.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@Attempt[T]=scala.util.Try[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Injections may not be defined for their inverse conversion.</p><div class="fullcomment"><div class="comment cmt"><p>Injections may not be defined for their inverse conversion.
+This type represents the attempted conversion. A failure
+will result in a scala.util.Failure containing the InversionFailure. A success
+will result in a scala.util.Success containing the inverted value.</p><p>TODO: Remove in 0.6.0.
+</p></div></div>
+    </li><li name="com.twitter.bijection.Base64String" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Base64StringextendsAnyValwithProductwithSerializable"></a>
+      <a id="Base64String:Base64String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Base64String.html"><span class="name">Base64String</span></a><span class="params">(<span name="str">str: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@Base64StringextendsAnyValwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.Bijection" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Bijection[A,B]extendsSerializable"></a>
+      <a id="Bijection[A,B]:Bijection[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Bijection.html"><span class="name">Bijection</span></a><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends <span class="extype" name="java.io.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@Bijection[A,B]extendsSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A Bijection[A, B] is a pair of functions that transform an element between
+types A and B isomorphically; that is, for all items,</p><div class="fullcomment"><div class="comment cmt"><p>A Bijection[A, B] is a pair of functions that transform an element between
+types A and B isomorphically; that is, for all items,</p><p>item == someBijection.inverse(someBijection.apply(item))
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@implicitNotFound</span><span class="args">(<span>
+      
+      <span class="defval" name="&quot;Cannot find Bijection type class between ${A} and ${B}&quot;">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="com.twitter.bijection.BinaryBijections" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="BinaryBijectionsextendsStringBijections"></a>
+      <a id="BinaryBijections:BinaryBijections"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="BinaryBijections.html"><span class="name">BinaryBijections</span></a><span class="result"> extends <a href="StringBijections.html" class="extype" name="com.twitter.bijection.StringBijections">StringBijections</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@BinaryBijectionsextendsStringBijections" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A collection of utilities for encoding strings and byte arrays to
+and decoding from strings compressed from with gzip.</p><div class="fullcomment"><div class="comment cmt"><p>A collection of utilities for encoding strings and byte arrays to
+and decoding from strings compressed from with gzip.</p><p>This object is thread-safe because there are no streams shared
+outside of method scope, and therefore no contention for shared byte arrays.
+</p></div></div>
+    </li><li name="com.twitter.bijection.Bufferable" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Bufferable[T]extendsSerializable"></a>
+      <a id="Bufferable[T]:Bufferable[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Bufferable.html"><span class="name">Bufferable</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="java.io.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@Bufferable[T]extendsSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Bufferable[T] is a typeclass to work with java.nio.ByteBuffer for serialization/injections to
+Array[Byte]
+Always call .duplicate before using the ByteBuffer so the original is not modified
+(though obviously the backing array is)
+</p><div class="fullcomment"><div class="comment cmt"><p>Bufferable[T] is a typeclass to work with java.nio.ByteBuffer for serialization/injections to
+Array[Byte]
+Always call .duplicate before using the ByteBuffer so the original is not modified
+(though obviously the backing array is)
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@implicitNotFound</span><span class="args">(<span>
+      
+      <span class="defval" name="&quot;Cannot find Bufferable type class for ${T}&quot;">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="com.twitter.bijection.ClassBijection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ClassBijection[T]extendsBijection[Class[T],com.twitter.bijection.@@[String,com.twitter.bijection.Rep[Class[T]]]]"></a>
+      <a id="ClassBijection[T]:ClassBijection[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ClassBijection.html"><span class="name">ClassBijection</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="Bijection.html" class="extype" name="com.twitter.bijection.Bijection">Bijection</a>[<span class="extype" name="scala.Predef.Class">Class</span>[<span class="extype" name="com.twitter.bijection.ClassBijection.T">T</span>], <a href="#@@[T,Tag]=Twithcom.twitter.bijection.package.Tagged[Tag]" class="extmbr" name="com.twitter.bijection.@@">@@</a>[<span class="extype" name="scala.Predef.String">String</span>, <a href="Rep.html" class="extype" name="com.twitter.bijection.Rep">Rep</a>[<span class="extype" name="scala.Predef.Class">Class</span>[<span class="extype" name="com.twitter.bijection.ClassBijection.T">T</span>]]]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@ClassBijection[T]extendsBijection[Class[T],com.twitter.bijection.@@[String,com.twitter.bijection.Rep[Class[T]]]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"> Bijection between Class objects and string.</p>
+    </li><li name="com.twitter.bijection.ClassInjection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ClassInjection[T]extendsAbstractInjection[Class[T],String]"></a>
+      <a id="ClassInjection[T]:ClassInjection[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ClassInjection.html"><span class="name">ClassInjection</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="AbstractInjection.html" class="extype" name="com.twitter.bijection.AbstractInjection">AbstractInjection</a>[<span class="extype" name="scala.Predef.Class">Class</span>[<span class="extype" name="com.twitter.bijection.ClassInjection.T">T</span>], <span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@ClassInjection[T]extendsAbstractInjection[Class[T],String]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"> Injection between Class objects and string.</p>
+    </li><li name="com.twitter.bijection.Codec" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Codec[T]=com.twitter.bijection.Injection[T,Array[Byte]]"></a>
+      <a id="Codec[T]:Codec[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Codec</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> = <a href="Injection.html" class="extype" name="com.twitter.bijection.Injection">Injection</a>[<span class="extype" name="com.twitter.bijection.Codec.T">T</span>, <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Byte">Byte</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@Codec[T]=com.twitter.bijection.Injection[T,Array[Byte]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Using Injections for serialization is a common pattern.</p><div class="fullcomment"><div class="comment cmt"><p>Using Injections for serialization is a common pattern. Currying
+the byte array parameter makes it easier to write code like
+this:</p><pre><span class="kw">def</span> getProducer[T: Codec] = ...</pre></div></div>
+    </li><li name="com.twitter.bijection.CollectionBijections" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="CollectionBijectionsextendsBinaryBijections"></a>
+      <a id="CollectionBijections:CollectionBijections"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="CollectionBijections.html"><span class="name">CollectionBijections</span></a><span class="result"> extends <a href="BinaryBijections.html" class="extype" name="com.twitter.bijection.BinaryBijections">BinaryBijections</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@CollectionBijectionsextendsBinaryBijections" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.CollectionInjections" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="CollectionInjectionsextendsStringInjections"></a>
+      <a id="CollectionInjections:CollectionInjections"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="CollectionInjections.html"><span class="name">CollectionInjections</span></a><span class="result"> extends <a href="StringInjections.html" class="extype" name="com.twitter.bijection.StringInjections">StringInjections</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@CollectionInjectionsextendsStringInjections" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.Conversion" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Conversion[A,B]extendsSerializable"></a>
+      <a id="Conversion[A,B]:Conversion[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Conversion.html"><span class="name">Conversion</span></a><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends <span class="extype" name="java.io.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@Conversion[A,B]extendsSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.Convert" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Convert[A]extendsAnyValwithProductwithSerializable"></a>
+      <a id="Convert[A]:Convert[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Convert.html"><span class="name">Convert</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="com.twitter.bijection.Convert.A">A</span></span>)</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@Convert[A]extendsAnyValwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Convert allows the user to convert an instance of type A to type B given an implicit Conversion
+that goes between the two.</p><div class="fullcomment"><div class="comment cmt"><p>Convert allows the user to convert an instance of type A to type B given an implicit Conversion
+that goes between the two.</p><p>For example, with an implicit Bijection[String,Array[Byte]], the following works:
+Array(1.toByte, 2.toByte).as[String]</p><p>Thanks to
+[hylotech](https://github.com/hylotech/suits/blob/master/src/main/scala/hylotech/util/Bijection.scala)
+for the following &quot;as&quot; pattern.
+</p></div></div>
+    </li><li name="com.twitter.bijection.CrazyLowPriorityConversion" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="CrazyLowPriorityConversionextendsSerializable"></a>
+      <a id="CrazyLowPriorityConversion:CrazyLowPriorityConversion"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="CrazyLowPriorityConversion.html"><span class="name">CrazyLowPriorityConversion</span></a><span class="result"> extends <span class="extype" name="java.io.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@CrazyLowPriorityConversionextendsSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.EnglishInt" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EnglishIntextendsAnyValwithProductwithSerializable"></a>
+      <a id="EnglishInt:EnglishInt"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="EnglishInt.html"><span class="name">EnglishInt</span></a><span class="params">(<span name="get">get: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@EnglishIntextendsAnyValwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.Forward" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Forward[A,B]extendsImplicitBijection[A,B]withProductwithSerializable"></a>
+      <a id="Forward[A,B]:Forward[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Forward.html"><span class="name">Forward</span></a><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="bijection">bijection: <a href="Bijection.html" class="extype" name="com.twitter.bijection.Bijection">Bijection</a>[<span class="extype" name="com.twitter.bijection.Forward.A">A</span>, <span class="extype" name="com.twitter.bijection.Forward.B">B</span>]</span>)</span><span class="result"> extends <a href="ImplicitBijection.html" class="extype" name="com.twitter.bijection.ImplicitBijection">ImplicitBijection</a>[<span class="extype" name="com.twitter.bijection.Forward.A">A</span>, <span class="extype" name="com.twitter.bijection.Forward.B">B</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@Forward[A,B]extendsImplicitBijection[A,B]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.GZippedBase64String" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GZippedBase64StringextendsAnyValwithProductwithSerializable"></a>
+      <a id="GZippedBase64String:GZippedBase64String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="GZippedBase64String.html"><span class="name">GZippedBase64String</span></a><span class="params">(<span name="str">str: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@GZippedBase64StringextendsAnyValwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.GZippedBytes" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GZippedBytesextendsAnyValwithProductwithSerializable"></a>
+      <a id="GZippedBytes:GZippedBytes"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="GZippedBytes.html"><span class="name">GZippedBytes</span></a><span class="params">(<span name="bytes">bytes: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Byte">Byte</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.AnyVal">AnyVal</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@GZippedBytesextendsAnyValwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.GeneratedTupleBijections" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="GeneratedTupleBijectionsextendsLowPriorityBijections"></a>
+      <a id="GeneratedTupleBijections:GeneratedTupleBijections"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="GeneratedTupleBijections.html"><span class="name">GeneratedTupleBijections</span></a><span class="result"> extends <a href="LowPriorityBijections.html" class="extype" name="com.twitter.bijection.LowPriorityBijections">LowPriorityBijections</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@GeneratedTupleBijectionsextendsLowPriorityBijections" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.GeneratedTupleBufferable" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="GeneratedTupleBufferableextendsAnyRef"></a>
+      <a id="GeneratedTupleBufferable:GeneratedTupleBufferable"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="GeneratedTupleBufferable.html"><span class="name">GeneratedTupleBufferable</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@GeneratedTupleBufferableextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.GeneratedTupleCollectionInjections" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="GeneratedTupleCollectionInjectionsextendsLowPriorityInjections"></a>
+      <a id="GeneratedTupleCollectionInjections:GeneratedTupleCollectionInjections"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="GeneratedTupleCollectionInjections.html"><span class="name">GeneratedTupleCollectionInjections</span></a><span class="result"> extends <a href="LowPriorityInjections.html" class="extype" name="com.twitter.bijection.LowPriorityInjections">LowPriorityInjections</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@GeneratedTupleCollectionInjectionsextendsLowPriorityInjections" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.GeneratedTupleInjections" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="GeneratedTupleInjectionsextendsGeneratedTupleCollectionInjections"></a>
+      <a id="GeneratedTupleInjections:GeneratedTupleInjections"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="GeneratedTupleInjections.html"><span class="name">GeneratedTupleInjections</span></a><span class="result"> extends <a href="GeneratedTupleCollectionInjections.html" class="extype" name="com.twitter.bijection.GeneratedTupleCollectionInjections">GeneratedTupleCollectionInjections</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@GeneratedTupleInjectionsextendsGeneratedTupleCollectionInjections" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.HasRep" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="HasRep[A,B]extendsAnyRef"></a>
+      <a id="HasRep[A,B]:HasRep[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="HasRep.html"><span class="name">HasRep</span></a><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@HasRep[A,B]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Type class for summoning the function that can check whether the instance can be tagged with Rep
+</p>
+    </li><li name="com.twitter.bijection.IdentityBijection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IdentityBijection[A]extendsBijection[A,A]"></a>
+      <a id="IdentityBijection[A]:IdentityBijection[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="IdentityBijection.html"><span class="name">IdentityBijection</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="Bijection.html" class="extype" name="com.twitter.bijection.Bijection">Bijection</a>[<span class="extype" name="com.twitter.bijection.IdentityBijection.A">A</span>, <span class="extype" name="com.twitter.bijection.IdentityBijection.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@IdentityBijection[A]extendsBijection[A,A]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.ImplicitBijection" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ImplicitBijection[A,B]extendsSerializable"></a>
+      <a id="ImplicitBijection[A,B]:ImplicitBijection[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ImplicitBijection.html"><span class="name">ImplicitBijection</span></a><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends <span class="extype" name="java.io.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@ImplicitBijection[A,B]extendsSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@implicitNotFound</span><span class="args">(<span>
+      
+      <span class="defval" name="&quot;Cannot find ImplicitBijection type class from ${A} to ${B}&quot;">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="com.twitter.bijection.Injection" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Injection[A,B]extendsSerializable"></a>
+      <a id="Injection[A,B]:Injection[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Injection.html"><span class="name">Injection</span></a><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="result"> extends <span class="extype" name="java.io.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@Injection[A,B]extendsSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An Injection[A, B] is a function from A to B, and from some B back to A.</p><div class="fullcomment"><div class="comment cmt"><p>An Injection[A, B] is a function from A to B, and from some B back to A.
+see: http://mathworld.wolfram.com/Injection.html
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@implicitNotFound</span><span class="args">(<span>
+      
+      <span class="defval" name="&quot;Cannot find Injection type class from ${A} to ${B}&quot;">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="com.twitter.bijection.IntModDivInjection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IntModDivInjectionextendsInjection[Int,(Int,Int)]"></a>
+      <a id="IntModDivInjection:IntModDivInjection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="IntModDivInjection.html"><span class="name">IntModDivInjection</span></a><span class="result"> extends <a href="Injection.html" class="extype" name="com.twitter.bijection.Injection">Injection</a>[<span class="extype" name="scala.Int">Int</span>, (<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@IntModDivInjectionextendsInjection[Int,(Int,Int)]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A common injection on numbers: N -&gt; (m = N mod K, (N-m)/K)
+The first element in result tuple is always [0, modulus)
+</p>
+    </li><li name="com.twitter.bijection.InversionFailure" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="InversionFailureextendsUnsupportedOperationExceptionwithProductwithSerializable"></a>
+      <a id="InversionFailure:InversionFailure"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="InversionFailure.html"><span class="name">InversionFailure</span></a><span class="params">(<span name="failed">failed: <span class="extype" name="scala.Any">Any</span></span>, <span name="ex">ex: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result"> extends <span class="extype" name="scala.UnsupportedOperationException">UnsupportedOperationException</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@InversionFailureextendsUnsupportedOperationExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"> When Injection inversion attempts are known to fail,
+ the attempt will encode an InversionFailure to represent
+ that failure
+</p>
+    </li><li name="com.twitter.bijection.JavaSerializationInjection" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="JavaSerializationInjection[T&lt;:java.io.Serializable]extendsInjection[T,Array[Byte]]"></a>
+      <a id="JavaSerializationInjection[T&lt;:Serializable]:JavaSerializationInjection[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="JavaSerializationInjection.html"><span class="name">JavaSerializationInjection</span></a><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="java.io.Serializable">Serializable</span></span>]</span><span class="result"> extends <a href="Injection.html" class="extype" name="com.twitter.bijection.Injection">Injection</a>[<span class="extype" name="com.twitter.bijection.JavaSerializationInjection.T">T</span>, <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Byte">Byte</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@JavaSerializationInjection[T&lt;:java.io.Serializable]extendsInjection[T,Array[Byte]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Use Java serialization to write/read bytes.</p><div class="fullcomment"><div class="comment cmt"><p>Use Java serialization to write/read bytes.
+We avoid manifests here to make it easier from Java
+</p></div></div>
+    </li><li name="com.twitter.bijection.LongModDivInjection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LongModDivInjectionextendsInjection[Long,(Long,Long)]"></a>
+      <a id="LongModDivInjection:LongModDivInjection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LongModDivInjection.html"><span class="name">LongModDivInjection</span></a><span class="result"> extends <a href="Injection.html" class="extype" name="com.twitter.bijection.Injection">Injection</a>[<span class="extype" name="scala.Long">Long</span>, (<span class="extype" name="scala.Long">Long</span>, <span class="extype" name="scala.Long">Long</span>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@LongModDivInjectionextendsInjection[Long,(Long,Long)]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A common injection on numbers: N -&gt; (m = N mod K, (N-m)/K)
+The first element in result tuple is always [0, modulus)
+</p>
+    </li><li name="com.twitter.bijection.LowPriorityBijections" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LowPriorityBijectionsextendsAnyRef"></a>
+      <a id="LowPriorityBijections:LowPriorityBijections"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LowPriorityBijections.html"><span class="name">LowPriorityBijections</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@LowPriorityBijectionsextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.LowPriorityConversion" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LowPriorityConversionextendsNotSuperLowPriorityConversion"></a>
+      <a id="LowPriorityConversion:LowPriorityConversion"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LowPriorityConversion.html"><span class="name">LowPriorityConversion</span></a><span class="result"> extends <a href="NotSuperLowPriorityConversion.html" class="extype" name="com.twitter.bijection.NotSuperLowPriorityConversion">NotSuperLowPriorityConversion</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@LowPriorityConversionextendsNotSuperLowPriorityConversion" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.LowPriorityImplicitBijection" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LowPriorityImplicitBijectionextendsSerializable"></a>
+      <a id="LowPriorityImplicitBijection:LowPriorityImplicitBijection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LowPriorityImplicitBijection.html"><span class="name">LowPriorityImplicitBijection</span></a><span class="result"> extends <span class="extype" name="java.io.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@LowPriorityImplicitBijectionextendsSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.LowPriorityInjections" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LowPriorityInjectionsextendsAnyRef"></a>
+      <a id="LowPriorityInjections:LowPriorityInjections"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LowPriorityInjections.html"><span class="name">LowPriorityInjections</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@LowPriorityInjectionsextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.NotSuperLowPriorityConversion" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NotSuperLowPriorityConversionextendsSuperLowPriorityConversion"></a>
+      <a id="NotSuperLowPriorityConversion:NotSuperLowPriorityConversion"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NotSuperLowPriorityConversion.html"><span class="name">NotSuperLowPriorityConversion</span></a><span class="result"> extends <a href="SuperLowPriorityConversion.html" class="extype" name="com.twitter.bijection.SuperLowPriorityConversion">SuperLowPriorityConversion</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@NotSuperLowPriorityConversionextendsSuperLowPriorityConversion" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.NumericBijections" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NumericBijectionsextendsGeneratedTupleBijections"></a>
+      <a id="NumericBijections:NumericBijections"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NumericBijections.html"><span class="name">NumericBijections</span></a><span class="result"> extends <a href="GeneratedTupleBijections.html" class="extype" name="com.twitter.bijection.GeneratedTupleBijections">GeneratedTupleBijections</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@NumericBijectionsextendsGeneratedTupleBijections" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.NumericInjections" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NumericInjectionsextendsGeneratedTupleInjections"></a>
+      <a id="NumericInjections:NumericInjections"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NumericInjections.html"><span class="name">NumericInjections</span></a><span class="result"> extends <a href="GeneratedTupleInjections.html" class="extype" name="com.twitter.bijection.GeneratedTupleInjections">GeneratedTupleInjections</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@NumericInjectionsextendsGeneratedTupleInjections" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.Pivot" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Pivot[K,K1,K2]extendsBijection[Iterable[K],Map[K1,Iterable[K2]]]"></a>
+      <a id="Pivot[K,K1,K2]:Pivot[K,K1,K2]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Pivot.html"><span class="name">Pivot</span></a><span class="tparams">[<span name="K">K</span>, <span name="K1">K1</span>, <span name="K2">K2</span>]</span><span class="result"> extends <a href="Bijection.html" class="extype" name="com.twitter.bijection.Bijection">Bijection</a>[<span class="extype" name="scala.Iterable">Iterable</span>[<span class="extype" name="com.twitter.bijection.Pivot.K">K</span>], <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.twitter.bijection.Pivot.K1">K1</span>, <span class="extype" name="scala.Iterable">Iterable</span>[<span class="extype" name="com.twitter.bijection.Pivot.K2">K2</span>]]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@Pivot[K,K1,K2]extendsBijection[Iterable[K],Map[K1,Iterable[K2]]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Pivot is useful in moving from a 1D space of K to a 2D mapping
+space of K1 x K2.</p><div class="fullcomment"><div class="comment cmt"><p>Pivot is useful in moving from a 1D space of K to a 2D mapping
+space of K1 x K2. If the elements within the K space have many repeated
+elements -- imagine the &quot;time&quot; component of a Key in a timeseries key-value
+store -- pivoting the changing component into an inner K2 while leaving
+the repeated component in an outer K1 can assist in compressing
+a datastore's space requirements.</p><p>Type Parameters:</p><p>K: Original Key
+K1: Outer Key
+K2: Inner Key</p><p>Trivial: Pivot[(Event, Timestamp), Event, Timestamp] would
+pivot the timestamp component out of a compound key.
+</p></div></div>
+    </li><li name="com.twitter.bijection.PivotDecoder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="PivotDecoder[K,K1,K2]extendsMap[K1,Iterable[K2]]=&gt;Iterable[K]withSerializable"></a>
+      <a id="PivotDecoder[K,K1,K2]:PivotDecoder[K,K1,K2]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="PivotDecoder.html"><span class="name">PivotDecoder</span></a><span class="tparams">[<span name="K">K</span>, <span name="K1">K1</span>, <span name="K2">K2</span>]</span><span class="result"> extends (<span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.twitter.bijection.PivotDecoder.K1">K1</span>, <span class="extype" name="scala.Iterable">Iterable</span>[<span class="extype" name="com.twitter.bijection.PivotDecoder.K2">K2</span>]]) ⇒ <span class="extype" name="scala.Iterable">Iterable</span>[<span class="extype" name="com.twitter.bijection.PivotDecoder.K">K</span>] with <span class="extype" name="java.io.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@PivotDecoder[K,K1,K2]extendsMap[K1,Iterable[K2]]=&gt;Iterable[K]withSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.PivotEncoder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="PivotEncoder[K,K1,K2]extendsIterable[K]=&gt;Map[K1,Iterable[K2]]withSerializable"></a>
+      <a id="PivotEncoder[K,K1,K2]:PivotEncoder[K,K1,K2]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="PivotEncoder.html"><span class="name">PivotEncoder</span></a><span class="tparams">[<span name="K">K</span>, <span name="K1">K1</span>, <span name="K2">K2</span>]</span><span class="result"> extends (<span class="extype" name="scala.Iterable">Iterable</span>[<span class="extype" name="com.twitter.bijection.PivotEncoder.K">K</span>]) ⇒ <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="com.twitter.bijection.PivotEncoder.K1">K1</span>, <span class="extype" name="scala.Iterable">Iterable</span>[<span class="extype" name="com.twitter.bijection.PivotEncoder.K2">K2</span>]] with <span class="extype" name="java.io.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@PivotEncoder[K,K1,K2]extendsIterable[K]=&gt;Map[K1,Iterable[K2]]withSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.PivotImpl" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PivotImpl[K,K1,K2]extendsPivot[K,K1,K2]"></a>
+      <a id="PivotImpl[K,K1,K2]:PivotImpl[K,K1,K2]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="PivotImpl.html"><span class="name">PivotImpl</span></a><span class="tparams">[<span name="K">K</span>, <span name="K1">K1</span>, <span name="K2">K2</span>]</span><span class="result"> extends <a href="Pivot.html" class="extype" name="com.twitter.bijection.Pivot">Pivot</a>[<span class="extype" name="com.twitter.bijection.PivotImpl.K">K</span>, <span class="extype" name="com.twitter.bijection.PivotImpl.K1">K1</span>, <span class="extype" name="com.twitter.bijection.PivotImpl.K2">K2</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@PivotImpl[K,K1,K2]extendsPivot[K,K1,K2]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.Rep" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Rep[A]extendsAnyRef"></a>
+      <a id="Rep[A]:Rep[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Rep.html"><span class="name">Rep</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@Rep[A]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Type tag used to indicate that an instance of a type such as String
+contains a valid representation of another type, such as Int or URL.</p>
+    </li><li name="com.twitter.bijection.Reverse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Reverse[A,B]extendsImplicitBijection[A,B]withProductwithSerializable"></a>
+      <a id="Reverse[A,B]:Reverse[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Reverse.html"><span class="name">Reverse</span></a><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="inv">inv: <a href="Bijection.html" class="extype" name="com.twitter.bijection.Bijection">Bijection</a>[<span class="extype" name="com.twitter.bijection.Reverse.B">B</span>, <span class="extype" name="com.twitter.bijection.Reverse.A">A</span>]</span>)</span><span class="result"> extends <a href="ImplicitBijection.html" class="extype" name="com.twitter.bijection.ImplicitBijection">ImplicitBijection</a>[<span class="extype" name="com.twitter.bijection.Reverse.A">A</span>, <span class="extype" name="com.twitter.bijection.Reverse.B">B</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@Reverse[A,B]extendsImplicitBijection[A,B]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.StringBijections" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StringBijectionsextendsNumericBijections"></a>
+      <a id="StringBijections:StringBijections"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StringBijections.html"><span class="name">StringBijections</span></a><span class="result"> extends <a href="NumericBijections.html" class="extype" name="com.twitter.bijection.NumericBijections">NumericBijections</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@StringBijectionsextendsNumericBijections" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.StringInjections" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StringInjectionsextendsNumericInjections"></a>
+      <a id="StringInjections:StringInjections"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StringInjections.html"><span class="name">StringInjections</span></a><span class="result"> extends <a href="NumericInjections.html" class="extype" name="com.twitter.bijection.NumericInjections">NumericInjections</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@StringInjectionsextendsNumericInjections" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.SubclassBijection" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="SubclassBijection[A,B&lt;:A]extendsBijection[A,B]"></a>
+      <a id="SubclassBijection[A,B&lt;:A]:SubclassBijection[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SubclassBijection.html"><span class="name">SubclassBijection</span></a><span class="tparams">[<span name="A">A</span>, <span name="B">B &lt;: <span class="extype" name="com.twitter.bijection.SubclassBijection.A">A</span></span>]</span><span class="result"> extends <a href="Bijection.html" class="extype" name="com.twitter.bijection.Bijection">Bijection</a>[<span class="extype" name="com.twitter.bijection.SubclassBijection.A">A</span>, <span class="extype" name="com.twitter.bijection.SubclassBijection.B">B</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@SubclassBijection[A,B&lt;:A]extendsBijection[A,B]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">When you have conversion between A and B where B is a subclass of A, which is often
+free, i.e.</p><div class="fullcomment"><div class="comment cmt"><p>When you have conversion between A and B where B is a subclass of A, which is often
+free, i.e. A is already an instance of A, then this can be faster
+</p></div></div>
+    </li><li name="com.twitter.bijection.SuperLowPriorityConversion" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SuperLowPriorityConversionextendsCrazyLowPriorityConversion"></a>
+      <a id="SuperLowPriorityConversion:SuperLowPriorityConversion"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SuperLowPriorityConversion.html"><span class="name">SuperLowPriorityConversion</span></a><span class="result"> extends <a href="CrazyLowPriorityConversion.html" class="extype" name="com.twitter.bijection.CrazyLowPriorityConversion">CrazyLowPriorityConversion</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@SuperLowPriorityConversionextendsCrazyLowPriorityConversion" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.Tagged" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Tagged[T]=AnyRef{typeTag=T}"></a>
+      <a id="Tagged[T]:Tagged[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Tagged</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> = <span class="extype" name="scala.AnyRef">AnyRef</span> { type Tag = T }</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@Tagged[T]=AnyRef{typeTag=T}" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Tagging infrastructure.</p>
+    </li><li name="com.twitter.bijection.TypeclassBijection" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="TypeclassBijection[T[_]]extendsAnyRef"></a>
+      <a id="TypeclassBijection[T[_]]:TypeclassBijection[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="TypeclassBijection.html"><span class="name">TypeclassBijection</span></a><span class="tparams">[<span name="T">T<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@TypeclassBijection[T[_]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.twitter.bijection.Base64String" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Base64String"></a>
+      <a id="Base64String:Base64String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Base64String$.html"><span class="name">Base64String</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@Base64String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.Bijection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Bijection"></a>
+      <a id="Bijection:Bijection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Bijection$.html"><span class="name">Bijection</span></a><span class="result"> extends <a href="CollectionBijections.html" class="extype" name="com.twitter.bijection.CollectionBijections">CollectionBijections</a> with <span class="extype" name="java.io.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@Bijection" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.Bufferable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Bufferable"></a>
+      <a id="Bufferable:Bufferable"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Bufferable$.html"><span class="name">Bufferable</span></a><span class="result"> extends <a href="GeneratedTupleBufferable.html" class="extype" name="com.twitter.bijection.GeneratedTupleBufferable">GeneratedTupleBufferable</a> with <span class="extype" name="java.io.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@Bufferable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.CastInjection" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="CastInjection"></a>
+      <a id="CastInjection:CastInjection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="CastInjection$.html"><span class="name">CastInjection</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@CastInjection" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"> Injection to cast back and forth between two types.</p><div class="fullcomment"><div class="comment cmt"><p> Injection to cast back and forth between two types.
+WARNING: this uses java's Class.cast, which is subject to type erasure. If you have
+a type parameterized type, like List[String] =&gt; List[Any], the cast will succeed, but
+the inner items will not be correct. This is intended for experts.
+</p></div></div>
+    </li><li name="com.twitter.bijection.ClassBijection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ClassBijection"></a>
+      <a id="ClassBijection:ClassBijection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ClassBijection$.html"><span class="name">ClassBijection</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@ClassBijection" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.Conversion" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Conversion"></a>
+      <a id="Conversion:Conversion"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Conversion$.html"><span class="name">Conversion</span></a><span class="result"> extends <a href="LowPriorityConversion.html" class="extype" name="com.twitter.bijection.LowPriorityConversion">LowPriorityConversion</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@Conversion" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.EnglishInt" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EnglishInt"></a>
+      <a id="EnglishInt:EnglishInt"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="EnglishInt$.html"><span class="name">EnglishInt</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@EnglishInt" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.GZippedBase64String" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="GZippedBase64String"></a>
+      <a id="GZippedBase64String:GZippedBase64String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="GZippedBase64String$.html"><span class="name">GZippedBase64String</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@GZippedBase64String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.ImplicitBijection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ImplicitBijection"></a>
+      <a id="ImplicitBijection:ImplicitBijection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ImplicitBijection$.html"><span class="name">ImplicitBijection</span></a><span class="result"> extends <a href="LowPriorityImplicitBijection.html" class="extype" name="com.twitter.bijection.LowPriorityImplicitBijection">LowPriorityImplicitBijection</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@ImplicitBijection" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.Injection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Injection"></a>
+      <a id="Injection:Injection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Injection$.html"><span class="name">Injection</span></a><span class="result"> extends <a href="CollectionInjections.html" class="extype" name="com.twitter.bijection.CollectionInjections">CollectionInjections</a> with <span class="extype" name="java.io.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@Injection" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.Inversion" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Inversion"></a>
+      <a id="Inversion:Inversion"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Inversion$.html"><span class="name">Inversion</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@Inversion" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Factory for applying inversion attempts
+</p>
+    </li><li name="com.twitter.bijection.InversionFailure" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="InversionFailure"></a>
+      <a id="InversionFailure:InversionFailure"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="InversionFailure$.html"><span class="name">InversionFailure</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@InversionFailure" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"> Factory for producing InversionFailures
+</p>
+    </li><li name="com.twitter.bijection.JavaSerializationInjection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="JavaSerializationInjection"></a>
+      <a id="JavaSerializationInjection:JavaSerializationInjection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="JavaSerializationInjection$.html"><span class="name">JavaSerializationInjection</span></a><span class="result"> extends <span class="extype" name="java.io.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@JavaSerializationInjection" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.NumberSystems" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NumberSystems"></a>
+      <a id="NumberSystems:NumberSystems"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NumberSystems$.html"><span class="name">NumberSystems</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@NumberSystems" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.Pivot" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Pivot"></a>
+      <a id="Pivot:Pivot"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Pivot$.html"><span class="name">Pivot</span></a><span class="result"> extends <span class="extype" name="java.io.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@Pivot" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.Rep" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Rep"></a>
+      <a id="Rep:Rep"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Rep$.html"><span class="name">Rep</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@Rep" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Useful HasRep
+</p>
+    </li><li name="com.twitter.bijection.StringCodec" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StringCodec"></a>
+      <a id="StringCodec:StringCodec"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="StringCodec$.html"><span class="name">StringCodec</span></a><span class="result"> extends <a href="StringInjections.html" class="extype" name="com.twitter.bijection.StringInjections">StringInjections</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@StringCodec" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.StringJoinBijection" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="StringJoinBijection"></a>
+      <a id="StringJoinBijection:StringJoinBijection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="StringJoinBijection$.html"><span class="name">StringJoinBijection</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@StringJoinBijection" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Bijection for joining together iterables of strings into a single string
+and splitting them back out.</p><div class="fullcomment"><div class="comment cmt"><p>Bijection for joining together iterables of strings into a single string
+and splitting them back out. Useful for storing sequences of strings
+in Config maps.
+</p></div></div>
+    </li><li name="com.twitter.bijection.SwapBijection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SwapBijection"></a>
+      <a id="SwapBijection:SwapBijection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SwapBijection$.html"><span class="name">SwapBijection</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@SwapBijection" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Bijection that flips the order of items in a Tuple2.</p>
+    </li><li name="com.twitter.bijection.TypeclassBijection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TypeclassBijection"></a>
+      <a id="TypeclassBijection:TypeclassBijection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="TypeclassBijection$.html"><span class="name">TypeclassBijection</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@TypeclassBijection" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.avro" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="avro"></a>
+      <a id="avro:avro"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="avro/package.html"><span class="name">avro</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@avro" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.clojure" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="clojure"></a>
+      <a id="clojure:clojure"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="clojure/package.html"><span class="name">clojure</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@clojure" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.codec" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="codec"></a>
+      <a id="codec:codec"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="codec/package.html"><span class="name">codec</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@codec" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.finagle_mysql" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="finagle_mysql"></a>
+      <a id="finagle_mysql:finagle_mysql"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="finagle_mysql/package.html"><span class="name">finagle_mysql</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@finagle_mysql" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.guava" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="guava"></a>
+      <a id="guava:guava"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="guava/package.html"><span class="name">guava</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@guava" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.hbase" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="hbase"></a>
+      <a id="hbase:hbase"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="hbase/package.html"><span class="name">hbase</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@hbase" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.jodatime" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="jodatime"></a>
+      <a id="jodatime:jodatime"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="jodatime/package.html"><span class="name">jodatime</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@jodatime" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.json" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="json"></a>
+      <a id="json:json"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="json/package.html"><span class="name">json</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@json" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.json4s" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="json4s"></a>
+      <a id="json4s:json4s"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="json4s/package.html"><span class="name">json4s</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@json4s" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Since</dt><dd><p>1/18/14
+</p></dd></dl></div>
+    </li><li name="com.twitter.bijection.macros" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="macros"></a>
+      <a id="macros:macros"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="macros/package.html"><span class="name">macros</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@macros" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.netty" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="netty"></a>
+      <a id="netty:netty"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="netty/package.html"><span class="name">netty</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@netty" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.protobuf" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="protobuf"></a>
+      <a id="protobuf:protobuf"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="protobuf/package.html"><span class="name">protobuf</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@protobuf" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.scrooge" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="scrooge"></a>
+      <a id="scrooge:scrooge"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="scrooge/package.html"><span class="name">scrooge</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@scrooge" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.thrift" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="thrift"></a>
+      <a id="thrift:thrift"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="thrift/package.html"><span class="name">thrift</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@thrift" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.twitter_util" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="twitter_util"></a>
+      <a id="twitter_util:twitter_util"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="twitter_util/package.html"><span class="name">twitter_util</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#com.twitter.bijection.package@twitter_util" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

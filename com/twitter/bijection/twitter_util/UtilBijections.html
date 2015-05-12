@@ -1,0 +1,652 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>UtilBijections - com.twitter.bijection.twitter_util.UtilBijections</title>
+          <meta name="description" content="UtilBijections - com.twitter.bijection.twitter util.UtilBijections" />
+          <meta name="keywords" content="UtilBijections com.twitter.bijection.twitter util.UtilBijections" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../index.html';
+            var hash = 'com.twitter.bijection.twitter_util.UtilBijections';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <a href="UtilBijections$.html" title="Go to companion"><img src="../../../../lib/trait_to_object_big.png" /></a>
+        <p id="owner"><a href="../../../package.html" class="extype" name="com">com</a>.<a href="../../package.html" class="extype" name="com.twitter">twitter</a>.<a href="../package.html" class="extype" name="com.twitter.bijection">bijection</a>.<a href="package.html" class="extype" name="com.twitter.bijection.twitter_util">twitter_util</a></p>
+        <h1><a href="UtilBijections$.html" title="Go to companion">UtilBijections</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="UtilBijections$.html" title="See companion">object UtilBijections</a>
+            | <a href="package.html" class="extype" name="com.twitter.bijection.twitter_util">package twitter_util</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">UtilBijections</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Bijection for mapping twitter-util's Future and Try onto
+other types.
+</p></div><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/twitter/bijection/tree/0.8.0/bijection-util/src/main/scala/com/twitter/bijection/twitter_util/UtilBijections.scala" target="_blank">UtilBijections.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="UtilBijections$.html" class="extype" name="com.twitter.bijection.twitter_util.UtilBijections">UtilBijections</a></div>
+          </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="com.twitter.bijection.twitter_util.UtilBijections"><span>UtilBijections</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@##():Int" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.twitter.bijection.twitter_util.UtilBijections.Owned" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Owned"></a>
+      <a id="Owned:Owned"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UtilBijections$Owned$.html"><span class="name">Owned</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@Owned" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.bijection.twitter_util.UtilBijections.Shared" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Shared"></a>
+      <a id="Shared:Shared"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="UtilBijections$Shared$.html"><span class="name">Shared</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@Shared" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@clone():Object" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="com.twitter.bijection.twitter_util.UtilBijections#futureBijection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="futureBijection[A,B](implicitbij:com.twitter.bijection.ImplicitBijection[A,B]):com.twitter.bijection.Bijection[com.twitter.util.Future[A],com.twitter.util.Future[B]]"></a>
+      <a id="futureBijection[A,B](ImplicitBijection[A,B]):Bijection[Future[A],Future[B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">futureBijection</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="bij">bij: <a href="../ImplicitBijection.html" class="extype" name="com.twitter.bijection.ImplicitBijection">ImplicitBijection</a>[<span class="extype" name="com.twitter.bijection.twitter_util.UtilBijections.futureBijection.A">A</span>, <span class="extype" name="com.twitter.bijection.twitter_util.UtilBijections.futureBijection.B">B</span>]</span>)</span><span class="result">: <a href="../Bijection.html" class="extype" name="com.twitter.bijection.Bijection">Bijection</a>[<span class="extype" name="com.twitter.util.Future">Future</span>[<span class="extype" name="com.twitter.bijection.twitter_util.UtilBijections.futureBijection.A">A</span>], <span class="extype" name="com.twitter.util.Future">Future</span>[<span class="extype" name="com.twitter.bijection.twitter_util.UtilBijections.futureBijection.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@futureBijection[A,B](implicitbij:com.twitter.bijection.ImplicitBijection[A,B]):com.twitter.bijection.Bijection[com.twitter.util.Future[A],com.twitter.util.Future[B]]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Bijection on Twitter Future
+if the bijection throws, the result will be a Throw.</p>
+    </li><li name="com.twitter.bijection.twitter_util.UtilBijections#futurePoolExecutionContextBijection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="futurePoolExecutionContextBijection:com.twitter.bijection.Bijection[com.twitter.util.FuturePool,scala.concurrent.ExecutionContext]"></a>
+      <a id="futurePoolExecutionContextBijection:Bijection[FuturePool,ExecutionContext]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">futurePoolExecutionContextBijection</span><span class="result">: <a href="../Bijection.html" class="extype" name="com.twitter.bijection.Bijection">Bijection</a>[<span class="extype" name="com.twitter.util.FuturePool">FuturePool</span>, <span class="extype" name="scala.concurrent.ExecutionContext">ExecutionContext</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@futurePoolExecutionContextBijection:com.twitter.bijection.Bijection[com.twitter.util.FuturePool,scala.concurrent.ExecutionContext]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Bijection from FuturePool to ExecutionContext
+</p>
+    </li><li name="com.twitter.bijection.twitter_util.UtilBijections#futureScalaBijection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="futureScalaBijection[A,B](implicitbij:com.twitter.bijection.ImplicitBijection[A,B],implicitexecutor:scala.concurrent.ExecutionContext):com.twitter.bijection.Bijection[scala.concurrent.Future[A],scala.concurrent.Future[B]]"></a>
+      <a id="futureScalaBijection[A,B](ImplicitBijection[A,B],ExecutionContext):Bijection[Future[A],Future[B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">futureScalaBijection</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="bij">bij: <a href="../ImplicitBijection.html" class="extype" name="com.twitter.bijection.ImplicitBijection">ImplicitBijection</a>[<span class="extype" name="com.twitter.bijection.twitter_util.UtilBijections.futureScalaBijection.A">A</span>, <span class="extype" name="com.twitter.bijection.twitter_util.UtilBijections.futureScalaBijection.B">B</span>]</span>, <span name="executor">executor: <span class="extype" name="scala.concurrent.ExecutionContext">ExecutionContext</span></span>)</span><span class="result">: <a href="../Bijection.html" class="extype" name="com.twitter.bijection.Bijection">Bijection</a>[<span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="com.twitter.bijection.twitter_util.UtilBijections.futureScalaBijection.A">A</span>], <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="com.twitter.bijection.twitter_util.UtilBijections.futureScalaBijection.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@futureScalaBijection[A,B](implicitbij:com.twitter.bijection.ImplicitBijection[A,B],implicitexecutor:scala.concurrent.ExecutionContext):com.twitter.bijection.Bijection[scala.concurrent.Future[A],scala.concurrent.Future[B]]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Bijection on Scala Future
+if the bijection throws, the result will be a Throw.</p>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@toString():String" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.twitter.bijection.twitter_util.UtilBijections#tryBijection" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tryBijection[A,B](implicitbij:com.twitter.bijection.ImplicitBijection[A,B]):com.twitter.bijection.Bijection[com.twitter.util.Try[A],com.twitter.util.Try[B]]"></a>
+      <a id="tryBijection[A,B](ImplicitBijection[A,B]):Bijection[Try[A],Try[B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tryBijection</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="bij">bij: <a href="../ImplicitBijection.html" class="extype" name="com.twitter.bijection.ImplicitBijection">ImplicitBijection</a>[<span class="extype" name="com.twitter.bijection.twitter_util.UtilBijections.tryBijection.A">A</span>, <span class="extype" name="com.twitter.bijection.twitter_util.UtilBijections.tryBijection.B">B</span>]</span>)</span><span class="result">: <a href="../Bijection.html" class="extype" name="com.twitter.bijection.Bijection">Bijection</a>[<span class="extype" name="com.twitter.util.Try">Try</span>[<span class="extype" name="com.twitter.bijection.twitter_util.UtilBijections.tryBijection.A">A</span>], <span class="extype" name="com.twitter.util.Try">Try</span>[<span class="extype" name="com.twitter.bijection.twitter_util.UtilBijections.tryBijection.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@tryBijection[A,B](implicitbij:com.twitter.bijection.ImplicitBijection[A,B]):com.twitter.bijection.Bijection[com.twitter.util.Try[A],com.twitter.util.Try[B]]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Bijection on Try.</p><div class="fullcomment"><div class="comment cmt"><p>Bijection on Try.
+If the the bijection throws, the result will be a throw
+</p></div></div>
+    </li><li name="com.twitter.bijection.twitter_util.UtilBijections#tryScalaBijection" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tryScalaBijection[A,B](implicitbij:com.twitter.bijection.ImplicitBijection[A,B]):com.twitter.bijection.Bijection[scala.util.Try[A],scala.util.Try[B]]"></a>
+      <a id="tryScalaBijection[A,B](ImplicitBijection[A,B]):Bijection[Try[A],Try[B]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tryScalaBijection</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="bij">bij: <a href="../ImplicitBijection.html" class="extype" name="com.twitter.bijection.ImplicitBijection">ImplicitBijection</a>[<span class="extype" name="com.twitter.bijection.twitter_util.UtilBijections.tryScalaBijection.A">A</span>, <span class="extype" name="com.twitter.bijection.twitter_util.UtilBijections.tryScalaBijection.B">B</span>]</span>)</span><span class="result">: <a href="../Bijection.html" class="extype" name="com.twitter.bijection.Bijection">Bijection</a>[<span class="extype" name="scala.util.Try">Try</span>[<span class="extype" name="com.twitter.bijection.twitter_util.UtilBijections.tryScalaBijection.A">A</span>], <span class="extype" name="scala.util.Try">Try</span>[<span class="extype" name="com.twitter.bijection.twitter_util.UtilBijections.tryScalaBijection.B">B</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@tryScalaBijection[A,B](implicitbij:com.twitter.bijection.ImplicitBijection[A,B]):com.twitter.bijection.Bijection[scala.util.Try[A],scala.util.Try[B]]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Bijection on scala Try.</p><div class="fullcomment"><div class="comment cmt"><p>Bijection on scala Try.
+If the the bijection throws, the result will be a throw
+</p></div></div>
+    </li><li name="com.twitter.bijection.twitter_util.UtilBijections#twitter2ScalaFuture" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="twitter2ScalaFuture[A](implicitexecutor:scala.concurrent.ExecutionContext):com.twitter.bijection.Bijection[com.twitter.util.Future[A],scala.concurrent.Future[A]]"></a>
+      <a id="twitter2ScalaFuture[A](ExecutionContext):Bijection[Future[A],Future[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">twitter2ScalaFuture</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="executor">executor: <span class="extype" name="scala.concurrent.ExecutionContext">ExecutionContext</span></span>)</span><span class="result">: <a href="../Bijection.html" class="extype" name="com.twitter.bijection.Bijection">Bijection</a>[<span class="extype" name="com.twitter.util.Future">Future</span>[<span class="extype" name="com.twitter.bijection.twitter_util.UtilBijections.twitter2ScalaFuture.A">A</span>], <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="com.twitter.bijection.twitter_util.UtilBijections.twitter2ScalaFuture.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@twitter2ScalaFuture[A](implicitexecutor:scala.concurrent.ExecutionContext):com.twitter.bijection.Bijection[com.twitter.util.Future[A],scala.concurrent.Future[A]]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Bijection between twitter and scala style Futures
+</p>
+    </li><li name="com.twitter.bijection.twitter_util.UtilBijections#twitter2ScalaTry" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="twitter2ScalaTry[A]:com.twitter.bijection.Bijection[com.twitter.util.Try[A],scala.util.Try[A]]"></a>
+      <a id="twitter2ScalaTry[A]:Bijection[Try[A],Try[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">twitter2ScalaTry</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="../Bijection.html" class="extype" name="com.twitter.bijection.Bijection">Bijection</a>[<span class="extype" name="com.twitter.util.Try">Try</span>[<span class="extype" name="com.twitter.bijection.twitter_util.UtilBijections.twitter2ScalaTry.A">A</span>], <span class="extype" name="scala.util.Try">Try</span>[<span class="extype" name="com.twitter.bijection.twitter_util.UtilBijections.twitter2ScalaTry.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@twitter2ScalaTry[A]:com.twitter.bijection.Bijection[com.twitter.util.Try[A],scala.util.Try[A]]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Bijection between twitter and scala style Trys
+</p>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.bijection.twitter_util.UtilBijections@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
