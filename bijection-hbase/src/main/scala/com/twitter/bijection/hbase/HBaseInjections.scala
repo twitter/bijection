@@ -32,19 +32,19 @@ object HBaseInjections {
 
   // Array[Byte] injections
   implicit lazy val string2BytesInj: Injection[String, Array[Byte]] =
-    buildCatchInvert(Bytes.toBytes: String => Array[Byte])(Bytes.toString)
+    buildCatchInvert[String, Array[Byte]](Bytes.toBytes)(Bytes.toString)
   implicit lazy val long2BytesInj: Injection[Long, Array[Byte]] =
-    buildCatchInvert(Bytes.toBytes: Long => Array[Byte])(Bytes.toLong)
+    buildCatchInvert[Long, Array[Byte]](Bytes.toBytes)(Bytes.toLong)
   implicit lazy val boolean2BytesInj: Injection[Boolean, Array[Byte]] =
-    buildCatchInvert(Bytes.toBytes: Boolean => Array[Byte])(Bytes.toBoolean)
+    buildCatchInvert[Boolean, Array[Byte]](Bytes.toBytes)(Bytes.toBoolean)
   implicit lazy val int2BytesInj: Injection[Int, Array[Byte]] =
-    buildCatchInvert(Bytes.toBytes: Int => Array[Byte])(Bytes.toInt)
+    buildCatchInvert[Int, Array[Byte]](Bytes.toBytes)(Bytes.toInt)
   implicit lazy val float2BytesInj: Injection[Float, Array[Byte]] =
-    buildCatchInvert(Bytes.toBytes: Float => Array[Byte])(Bytes.toFloat)
+    buildCatchInvert[Float, Array[Byte]](Bytes.toBytes)(Bytes.toFloat)
   implicit lazy val short2BytesInj: Injection[Short, Array[Byte]] =
-    buildCatchInvert(Bytes.toBytes: Short => Array[Byte])(Bytes.toShort)
+    buildCatchInvert[Short, Array[Byte]](Bytes.toBytes)(Bytes.toShort)
   implicit lazy val double2BytesInj: Injection[Double, Array[Byte]] =
-    buildCatchInvert(Bytes.toBytes: Double => Array[Byte])(Bytes.toDouble)
+    buildCatchInvert[Double, Array[Byte]](Bytes.toBytes)(Bytes.toDouble)
   implicit lazy val bigDecimal2BytesInj: Injection[BigDecimal, Array[Byte]] =
     new AbstractInjection[BigDecimal, Array[Byte]] {
       override def apply(a: BigDecimal) = Bytes.toBytes(a.underlying)
