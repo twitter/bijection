@@ -48,7 +48,7 @@ object HBaseInjections {
   implicit lazy val bigDecimal2BytesInj: Injection[BigDecimal, Array[Byte]] =
     new AbstractInjection[BigDecimal, Array[Byte]] {
       override def apply(a: BigDecimal) = Bytes.toBytes(a.underlying)
-      override def invert(b: Array[Byte]) = Try { Bytes.toBigDecimal(b) } map (BigDecimal(_))
+      override def invert(b: Array[Byte]) = Try(Bytes.toBigDecimal(b)).map(BigDecimal(_))
     }
 
   /**
