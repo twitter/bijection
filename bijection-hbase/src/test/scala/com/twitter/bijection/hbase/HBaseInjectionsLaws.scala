@@ -22,10 +22,10 @@ import com.twitter.bijection.{ CheckProperties, BaseProperties, Injection }
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
 
 object HBaseInjectionsLaws {
-  private[this] val arbitraryByteArray = implicitly[Arbitrary[Array[Byte]]]
-
   implicit val arbitaryImmutableBytesWritable: Arbitrary[ImmutableBytesWritable] =
-    Arbitrary { arbitraryByteArray.arbitrary.map(new ImmutableBytesWritable(_)) }
+    Arbitrary(for {
+      arbByteArray <- Arbitrary.arbitrary[Array[Byte]]
+    } yield new ImmutableBytesWritable(arbByteArray))
 
   implicit val equivImmutableBytesWritable = new Equiv[ImmutableBytesWritable] {
     def equiv(x: ImmutableBytesWritable, y: ImmutableBytesWritable): Boolean = x == y
