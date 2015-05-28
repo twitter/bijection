@@ -109,7 +109,7 @@ object HBaseInjections {
   implicit lazy val bytes2BytesWritableInj: Injection[Array[Byte], ImmutableBytesWritable] =
     new AbstractInjection[Array[Byte], ImmutableBytesWritable] {
       override def apply(a: Array[Byte]) = new ImmutableBytesWritable(a)
-      override def invert(b: ImmutableBytesWritable) = Success(b.copyBytes)
+      override def invert(b: ImmutableBytesWritable) = Try(b.copyBytes)
     }
 
   abstract class ImmutableBytesWritableInjection[T](implicit inj: Injection[T, Array[Byte]]) extends AbstractInjection[T, ImmutableBytesWritable] {
