@@ -16,7 +16,6 @@ package com.twitter.bijection.hbase
 
 import com.twitter.bijection.AbstractInjection
 import com.twitter.bijection.Injection
-import com.twitter.bijection.Util.OptionToTry
 import com.twitter.bijection.Tag
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
 import org.apache.hadoop.hbase.util.Bytes
@@ -59,8 +58,11 @@ object HBaseInjections {
   implicit lazy val string2BytesWritableInj =
     new ImmutableBytesWritableInjection[String] {
       override def invert(b: ImmutableBytesWritable) =
-        Option(Bytes.toString(b.get, b.getOffset, b.getLength))
-          .toTry("Invalid string")
+        Try {
+          val str = Bytes.toString(b.get, b.getOffset, b.getLength)
+          if (str == null) sys.error("Invalid string")
+          else str
+        }
     }
   implicit lazy val int2BytesWritableInj =
     new ImmutableBytesWritableInjection[Int] {
