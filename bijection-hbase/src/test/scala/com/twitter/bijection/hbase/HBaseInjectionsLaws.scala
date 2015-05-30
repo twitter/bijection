@@ -17,6 +17,7 @@ package com.twitter.bijection.hbase
 import org.scalatest.{ PropSpec, MustMatchers }
 import org.scalatest.prop.PropertyChecks
 import org.scalacheck.Arbitrary
+import org.scalacheck.Gen
 
 import com.twitter.bijection.{ CheckProperties, BaseProperties, Injection }
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
@@ -24,8 +25,10 @@ import org.apache.hadoop.hbase.io.ImmutableBytesWritable
 object HBaseInjectionsLaws {
   implicit val arbitaryImmutableBytesWritable: Arbitrary[ImmutableBytesWritable] =
     Arbitrary(for {
-      arbByteArray <- Arbitrary.arbitrary[Array[Byte]]
-    } yield new ImmutableBytesWritable(arbByteArray))
+      bytes <- Arbitrary.arbitrary[Array[Byte]]
+      offset <- Gen.choose(0, bytes.length - 1)
+      len <- Gen.choose(0, bytes.length - offset)
+    } yield new ImmutableBytesWritable(bytes, offset, len))
 
   implicit val equivImmutableBytesWritable = new Equiv[ImmutableBytesWritable] {
     def equiv(x: ImmutableBytesWritable, y: ImmutableBytesWritable): Boolean = x == y
