@@ -29,10 +29,6 @@ object HBaseInjectionsLaws {
       offset <- Gen.choose(0, bytes.length - 1)
       len <- Gen.choose(0, bytes.length - offset)
     } yield new ImmutableBytesWritable(bytes, offset, len))
-
-  implicit val equivImmutableBytesWritable = new Equiv[ImmutableBytesWritable] {
-    def equiv(x: ImmutableBytesWritable, y: ImmutableBytesWritable): Boolean = x == y
-  }
 }
 
 /**
@@ -41,9 +37,7 @@ object HBaseInjectionsLaws {
  */
 class HBaseInjectionsLaws extends CheckProperties with BaseProperties {
   import HBaseInjections._
-
   import HBaseInjectionsLaws.arbitaryImmutableBytesWritable
-  import HBaseInjectionsLaws.equivImmutableBytesWritable
 
   property("String -> Array[Byte]") {
     isLooseInjection[String, Array[Byte]]
