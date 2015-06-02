@@ -44,19 +44,19 @@ class HBaseInjectionsLaws extends CheckProperties with BaseProperties {
   }
 
   property("Int -> Array[Byte]") {
-    isLooseInjection[Int, Array[Byte]]
+    isInjection[Int, Array[Byte]]
   }
 
   property("Long -> Array[Byte]") {
-    isLooseInjection[Long, Array[Byte]]
+    isInjection[Long, Array[Byte]]
   }
 
   property("Double -> Array[Byte]") {
-    isLooseInjection[Double, Array[Byte]]
+    isInjection[Double, Array[Byte]]
   }
 
   property("Float -> Array[Byte]") {
-    isLooseInjection[Float, Array[Byte]]
+    isInjection[Float, Array[Byte]]
   }
 
   property("Boolean -> Array[Byte]") {
@@ -64,7 +64,7 @@ class HBaseInjectionsLaws extends CheckProperties with BaseProperties {
   }
 
   property("Short -> Array[Byte]") {
-    isLooseInjection[Short, Array[Byte]]
+    isInjection[Short, Array[Byte]]
   }
 
   property("String -> ImmutableBytesWritable") {
@@ -72,17 +72,31 @@ class HBaseInjectionsLaws extends CheckProperties with BaseProperties {
   }
 
   property("Int -> ImmutableBytesWritable") {
-    isLooseInjection[Int, ImmutableBytesWritable]
+    isInjection[Int, ImmutableBytesWritable]
   }
 
   property("Long -> ImmutableBytesWritable") {
-    isLooseInjection[Long, ImmutableBytesWritable]
+    isInjection[Long, ImmutableBytesWritable]
   }
 
+  // This injection will invert a ImmutableBytesWritable whose length is less
+  // or greater than the size of a Bytes.toDouble because it incorrectly assumes
+  // that you give it the correct number of bytes.
+  //
+  // i.e. If the ImmutableBytesWritable is a slice of the first byte of an
+  // underlying 8 byte array, this injection will use all the bytes when
+  // inverting.
   property("Double -> ImmutableBytesWritable") {
     isLooseInjection[Double, ImmutableBytesWritable]
   }
 
+  // This injection will invert a ImmutableBytesWritable whose length is less
+  // or greater than the size of a Bytes.toFloat because it incorrectly assumes
+  // that you give it the correct number of bytes.
+  //
+  // i.e. If the ImmutableBytesWritable is a slice of the first byte of an
+  // underlying 4 byte array, this injection will use all the bytes when
+  // inverting.
   property("Float -> ImmutableBytesWritable") {
     isLooseInjection[Float, ImmutableBytesWritable]
   }
@@ -92,10 +106,10 @@ class HBaseInjectionsLaws extends CheckProperties with BaseProperties {
   }
 
   property("Short -> ImmutableBytesWritable") {
-    isLooseInjection[Short, ImmutableBytesWritable]
+    isInjection[Short, ImmutableBytesWritable]
   }
 
   property("Array[Byte] -> ImmutableBytesWritable") {
-    isLooseInjection[Array[Byte], ImmutableBytesWritable]
+    isInjection[Array[Byte], ImmutableBytesWritable]
   }
 }
