@@ -218,7 +218,7 @@ object BijectionBuild extends Build {
       "com.twitter" %% "util-core" % "6.24.0",
       "com.twitter" %% "finagle-core" % "6.25.0" % "test"
     )
-  ).dependsOn(bijectionCore % "test->test;compile->compile")
+  ).dependsOn(bijectionCore % "test->test;compile->compile", bijectionThrift)
 
   lazy val bijectionJson = module("json").settings(
     osgiExportAll("com.twitter.bijection.json"),

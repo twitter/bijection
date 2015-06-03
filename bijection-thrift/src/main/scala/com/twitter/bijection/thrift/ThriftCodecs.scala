@@ -63,7 +63,23 @@ object BinaryThriftCodec {
 }
 
 class BinaryThriftCodec[T <: TBase[_, _]](klass: Class[T])
-  extends ThriftCodec[T, TBinaryProtocol.Factory](klass, new TBinaryProtocol.Factory)
+  extends Injection[T, Array[Byte]] {
+
+  private[this] val factory = new TBinaryProtocol.Factory
+
+  protected lazy val prototype = klass.newInstance
+
+  override def apply(item: T) = {
+    val baos = new ByteArrayOutputStream
+    item.write(factory.getProtocol(new TIOStreamTransport(baos)))
+    baos.toByteArray
+  }
+  override def invert(bytes: Array[Byte]) = attempt(bytes) { bytes =>
+    val obj = prototype.deepCopy
+    obj.read(TArrayBinaryProtocol(TArrayByteTransport(bytes)))
+    obj.asInstanceOf[T]
+  }
+}
 
 object CompactThriftCodec {
   def apply[T <: TBase[_, _]: ClassTag]: Injection[T, Array[Byte]] = fromClass(classTag[T].runtimeClass.asInstanceOf[Class[T]])

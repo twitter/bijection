@@ -35,10 +35,19 @@ object BinaryScalaCodec {
 }
 
 class BinaryScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
-  extends ScalaCodec(new ThriftStructSerializer[T] {
+  extends Injection[T, Array[Byte]] {
+  import com.twitter.bijection.thrift.{ TArrayByteTransport, TArrayBinaryProtocol }
+
+  lazy val thriftStructSerializer = new ThriftStructSerializer[T] {
     override def codec = c
     val protocolFactory = new TBinaryProtocol.Factory
-  })
+  }
+
+  override def apply(item: T) = thriftStructSerializer.toBytes(item)
+  override def invert(bytes: Array[Byte]) = attempt(bytes){ bytes =>
+    c.decode(TArrayBinaryProtocol(TArrayByteTransport(bytes)))
+  }
+}
 
 object CompactScalaCodec {
   def apply[T <: ThriftStruct](c: ThriftStructCodec[T]) =
