@@ -2,6 +2,7 @@ package com.twitter.bijection.thrift
 
 import com.twitter.bijection.{ Bijection, Conversion, Injection, InversionFailure, StringCodec }
 import com.twitter.bijection.Inversion.attempt
+import com.twitter.bijection.macros.Macros
 import java.io.{ ByteArrayInputStream, ByteArrayOutputStream }
 import org.apache.thrift.{ TBase, TEnum }
 import org.apache.thrift.protocol.{
@@ -74,7 +75,7 @@ class BinaryThriftCodec[T <: TBase[_, _]](klass: Class[T])
     item.write(factory.getProtocol(new TIOStreamTransport(baos)))
     baos.toByteArray
   }
-  override def invert(bytes: Array[Byte]) = attempt(bytes) { bytes =>
+  override def invert(bytes: Array[Byte]) = Macros.fastAttempt(bytes){
     val obj = prototype.deepCopy
     obj.read(TArrayBinaryProtocol(TArrayByteTransport(bytes)))
     obj.asInstanceOf[T]

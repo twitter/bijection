@@ -18,6 +18,7 @@ package com.twitter.bijection.scrooge
 
 import com.twitter.bijection.{ Bijection, Injection }
 import com.twitter.bijection.Inversion.attempt
+import com.twitter.bijection.macros.Macros
 import com.twitter.scrooge._
 import org.apache.thrift.protocol.TJSONProtocol
 
@@ -44,7 +45,7 @@ class BinaryScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
   }
 
   override def apply(item: T) = thriftStructSerializer.toBytes(item)
-  override def invert(bytes: Array[Byte]) = attempt(bytes){ bytes =>
+  override def invert(bytes: Array[Byte]) = Macros.fastAttempt(bytes){
     c.decode(TArrayBinaryProtocol(TArrayByteTransport(bytes)))
   }
 }
