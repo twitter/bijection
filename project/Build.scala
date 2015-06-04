@@ -262,7 +262,7 @@ object BijectionBuild extends Build {
       "org.apache.hadoop" % "hadoop-core" % "1.0.4" % "provided->default"
     )
   ).dependsOn(bijectionCore % "test->test;compile->compile")
-   .dependsOn(bijectionMacros % "test->test;compile->compile")
+   .dependsOn(bijectionMacros % "compile->compile")
 
   lazy val bijectionJodaTime = module("jodatime").settings(
     osgiExportAll("com.twitter.bijection.jodatime"),
