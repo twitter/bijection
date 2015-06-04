@@ -60,7 +60,7 @@ object HBaseInjections {
     new ImmutableBytesWritableInjection[String] {
       override def invert(b: ImmutableBytesWritable) =
         fastAttempt(b)(Bytes.toString(b.get, b.getOffset, b.getLength) match {
-          case null => sys.error("Could not read string from: $b")
+          case null => sys.error(s"$b decoded to null, which is disallowed.")
           case str => str
         })
     }
