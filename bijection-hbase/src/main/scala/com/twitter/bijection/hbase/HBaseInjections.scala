@@ -16,6 +16,7 @@ package com.twitter.bijection.hbase
 
 import com.twitter.bijection.AbstractInjection
 import com.twitter.bijection.Injection
+import com.twitter.bijection.macros.Macros.fastAttempt
 import com.twitter.bijection.Tag
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
 import org.apache.hadoop.hbase.util.Bytes
@@ -58,53 +59,45 @@ object HBaseInjections {
   implicit lazy val string2BytesWritableInj =
     new ImmutableBytesWritableInjection[String] {
       override def invert(b: ImmutableBytesWritable) =
-        Try {
-          val str = Bytes.toString(b.get, b.getOffset, b.getLength)
-          if (str == null) sys.error("Invalid string")
-          else str
-        }
+        fastAttempt(b)(Bytes.toString(b.get, b.getOffset, b.getLength) match {
+          case null => sys.error(s"$b decoded to null, which is disallowed.")
+          case str => str
+        })
     }
   implicit lazy val int2BytesWritableInj =
     new ImmutableBytesWritableInjection[Int] {
-      override def invert(b: ImmutableBytesWritable) = Try {
-        Bytes.toInt(b.get, b.getOffset, b.getLength)
-      }
+      override def invert(b: ImmutableBytesWritable) =
+        fastAttempt(b)(Bytes.toInt(b.get, b.getOffset, b.getLength))
     }
   implicit lazy val long2BytesWritableInj =
     new ImmutableBytesWritableInjection[Long] {
-      override def invert(b: ImmutableBytesWritable) = Try {
-        Bytes.toLong(b.get, b.getOffset, b.getLength)
-      }
+      override def invert(b: ImmutableBytesWritable) =
+        fastAttempt(b)(Bytes.toLong(b.get, b.getOffset, b.getLength))
     }
   implicit lazy val double2BytesWritableInj =
     new ImmutableBytesWritableInjection[Double] {
-      override def invert(b: ImmutableBytesWritable) = Try {
-        Bytes.toDouble(b.get, b.getOffset)
-      }
+      override def invert(b: ImmutableBytesWritable) =
+        fastAttempt(b)(Bytes.toDouble(b.get, b.getOffset))
     }
   implicit lazy val float2BytesWritableInj =
     new ImmutableBytesWritableInjection[Float] {
-      override def invert(b: ImmutableBytesWritable) = Try {
-        Bytes.toFloat(b.get, b.getOffset)
-      }
+      override def invert(b: ImmutableBytesWritable) =
+        fastAttempt(b)(Bytes.toFloat(b.get, b.getOffset))
     }
   implicit lazy val short2BytesWritableInj =
     new ImmutableBytesWritableInjection[Short] {
-      override def invert(b: ImmutableBytesWritable) = Try {
-        Bytes.toShort(b.get, b.getOffset, b.getLength)
-      }
+      override def invert(b: ImmutableBytesWritable) =
+        fastAttempt(b)(Bytes.toShort(b.get, b.getOffset, b.getLength))
     }
   implicit lazy val boolean2BytesWritableInj =
     new ImmutableBytesWritableInjection[Boolean] {
-      override def invert(b: ImmutableBytesWritable) = Try {
-        Bytes.toBoolean(b.copyBytes)
-      }
+      override def invert(b: ImmutableBytesWritable) =
+        fastAttempt(b)(Bytes.toBoolean(b.copyBytes))
     }
   implicit lazy val bigDecimal2BytesWritableInj =
     new ImmutableBytesWritableInjection[BigDecimal] {
-      override def invert(b: ImmutableBytesWritable) = Try {
-        Bytes.toBigDecimal(b.get, b.getOffset, b.getLength)
-      }
+      override def invert(b: ImmutableBytesWritable) =
+        fastAttempt(b)(Bytes.toBigDecimal(b.get, b.getOffset, b.getLength))
     }
   implicit lazy val bytes2BytesWritableInj: Injection[Array[Byte], ImmutableBytesWritable] =
     new AbstractInjection[Array[Byte], ImmutableBytesWritable] {
