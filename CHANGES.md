@@ -1,5 +1,15 @@
 # Bijection #
 
+### 0.8.1
+* Simplifies hbase injections with fastAttempt macro: https://github.com/twitter/bijection/pull/220
+* Specialize the TBinaryProtocol read path up to ~2x speedups: https://github.com/twitter/bijection/pull/221
+* Makes some of the hbase injection tests stricter: https://github.com/twitter/bijection/pull/219
+* Migrates hbase bijections to injections because they weren't actually bijections: https://github.com/twitter/bijection/pull/217
+* Removes unnecessary HBase injections: https://github.com/twitter/bijection/pull/215
+* Fixes flaky test: https://github.com/twitter/bijection/pull/214
+* Fixup unidoc: https://github.com/twitter/bijection/pull/213
+* Update travis & sbt scala versions to 2.10.5 and 2.11.5: https://github.com/twitter/bijection/pull/212
+
 ### 0.8.0
 * add twitter util Buf <-> Array[Byte] bijection https://github.com/twitter/bijection/pull/208
 * upgrade testing libraries https://github.com/twitter/bijection/pull/207
