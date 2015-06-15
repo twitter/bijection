@@ -21,13 +21,17 @@ import com.twitter.bijection.{ CheckProperties, BaseProperties, Bijection, Injec
 import org.scalatest.{ PropSpec, MustMatchers }
 import org.scalatest.prop.PropertyChecks
 
-import org.scalacheck.Arbitrary
+import org.scalacheck.{ Gen, Arbitrary }
 
 class ScroogeCodecLaws extends CheckProperties with BaseProperties {
-  def buildScrooge(i: (Int, String)) =
-    TestStruct(i._1, Some(i._2))
-
-  implicit val testScrooge = arbitraryViaFn { is: (Int, String) => buildScrooge(is) }
+  implicit val testScrooge: Arbitrary[TestStruct] = Arbitrary {
+    for {
+      l <- Gen.oneOf('a' to 'z')
+      u <- Gen.oneOf('A' to 'Z')
+      s <- Gen.listOf(Gen.oneOf(l, u, Gen.numChar)).map(_.mkString)
+      i <- Arbitrary.arbitrary[Int]
+    } yield TestStruct(i, Some(s))
+  }
 
   // Code generator for thrift instances.
   def roundTripsScrooge[B](bijection: Injection[TestStruct, B]) = {

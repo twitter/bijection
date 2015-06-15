@@ -2,6 +2,7 @@ package com.twitter.bijection.thrift
 
 import com.twitter.bijection.{ Bijection, Conversion, Injection, InversionFailure, StringCodec }
 import com.twitter.bijection.Inversion.attempt
+import com.twitter.bijection.macros.Macros
 import java.io.{ ByteArrayInputStream, ByteArrayOutputStream }
 import org.apache.thrift.{ TBase, TEnum }
 import org.apache.thrift.protocol.{
@@ -63,7 +64,23 @@ object BinaryThriftCodec {
 }
 
 class BinaryThriftCodec[T <: TBase[_, _]](klass: Class[T])
-  extends ThriftCodec[T, TBinaryProtocol.Factory](klass, new TBinaryProtocol.Factory)
+  extends Injection[T, Array[Byte]] {
+
+  private[this] val factory = new TBinaryProtocol.Factory
+
+  protected lazy val prototype = klass.newInstance
+
+  override def apply(item: T) = {
+    val baos = new ByteArrayOutputStream
+    item.write(factory.getProtocol(new TIOStreamTransport(baos)))
+    baos.toByteArray
+  }
+  override def invert(bytes: Array[Byte]) = Macros.fastAttempt(bytes){
+    val obj = prototype.deepCopy
+    obj.read(TArrayBinaryProtocol(TArrayByteTransport(bytes)))
+    obj.asInstanceOf[T]
+  }
+}
 
 object CompactThriftCodec {
   def apply[T <: TBase[_, _]: ClassTag]: Injection[T, Array[Byte]] = fromClass(classTag[T].runtimeClass.asInstanceOf[Class[T]])
