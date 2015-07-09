@@ -127,10 +127,7 @@ object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
   }
 
   // This causes diverging implicits
-  def collectionJson[T, C <: Traversable[T]](implicit cbf: CanBuildFrom[Nothing, T, C],
-    jbij: JsonNodeInjection[T]): JsonNodeInjection[C] = fromBuilder(cbf())
-
-  def fromBuilder[T, C <: Traversable[T]](builder: Builder[T, C])(implicit jbij: JsonNodeInjection[T]): JsonNodeInjection[C] =
+  def collectionJson[T, C <: Traversable[T]](implicit cbf: CanBuildFrom[Nothing, T, C], jbij: JsonNodeInjection[T]): JsonNodeInjection[C] =
     new AbstractJsonNodeInjection[C] {
       def apply(l: C) = {
         val ary = JsonNodeFactory.instance.arrayNode
@@ -138,7 +135,7 @@ object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
         ary
       }
       override def invert(n: JsonNode): Try[C] = {
-        builder.clear
+        val builder = cbf()
         var inCount = 0
         n.getElements.asScala.foreach { jn =>
           inCount += 1
@@ -154,19 +151,19 @@ object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
     }
 
   implicit def listJson[T: JsonNodeInjection]: JsonNodeInjection[List[T]] =
-    fromBuilder(List.newBuilder[T])
+    collectionJson[T, List[T]]
 
   implicit def vectorJson[T: JsonNodeInjection]: JsonNodeInjection[Vector[T]] =
-    fromBuilder(Vector.newBuilder[T])
+    collectionJson[T, Vector[T]]
 
   implicit def indexedSeqJson[T: JsonNodeInjection]: JsonNodeInjection[IndexedSeq[T]] =
-    fromBuilder(IndexedSeq.newBuilder[T])
+    collectionJson[T, IndexedSeq[T]]
 
   implicit def seqJson[T: JsonNodeInjection]: JsonNodeInjection[Seq[T]] =
-    fromBuilder(Seq.newBuilder[T])
+    collectionJson[T, Seq[T]]
 
   implicit def setJson[T: JsonNodeInjection]: JsonNodeInjection[Set[T]] =
-    fromBuilder(Set.newBuilder[T])
+    collectionJson[T, Set[T]]
 
   implicit def mapJson[V: JsonNodeInjection]: JsonNodeInjection[Map[String, V]] =
     new AbstractJsonNodeInjection[Map[String, V]] {
