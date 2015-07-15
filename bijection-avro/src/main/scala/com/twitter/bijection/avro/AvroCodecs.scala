@@ -110,12 +110,13 @@ object SpecificAvroCodecs {
 
   /**
    * Returns Injection capable of serializing and deserializing a compiled avro record using org.apache.avro.io.BinaryEncoder.
-   * Accepts a schema to support generated Scala case classes. This is not completely typesafe and will fail at runtime
-   * when you pass in the wrong schema.
+   * Fetches the schema from the specified class in order to be compatible with generated Scala classes.
    * @tparam T compiled Avro record
    * @return Injection
    */
-  def toBinaryWithSchema[T <: SpecificRecordBase](schema: Schema): Injection[T, Array[Byte]] = {
+  def toBinaryWithSchema[T <: SpecificRecordBase: ClassTag]: Injection[T, Array[Byte]] = {
+    val record = classTag[T].runtimeClass.newInstance().asInstanceOf[T]
+    val schema = record.getSchema
     val writer = new SpecificDatumWriter[T](schema)
     val reader = new SpecificDatumReader[T](schema)
     new BinaryAvroCodec[T](writer, reader)
