@@ -64,7 +64,7 @@ class SpecificAvroCodecLaws extends CheckProperties with BaseProperties {
   }
 
   property("round trips Specific Record -> Array[Byte] using Binary Encoder/Decoder with schema") {
-    roundTripsSpecificRecord(SpecificAvroCodecs.toBinaryWithSchema[FiscalRecord](testSchema))
+    roundTripsSpecificRecord(SpecificAvroCodecs.toBinaryWithSchema[FiscalRecord])
   }
 
   property("round trips Specific Record -> String using Json Encoder/Decoder") {

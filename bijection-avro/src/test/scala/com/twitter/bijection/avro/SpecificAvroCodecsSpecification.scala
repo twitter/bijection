@@ -95,21 +95,11 @@ class SpecificAvroCodecsSpecification extends WordSpec with Matchers with BasePr
     }
 
     "Round trip specific record using Binary Injection With Schema for Scala case classes" in {
-      implicit val specificBinaryInjection = SpecificAvroCodecs.toBinaryWithSchema[FiscalRecordScala](FiscalRecordScala.SCHEMA$)
+      implicit val specificBinaryInjection = SpecificAvroCodecs.toBinaryWithSchema[FiscalRecordScala]
       val testRecord = FiscalRecordScala("2012-01-01", Some(1), Some(12))
       val bytes = Injection[FiscalRecordScala, Array[Byte]](testRecord)
       val attempt = Injection.invert[FiscalRecordScala, Array[Byte]](bytes)
       assert(attempt.get == testRecord)
-    }
-
-    "Binary with schema will fail with exception when passing in wrong schema" in {
-      val wrongSchema = new Schema.Parser().parse("{\"type\":\"record\",\"name\":\"WrongRecord\",\"namespace\":\"avro\",\"fields\":[{\"name\":\"date\",\"type\":\"string\"}]}")
-      implicit val specificBinaryInjection = SpecificAvroCodecs.toBinaryWithSchema[FiscalRecordScala](wrongSchema)
-      val testRecord = FiscalRecordScala("2012-01-01", Some(1), Some(12))
-      val bytes = Injection[FiscalRecordScala, Array[Byte]](testRecord)
-      val attempt = Injection.invert[FiscalRecordScala, Array[Byte]](bytes)
-
-      assert(trap(attempt.get).isInstanceOf[ClassCastException])
     }
 
     "Round trip specific record using Json Injection" in {
