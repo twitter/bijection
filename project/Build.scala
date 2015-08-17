@@ -285,7 +285,7 @@ object BijectionBuild extends Build {
     libraryDependencies <++= (scalaVersion) { scalaVersion => Seq(
       "org.scala-lang" % "scala-library" % scalaVersion,
       "org.scala-lang" % "scala-reflect" % scalaVersion,
-      "org.scalatest" %% "scalatest" % "2.2.2",
+      "org.scalatest" %% "scalatest" % "2.2.2" % "test",
       "com.twitter" %% "chill" % "0.5.0" % "test"
     ) ++ (if (scalaVersion.startsWith("2.10")) Seq("org.scalamacros" %% "quasiquotes" % "2.0.1") else Seq())
   },
