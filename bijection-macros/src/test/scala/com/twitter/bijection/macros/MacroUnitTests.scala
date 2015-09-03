@@ -4,7 +4,6 @@ import org.scalatest.{ Matchers, WordSpec }
 
 import com.twitter.bijection._
 import com.twitter.bijection.macros._
-import com.twitter.chill.Externalizer
 
 import scala.util.{ Failure, Success }
 
