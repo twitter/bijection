@@ -1,7 +1,6 @@
 package com.twitter.bijection.macros
 
 import org.scalatest.Matchers
-import com.twitter.chill.Externalizer
 
 object MacroCaseClasses extends java.io.Serializable {
   type Atup = (Int, String)
