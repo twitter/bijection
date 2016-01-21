@@ -40,7 +40,10 @@ object BijectionBuild extends Build {
 
     parallelExecution in Test := true,
 
-    scalacOptions ++= Seq("-unchecked", "-deprecation", "-language:implicitConversions", "-language:higherKinds", "-language:existentials"),
+    scalacOptions ++= Seq("-unchecked", "-deprecation", "-language:implicitConversions", "-language:higherKinds", "-language:existentials", "-Xmax-classfile-name", "200"), // People using encrypted file-systems can have problems if the names get too long
+                                        // note changing this parameter will change the binaries
+                                        // obviously. When the name is too long, it is hashed with
+                                        // md5.
 
     scalacOptions <++= (scalaVersion) map { sv =>
         if (sv startsWith "2.10")
