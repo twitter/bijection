@@ -16,13 +16,14 @@ limitations under the License.
 
 package com.twitter.bijection
 
+import com.twitter.bijection.Inversion.attempt
 import java.net.{ URLDecoder, URLEncoder, URL }
-import java.util.UUID
+import java.nio.charset.{Charset, CodingErrorAction}
+import java.nio.ByteBuffer
 
+import java.util.UUID
 import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
-
-import com.twitter.bijection.Inversion.attempt
 import scala.util.Try
 
 trait StringInjections extends NumericInjections {
@@ -32,9 +33,22 @@ trait StringInjections extends NumericInjections {
 
   def withEncoding(encoding: String): Injection[String, Array[Byte]] =
     new AbstractInjection[String, Array[Byte]] {
+      private[this] val decRef = {
+        val cs = Charset.forName(encoding)
+        new AtomicSharedState(() => cs.newDecoder.onUnmappableCharacter(CodingErrorAction.REPORT))
+      }
+
       def apply(s: String) = s.getBytes(encoding)
       override def invert(b: Array[Byte]) =
-        attempt(b) { new String(_, encoding) }
+        // toString on ByteBuffer is nicer, so use it
+        attempt(ByteBuffer.wrap(b)) { bb =>
+          //these are mutable, so it can't be shared trivially
+          //avoid GC pressure and (probably) perform better
+          val dec = decRef.get
+          val str = dec.decode(bb).toString
+          decRef.release(dec)
+          str
+        }
     }
 
   // Some bijections with string from standard java/scala classes:

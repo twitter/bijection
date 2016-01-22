@@ -38,7 +38,7 @@ object StringArbs extends BaseProperties {
 class StringBijectionLaws extends CheckProperties with BaseProperties {
 
   property("round trips string -> Array[String]") {
-    isLooseInjection[String, Array[Byte]]
+    isInjection[String, Array[Byte]]
   }
 
   implicit val symbol = arbitraryViaFn { (s: String) => Symbol(s) }
