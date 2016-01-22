@@ -18,9 +18,8 @@ package com.twitter.bijection
 
 import com.twitter.bijection.Inversion.attempt
 import java.net.{ URLDecoder, URLEncoder, URL }
-import java.nio.charset.{Charset, CodingErrorAction}
-import java.nio.ByteBuffer
-
+import java.nio.charset.{ Charset, CoderResult, CodingErrorAction }
+import java.nio.{ ByteBuffer, CharBuffer }
 import java.util.UUID
 import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
@@ -33,10 +32,14 @@ trait StringInjections extends NumericInjections {
 
   def withEncoding(encoding: String): Injection[String, Array[Byte]] =
     new AbstractInjection[String, Array[Byte]] {
-      private[this] val decRef = {
-        val cs = Charset.forName(encoding)
-        new AtomicSharedState(() => cs.newDecoder.onUnmappableCharacter(CodingErrorAction.REPORT))
-      }
+      private[this] val decRef =
+        new AtomicSharedState({ () =>
+          val dec = Charset.forName(encoding)
+            .newDecoder
+            .onUnmappableCharacter(CodingErrorAction.REPORT)
+          val buf = CharBuffer.allocate(1024) // something big enough, if not big enough, allocate
+          (dec, buf)
+        })
 
       def apply(s: String) = s.getBytes(encoding)
       override def invert(b: Array[Byte]) =
@@ -44,9 +47,23 @@ trait StringInjections extends NumericInjections {
         attempt(ByteBuffer.wrap(b)) { bb =>
           //these are mutable, so it can't be shared trivially
           //avoid GC pressure and (probably) perform better
-          val dec = decRef.get
-          val str = dec.decode(bb).toString
-          decRef.release(dec)
+          val decBuf = decRef.get
+          val dec = decBuf._1
+          val buf = decBuf._2
+          val maxSpace = (b.length * dec.maxCharsPerByte).toInt + 1
+          val thisBuf = if (maxSpace > buf.limit) CharBuffer.allocate(maxSpace) else buf
+
+          // this is the error free result
+          @inline def assertUnderFlow(cr: CoderResult) { if(!cr.isUnderflow) cr.throwException }
+          assertUnderFlow(dec.reset.decode(bb, thisBuf, true))
+          assertUnderFlow(dec.flush(thisBuf))
+          // set the limit to be the position
+          thisBuf.flip
+          val str = thisBuf.toString
+          // make sure the buffer we store is clear.
+          buf.clear
+          // we don't reset with the larger buffer to avoid memory leaks
+          decRef.release(decBuf)
           str
         }
     }
