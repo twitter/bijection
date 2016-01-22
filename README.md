@@ -154,6 +154,9 @@ Every artifact is published against Scala `"2.10"` and `"2.11"`. To pull in the 
 
 `bijection-core_2.10` or `bijection-core_2.11`
 
+## Chat
+[![Gitter](https://badges.gitter.im/twitter/bijection.svg)](https://gitter.im/twitter/bijection?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
 ## Authors
 
 * Oscar Boykin <http://twitter.com/posco>
