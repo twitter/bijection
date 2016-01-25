@@ -95,7 +95,7 @@ class SpecificAvroCodecsSpecification extends WordSpec with Matchers with BasePr
     }
 
     "Round trip specific record using Binary Injection With Schema for Scala case classes" in {
-      implicit val specificBinaryInjection = SpecificAvroCodecs.toBinaryWithSchema[FiscalRecordScala]
+      implicit val specificBinaryInjection = SpecificAvroCodecs.toBinary[FiscalRecordScala]
       val testRecord = FiscalRecordScala("2012-01-01", Some(1), Some(12))
       val bytes = Injection[FiscalRecordScala, Array[Byte]](testRecord)
       val attempt = Injection.invert[FiscalRecordScala, Array[Byte]](bytes)
