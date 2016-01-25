@@ -97,14 +97,16 @@ object SpecificAvroCodecs {
     withCompression(CodecFactory.snappyCodec())
 
   /**
-   * Returns Injection capable of serializing and deserializing a compiled avro record using org.apache.avro.io.BinaryEncoder
+   * Returns Injection capable of serializing and deserializing a compiled avro record using org.apache.avro.io.BinaryEncoder.
+   * Fetches the schema from the specified class in order to be compatible with generated Scala classes.
    * @tparam T compiled Avro record
    * @return Injection
    */
   def toBinary[T <: SpecificRecordBase: ClassTag]: Injection[T, Array[Byte]] = {
-    val klass = classTag[T].runtimeClass.asInstanceOf[Class[T]]
-    val writer = new SpecificDatumWriter[T](klass)
-    val reader = new SpecificDatumReader[T](klass)
+    val record = classTag[T].runtimeClass.newInstance().asInstanceOf[T]
+    val schema = record.getSchema
+    val writer = new SpecificDatumWriter[T](schema)
+    val reader = new SpecificDatumReader[T](schema)
     new BinaryAvroCodec[T](writer, reader)
   }
 

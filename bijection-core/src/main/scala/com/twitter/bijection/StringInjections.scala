@@ -54,7 +54,7 @@ trait StringInjections extends NumericInjections {
           val thisBuf = if (maxSpace > buf.limit) CharBuffer.allocate(maxSpace) else buf
 
           // this is the error free result
-          @inline def assertUnderFlow(cr: CoderResult) { if(!cr.isUnderflow) cr.throwException }
+          @inline def assertUnderFlow(cr: CoderResult) { if (!cr.isUnderflow) cr.throwException }
           assertUnderFlow(dec.reset.decode(bb, thisBuf, true))
           assertUnderFlow(dec.flush(thisBuf))
           // set the limit to be the position
