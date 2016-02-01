@@ -7,7 +7,7 @@
 #sbt
 /project/target/
 /project/project/target
-
+sonatype.sbt
 /target/
 /src/jline/target/
 
