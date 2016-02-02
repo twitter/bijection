@@ -1,5 +1,16 @@
 # Bijection #
 
+### 0.9.0
+* Reduce the exposed type granularity down, maintains binary compat wit…: https://github.com/twitter/bijection/pull/235
+* avro binary with schema: https://github.com/twitter/bijection/pull/238
+* Make string Injections safer. Fix #199: https://github.com/twitter/bijection/pull/237
+* Mostly maintenance commit: https://github.com/twitter/bijection/pull/234
+* set the max file size to deal with #184: https://github.com/twitter/bijection/pull/232
+* Getting rid of a circular dependency between bijection-macros and chill: https://github.com/twitter/bijection/pull/228
+* Noticed this appearing in downstream bundles, should be for test only: https://github.com/twitter/bijection/pull/226
+* Upgrade sbt launcher script (sbt-extras): https://github.com/twitter/bijection/pull/225
+* En-threadsafe json injections for collections: https://github.com/twitter/bijection/pull/224
+
 ### 0.8.1
 * Simplifies hbase injections with fastAttempt macro: https://github.com/twitter/bijection/pull/220
 * Specialize the TBinaryProtocol read path up to ~2x speedups: https://github.com/twitter/bijection/pull/221
