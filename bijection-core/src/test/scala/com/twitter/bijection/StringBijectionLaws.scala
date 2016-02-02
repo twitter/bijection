@@ -63,8 +63,10 @@ class StringBijectionLaws extends CheckProperties with BaseProperties {
 
   def toUrl(s: String): Try[URL] = Try(new URL("http://" + s + ".com"))
 
+  // Gen's identifier will produce string starting with a lower case alpha
+  // followed by an alpha numeric sequence of characters
   implicit val urlArb: Arbitrary[URL] =
-    Arbitrary { Arbitrary.arbitrary[String] map (toUrl(_)) suchThat (_.isSuccess) map (_.get) }
+    Arbitrary { identifier map (toUrl(_)) suchThat (_.isSuccess) map (_.get) }
 
   // This is trivially a bijection if it injective
   property("URL -> String") {
