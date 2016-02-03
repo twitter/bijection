@@ -8,7 +8,6 @@ import org.scalatest.prop.PropertyChecks
 
 import com.twitter.bijection._
 import com.twitter.bijection.macros._
-import com.twitter.chill.Externalizer
 
 trait MacroPropTests extends PropSpec with PropertyChecks with Matchers with MacroTestHelper {
   import MacroImplicits._

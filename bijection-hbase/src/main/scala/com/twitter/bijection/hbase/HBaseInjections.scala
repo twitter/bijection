@@ -56,7 +56,7 @@ object HBaseInjections {
    * ImmutableBytesWritable injections avoid copying when possible and use the
    * slice (offset and length) of the underlying byte array.
    */
-  implicit lazy val string2BytesWritableInj =
+  implicit lazy val string2BytesWritableInj: Injection[String, ImmutableBytesWritable] =
     new ImmutableBytesWritableInjection[String] {
       override def invert(b: ImmutableBytesWritable) =
         fastAttempt(b)(Bytes.toString(b.get, b.getOffset, b.getLength) match {
@@ -64,37 +64,37 @@ object HBaseInjections {
           case str => str
         })
     }
-  implicit lazy val int2BytesWritableInj =
+  implicit lazy val int2BytesWritableInj: Injection[Int, ImmutableBytesWritable] =
     new ImmutableBytesWritableInjection[Int] {
       override def invert(b: ImmutableBytesWritable) =
         fastAttempt(b)(Bytes.toInt(b.get, b.getOffset, b.getLength))
     }
-  implicit lazy val long2BytesWritableInj =
+  implicit lazy val long2BytesWritableInj: Injection[Long, ImmutableBytesWritable] =
     new ImmutableBytesWritableInjection[Long] {
       override def invert(b: ImmutableBytesWritable) =
         fastAttempt(b)(Bytes.toLong(b.get, b.getOffset, b.getLength))
     }
-  implicit lazy val double2BytesWritableInj =
+  implicit lazy val double2BytesWritableInj: Injection[Double, ImmutableBytesWritable] =
     new ImmutableBytesWritableInjection[Double] {
       override def invert(b: ImmutableBytesWritable) =
         fastAttempt(b)(Bytes.toDouble(b.get, b.getOffset))
     }
-  implicit lazy val float2BytesWritableInj =
+  implicit lazy val float2BytesWritableInj: Injection[Float, ImmutableBytesWritable] =
     new ImmutableBytesWritableInjection[Float] {
       override def invert(b: ImmutableBytesWritable) =
         fastAttempt(b)(Bytes.toFloat(b.get, b.getOffset))
     }
-  implicit lazy val short2BytesWritableInj =
+  implicit lazy val short2BytesWritableInj: Injection[Short, ImmutableBytesWritable] =
     new ImmutableBytesWritableInjection[Short] {
       override def invert(b: ImmutableBytesWritable) =
         fastAttempt(b)(Bytes.toShort(b.get, b.getOffset, b.getLength))
     }
-  implicit lazy val boolean2BytesWritableInj =
+  implicit lazy val boolean2BytesWritableInj: Injection[Boolean, ImmutableBytesWritable] =
     new ImmutableBytesWritableInjection[Boolean] {
       override def invert(b: ImmutableBytesWritable) =
         fastAttempt(b)(Bytes.toBoolean(b.copyBytes))
     }
-  implicit lazy val bigDecimal2BytesWritableInj =
+  implicit lazy val bigDecimal2BytesWritableInj: Injection[BigDecimal, ImmutableBytesWritable] =
     new ImmutableBytesWritableInjection[BigDecimal] {
       override def invert(b: ImmutableBytesWritable) =
         fastAttempt(b)(Bytes.toBigDecimal(b.get, b.getOffset, b.getLength))

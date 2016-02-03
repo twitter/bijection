@@ -3,7 +3,7 @@ package com.twitter.bijection.avro
 import org.scalatest._
 import com.twitter.bijection.{ Injection, BaseProperties }
 import org.apache.avro.Schema
-import avro.FiscalRecord
+import avro.{ FiscalRecordScala, FiscalRecord }
 
 /**
  * @author Muhammad Ashraf
@@ -91,6 +91,14 @@ class SpecificAvroCodecsSpecification extends WordSpec with Matchers with BasePr
       val testRecord = buildSpecificAvroRecord(("2012-01-01", 1, 12))
       val bytes = Injection[FiscalRecord, Array[Byte]](testRecord)
       val attempt = Injection.invert[FiscalRecord, Array[Byte]](bytes)
+      assert(attempt.get == testRecord)
+    }
+
+    "Round trip specific record using Binary Injection With Schema for Scala case classes" in {
+      implicit val specificBinaryInjection = SpecificAvroCodecs.toBinary[FiscalRecordScala]
+      val testRecord = FiscalRecordScala("2012-01-01", Some(1), Some(12))
+      val bytes = Injection[FiscalRecordScala, Array[Byte]](testRecord)
+      val attempt = Injection.invert[FiscalRecordScala, Array[Byte]](bytes)
       assert(attempt.get == testRecord)
     }
 
