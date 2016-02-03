@@ -38,7 +38,7 @@ object StringArbs extends BaseProperties {
 class StringBijectionLaws extends CheckProperties with BaseProperties {
 
   property("round trips string -> Array[String]") {
-    isInjection[String, Array[Byte]]
+    isSerializableInjection[String, Array[Byte]]
   }
 
   implicit val symbol = arbitraryViaFn { (s: String) => Symbol(s) }
@@ -54,7 +54,7 @@ class StringBijectionLaws extends CheckProperties with BaseProperties {
   }
 
   property("UUID -> String") {
-    isInjection[UUID, String]
+    isSerializableInjection[UUID, String]
   }
 
   //property("UUID <-> String @@ Rep[UUID]") {
@@ -70,7 +70,7 @@ class StringBijectionLaws extends CheckProperties with BaseProperties {
 
   // This is trivially a bijection if it injective
   property("URL -> String") {
-    isInjection[URL, String]
+    isSerializableInjection[URL, String]
   }
 
   property("rts through StringJoinBijection") {

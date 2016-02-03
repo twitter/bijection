@@ -18,7 +18,7 @@ package com.twitter.bijection
 
 import com.twitter.bijection.Inversion.attempt
 import java.net.{ URLDecoder, URLEncoder, URL }
-import java.nio.charset.{ Charset, CoderResult, CodingErrorAction }
+import java.nio.charset.{ Charset, CharsetDecoder, CoderResult, CodingErrorAction }
 import java.nio.{ ByteBuffer, CharBuffer }
 import java.util.UUID
 import scala.annotation.tailrec
@@ -32,7 +32,9 @@ trait StringInjections extends NumericInjections {
 
   def withEncoding(encoding: String): Injection[String, Array[Byte]] =
     new AbstractInjection[String, Array[Byte]] {
-      private[this] val decRef =
+      @transient private[this] var decRef: AtomicSharedState[(CharsetDecoder, CharBuffer)] = null
+
+      private[this] def mkSharedState =
         new AtomicSharedState({ () =>
           val dec = Charset.forName(encoding)
             .newDecoder
@@ -47,6 +49,7 @@ trait StringInjections extends NumericInjections {
         attempt(ByteBuffer.wrap(b)) { bb =>
           //these are mutable, so it can't be shared trivially
           //avoid GC pressure and (probably) perform better
+          if (null == decRef) { decRef = mkSharedState }
           val decBuf = decRef.get
           val dec = decBuf._1
           val buf = decBuf._2
