@@ -1,5 +1,9 @@
 # Bijection #
 
+### 0.9.1
+* Repro ser/de failures and add tests: https://github.com/twitter/bijection/pull/241
+* Fix flaky URL test: https://github.com/twitter/bijection/pull/240
+
 ### 0.9.0
 * Reduce the exposed type granularity down, maintains binary compat wit…: https://github.com/twitter/bijection/pull/235
 * avro binary with schema: https://github.com/twitter/bijection/pull/238
