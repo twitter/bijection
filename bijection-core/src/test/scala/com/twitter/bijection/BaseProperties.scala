@@ -16,17 +16,42 @@ limitations under the License.
 
 package com.twitter.bijection
 
-import org.scalacheck.Arbitrary
-import org.scalatest.{ PropSpec, MustMatchers }
-import org.scalatest.prop.PropertyChecks
-
-import org.scalacheck.Prop.forAll
-
-import scala.math.Equiv
-import scala.util.Success
+import java.io.{ ByteArrayInputStream, ByteArrayOutputStream, ObjectOutputStream, ObjectInputStream, Serializable }
 import java.util.Arrays
+import org.scalacheck.Arbitrary
+import org.scalacheck.Prop.forAll
+import org.scalatest.prop.PropertyChecks
+import org.scalatest.{ PropSpec, MustMatchers }
+import scala.math.Equiv
+import scala.reflect.ClassTag
+import scala.util.Success
 
 trait BaseProperties {
+  def jserialize[T <: Serializable](t: T): Array[Byte] = {
+    val bos = new ByteArrayOutputStream
+    val out = new ObjectOutputStream(bos)
+    try {
+      out.writeObject(t)
+      bos.toByteArray
+    } finally {
+      out.close
+      bos.close
+    }
+  }
+  def jdeserialize[T](bytes: Array[Byte])(implicit cmf: ClassTag[T]): T = {
+    val cls = cmf.runtimeClass.asInstanceOf[Class[T]]
+    val bis = new ByteArrayInputStream(bytes)
+    val in = new ObjectInputStream(bis);
+    try {
+      cls.cast(in.readObject)
+    } finally {
+      bis.close
+      in.close
+    }
+  }
+  def jrt[T <: Serializable](t: T)(implicit cmf: ClassTag[T]): T =
+    jdeserialize(jserialize(t))
+
   implicit def barrEq[T](implicit eqt: Equiv[T]): Equiv[Array[T]] = new Equiv[Array[T]] {
     def equiv(a1: Array[T], a2: Array[T]) =
       a1.zip(a2).forall { tup: (T, T) => eqt.equiv(tup._1, tup._2) }
@@ -65,7 +90,12 @@ trait BaseProperties {
 
   def isInjection[A, B](implicit a: Arbitrary[A],
     inj: Injection[A, B], barb: Arbitrary[B], eqa: Equiv[A], eqb: Equiv[B]) =
-    isLooseInjection[A, B] && invertIsStrict[A, B]
+    isLooseInjection[A, B] &&
+    invertIsStrict[A, B] && {
+      val rtInj = jrt(inj)
+      (isLooseInjection[A, B](a, rtInj, eqa) &&
+        invertIsStrict[A, B](barb, rtInj, eqb)).label("Serialized check")
+    }
 
   def isInjective[A, B](implicit a: Arbitrary[A], bij: ImplicitBijection[A, B], eqa: Equiv[A]) =
     forAll { (a: A) => eqa.equiv(a, rt(a)(bij.bijection)) }
@@ -74,10 +104,12 @@ trait BaseProperties {
     forAll { b: B => eqb.equiv(b, rtInjective(b)(bij.bijection.inverse)) }
 
   def isBijection[A, B](implicit arba: Arbitrary[A],
-    arbb: Arbitrary[B], bij: ImplicitBijection[A, B], eqa: Equiv[A], eqb: Equiv[B]) = {
-    implicit val inj = Injection.fromBijection(bij.bijection)
-    isInjective[A, B] && invertIsInjection[A, B]
-  }
+    arbb: Arbitrary[B], bij: ImplicitBijection[A, B], eqa: Equiv[A], eqb: Equiv[B]) =
+    isInjective[A, B] && invertIsInjection[A, B] && {
+      val bij2 = jrt(bij)
+      (isInjective[A, B](arba, bij2, eqa)  &&
+        invertIsInjection[A, B](arbb, bij2, eqb)).label("Serialized check")
+    }
 
   def arbitraryViaBijection[A, B](implicit bij: Bijection[A, B], arb: Arbitrary[A]): Arbitrary[B] =
     Arbitrary { arb.arbitrary.map { bij(_) } }
