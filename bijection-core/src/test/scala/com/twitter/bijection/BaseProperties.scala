@@ -90,12 +90,11 @@ trait BaseProperties {
 
   def isInjection[A, B](implicit a: Arbitrary[A],
     inj: Injection[A, B], barb: Arbitrary[B], eqa: Equiv[A], eqb: Equiv[B]) =
-    isLooseInjection[A, B] &&
-    invertIsStrict[A, B] && {
-      val rtInj = jrt(inj)
-      (isLooseInjection[A, B](a, rtInj, eqa) &&
-        invertIsStrict[A, B](barb, rtInj, eqb)).label("Serialized check")
-    }
+    isLooseInjection[A, B] && invertIsStrict[A, B]
+
+  def isSerializableInjection[A, B](implicit arba: Arbitrary[A],
+    inj: Injection[A, B], barb: Arbitrary[B], eqa: Equiv[A], eqb: Equiv[B]) =
+    isInjection[A, B] && (isInjection(arba, jrt(inj), barb, eqa, eqb).label("Serializable check"))
 
   def isInjective[A, B](implicit a: Arbitrary[A], bij: ImplicitBijection[A, B], eqa: Equiv[A]) =
     forAll { (a: A) => eqa.equiv(a, rt(a)(bij.bijection)) }
@@ -105,11 +104,11 @@ trait BaseProperties {
 
   def isBijection[A, B](implicit arba: Arbitrary[A],
     arbb: Arbitrary[B], bij: ImplicitBijection[A, B], eqa: Equiv[A], eqb: Equiv[B]) =
-    isInjective[A, B] && invertIsInjection[A, B] && {
-      val bij2 = jrt(bij)
-      (isInjective[A, B](arba, bij2, eqa)  &&
-        invertIsInjection[A, B](arbb, bij2, eqb)).label("Serialized check")
-    }
+    isInjective[A, B] && invertIsInjection[A, B]
+
+  def isSerializableBijection[A, B](implicit arba: Arbitrary[A],
+    arbb: Arbitrary[B], bij: ImplicitBijection[A, B], eqa: Equiv[A], eqb: Equiv[B]) =
+    isBijection[A, B] && (isBijection(arba, arbb, jrt(bij), eqa, eqb).label("Serializable check"))
 
   def arbitraryViaBijection[A, B](implicit bij: Bijection[A, B], arb: Arbitrary[A]): Arbitrary[B] =
     Arbitrary { arb.arbitrary.map { bij(_) } }
