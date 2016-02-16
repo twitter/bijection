@@ -53,7 +53,7 @@ trait StringInjections extends NumericInjections {
           val decBuf = decRef.get
           val dec = decBuf._1
           val buf = decBuf._2
-          val maxSpace = (b.length * dec.maxCharsPerByte).toInt + 1
+          val maxSpace = (b.length * (dec.maxCharsPerByte.toDouble)).toInt + 1
           val thisBuf = if (maxSpace > buf.limit) CharBuffer.allocate(maxSpace) else buf
 
           // this is the error free result
