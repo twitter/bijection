@@ -137,7 +137,7 @@ val unreleasedModules = Set[String]()
 def youngestForwardCompatible(subProj: String) =
   Some(subProj)
     .filterNot(unreleasedModules.contains(_))
-    .map { s => "com.twitter" % ("bijection-" + s + "_2.10") % "0.8.1" }
+    .map { s => "com.twitter" % ("bijection-" + s + "_2.10") % "0.9.1" }
 
 def osgiExportAll(packs: String*) =
   OsgiKeys.exportPackage := packs.map(_ + ".*;version=${Bundle-Version}")
