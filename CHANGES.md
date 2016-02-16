@@ -1,5 +1,8 @@
 # Bijection #
 
+### 0.9.2
+* Fix issue with `Injection[String, Array[Byte]].invert` for arrays more than `2^(24)` in size: https://github.com/twitter/bijection/pull/243
+
 ### 0.9.1
 * Repro ser/de failures and add tests: https://github.com/twitter/bijection/pull/241
 * Fix flaky URL test: https://github.com/twitter/bijection/pull/240
