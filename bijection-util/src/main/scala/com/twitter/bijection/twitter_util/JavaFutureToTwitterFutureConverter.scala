@@ -17,9 +17,9 @@ limitations under the License.
 package com.twitter.bijection.twitter_util
 
 import java.util.concurrent.atomic.AtomicReference
-import java.util.concurrent.{Future => JFuture}
+import java.util.concurrent.{ Future => JFuture }
 
-import com.twitter.util.{Future, Promise, Try}
+import com.twitter.util.{ Future, Promise, Try }
 
 import scala.annotation.tailrec
 
@@ -60,14 +60,14 @@ private[twitter_util] class JavaFutureToTwitterFutureConverter(waitTimeMs: Long 
     @tailrec
     def swapOpen(old: List[Link[_]]): Option[List[Link[_]]] = list.get match {
       case Closed => None
-      case s@Open(links) =>
+      case s @ Open(links) =>
         if (list.compareAndSet(s, Open(old))) Some(links)
         else swapOpen(links)
     }
 
     @tailrec
     def loop(state: State): Unit = state match {
-      case s@Open(links) =>
+      case s @ Open(links) =>
         val notDone = links.filterNot(_.maybeUpdate)
         if (links.isEmpty || notDone.nonEmpty) Thread.sleep(waitTimeMs)
         swapOpen(notDone) match {
@@ -94,13 +94,13 @@ private[twitter_util] class JavaFutureToTwitterFutureConverter(waitTimeMs: Long 
   def stop(): Unit = {
     list.getAndSet(Closed) match {
       case Closed => // already closed
-      case s@Open(links) => links.foreach(_.cancel())
+      case s @ Open(links) => links.foreach(_.cancel())
     }
   }
 
   private def poll[T](link: Link[T]): Unit = list.get match {
     case Closed => link.cancel()
-    case s@Open(tail) =>
+    case s @ Open(tail) =>
       if (list.compareAndSet(s, Open(link :: tail))) ()
       else poll(link)
   }

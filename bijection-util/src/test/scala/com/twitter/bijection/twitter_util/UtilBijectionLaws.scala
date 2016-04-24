@@ -16,15 +16,12 @@ limitations under the License.
 
 package com.twitter.bijection.twitter_util
 
-import com.twitter.bijection.{ CheckProperties, BaseProperties, Bijection }
+import com.twitter.bijection.{ CheckProperties, BaseProperties }
 import com.twitter.io.Buf
 import com.twitter.util.{ Future => TwitterFuture, Try => TwitterTry, Await => TwitterAwait }
 import java.lang.{ Integer => JInt, Long => JLong }
 import org.scalacheck.Arbitrary
-import org.scalatest.{ PropSpec, MustMatchers }
-import org.scalatest.prop.PropertyChecks
 
-import org.scalacheck.Prop.forAll
 import scala.concurrent.{ Future => ScalaFuture, Await => ScalaAwait }
 import scala.concurrent.duration.Duration
 import scala.util.{ Try => ScalaTry }
@@ -38,7 +35,7 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties {
 
   protected def toOption[T](f: ScalaFuture[T]): Option[T] = TwitterTry(ScalaAwait.result(f, Duration.Inf)).toOption
 
-  implicit def futureArb[T: Arbitrary] = arbitraryViaFn[T, TwitterFuture[T]] { TwitterFuture.value(_) }
+  implicit def futureArb[T: Arbitrary] = arbitraryViaFn[T, TwitterFuture[T]] { TwitterFuture.value }
   implicit def scalaFutureArb[T: Arbitrary] = arbitraryViaFn[T, ScalaFuture[T]] { future(_) }
   implicit def tryArb[T: Arbitrary] = arbitraryViaFn[T, TwitterTry[T]] { TwitterTry(_) }
   implicit def scalaTryArb[T: Arbitrary] = arbitraryViaFn[T, ScalaTry[T]] { ScalaTry(_) }
