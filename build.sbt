@@ -18,7 +18,7 @@ val sharedSettings = Project.defaultSettings ++ osgiSettings ++ scalariformSetti
 
   ScalariformKeys.preferences := formattingPreferences,
 
-  scalaVersion := "2.10.5",
+  scalaVersion := "2.11.7",
 
   javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
 
