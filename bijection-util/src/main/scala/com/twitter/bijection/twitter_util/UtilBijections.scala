@@ -16,7 +16,9 @@ limitations under the License.
 
 package com.twitter.bijection.twitter_util
 
-import com.twitter.bijection.{ AbstractBijection, Bijection, ImplicitBijection }
+import java.util.concurrent.{Future => JavaFuture, CompletableFuture}
+
+import com.twitter.bijection._
 import com.twitter.io.Buf
 import com.twitter.util.{ Future => TwitterFuture, Try => TwitterTry, Promise => TwitterPromise, Return, Throw, FuturePool }
 
@@ -40,7 +42,7 @@ trait UtilBijections {
   implicit def futureBijection[A, B](implicit bij: ImplicitBijection[A, B]): Bijection[TwitterFuture[A], TwitterFuture[B]] =
     new AbstractBijection[TwitterFuture[A], TwitterFuture[B]] {
       override def apply(fa: TwitterFuture[A]) = fa.map(bij(_))
-      override def invert(fb: TwitterFuture[B]) = fb.map(bij.invert(_))
+      override def invert(fb: TwitterFuture[B]) = fb.map(bij.invert)
     }
 
   /**
@@ -50,7 +52,7 @@ trait UtilBijections {
   implicit def futureScalaBijection[A, B](implicit bij: ImplicitBijection[A, B], executor: ExecutionContext): Bijection[ScalaFuture[A], ScalaFuture[B]] =
     new AbstractBijection[ScalaFuture[A], ScalaFuture[B]] {
       override def apply(fa: ScalaFuture[A]) = fa.map(bij(_))
-      override def invert(fb: ScalaFuture[B]) = fb.map(bij.invert(_))
+      override def invert(fb: ScalaFuture[B]) = fb.map(bij.invert)
     }
 
   /**
@@ -74,6 +76,32 @@ trait UtilBijections {
           case Failure(exception) => p.setException(exception)
         }
         p
+      }
+    }
+  }
+
+  private val futureConverter = {
+    val converter = new JavaFutureToTwitterFutureConverter()
+    converter.start()
+    converter
+  }
+
+  /**
+   * Injection from java futures to twitter futures
+   */
+  implicit def twitter2JavaFuture[A]: Bijection[TwitterFuture[A], JavaFuture[A]] = {
+    new AbstractBijection[TwitterFuture[A], JavaFuture[A]] {
+      override def apply(f: TwitterFuture[A]): JavaFuture[A] = {
+        val javaFuture = new CompletableFuture[A]()
+        f.respond {
+          case Return(value) => javaFuture.complete(value)
+          case Throw(exception) => javaFuture.completeExceptionally(exception)
+        }
+        javaFuture
+      }
+
+      override def invert(f: JavaFuture[A]): TwitterFuture[A] = {
+        futureConverter(f)
       }
     }
   }
@@ -102,7 +130,7 @@ trait UtilBijections {
   implicit def tryBijection[A, B](implicit bij: ImplicitBijection[A, B]): Bijection[TwitterTry[A], TwitterTry[B]] =
     new AbstractBijection[TwitterTry[A], TwitterTry[B]] {
       override def apply(fa: TwitterTry[A]) = fa.map(bij(_))
-      override def invert(fb: TwitterTry[B]) = fb.map(bij.invert(_))
+      override def invert(fb: TwitterTry[B]) = fb.map(bij.invert)
     }
 
   /**
@@ -112,7 +140,7 @@ trait UtilBijections {
   implicit def tryScalaBijection[A, B](implicit bij: ImplicitBijection[A, B]): Bijection[ScalaTry[A], ScalaTry[B]] =
     new AbstractBijection[ScalaTry[A], ScalaTry[B]] {
       override def apply(fa: ScalaTry[A]) = fa.map(bij(_))
-      override def invert(fb: ScalaTry[B]) = fb.map(bij.invert(_))
+      override def invert(fb: ScalaTry[B]) = fb.map(bij.invert)
     }
 
   /**
