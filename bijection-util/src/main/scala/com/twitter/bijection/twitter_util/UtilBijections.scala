@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.twitter.bijection.twitter_util
 
-import java.util.concurrent.{Future => JavaFuture, CompletableFuture}
+import java.util.concurrent.{ Future => JavaFuture, CompletableFuture }
 
 import com.twitter.bijection._
 import com.twitter.io.Buf
