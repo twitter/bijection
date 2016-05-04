@@ -23,6 +23,7 @@ import com.twitter.util.{ Future => TwitterFuture, Try => TwitterTry, Await => T
 import java.lang.{ Integer => JInt, Long => JLong }
 import java.util.concurrent.{ Future => JavaFuture }
 import org.scalacheck.Arbitrary
+import org.scalatest.BeforeAndAfterAll
 
 import scala.concurrent.{ Future => ScalaFuture, Await => ScalaAwait }
 import scala.concurrent.duration.Duration
@@ -30,7 +31,7 @@ import scala.util.{ Try => ScalaTry }
 import scala.concurrent.future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class UtilBijectionLaws extends CheckProperties with BaseProperties {
+class UtilBijectionLaws extends CheckProperties with BaseProperties with BeforeAndAfterAll {
   import UtilBijections._
 
   protected def toOption[T](f: TwitterFuture[T]): Option[T] =
@@ -52,6 +53,14 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties {
   implicit val jIntArb = arbitraryViaBijection[Int, JInt]
   implicit val jLongArb = arbitraryViaBijection[Long, JLong]
   implicit val bufArb: Arbitrary[Buf] = arbitraryViaFn[Array[Byte], Buf](Buf.ByteArray.Owned.apply)
+
+  implicit val futureConverter = {
+    val converter = new JavaFutureToTwitterFutureConverter()
+    converter.start()
+    converter
+  }
+
+  override protected def afterAll(): Unit = futureConverter.stop()
 
   implicit protected def futureEq[T: Equiv]: Equiv[TwitterFuture[T]] =
     Equiv.fromFunction { (f1, f2) => Equiv[Option[T]].equiv(toOption(f1), toOption(f2)) }

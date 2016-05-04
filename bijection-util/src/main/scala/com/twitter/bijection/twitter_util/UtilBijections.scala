@@ -80,16 +80,11 @@ trait UtilBijections {
     }
   }
 
-  private val futureConverter = {
-    val converter = new JavaFutureToTwitterFutureConverter()
-    converter.start()
-    converter
-  }
-
   /**
    * Injection from java futures to twitter futures
    */
-  implicit def twitter2JavaFuture[A]: Bijection[TwitterFuture[A], JavaFuture[A]] = {
+  implicit def twitter2JavaFuture[A](
+    implicit converter: JavaFutureToTwitterFutureConverter): Bijection[TwitterFuture[A], JavaFuture[A]] = {
     new AbstractBijection[TwitterFuture[A], JavaFuture[A]] {
       override def apply(f: TwitterFuture[A]): JavaFuture[A] = {
         val javaFuture = new CompletableFuture[A]()
@@ -101,7 +96,7 @@ trait UtilBijections {
       }
 
       override def invert(f: JavaFuture[A]): TwitterFuture[A] = {
-        futureConverter(f)
+        converter(f)
       }
     }
   }
