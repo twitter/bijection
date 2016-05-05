@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.twitter.bijection.twitter_util
 
-import java.util.concurrent.{ Future => JavaFuture, CompletableFuture }
+import java.util.concurrent.{ Future => JavaFuture }
 
 import com.twitter.bijection._
 import com.twitter.io.Buf
@@ -84,16 +84,11 @@ trait UtilBijections {
    * Injection from java futures to twitter futures
    */
   implicit def twitter2JavaFuture[A](
-    implicit converter: JavaFutureToTwitterFutureConverter): Bijection[TwitterFuture[A], JavaFuture[A]] = {
+    implicit converter: JavaFutureToTwitterFutureConverter
+  ): Bijection[TwitterFuture[A], JavaFuture[A]] = {
     new AbstractBijection[TwitterFuture[A], JavaFuture[A]] {
-      override def apply(f: TwitterFuture[A]): JavaFuture[A] = {
-        val javaFuture = new CompletableFuture[A]()
-        f.respond {
-          case Return(value) => javaFuture.complete(value)
-          case Throw(exception) => javaFuture.completeExceptionally(exception)
-        }
-        javaFuture
-      }
+      override def apply(f: TwitterFuture[A]): JavaFuture[A] =
+        f.toJavaFuture.asInstanceOf[JavaFuture[A]]
 
       override def invert(f: JavaFuture[A]): TwitterFuture[A] = {
         converter(f)
