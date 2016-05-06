@@ -242,10 +242,7 @@ lazy val bijectionJson = module("json").settings(
 
 lazy val bijectionUtil = module("util").settings(
   osgiExportAll("com.twitter.bijection.twitter_util"),
-  libraryDependencies ++= Seq(
-    "com.twitter" %% "util-core" % "6.24.0",
-    "com.google.guava" % "guava" % "14.0" % "test"
-  )
+  libraryDependencies += "com.twitter" %% "util-core" % "6.24.0"
 ).dependsOn(bijectionCore % "test->test;compile->compile")
 
 lazy val bijectionFinagleMySql = module("finagle-mysql").settings(
