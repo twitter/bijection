@@ -81,6 +81,19 @@ trait UtilBijections {
   }
 
   /**
+   * Injection from twitter futures to java futures.
+   */
+  implicit def twitter2JavaFutureInjection[A]: Injection[TwitterFuture[A], JavaFuture[A]] = {
+    new AbstractInjection[TwitterFuture[A], JavaFuture[A]] {
+      override def apply(f: TwitterFuture[A]): JavaFuture[A] =
+        f.toJavaFuture.asInstanceOf[JavaFuture[A]]
+
+      override def invert(f: JavaFuture[A]): ScalaTry[TwitterFuture[A]] =
+        Inversion.attemptWhen(f)(_.isDone)(jf => TwitterFuture.value(jf.get()))
+    }
+  }
+
+  /**
    * Bijection between java futures and twitter futures.
    * An implicit [[JavaFutureConverter]] is needed, two strategies are available out of the box:
    *   - [[FuturePoolJavaFutureConverter]] which is based on a [[FuturePool]] and which will
@@ -92,7 +105,7 @@ trait UtilBijections {
    *   futures to convert and one cares less about the latency induced by
    *   <code>checkFrequency</code>.
    */
-  implicit def twitter2JavaFuture[A](
+  implicit def twitter2JavaFutureBijection[A](
     implicit converter: JavaFutureConverter
   ): Bijection[TwitterFuture[A], JavaFuture[A]] = {
     new AbstractBijection[TwitterFuture[A], JavaFuture[A]] {

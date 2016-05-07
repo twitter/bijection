@@ -72,50 +72,54 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties with BeforeA
   type FromMap = Map[Int, Long]
   type ToMap = Map[JInt, JLong]
 
-  property("round trips TwitterFuture[Map[Int, String]] -> Twitter.Future[JInt, JLong]") {
+  property("round trips TwitterFuture[Map[Int, String]] <-> Twitter.Future[JInt, JLong]") {
     isBijection[TwitterFuture[FromMap], TwitterFuture[ToMap]]
   }
 
-  property("round trips ScalaFuture[Map[Int, String]] -> ScalaFuture[JInt, JLong]") {
+  property("round trips ScalaFuture[Map[Int, String]] <-> ScalaFuture[JInt, JLong]") {
     isBijection[ScalaFuture[FromMap], ScalaFuture[ToMap]]
   }
 
-  property("round trips TwitterTry[Map[Int, String]] -> TwitterTry[Map[JInt, JLong]]") {
+  property("round trips TwitterTry[Map[Int, String]] <-> TwitterTry[Map[JInt, JLong]]") {
     isBijection[TwitterTry[FromMap], TwitterTry[ToMap]]
   }
 
-  property("round trips ScalaTry[Map[Int, String]] -> ScalaTry[Map[JInt, JLong]]") {
+  property("round trips ScalaTry[Map[Int, String]] <-> ScalaTry[Map[JInt, JLong]]") {
     isBijection[ScalaTry[FromMap], ScalaTry[ToMap]]
   }
 
-  property("round trips TwitterTry[Map[JInt, JLong]] -> ScalaTry[Map[JInt, JLong]]") {
+  property("round trips TwitterTry[Map[JInt, JLong]] <-> ScalaTry[Map[JInt, JLong]]") {
     isBijection[TwitterTry[ToMap], ScalaTry[ToMap]]
   }
 
-  property("round trips TwitterFuture[Map[JInt, JLong]] -> ScalaFuture[Map[JInt, JLong]]") {
+  property("round trips TwitterFuture[Map[JInt, JLong]] <-> ScalaFuture[Map[JInt, JLong]]") {
     isBijection[TwitterFuture[ToMap], ScalaFuture[ToMap]]
   }
 
-  property("round trips TwitterFuture[Map[JInt, JLong]] -> JavaFuture[Map[JInt, JLong]] " +
+  property("round trips TwitterFuture[Map[JInt, JLong]] <-> JavaFuture[Map[JInt, JLong]] " +
     "using FuturePool") {
     implicit val converter = new FuturePoolJavaFutureConverter(true)
     isBijection[TwitterFuture[ToMap], JavaFuture[ToMap]]
   }
 
-  property("round trips TwitterFuture[Map[JInt, JLong]] -> JavaFuture[Map[JInt, JLong]] " +
+  property("round trips TwitterFuture[Map[JInt, JLong]] <-> JavaFuture[Map[JInt, JLong]] " +
     "using Timer") {
     implicit val converter =
       new TimerJavaFutureConverter(new JavaTimer, com.twitter.util.Duration.fromSeconds(1), true)
     isBijection[TwitterFuture[ToMap], JavaFuture[ToMap]]
   }
 
-  property("round trips shared com.twitter.io.Buf -> Array[Byte]") {
+  property("TwitterFuture[Map[JInt, JLong]] -> JavaFuture[Map[JInt, JLong]]") {
+    isInjection[TwitterFuture[ToMap], JavaFuture[ToMap]]
+  }
+
+  property("round trips shared com.twitter.io.Buf <-> Array[Byte]") {
     import Shared.byteArrayBufBijection
 
     isBijection[Array[Byte], Buf]
   }
 
-  property("round trips owned com.twitter.io.Buf -> Array[Byte]") {
+  property("round trips owned com.twitter.io.Buf <-> Array[Byte]") {
     import Owned.byteArrayBufBijection
 
     isBijection[Array[Byte], Buf]
