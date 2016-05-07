@@ -18,7 +18,7 @@ package com.twitter.bijection.twitter_util
 
 import com.twitter.bijection.{ CheckProperties, BaseProperties }
 import com.twitter.io.Buf
-import com.twitter.util.{ Future => TwitterFuture, Try => TwitterTry, Await => TwitterAwait }
+import com.twitter.util.{ Future => TwitterFuture, Try => TwitterTry, Await => TwitterAwait, JavaTimer }
 import java.lang.{ Integer => JInt, Long => JLong }
 import java.util.concurrent.{ Future => JavaFuture, TimeUnit }
 import org.scalacheck.Arbitrary
@@ -60,14 +60,6 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties with BeforeA
   implicit val jLongArb = arbitraryViaBijection[Long, JLong]
   implicit val bufArb: Arbitrary[Buf] = arbitraryViaFn[Array[Byte], Buf](Buf.ByteArray.Owned.apply)
 
-  implicit val futureConverter = {
-    val converter = new JavaFutureToTwitterFutureConverter()
-    converter.start()
-    converter
-  }
-
-  override protected def afterAll(): Unit = futureConverter.stop()
-
   implicit protected def futureEq[T: Equiv]: Equiv[TwitterFuture[T]] =
     Equiv.fromFunction { (f1, f2) => Equiv[Option[T]].equiv(toOption(f1), toOption(f2)) }
 
@@ -104,7 +96,16 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties with BeforeA
     isBijection[TwitterFuture[ToMap], ScalaFuture[ToMap]]
   }
 
-  property("round trips TwitterFuture[Map[JInt, JLong]] -> JavaFuture[Map[JInt, JLong]]") {
+  property("round trips TwitterFuture[Map[JInt, JLong]] -> JavaFuture[Map[JInt, JLong]] " +
+    "using FuturePool") {
+    implicit val converter = new FuturePoolJavaFutureConverter(true)
+    isBijection[TwitterFuture[ToMap], JavaFuture[ToMap]]
+  }
+
+  property("round trips TwitterFuture[Map[JInt, JLong]] -> JavaFuture[Map[JInt, JLong]] " +
+    "using Timer") {
+    implicit val converter =
+      new TimerJavaFutureConverter(new JavaTimer, com.twitter.util.Duration.fromSeconds(1), true)
     isBijection[TwitterFuture[ToMap], JavaFuture[ToMap]]
   }
 

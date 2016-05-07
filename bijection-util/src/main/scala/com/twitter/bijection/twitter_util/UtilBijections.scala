@@ -84,7 +84,7 @@ trait UtilBijections {
    * Injection from java futures to twitter futures
    */
   implicit def twitter2JavaFuture[A](
-    implicit converter: JavaFutureToTwitterFutureConverter
+    implicit converter: JavaFutureConverter
   ): Bijection[TwitterFuture[A], JavaFuture[A]] = {
     new AbstractBijection[TwitterFuture[A], JavaFuture[A]] {
       override def apply(f: TwitterFuture[A]): JavaFuture[A] =
