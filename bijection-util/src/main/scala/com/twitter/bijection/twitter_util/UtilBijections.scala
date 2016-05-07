@@ -81,7 +81,16 @@ trait UtilBijections {
   }
 
   /**
-   * Injection from java futures to twitter futures
+   * Bijection between java futures and twitter futures.
+   * An implicit [[JavaFutureConverter]] is needed, two strategies are available out of the box:
+   *   - [[FuturePoolJavaFutureConverter]] which is based on a [[FuturePool]] and which will
+   *   create one thread per future. To favor if there aren't too many futures to convert and one
+   *   cares about latency.
+   *   - [[TimerJavaFutureConverter]] which is based on a [[com.twitter.util.Timer]] which will
+   *   create a task which will check every <code>checkFrequency</code> if the java future is
+   *   completed, one thread will be used for every conversion. To favor if there are a lot of
+   *   futures to convert and one cares less about the latency induced by
+   *   <code>checkFrequency</code>.
    */
   implicit def twitter2JavaFuture[A](
     implicit converter: JavaFutureConverter

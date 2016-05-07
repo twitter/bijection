@@ -20,10 +20,19 @@ import java.util.concurrent.{ Future => JFuture }
 
 import com.twitter.util._
 
+/**
+ * Base class for converting java futures to twitter futures
+ */
 abstract class JavaFutureConverter {
   def apply[T](javaFuture: JFuture[T]): Future[T]
 }
 
+/**
+ * Converter based on a [[FuturePool]] which will create one thread per future.
+ * To favor if there aren't too many futures to convert and one cares about latency.
+ * @param mayInterruptIfRunning whether or not the initial java future can be interrupted if it's
+ *                              running
+ */
 class FuturePoolJavaFutureConverter(mayInterruptIfRunning: Boolean) extends JavaFutureConverter {
   override def apply[T](javaFuture: JFuture[T]): Future[T] = {
     val f = FuturePool.unboundedPool { javaFuture.get() }
@@ -38,6 +47,17 @@ class FuturePoolJavaFutureConverter(mayInterruptIfRunning: Boolean) extends Java
   }
 }
 
+/**
+ * Converter based on a [[Timer]] which will create a task which will check every
+ * <code>checkFrequency</code> if the java future is completed, one thread will be used for every
+ * conversion.
+ * To favor if there are a lot of futures to convert and one cares less about the latency induced
+ * by <code>checkFrequency</code>.
+ * @param timer timer used to schedule a task which will check if the java future is done
+ * @param checkFrequency frequency at which the java future will be checked for completion
+ * @param mayInterruptIfRunning whether or not the initial java future can be interrupted if it's
+ *                              running
+ */
 class TimerJavaFutureConverter(
   timer: Timer,
   checkFrequency: Duration,
