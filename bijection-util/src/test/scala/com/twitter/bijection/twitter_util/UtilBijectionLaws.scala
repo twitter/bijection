@@ -18,7 +18,7 @@ package com.twitter.bijection.twitter_util
 
 import com.twitter.bijection.{ CheckProperties, BaseProperties }
 import com.twitter.io.Buf
-import com.twitter.util.{ Future => TwitterFuture, Try => TwitterTry, Await => TwitterAwait, JavaTimer }
+import com.twitter.util.{ Future => TwitterFuture, Try => TwitterTry, Await => TwitterAwait, FuturePool, JavaTimer }
 import java.lang.{ Integer => JInt, Long => JLong }
 import java.util.concurrent.{ Future => JavaFuture, Callable, FutureTask }
 import org.scalacheck.Arbitrary
@@ -96,7 +96,7 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties with BeforeA
 
   property("round trips TwitterFuture[Map[JInt, JLong]] <-> JavaFuture[Map[JInt, JLong]] " +
     "using FuturePool") {
-    implicit val converter = new FuturePoolJavaFutureConverter(true)
+    implicit val converter = new FuturePoolJavaFutureConverter(FuturePool.unboundedPool, true)
     isBijection[TwitterFuture[ToMap], JavaFuture[ToMap]]
   }
 
