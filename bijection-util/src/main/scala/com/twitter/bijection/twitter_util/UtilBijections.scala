@@ -82,14 +82,16 @@ trait UtilBijections {
 
   /**
    * Injection from twitter futures to java futures.
+   * Will throw when inverting back from java future to twitter future if the java future is not
+   * done.
    */
-  implicit def twitter2JavaFutureInjection[A]: Injection[TwitterFuture[A], JavaFuture[A]] = {
+  def twitter2JavaFutureInjection[A]: Injection[TwitterFuture[A], JavaFuture[A]] = {
     new AbstractInjection[TwitterFuture[A], JavaFuture[A]] {
       override def apply(f: TwitterFuture[A]): JavaFuture[A] =
         f.toJavaFuture.asInstanceOf[JavaFuture[A]]
 
       override def invert(f: JavaFuture[A]): ScalaTry[TwitterFuture[A]] =
-        Inversion.attemptWhen(f)(_.isDone)(jf => TwitterFuture.value(jf.get()))
+        Inversion.attemptWhen(f)(_.isDone)(jf => TwitterFuture(jf.get()))
     }
   }
 
@@ -112,9 +114,8 @@ trait UtilBijections {
       override def apply(f: TwitterFuture[A]): JavaFuture[A] =
         f.toJavaFuture.asInstanceOf[JavaFuture[A]]
 
-      override def invert(f: JavaFuture[A]): TwitterFuture[A] = {
+      override def invert(f: JavaFuture[A]): TwitterFuture[A] =
         converter(f)
-      }
     }
   }
 

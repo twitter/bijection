@@ -108,7 +108,8 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties with BeforeA
   }
 
   property("TwitterFuture[Map[JInt, JLong]] -> JavaFuture[Map[JInt, JLong]]") {
-    isInjection[TwitterFuture[ToMap], JavaFuture[ToMap]]
+    isInjection[TwitterFuture[ToMap], JavaFuture[ToMap]](
+      futureArb[ToMap], twitter2JavaFutureInjection, javaFutureArb[ToMap], futureEq, javaFutureEq)
   }
 
   property("round trips shared com.twitter.io.Buf <-> Array[Byte]") {
