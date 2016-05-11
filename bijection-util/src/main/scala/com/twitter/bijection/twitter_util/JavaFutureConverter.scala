@@ -31,6 +31,7 @@ abstract class JavaFutureConverter {
  * Converter based on the specified <code>futurePool</code> which will create one thread per
  * future possibly limited by the maximum size of the pool.
  * To favor if there aren't too many futures to convert and one cares about latency.
+ *
  * @param futurePool future pool used to retrieve the result of every future
  * @param mayInterruptIfRunning whether or not the initial java future can be interrupted if it's
  *                              running
@@ -61,6 +62,7 @@ class FuturePoolJavaFutureConverter(
  * by <code>checkFrequency</code>.
  * <code>checkFrequency</code> needs to be a multiple of the timer implementation's granularity
  * which is often 1ms.
+ *
  * @param timer timer used to schedule a task which will check if the java future is done
  * @param checkFrequency frequency at which the java future will be checked for completion
  * @param mayInterruptIfRunning whether or not the initial java future can be interrupted if it's
@@ -73,11 +75,13 @@ class TimerJavaFutureConverter(
 ) extends JavaFutureConverter {
   override def apply[T](javaFuture: JFuture[T]): Future[T] = {
     val p = Promise[T]
-    val task = timer.schedule(checkFrequency) {
+    lazy val task: TimerTask = timer.schedule(checkFrequency) {
       if (javaFuture.isDone) {
         p.updateIfEmpty(Try(javaFuture.get()))
+        task.cancel()
       }
     }
+    require(task != null)
     p.setInterruptHandler { case NonFatal(e) =>
       task.cancel()
       p.updateIfEmpty(Throw(e))
