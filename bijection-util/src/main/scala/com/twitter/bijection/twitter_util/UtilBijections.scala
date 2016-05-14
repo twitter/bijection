@@ -16,7 +16,9 @@ limitations under the License.
 
 package com.twitter.bijection.twitter_util
 
-import com.twitter.bijection.{ AbstractBijection, Bijection, ImplicitBijection }
+import java.util.concurrent.{ Future => JavaFuture }
+
+import com.twitter.bijection._
 import com.twitter.io.Buf
 import com.twitter.util.{ Future => TwitterFuture, Try => TwitterTry, Promise => TwitterPromise, Return, Throw, FuturePool }
 
@@ -40,7 +42,7 @@ trait UtilBijections {
   implicit def futureBijection[A, B](implicit bij: ImplicitBijection[A, B]): Bijection[TwitterFuture[A], TwitterFuture[B]] =
     new AbstractBijection[TwitterFuture[A], TwitterFuture[B]] {
       override def apply(fa: TwitterFuture[A]) = fa.map(bij(_))
-      override def invert(fb: TwitterFuture[B]) = fb.map(bij.invert(_))
+      override def invert(fb: TwitterFuture[B]) = fb.map(bij.invert)
     }
 
   /**
@@ -50,7 +52,7 @@ trait UtilBijections {
   implicit def futureScalaBijection[A, B](implicit bij: ImplicitBijection[A, B], executor: ExecutionContext): Bijection[ScalaFuture[A], ScalaFuture[B]] =
     new AbstractBijection[ScalaFuture[A], ScalaFuture[B]] {
       override def apply(fa: ScalaFuture[A]) = fa.map(bij(_))
-      override def invert(fb: ScalaFuture[B]) = fb.map(bij.invert(_))
+      override def invert(fb: ScalaFuture[B]) = fb.map(bij.invert)
     }
 
   /**
@@ -79,6 +81,45 @@ trait UtilBijections {
   }
 
   /**
+   * Injection from twitter futures to java futures.
+   * Will throw when inverting back from java future to twitter future if the java future is not
+   * done.
+   */
+  def twitter2JavaFutureInjection[A]: Injection[TwitterFuture[A], JavaFuture[A]] = {
+    new AbstractInjection[TwitterFuture[A], JavaFuture[A]] {
+      override def apply(f: TwitterFuture[A]): JavaFuture[A] =
+        f.toJavaFuture.asInstanceOf[JavaFuture[A]]
+
+      override def invert(f: JavaFuture[A]): ScalaTry[TwitterFuture[A]] =
+        Inversion.attemptWhen(f)(_.isDone)(jf => TwitterFuture(jf.get()))
+    }
+  }
+
+  /**
+   * Bijection between java futures and twitter futures.
+   * An implicit [[JavaFutureConverter]] is needed, two strategies are available out of the box:
+   *   - [[FuturePoolJavaFutureConverter]] which is based on a [[FuturePool]] and which will
+   *   create one thread per future. To favor if there aren't too many futures to convert and one
+   *   cares about latency.
+   *   - [[TimerJavaFutureConverter]] which is based on a [[com.twitter.util.Timer]] which will
+   *   create a task which will check every <code>checkFrequency</code> if the java future is
+   *   completed, one thread will be used for every conversion. To favor if there are a lot of
+   *   futures to convert and one cares less about the latency induced by
+   *   <code>checkFrequency</code>.
+   */
+  implicit def twitter2JavaFutureBijection[A](
+    implicit converter: JavaFutureConverter
+  ): Bijection[TwitterFuture[A], JavaFuture[A]] = {
+    new AbstractBijection[TwitterFuture[A], JavaFuture[A]] {
+      override def apply(f: TwitterFuture[A]): JavaFuture[A] =
+        f.toJavaFuture.asInstanceOf[JavaFuture[A]]
+
+      override def invert(f: JavaFuture[A]): TwitterFuture[A] =
+        converter(f)
+    }
+  }
+
+  /**
    * Bijection between twitter and scala style Trys
    */
   implicit def twitter2ScalaTry[A]: Bijection[TwitterTry[A], ScalaTry[A]] = {
@@ -102,7 +143,7 @@ trait UtilBijections {
   implicit def tryBijection[A, B](implicit bij: ImplicitBijection[A, B]): Bijection[TwitterTry[A], TwitterTry[B]] =
     new AbstractBijection[TwitterTry[A], TwitterTry[B]] {
       override def apply(fa: TwitterTry[A]) = fa.map(bij(_))
-      override def invert(fb: TwitterTry[B]) = fb.map(bij.invert(_))
+      override def invert(fb: TwitterTry[B]) = fb.map(bij.invert)
     }
 
   /**
@@ -112,7 +153,7 @@ trait UtilBijections {
   implicit def tryScalaBijection[A, B](implicit bij: ImplicitBijection[A, B]): Bijection[ScalaTry[A], ScalaTry[B]] =
     new AbstractBijection[ScalaTry[A], ScalaTry[B]] {
       override def apply(fa: ScalaTry[A]) = fa.map(bij(_))
-      override def invert(fb: ScalaTry[B]) = fb.map(bij.invert(_))
+      override def invert(fb: ScalaTry[B]) = fb.map(bij.invert)
     }
 
   /**
