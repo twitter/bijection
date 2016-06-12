@@ -43,6 +43,8 @@ private[bijection] object CaseClassToTuple {
 
     //TODO can make error handling better
     val companion = T.tpe.typeSymbol.companionSymbol
+    val tuple = Tup.tpe.typeSymbol.companionSymbol
+
     val getPutConv = T.tpe
       .declarations
       .collect { case m: MethodSymbol if m.isCaseAccessor => m }
@@ -73,7 +75,7 @@ private[bijection] object CaseClassToTuple {
     new Bijection[$T,$Tup] with MacroGenerated {
       override def apply(t: $T): $Tup = {
         ..$converters
-        (..$putters)
+        $tuple(..$putters)
       }
       override def invert(tup: $Tup): $T = {
         ..$converters
