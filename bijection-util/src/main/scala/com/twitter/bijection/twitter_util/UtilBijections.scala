@@ -108,8 +108,7 @@ trait UtilBijections {
    *   <code>checkFrequency</code>.
    */
   implicit def twitter2JavaFutureBijection[A](
-    implicit converter: JavaFutureConverter
-  ): Bijection[TwitterFuture[A], JavaFuture[A]] = {
+    implicit converter: JavaFutureConverter): Bijection[TwitterFuture[A], JavaFuture[A]] = {
     new AbstractBijection[TwitterFuture[A], JavaFuture[A]] {
       override def apply(f: TwitterFuture[A]): JavaFuture[A] =
         f.toJavaFuture.asInstanceOf[JavaFuture[A]]
