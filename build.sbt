@@ -1,5 +1,5 @@
 import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
-import com.typesafe.tools.mima.plugin.MimaKeys.previousArtifact
+import com.typesafe.tools.mima.plugin.MimaKeys.{ binaryIssueFilters, previousArtifact }
 import com.typesafe.sbt.osgi.SbtOsgi._
 import scalariform.formatter.preferences._
 import com.typesafe.sbt.SbtScalariform._
@@ -14,11 +14,11 @@ def isScala210x(scalaVersion: String) = scalaVersion match {
 val sharedSettings = Project.defaultSettings ++ osgiSettings ++ scalariformSettings ++ Seq(
   organization := "com.twitter",
 
-  crossScalaVersions := Seq("2.10.5", "2.11.7"),
+  crossScalaVersions := Seq("2.10.6", "2.11.8"),
 
   ScalariformKeys.preferences := formattingPreferences,
 
-  scalaVersion := "2.11.7",
+  scalaVersion := "2.11.8",
 
   javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
 
@@ -137,7 +137,21 @@ val unreleasedModules = Set[String]()
 def youngestForwardCompatible(subProj: String) =
   Some(subProj)
     .filterNot(unreleasedModules.contains(_))
-    .map { s => "com.twitter" % ("bijection-" + s + "_2.10") % "0.9.1" }
+    .map { s => "com.twitter" %% ("bijection-" + s) % "0.9.1" }
+
+/**
+ * Empty this each time we publish a new version (and bump the minor number)
+ */
+val ignoredABIProblems = {
+  import com.typesafe.tools.mima.core._
+  import com.typesafe.tools.mima.core.ProblemFilters._
+
+  Seq(
+    exclude[ReversedMissingMethodProblem]("com.twitter.bijection.GeneratedTupleBufferable.tuple1"),
+    exclude[ReversedMissingMethodProblem]("com.twitter.bijection.twitter_util.UtilBijections.twitter2JavaFutureBijection"),
+    exclude[ReversedMissingMethodProblem]("com.twitter.bijection.twitter_util.UtilBijections.twitter2JavaFutureInjection"))
+}
+
 
 def osgiExportAll(packs: String*) =
   OsgiKeys.exportPackage := packs.map(_ + ".*;version=${Bundle-Version}")
@@ -172,7 +186,8 @@ def module(name: String) = {
   val id = "bijection-%s".format(name)
   Project(id = id, base = file(id), settings = sharedSettings ++ Seq(
     Keys.name := id,
-    previousArtifact := youngestForwardCompatible(name))
+    previousArtifact := youngestForwardCompatible(name),
+    binaryIssueFilters ++= ignoredABIProblems)
   )
 }
 
@@ -301,7 +316,7 @@ lazy val bijectionMacros = module("macros").settings(
     "org.scala-lang" % "scala-library" % scalaVersion,
     "org.scala-lang" % "scala-reflect" % scalaVersion,
     "org.scalatest" %% "scalatest" % "2.2.2" % "test"
-  ) ++ (if (scalaVersion.startsWith("2.10")) Seq("org.scalamacros" %% "quasiquotes" % "2.0.1") else Seq())
+  ) ++ (if (scalaVersion.startsWith("2.10")) Seq("org.scalamacros" %% "quasiquotes" % "2.1.0") else Seq())
 },
-addCompilerPlugin("org.scalamacros" % "paradise" % "2.0.1" cross CrossVersion.full)
+addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 ).dependsOn(bijectionCore)

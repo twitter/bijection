@@ -2,10 +2,10 @@ language: scala
 sudo: false
 matrix:
   include:
-    - scala: 2.10.5
-      script: ./sbt ++$TRAVIS_SCALA_VERSION clean test
+    - scala: 2.10.6
+      script: ./sbt ++$TRAVIS_SCALA_VERSION clean test mimaReportBinaryIssues
 
-    - scala: 2.11.5
-      script: ./sbt ++$TRAVIS_SCALA_VERSION clean coverage test coverageReport
+    - scala: 2.11.8
+      script: ./sbt ++$TRAVIS_SCALA_VERSION clean coverage test coverageReport mimaReportBinaryIssues
       after_success:
         - bash <(curl -s https://codecov.io/bash)

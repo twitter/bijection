@@ -38,17 +38,17 @@ abstract class JavaFutureConverter {
  */
 class FuturePoolJavaFutureConverter(
   futurePool: FuturePool,
-  mayInterruptIfRunning: Boolean
-) extends JavaFutureConverter {
+  mayInterruptIfRunning: Boolean) extends JavaFutureConverter {
   override def apply[T](javaFuture: JFuture[T]): Future[T] = {
     val f = futurePool { javaFuture.get() }
     val p = Promise.attached(f)
-    p.setInterruptHandler { case NonFatal(e) =>
-      if (p.detach()) {
-        f.raise(e)
-        javaFuture.cancel(mayInterruptIfRunning)
-        p.setException(e)
-      }
+    p.setInterruptHandler {
+      case NonFatal(e) =>
+        if (p.detach()) {
+          f.raise(e)
+          javaFuture.cancel(mayInterruptIfRunning)
+          p.setException(e)
+        }
     }
     p
   }
@@ -71,8 +71,7 @@ class FuturePoolJavaFutureConverter(
 class TimerJavaFutureConverter(
   timer: Timer,
   checkFrequency: Duration,
-  mayInterruptIfRunning: Boolean
-) extends JavaFutureConverter {
+  mayInterruptIfRunning: Boolean) extends JavaFutureConverter {
   override def apply[T](javaFuture: JFuture[T]): Future[T] = {
     val p = Promise[T]
     lazy val task: TimerTask = timer.schedule(checkFrequency) {
@@ -82,10 +81,11 @@ class TimerJavaFutureConverter(
       }
     }
     require(task != null)
-    p.setInterruptHandler { case NonFatal(e) =>
-      task.cancel()
-      p.updateIfEmpty(Throw(e))
-      javaFuture.cancel(mayInterruptIfRunning)
+    p.setInterruptHandler {
+      case NonFatal(e) =>
+        task.cancel()
+        p.updateIfEmpty(Throw(e))
+        javaFuture.cancel(mayInterruptIfRunning)
     }
     p
   }
