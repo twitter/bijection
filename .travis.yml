@@ -6,4 +6,6 @@ matrix:
       script: ./sbt ++$TRAVIS_SCALA_VERSION clean test mimaReportBinaryIssues
 
     - scala: 2.11.8
-      script: ./sbt ++$TRAVIS_SCALA_VERSION clean test mimaReportBinaryIssues
+      script: ./sbt ++$TRAVIS_SCALA_VERSION clean coverage test coverageReport mimaReportBinaryIssues
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
