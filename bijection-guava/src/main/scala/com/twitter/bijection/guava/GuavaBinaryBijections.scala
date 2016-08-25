@@ -14,13 +14,13 @@
 
 package com.twitter.bijection.guava
 
-import com.twitter.bijection.{ AbstractBijection, Bijection }
+import com.twitter.bijection.{AbstractBijection, Bijection}
 import com.google.common.io.BaseEncoding
 
 /**
- * @author Muhammad Ashraf
- * @since 7/7/13
- */
+  * @author Muhammad Ashraf
+  * @since 7/7/13
+  */
 object GuavaBinaryBijections {
 
   trait BaseEncoding extends Any {

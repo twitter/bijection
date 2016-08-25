@@ -12,22 +12,21 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 
 package com.twitter.bijection.finagle_mysql
 
 import com.twitter.finagle.exp.mysql._
 import com.twitter.bijection._
 import java.sql.Timestamp
-import scala.util.{ Try, Success, Failure }
+import scala.util.{Try, Success, Failure}
 
 /**
- * Bijections and injections for mapping twitter-finagle's MySql datatypes to Scala datatypes
- * other types.
- *
- *  @author George Leontiev
- */
-
+  * Bijections and injections for mapping twitter-finagle's MySql datatypes to Scala datatypes
+  * other types.
+  *
+  *  @author George Leontiev
+  */
 trait MySqlBijections {
   implicit val byte: Bijection[ByteValue, Byte] = new AbstractBijection[ByteValue, Byte] {
     def apply(v: ByteValue) = v.b
@@ -54,15 +53,17 @@ trait MySqlBijections {
     override def invert(f: Float) = FloatValue(f)
   }
 
-  implicit val double: Bijection[DoubleValue, Double] = new AbstractBijection[DoubleValue, Double] {
-    def apply(d: DoubleValue) = d.d
-    override def invert(d: Double) = DoubleValue(d)
-  }
+  implicit val double: Bijection[DoubleValue, Double] =
+    new AbstractBijection[DoubleValue, Double] {
+      def apply(d: DoubleValue) = d.d
+      override def invert(d: Double) = DoubleValue(d)
+    }
 
-  implicit val string: Bijection[StringValue, String] = new AbstractBijection[StringValue, String] {
-    def apply(s: StringValue) = s.s
-    override def invert(s: String) = StringValue(s)
-  }
+  implicit val string: Bijection[StringValue, String] =
+    new AbstractBijection[StringValue, String] {
+      def apply(s: StringValue) = s.s
+      override def invert(s: String) = StringValue(s)
+    }
 }
 
 trait MySqlInjections {
@@ -71,7 +72,8 @@ trait MySqlInjections {
     override def invert(t: ByteValue) = t match {
       case ByteValue(0) => Success(false)
       case ByteValue(1) => Success(true)
-      case ByteValue(x) => Failure(new RuntimeException(s"Cannot cast ByteValue holding $x to Boolean"))
+      case ByteValue(x) =>
+        Failure(new RuntimeException(s"Cannot cast ByteValue holding $x to Boolean"))
     }
   }
 
@@ -90,7 +92,8 @@ trait MySqlInjections {
     new AbstractInjection[NullValue.type, Option[A]] {
       def apply(n: NullValue.type) = None
       override def invert(n: Option[A]) = n match {
-        case Some(_) => Failure(new RuntimeException("Cannot convert non-empty option to NullValue"))
+        case Some(_) =>
+          Failure(new RuntimeException("Cannot convert non-empty option to NullValue"))
         case None => Success(NullValue)
       }
     }
@@ -99,7 +102,8 @@ trait MySqlInjections {
     new AbstractInjection[EmptyValue.type, Option[A]] {
       def apply(n: EmptyValue.type) = None
       override def invert(n: Option[A]) = n match {
-        case Some(_) => Failure(new RuntimeException("Cannot convert non-empty option to EmptyValue"))
+        case Some(_) =>
+          Failure(new RuntimeException("Cannot convert non-empty option to EmptyValue"))
         case None => Success(EmptyValue)
       }
     }

@@ -1,11 +1,11 @@
 package com.twitter.bijection.macros
 
-import org.scalatest.{ Matchers, WordSpec }
+import org.scalatest.{Matchers, WordSpec}
 
 import com.twitter.bijection._
 import com.twitter.bijection.macros._
 
-import scala.util.{ Failure, Success }
+import scala.util.{Failure, Success}
 
 class MacroUnitTests extends WordSpec with Matchers with MacroTestHelper {
   import MacroImplicits._
@@ -21,45 +21,45 @@ class MacroUnitTests extends WordSpec with Matchers with MacroTestHelper {
   }
 
   def alwaysFail(): Unit = {
-    true should be (false)
+    true should be(false)
   }
 
   "Fast Try" when {
     "creating Try" should {
       "give a Failure with expection" in {
         Macros.fastTry(sys.error("oh no")) match {
-          case Failure(e) => e.getMessage.contains("oh no") should be (true)
+          case Failure(e) => e.getMessage.contains("oh no") should be(true)
           case _ => alwaysFail()
         }
         Macros.fastTry {
           val l = List(1, 2, 3)
           val l2 = l.filter(_ < 0)
           l2.head
-        }.isFailure should be (true)
+        }.isFailure should be(true)
       }
       "not fail when there is no exception" in {
-        Macros.fastTry(1) should be (Success(1))
-        Macros.fastTry(List(1, 2)) should be (Success(List(1, 2)))
+        Macros.fastTry(1) should be(Success(1))
+        Macros.fastTry(List(1, 2)) should be(Success(List(1, 2)))
         Macros.fastTry {
           val l = List(1, 2, 3)
           val l2 = l.filter(_ > 0)
           l2.last
-        } should be (Success(3))
+        } should be(Success(3))
       }
     }
     "attempt Inversion" should {
       "give a InversionFailure on error" in {
         Macros.fastAttempt("12m")("12m".toInt) match {
-          case Failure(InversionFailure(d, e)) => d should be ("12m")
+          case Failure(InversionFailure(d, e)) => d should be("12m")
           case _ => alwaysFail()
         }
         Macros.fastAttempt("12m")(sys.error("This is lazy")) match {
-          case Failure(InversionFailure(d, e)) => d should be ("12m")
+          case Failure(InversionFailure(d, e)) => d should be("12m")
           case _ => alwaysFail()
         }
       }
       "give Success when correct" in {
-        Macros.fastAttempt("12")("12".toInt) should be (Success(12))
+        Macros.fastAttempt("12")("12".toInt) should be(Success(12))
       }
     }
   }

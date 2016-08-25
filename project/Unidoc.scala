@@ -24,17 +24,23 @@ object Unidoc {
     unidoc <<= unidocTask
   )
 
-  def allSources(projectRef: ProjectRef, structure: Load.BuildStructure, exclude: Seq[String]): Task[Seq[Seq[File]]] = {
+  def allSources(projectRef: ProjectRef,
+                 structure: Load.BuildStructure,
+                 exclude: Seq[String]): Task[Seq[Seq[File]]] = {
     val projects = aggregated(projectRef, structure, exclude)
     projects flatMap { sources in Compile in LocalProject(_) get structure.data } join
   }
 
-  def allClasspaths(projectRef: ProjectRef, structure: Load.BuildStructure, exclude: Seq[String]): Task[Seq[Classpath]] = {
+  def allClasspaths(projectRef: ProjectRef,
+                    structure: Load.BuildStructure,
+                    exclude: Seq[String]): Task[Seq[Classpath]] = {
     val projects = aggregated(projectRef, structure, exclude)
     projects flatMap { dependencyClasspath in Compile in LocalProject(_) get structure.data } join
   }
 
-  def aggregated(projectRef: ProjectRef, structure: Load.BuildStructure, exclude: Seq[String]): Seq[String] = {
+  def aggregated(projectRef: ProjectRef,
+                 structure: Load.BuildStructure,
+                 exclude: Seq[String]): Seq[String] = {
     val aggregate = Project.getProject(projectRef, structure).toSeq.flatMap(_.aggregate)
     aggregate flatMap { ref =>
       if (exclude contains ref.project) Seq.empty
@@ -43,8 +49,14 @@ object Unidoc {
   }
 
   def unidocTask: Initialize[Task[File]] = {
-    (compilers, cacheDirectory, unidocSources, unidocClasspath, unidocDirectory, scalacOptions in doc, streams) map {
-      (compilers, cache, sources, classpath, target, options, s) => {
+    (compilers,
+     cacheDirectory,
+     unidocSources,
+     unidocClasspath,
+     unidocDirectory,
+     scalacOptions in doc,
+     streams) map { (compilers, cache, sources, classpath, target, options, s) =>
+      {
         val scaladoc = new Scaladoc(100, compilers.scalac)
         scaladoc.cached(cache / "unidoc", "main", sources, classpath, target, options, s.log)
         target

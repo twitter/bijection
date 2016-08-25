@@ -29,7 +29,7 @@ object Generator {
           case _ => InversionFailure.failedAttempt(out)
         }
       }
-  */
+   */
 
   val lowerLetters = ('a' to 'z').toIndexedSeq
   val upperLetters = ('A' to 'Z').toIndexedSeq
@@ -37,59 +37,65 @@ object Generator {
   def bijectionParameter(i: Int, typeStr: String = "Bijection"): String = {
     val l = lowerLetters(i)
     val U = upperLetters(i)
-    "b" + l + ": " + typeStr +"[" + U + "1," + U + "2]"
+    "b" + l + ": " + typeStr + "[" + U + "1," + U + "2]"
   }
 
   def singleTypeParameter(typeStr: String, i: Int): String =
-    typeStr +"[" + upperLetters(i) + "]"
+    typeStr + "[" + upperLetters(i) + "]"
 
   def injectionParameter(fromIdx: Int, toIdx: Int, typeStr: String = "Injection"): String = {
     val l = lowerLetters(fromIdx)
     val (fromU, toU) = (upperLetters(fromIdx), upperLetters(toIdx))
-      "b" + l + ": " + typeStr +"[" + fromU + "," + toU + "]"
+    "b" + l + ": " + typeStr + "[" + fromU + "," + toU + "]"
   }
 
   def typeList(cnt: Int, suffix: String) =
-    upperLetters.slice(0, cnt) map { l => l.toString + suffix } mkString(",")
+    upperLetters.slice(0, cnt) map { l =>
+      l.toString + suffix
+    } mkString (",")
 
   def tupleBijectionType(cnt: Int, typeStr: String = "Bijection"): String =
     typeStr + "[(" + typeList(cnt, "1") + "), (" + typeList(cnt, "2") + ")]"
 
-  def applyPart(i: Int): String = "b" + lowerLetters(i) + "(in._" + (i+1) + ")"
-  def invertPart(i: Int): String = "b" + lowerLetters(i) + ".invert(out._" + (i+1) + ")"
+  def applyPart(i: Int): String = "b" + lowerLetters(i) + "(in._" + (i + 1) + ")"
+  def invertPart(i: Int): String = "b" + lowerLetters(i) + ".invert(out._" + (i + 1) + ")"
   def forInvertPart(i: Int): String = lowerLetters(i) + " <- " + invertPart(i)
 
   def expressionTuple(cnt: Int, sep: String = ", ")(part: (Int) => String) =
-    (0 until cnt) map { part(_) } mkString("(", sep, ")")
+    (0 until cnt) map { part(_) } mkString ("(", sep, ")")
 
   def applyMethod(cnt: Int) =
-    "def apply(in: (" + typeList(cnt,"1") + ")) = " + expressionTuple(cnt) { applyPart _ }
+    "def apply(in: (" + typeList(cnt, "1") + ")) = " + expressionTuple(cnt) { applyPart _ }
 
   def invertMethod(cnt: Int) =
-    "override def invert(out: (" + typeList(cnt,"2") + ")) = " + expressionTuple(cnt) { invertPart _ }
+    "override def invert(out: (" + typeList(cnt, "2") + ")) = " + expressionTuple(cnt) {
+      invertPart _
+    }
 
   // Here we put it all together:
   def implicitTuple(cnt: Int): String =
-    "  implicit def tuple" + cnt + "[" + typeList(cnt,"1") + "," + typeList(cnt,"2") +
-      "](implicit " + ((0 until cnt) map { bijectionParameter(_, "ImplicitBijection") } mkString(", ") ) + "):\n    " +
-    tupleBijectionType(cnt) + " = new Abstract" + tupleBijectionType(cnt) + " {\n" +
-    "      " + applyMethod(cnt) +"\n" +
-    "      " + invertMethod(cnt) + "\n" +
-    "    }"
+    "  implicit def tuple" + cnt + "[" + typeList(cnt, "1") + "," + typeList(cnt, "2") +
+      "](implicit " + ((0 until cnt) map { bijectionParameter(_, "ImplicitBijection") } mkString (", ")) + "):\n    " +
+      tupleBijectionType(cnt) + " = new Abstract" + tupleBijectionType(cnt) + " {\n" +
+      "      " + applyMethod(cnt) + "\n" +
+      "      " + invertMethod(cnt) + "\n" +
+      "    }"
 
   def invertInj(cnt: Int) =
-    "def invert(out: (" + typeList(cnt,"2") + ")) = for" +
+    "def invert(out: (" + typeList(cnt, "2") + ")) = for" +
       expressionTuple(cnt, "; ") { forInvertPart _ } + " yield (" +
-        lowerLetters.slice(0, cnt).mkString(",") + ")"
+      lowerLetters.slice(0, cnt).mkString(",") + ")"
 
   // For the Injections:
   def implicitTupleInj(cnt: Int): String =
-    "  implicit def tuple" + cnt + "[" + typeList(cnt,"1") + "," + typeList(cnt,"2") +
-      "](implicit " + ((0 until cnt) map { bijectionParameter(_, "Injection") } mkString(", ") ) + "):\n    " +
-      tupleBijectionType(cnt, "Injection") + " = new Abstract" + tupleBijectionType(cnt, "Injection") + " {\n" +
-    "      " + applyMethod(cnt) +"\n" +
-    "      " + invertInj(cnt) + "\n" +
-    "    }"
+    "  implicit def tuple" + cnt + "[" + typeList(cnt, "1") + "," + typeList(cnt, "2") +
+      "](implicit " + ((0 until cnt) map { bijectionParameter(_, "Injection") } mkString (", ")) + "):\n    " +
+      tupleBijectionType(cnt, "Injection") + " = new Abstract" + tupleBijectionType(
+      cnt,
+      "Injection") + " {\n" +
+      "      " + applyMethod(cnt) + "\n" +
+      "      " + invertInj(cnt) + "\n" +
+      "    }"
 
   def toListInjectionType(cnt: Int): String =
     "Injection[(" + typeList(cnt, "") + ")," + singleTypeParameter("List", cnt) + "]"
@@ -108,21 +114,21 @@ object Generator {
     val letters = lowerLetters.slice(0, cnt)
     val someCase = {
       "        case " + letters.mkString(" :: ") + " :: Nil => " + "for" +
-      expressionTuple(cnt, "; ") { forInvertFromListPart(_) } + " yield (" +
-      letters.mkString(",") + ")\n"
+        expressionTuple(cnt, "; ") { forInvertFromListPart(_) } + " yield (" +
+        letters.mkString(",") + ")\n"
     }
     val noneCase = "        case _ => InversionFailure.failedAttempt(out)\n"
     "def invert(out: " + singleTypeParameter("List", cnt) + ") = out match {\n" +
-    someCase + noneCase + "      }"
+      someCase + noneCase + "      }"
   }
 
   def implicitTupleToCollInj(cnt: Int): String = {
     val implicitParams: String = (0 until cnt).map { injectionParameter(_, cnt) }.mkString(", ")
     "  implicit def tuple" + cnt + "ToList[" + typeList(cnt + 1, "") + "](implicit " + implicitParams + "):\n    " +
-    toListInjectionType(cnt) + " = new Abstract" + toListInjectionType(cnt) + " {\n" +
-    "      " + toListMethod(cnt) +"\n" +
-    "      " + fromListMethod(cnt) + "\n" +
-    "    }"
+      toListInjectionType(cnt) + " = new Abstract" + toListInjectionType(cnt) + " {\n" +
+      "      " + toListMethod(cnt) + "\n" +
+      "      " + fromListMethod(cnt) + "\n" +
+      "    }"
   }
 
   def generate = {
@@ -131,15 +137,21 @@ object Generator {
     b.append(pkg).append("\n")
 
     b.append("\ntrait GeneratedTupleBijections extends LowPriorityBijections {\n")
-    (2 to 22).foreach { cnt => b.append(implicitTuple(cnt)).append("\n") }
+    (2 to 22).foreach { cnt =>
+      b.append(implicitTuple(cnt)).append("\n")
+    }
     b.append("}\n")
 
     b.append("\ntrait GeneratedTupleCollectionInjections extends LowPriorityInjections {\n")
-    (2 to 22).foreach { cnt => b.append(implicitTupleToCollInj(cnt)).append("\n") }
+    (2 to 22).foreach { cnt =>
+      b.append(implicitTupleToCollInj(cnt)).append("\n")
+    }
     b.append("}\n")
 
     b.append("\ntrait GeneratedTupleInjections extends GeneratedTupleCollectionInjections {\n")
-    (2 to 22).foreach { cnt => b.append(implicitTupleInj(cnt)).append("\n") }
+    (2 to 22).foreach { cnt =>
+      b.append(implicitTupleInj(cnt)).append("\n")
+    }
     b.append("}\n")
 
     b.toString

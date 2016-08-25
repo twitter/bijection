@@ -1,14 +1,14 @@
 package com.twitter.bijection.avro
 
 import org.scalatest._
-import com.twitter.bijection.{ Injection, BaseProperties }
+import com.twitter.bijection.{Injection, BaseProperties}
 import org.apache.avro.Schema
-import avro.{ FiscalRecordScala, FiscalRecord }
+import avro.{FiscalRecordScala, FiscalRecord}
 
 /**
- * @author Muhammad Ashraf
- * @since 10/5/13
- */
+  * @author Muhammad Ashraf
+  * @since 10/5/13
+  */
 class SpecificAvroCodecsSpecification extends WordSpec with Matchers with BaseProperties {
   val testSchema = new Schema.Parser().parse("""{
                                                    "type":"record",
@@ -71,11 +71,13 @@ class SpecificAvroCodecsSpecification extends WordSpec with Matchers with BasePr
     }
 
     "Cannot create Specific Injection with Deflate compression if compression level is set too low" in {
-      an[IllegalArgumentException] should be thrownBy SpecificAvroCodecs.withDeflateCompression[FiscalRecord](0)
+      an[IllegalArgumentException] should be thrownBy SpecificAvroCodecs
+        .withDeflateCompression[FiscalRecord](0)
     }
 
     "Cannot create Specific Injection with Deflate compression if compression level is set too high" in {
-      an[IllegalArgumentException] should be thrownBy SpecificAvroCodecs.withDeflateCompression[FiscalRecord](10)
+      an[IllegalArgumentException] should be thrownBy SpecificAvroCodecs
+        .withDeflateCompression[FiscalRecord](10)
     }
 
     "Round trip specific record using Specific Injection with Snappy compression" in {
@@ -112,10 +114,6 @@ class SpecificAvroCodecsSpecification extends WordSpec with Matchers with BasePr
   }
 
   def buildSpecificAvroRecord(i: (String, Int, Int)): FiscalRecord = {
-    FiscalRecord.newBuilder()
-      .setCalendarDate(i._1)
-      .setFiscalWeek(i._2)
-      .setFiscalYear(i._3)
-      .build()
+    FiscalRecord.newBuilder().setCalendarDate(i._1).setFiscalWeek(i._2).setFiscalYear(i._3).build()
   }
 }

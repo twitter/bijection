@@ -12,21 +12,27 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 
 package com.twitter.bijection.twitter_util
 
-import com.twitter.bijection.{ CheckProperties, BaseProperties }
+import com.twitter.bijection.{CheckProperties, BaseProperties}
 import com.twitter.io.Buf
-import com.twitter.util.{ Future => TwitterFuture, Try => TwitterTry, Await => TwitterAwait, FuturePool, JavaTimer }
-import java.lang.{ Integer => JInt, Long => JLong }
-import java.util.concurrent.{ Future => JavaFuture, Callable, FutureTask }
+import com.twitter.util.{
+  Future => TwitterFuture,
+  Try => TwitterTry,
+  Await => TwitterAwait,
+  FuturePool,
+  JavaTimer
+}
+import java.lang.{Integer => JInt, Long => JLong}
+import java.util.concurrent.{Future => JavaFuture, Callable, FutureTask}
 import org.scalacheck.Arbitrary
 import org.scalatest.BeforeAndAfterAll
 
-import scala.concurrent.{ Future => ScalaFuture, Await => ScalaAwait }
+import scala.concurrent.{Future => ScalaFuture, Await => ScalaAwait}
 import scala.concurrent.duration.Duration
-import scala.util.{ Try => ScalaTry }
+import scala.util.{Try => ScalaTry}
 import scala.concurrent.future
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -42,7 +48,9 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties with BeforeA
   protected def toOption[T](f: JavaFuture[T]): Option[T] =
     TwitterTry(f.get()).toOption
 
-  implicit def futureArb[T: Arbitrary] = arbitraryViaFn[T, TwitterFuture[T]] { TwitterFuture.value }
+  implicit def futureArb[T: Arbitrary] = arbitraryViaFn[T, TwitterFuture[T]] {
+    TwitterFuture.value
+  }
   implicit def scalaFutureArb[T: Arbitrary] = arbitraryViaFn[T, ScalaFuture[T]] { future(_) }
   implicit def javaFutureArb[T: Arbitrary] = arbitraryViaFn[T, JavaFuture[T]] { t =>
     val f = new FutureTask[T](new Callable[T] {
@@ -59,13 +67,19 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties with BeforeA
   implicit val bufArb: Arbitrary[Buf] = arbitraryViaFn[Array[Byte], Buf](Buf.ByteArray.Owned.apply)
 
   implicit protected def futureEq[T: Equiv]: Equiv[TwitterFuture[T]] =
-    Equiv.fromFunction { (f1, f2) => Equiv[Option[T]].equiv(toOption(f1), toOption(f2)) }
+    Equiv.fromFunction { (f1, f2) =>
+      Equiv[Option[T]].equiv(toOption(f1), toOption(f2))
+    }
 
   implicit protected def scalaFutureEq[T: Equiv]: Equiv[ScalaFuture[T]] =
-    Equiv.fromFunction { (f1, f2) => Equiv[Option[T]].equiv(toOption(f1), toOption(f2)) }
+    Equiv.fromFunction { (f1, f2) =>
+      Equiv[Option[T]].equiv(toOption(f1), toOption(f2))
+    }
 
   implicit protected def javaFutureEq[T: Equiv]: Equiv[JavaFuture[T]] =
-    Equiv.fromFunction { (f1, f2) => Equiv[Option[T]].equiv(toOption(f1), toOption(f2)) }
+    Equiv.fromFunction { (f1, f2) =>
+      Equiv[Option[T]].equiv(toOption(f1), toOption(f2))
+    }
 
   type FromMap = Map[Int, Long]
   type ToMap = Map[JInt, JLong]
@@ -94,22 +108,27 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties with BeforeA
     isBijection[TwitterFuture[ToMap], ScalaFuture[ToMap]]
   }
 
-  property("round trips TwitterFuture[Map[JInt, JLong]] <-> JavaFuture[Map[JInt, JLong]] " +
-    "using FuturePool") {
+  property(
+    "round trips TwitterFuture[Map[JInt, JLong]] <-> JavaFuture[Map[JInt, JLong]] " +
+      "using FuturePool") {
     implicit val converter = new FuturePoolJavaFutureConverter(FuturePool.unboundedPool, true)
     isBijection[TwitterFuture[ToMap], JavaFuture[ToMap]]
   }
 
-  property("round trips TwitterFuture[Map[JInt, JLong]] <-> JavaFuture[Map[JInt, JLong]] " +
-    "using Timer") {
+  property(
+    "round trips TwitterFuture[Map[JInt, JLong]] <-> JavaFuture[Map[JInt, JLong]] " +
+      "using Timer") {
     implicit val converter =
       new TimerJavaFutureConverter(new JavaTimer, com.twitter.util.Duration.fromSeconds(1), true)
     isBijection[TwitterFuture[ToMap], JavaFuture[ToMap]]
   }
 
   property("TwitterFuture[Map[JInt, JLong]] -> JavaFuture[Map[JInt, JLong]]") {
-    isInjection[TwitterFuture[ToMap], JavaFuture[ToMap]](
-      futureArb[ToMap], twitter2JavaFutureInjection, javaFutureArb[ToMap], futureEq, javaFutureEq)
+    isInjection[TwitterFuture[ToMap], JavaFuture[ToMap]](futureArb[ToMap],
+                                                         twitter2JavaFutureInjection,
+                                                         javaFutureArb[ToMap],
+                                                         futureEq,
+                                                         javaFutureEq)
   }
 
   property("round trips shared com.twitter.io.Buf <-> Array[Byte]") {

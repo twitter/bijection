@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 
 package com.twitter.bijection
 
@@ -35,9 +35,10 @@ object StringArbs extends BaseProperties {
   implicit val strFloat = arbitraryViaBijection[Float, String @@ Rep[Float]]
   implicit val strDouble = arbitraryViaBijection[Double, String @@ Rep[Double]]
 }
+
 /**
- * We had an issue with giant strings. Make sure they work
- */
+  * We had an issue with giant strings. Make sure they work
+  */
 class StringRegressions extends FunSuite {
   test("Strings larger that 2^24, the largest integer range floats can store work") {
     val bigString = Array.fill(70824427)(42.toByte)
@@ -51,16 +52,16 @@ class StringBijectionLaws extends CheckProperties with BaseProperties {
     isSerializableInjection[String, Array[Byte]]
   }
 
-  implicit val symbol = arbitraryViaFn { (s: String) => Symbol(s) }
+  implicit val symbol = arbitraryViaFn { (s: String) =>
+    Symbol(s)
+  }
   property("round trips string -> symbol") {
     isBijection[String, Symbol]
   }
 
   implicit val uuidArb = Arbitrary {
-    for (
-      l <- choose(-100L, 100L);
-      u <- choose(-100L, 100L)
-    ) yield (new UUID(l, u))
+    for (l <- choose(-100L, 100L);
+         u <- choose(-100L, 100L)) yield (new UUID(l, u))
   }
 
   property("UUID -> String") {

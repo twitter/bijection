@@ -12,61 +12,62 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 
 package com.twitter.bijection.json
 
-import com.twitter.bijection.{ Bijection, Injection, InversionFailure, ImplicitBijection }
-import com.twitter.bijection.Inversion.{ attempt, attemptWhen }
-import org.codehaus.jackson.{ JsonParser, JsonNode, JsonFactory }
+import com.twitter.bijection.{Bijection, Injection, InversionFailure, ImplicitBijection}
+import com.twitter.bijection.Inversion.{attempt, attemptWhen}
+import org.codehaus.jackson.{JsonParser, JsonNode, JsonFactory}
 import org.codehaus.jackson.map.ObjectMapper
-import org.codehaus.jackson.node.{
-  BooleanNode,
-  IntNode,
-  JsonNodeFactory,
-  LongNode
-}
+import org.codehaus.jackson.node.{BooleanNode, IntNode, JsonNodeFactory, LongNode}
 
 import scala.collection.generic.CanBuildFrom
 import scala.collection.mutable.Builder
 import scala.collection.JavaConverters._
-import scala.util.{ Success, Try }
+import scala.util.{Success, Try}
 import scala.util.control.NonFatal
 
 /**
- *  @author Oscar Boykin
- *  @author Sam Ritchie
- *
- * Bijection for converting between Scala basic collections and
- * types and JSON objects.
- */
-
+  *  @author Oscar Boykin
+  *  @author Sam Ritchie
+  *
+  * Bijection for converting between Scala basic collections and
+  * types and JSON objects.
+  */
 trait JsonNodeInjection[T] extends Injection[T, JsonNode]
 
 abstract class AbstractJsonNodeInjection[T] extends JsonNodeInjection[T]
 
 trait LowPriorityJson {
-  def viaInjection[A, B](implicit inj: Injection[A, B], json: JsonNodeInjection[B]): JsonNodeInjection[A] = new AbstractJsonNodeInjection[A] {
-    def apply(a: A) = json(inj(a))
-    def invert(j: JsonNode) = json.invert(j).flatMap { inj.invert(_) }
-  }
-  def viaBijection[A, B](implicit bij: Bijection[A, B], json: JsonNodeInjection[B]): JsonNodeInjection[A] = new AbstractJsonNodeInjection[A] {
-    def apply(a: A) = json(bij(a))
-    def invert(j: JsonNode) = json.invert(j).map { bij.invert(_) }
-  }
+  def viaInjection[A, B](implicit inj: Injection[A, B],
+                         json: JsonNodeInjection[B]): JsonNodeInjection[A] =
+    new AbstractJsonNodeInjection[A] {
+      def apply(a: A) = json(inj(a))
+      def invert(j: JsonNode) = json.invert(j).flatMap { inj.invert(_) }
+    }
+  def viaBijection[A, B](implicit bij: Bijection[A, B],
+                         json: JsonNodeInjection[B]): JsonNodeInjection[A] =
+    new AbstractJsonNodeInjection[A] {
+      def apply(a: A) = json(bij(a))
+      def invert(j: JsonNode) = json.invert(j).map { bij.invert(_) }
+    }
   // To get the tuple conversions, low priority because List[T] <: Product
-  implicit def tuple[T <: Product](implicit inj: Injection[T, List[JsonNode]],
-    ltoJ: Injection[List[JsonNode], JsonNode]): JsonNodeInjection[T] =
+  implicit def tuple[T <: Product](
+      implicit inj: Injection[T, List[JsonNode]],
+      ltoJ: Injection[List[JsonNode], JsonNode]): JsonNodeInjection[T] =
     new AbstractJsonNodeInjection[T] {
       def apply(t: T) = ltoJ.apply(inj(t))
-      def invert(j: JsonNode) = ltoJ.invert(j).flatMap { l => inj.invert(l) }
+      def invert(j: JsonNode) = ltoJ.invert(j).flatMap { l =>
+        inj.invert(l)
+      }
     }
 }
 
 /**
- * You need to import all the methods of this object to get general
- * Injection[T,JsonNode] to work
- */
+  * You need to import all the methods of this object to get general
+  * Injection[T,JsonNode] to work
+  */
 object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
 
   def toJsonNode[T](t: T)(implicit json: JsonNodeInjection[T]): JsonNode =
@@ -89,11 +90,13 @@ object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
   }
   implicit val intJson = new AbstractJsonNodeInjection[Int] {
     def apply(i: Int) = JsonNodeFactory.instance.numberNode(i)
-    override def invert(n: JsonNode) = if (n.isInt) Success(n.asInt) else InversionFailure.failedAttempt(n)
+    override def invert(n: JsonNode) =
+      if (n.isInt) Success(n.asInt) else InversionFailure.failedAttempt(n)
   }
   implicit val longJson = new AbstractJsonNodeInjection[Long] {
     def apply(i: Long) = JsonNodeFactory.instance.numberNode(i)
-    override def invert(n: JsonNode) = if (n.isLong || n.isInt) Success(n.asLong) else InversionFailure.failedAttempt(n)
+    override def invert(n: JsonNode) =
+      if (n.isLong || n.isInt) Success(n.asLong) else InversionFailure.failedAttempt(n)
   }
   implicit val floatJson = new AbstractJsonNodeInjection[Float] {
     def apply(i: Float) = JsonNodeFactory.instance.numberNode(i)
@@ -101,37 +104,40 @@ object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
   }
   implicit val doubleJson = new AbstractJsonNodeInjection[Double] {
     def apply(i: Double) = JsonNodeFactory.instance.numberNode(i)
-    override def invert(n: JsonNode) = if (n.isDouble) Success(n.asDouble) else InversionFailure.failedAttempt(n)
+    override def invert(n: JsonNode) =
+      if (n.isDouble) Success(n.asDouble) else InversionFailure.failedAttempt(n)
   }
   implicit val stringJson = new AbstractJsonNodeInjection[String] {
     def apply(s: String) = JsonNodeFactory.instance.textNode(s)
-    override def invert(n: JsonNode) = if (n.isTextual) Success(n.asText) else InversionFailure.failedAttempt(n)
+    override def invert(n: JsonNode) =
+      if (n.isTextual) Success(n.asText) else InversionFailure.failedAttempt(n)
   }
   implicit val byteArray = new AbstractJsonNodeInjection[Array[Byte]] {
     def apply(b: Array[Byte]) = JsonNodeFactory.instance.binaryNode(b)
     override def invert(n: JsonNode) = attempt(n)(_.getBinaryValue)
   }
-  implicit def either[L: JsonNodeInjection, R: JsonNodeInjection] = new AbstractJsonNodeInjection[Either[L, R]] {
-    def apply(e: Either[L, R]) = e match {
-      case Left(l) => toJsonNode(l)
-      case Right(r) => toJsonNode(r)
-    }
-    override def invert(n: JsonNode) =
-      fromJsonNode[R](n)
-        .map { Right(_) }
-        .recoverWith {
+  implicit def either[L: JsonNodeInjection, R: JsonNodeInjection] =
+    new AbstractJsonNodeInjection[Either[L, R]] {
+      def apply(e: Either[L, R]) = e match {
+        case Left(l) => toJsonNode(l)
+        case Right(r) => toJsonNode(r)
+      }
+      override def invert(n: JsonNode) =
+        fromJsonNode[R](n).map { Right(_) }.recoverWith {
           case NonFatal(_) =>
-            fromJsonNode[L](n).map { Left(_) }
-              .recoverWith(InversionFailure.partialFailure(n))
+            fromJsonNode[L](n).map { Left(_) }.recoverWith(InversionFailure.partialFailure(n))
         }
-  }
+    }
 
   // This causes diverging implicits
-  def collectionJson[T, C <: Traversable[T]](implicit cbf: CanBuildFrom[Nothing, T, C], jbij: JsonNodeInjection[T]): JsonNodeInjection[C] =
+  def collectionJson[T, C <: Traversable[T]](implicit cbf: CanBuildFrom[Nothing, T, C],
+                                             jbij: JsonNodeInjection[T]): JsonNodeInjection[C] =
     new AbstractJsonNodeInjection[C] {
       def apply(l: C) = {
         val ary = JsonNodeFactory.instance.arrayNode
-        l foreach { t => ary.add(jbij(t)) }
+        l foreach { t =>
+          ary.add(jbij(t))
+        }
         ary
       }
       override def invert(n: JsonNode): Try[C] = {

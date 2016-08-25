@@ -16,7 +16,7 @@
 
 package com.twitter.bijection.scrooge
 
-import com.twitter.bijection.{ Bijection, Injection }
+import com.twitter.bijection.{Bijection, Injection}
 import com.twitter.bijection.Inversion.attempt
 import com.twitter.bijection.macros.Macros
 import com.twitter.scrooge._
@@ -25,7 +25,7 @@ import org.apache.thrift.protocol.TJSONProtocol
 import scala.util.Try
 
 class ScalaCodec[T <: ThriftStruct](ser: ThriftStructSerializer[T])
-  extends Injection[T, Array[Byte]] {
+    extends Injection[T, Array[Byte]] {
   override def apply(item: T) = ser.toBytes(item)
   override def invert(bytes: Array[Byte]) = attempt(bytes)(ser.fromBytes(_))
 }
@@ -36,8 +36,8 @@ object BinaryScalaCodec {
 }
 
 class BinaryScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
-  extends Injection[T, Array[Byte]] {
-  import com.twitter.bijection.thrift.{ TArrayByteTransport, TArrayBinaryProtocol }
+    extends Injection[T, Array[Byte]] {
+  import com.twitter.bijection.thrift.{TArrayByteTransport, TArrayBinaryProtocol}
 
   lazy val thriftStructSerializer = new ThriftStructSerializer[T] {
     override def codec = c
@@ -45,7 +45,7 @@ class BinaryScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
   }
 
   override def apply(item: T) = thriftStructSerializer.toBytes(item)
-  override def invert(bytes: Array[Byte]) = Macros.fastAttempt(bytes){
+  override def invert(bytes: Array[Byte]) = Macros.fastAttempt(bytes) {
     c.decode(TArrayBinaryProtocol(TArrayByteTransport(bytes)))
   }
 }
@@ -55,8 +55,7 @@ object CompactScalaCodec {
     new CompactScalaCodec[T](c)
 }
 
-class JsonScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
-  extends Injection[T, String] {
+class JsonScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T]) extends Injection[T, String] {
   val ser = new ThriftStructSerializer[T] {
     override def codec = c
     override val protocolFactory = new TJSONProtocol.Factory
@@ -72,8 +71,8 @@ object JsonScalaCodec {
 }
 
 class CompactScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
-  extends ScalaCodec(new CompactThriftSerializer[T] {
-    override def codec = c
-  })
+    extends ScalaCodec(new CompactThriftSerializer[T] {
+      override def codec = c
+    })
 
 // TODO: add  ThriftEnum codecs

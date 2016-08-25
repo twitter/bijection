@@ -12,11 +12,11 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 
 package com.twitter.bijection
 
-import java.lang.{ Iterable => JIterable }
+import java.lang.{Iterable => JIterable}
 import java.util.{
   Collection => JCollection,
   Dictionary => JDictionary,
@@ -26,7 +26,7 @@ import java.util.{
   Map => JMap,
   Set => JSet
 }
-import java.util.concurrent.{ ConcurrentMap => JConcurrentMap }
+import java.util.concurrent.{ConcurrentMap => JConcurrentMap}
 import scala.collection.JavaConverters._
 import scala.collection.mutable
 import collection.generic.CanBuildFrom
@@ -36,8 +36,8 @@ trait CollectionBijections extends BinaryBijections {
   import Conversion.asMethod
 
   /**
-   * Bijections between collection types defined in scala.collection.JavaConverters.
-   */
+    * Bijections between collection types defined in scala.collection.JavaConverters.
+    */
   implicit def iterable2java[T]: Bijection[Iterable[T], JIterable[T]] =
     new AbstractBijection[Iterable[T], JIterable[T]] {
       override def apply(t: Iterable[T]) = t.asJava
@@ -134,17 +134,21 @@ trait CollectionBijections extends BinaryBijections {
       }
     }
   implicit def seq2Vector[T]: Bijection[Seq[T], Vector[T]] = trav2Vector[T, Seq[T]]
-  implicit def indexedSeq2Vector[T]: Bijection[IndexedSeq[T], Vector[T]] = trav2Vector[T, IndexedSeq[T]]
+  implicit def indexedSeq2Vector[T]: Bijection[IndexedSeq[T], Vector[T]] =
+    trav2Vector[T, IndexedSeq[T]]
 
   /**
-   * Accepts a Bijection[A, B] and returns a bijection that can
-   * transform traversable containers of A into traversable containers of B.
-   *
-   * Do not go from ordered to unordered containers;
-   * Bijection[Iterable[A], Set[B]] is inaccurate, and really makes
-   * no sense.
-   */
-  def toContainer[A, B, C <: TraversableOnce[A], D <: TraversableOnce[B]](implicit bij: ImplicitBijection[A, B], cd: CanBuildFrom[Nothing, B, D], dc: CanBuildFrom[Nothing, A, C]): Bijection[C, D] =
+    * Accepts a Bijection[A, B] and returns a bijection that can
+    * transform traversable containers of A into traversable containers of B.
+    *
+    * Do not go from ordered to unordered containers;
+    * Bijection[Iterable[A], Set[B]] is inaccurate, and really makes
+    * no sense.
+    */
+  def toContainer[A, B, C <: TraversableOnce[A], D <: TraversableOnce[B]](
+      implicit bij: ImplicitBijection[A, B],
+      cd: CanBuildFrom[Nothing, B, D],
+      dc: CanBuildFrom[Nothing, A, C]): Bijection[C, D] =
     new AbstractBijection[C, D] {
       def apply(c: C) = {
         val builder = cd()
@@ -158,33 +162,43 @@ trait CollectionBijections extends BinaryBijections {
       }
     }
 
-  implicit def betweenMaps[K1, V1, K2, V2](implicit kBijection: ImplicitBijection[K1, K2], vBijection: ImplicitBijection[V1, V2]) =
+  implicit def betweenMaps[K1, V1, K2, V2](implicit kBijection: ImplicitBijection[K1, K2],
+                                           vBijection: ImplicitBijection[V1, V2]) =
     toContainer[(K1, V1), (K2, V2), Map[K1, V1], Map[K2, V2]]
 
-  implicit def betweenVectors[T, U](implicit bij: ImplicitBijection[T, U]) = toContainer[T, U, Vector[T], Vector[U]]
+  implicit def betweenVectors[T, U](implicit bij: ImplicitBijection[T, U]) =
+    toContainer[T, U, Vector[T], Vector[U]]
 
   implicit def betweenIndexedSeqs[T, U](implicit bij: ImplicitBijection[T, U]) =
     toContainer[T, U, IndexedSeq[T], IndexedSeq[U]]
 
-  implicit def betweenSets[T, U](implicit bij: ImplicitBijection[T, U]) = toContainer[T, U, Set[T], Set[U]]
+  implicit def betweenSets[T, U](implicit bij: ImplicitBijection[T, U]) =
+    toContainer[T, U, Set[T], Set[U]]
 
-  implicit def betweenSeqs[T, U](implicit bij: ImplicitBijection[T, U]) = toContainer[T, U, Seq[T], Seq[U]]
+  implicit def betweenSeqs[T, U](implicit bij: ImplicitBijection[T, U]) =
+    toContainer[T, U, Seq[T], Seq[U]]
 
-  implicit def betweenLists[T, U](implicit bij: ImplicitBijection[T, U]) = toContainer[T, U, List[T], List[U]]
+  implicit def betweenLists[T, U](implicit bij: ImplicitBijection[T, U]) =
+    toContainer[T, U, List[T], List[U]]
 
-  implicit def option[T, U](implicit bij: ImplicitBijection[T, U]): Bijection[Option[T], Option[U]] =
+  implicit def option[T, U](
+      implicit bij: ImplicitBijection[T, U]): Bijection[Option[T], Option[U]] =
     new AbstractBijection[Option[T], Option[U]] {
       override def apply(optt: Option[T]) = optt.map(bij.bijection)
       override def invert(optu: Option[U]) = optu.map(bij.bijection.inverse)
     }
   // Always requires a copy
-  implicit def vector2List[A, B](implicit bij: ImplicitBijection[A, B]): Bijection[Vector[A], List[B]] = toContainer[A, B, Vector[A], List[B]]
+  implicit def vector2List[A, B](
+      implicit bij: ImplicitBijection[A, B]): Bijection[Vector[A], List[B]] =
+    toContainer[A, B, Vector[A], List[B]]
 
-  implicit def indexedSeq2List[A, B](implicit bij: ImplicitBijection[A, B]): Bijection[IndexedSeq[A], List[B]] = toContainer[A, B, IndexedSeq[A], List[B]]
+  implicit def indexedSeq2List[A, B](
+      implicit bij: ImplicitBijection[A, B]): Bijection[IndexedSeq[A], List[B]] =
+    toContainer[A, B, IndexedSeq[A], List[B]]
 
   /**
-   * This doesn't actually copy the Array, only wraps/unwraps with WrappedArray
-   */
+    * This doesn't actually copy the Array, only wraps/unwraps with WrappedArray
+    */
   implicit def array2Traversable[T: ClassTag]: Bijection[Array[T], Traversable[T]] =
     new AbstractBijection[Array[T], Traversable[T]] {
       override def apply(a: Array[T]) = a.toTraversable
@@ -192,8 +206,8 @@ trait CollectionBijections extends BinaryBijections {
     }
 
   /**
-   * This doesn't actually copy the Array, only wraps/unwraps with WrappedArray
-   */
+    * This doesn't actually copy the Array, only wraps/unwraps with WrappedArray
+    */
   implicit def array2Seq[T: ClassTag]: Bijection[Array[T], Seq[T]] =
     new AbstractBijection[Array[T], Seq[T]] {
       override def apply(a: Array[T]) = a.toSeq

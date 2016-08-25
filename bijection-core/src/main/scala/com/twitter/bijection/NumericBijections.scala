@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 
 package com.twitter.bijection
 
@@ -29,12 +29,13 @@ import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.util.UUID
 
-import Bijection.{ build, fromInjection }
+import Bijection.{build, fromInjection}
 
 trait NumericBijections extends GeneratedTupleBijections {
+
   /**
-   * Bijections between the numeric types and their java versions.
-   */
+    * Bijections between the numeric types and their java versions.
+    */
   implicit val byte2Boxed: Bijection[Byte, JByte] =
     new AbstractBijection[Byte, JByte] {
       def apply(b: Byte) = JByte.valueOf(b)

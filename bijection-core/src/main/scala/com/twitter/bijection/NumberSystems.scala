@@ -1,8 +1,7 @@
 /**
- * Convert between popular number systems
- * Author: Krishnan Raman, kraman@twitter.com
- */
-
+  * Convert between popular number systems
+  * Author: Krishnan Raman, kraman@twitter.com
+  */
 package com.twitter.bijection
 
 object NumberSystems {
@@ -24,8 +23,9 @@ object NumberSystems {
     override def invert(s: OctalString) = Integer.parseInt(s.get, 8)
   }
   // Can't be implicit due to the base parameter:
-  def arbitbase(base: Int): Bijection[Int, ArbitBaseString] = new AbstractBijection[Int, ArbitBaseString] {
-    def apply(num: Int) = ArbitBaseString(Integer.toString(num, base), base)
-    override def invert(s: ArbitBaseString) = Integer.parseInt(s.get, s.base)
-  }
+  def arbitbase(base: Int): Bijection[Int, ArbitBaseString] =
+    new AbstractBijection[Int, ArbitBaseString] {
+      def apply(num: Int) = ArbitBaseString(Integer.toString(num, base), base)
+      override def invert(s: ArbitBaseString) = Integer.parseInt(s.get, s.base)
+    }
 }

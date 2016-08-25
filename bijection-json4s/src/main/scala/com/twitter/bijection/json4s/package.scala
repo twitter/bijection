@@ -14,12 +14,12 @@
 
 package com.twitter.bijection
 
-import org.json4s.{ NoTypeHints, native }
+import org.json4s.{NoTypeHints, native}
 
 /**
- * @author Mansur Ashraf
- * @since 1/18/14
- */
+  * @author Mansur Ashraf
+  * @since 1/18/14
+  */
 package object json4s {
   implicit val formats = native.Serialization.formats(NoTypeHints)
 }

@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 
 package com.twitter.bijection
 
@@ -28,7 +28,7 @@ import java.nio.ByteBuffer
 import java.util.UUID
 import scala.util.Success
 import Bijection.build
-import Inversion.{ attempt, attemptWhen }
+import Inversion.{attempt, attemptWhen}
 
 trait NumericInjections extends GeneratedTupleInjections {
   implicit val byte2Short: Injection[Byte, Short] = new AbstractInjection[Byte, Short] {

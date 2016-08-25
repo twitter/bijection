@@ -10,17 +10,17 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 package com.twitter.bijection.avro
 
-import com.twitter.bijection.{ BaseProperties, CheckProperties, Injection }
+import com.twitter.bijection.{BaseProperties, CheckProperties, Injection}
 import org.apache.avro.Schema
-import org.apache.avro.generic.{ GenericData, GenericRecord }
+import org.apache.avro.generic.{GenericData, GenericRecord}
 
 /**
- * @author Muhammad Ashraf
- * @since 7/5/13
- */
+  * @author Muhammad Ashraf
+  * @since 7/5/13
+  */
 class GenericAvroCodecLaws extends CheckProperties with BaseProperties {
   val testSchema = new Schema.Parser().parse("""{
                                                    "type":"record",
@@ -57,8 +57,8 @@ class GenericAvroCodecLaws extends CheckProperties with BaseProperties {
     fiscalRecord
   }
 
-  implicit val testGenericRecord = arbitraryViaFn {
-    is: (String, Int, Int) => buildGenericAvroRecord(is)
+  implicit val testGenericRecord = arbitraryViaFn { is: (String, Int, Int) =>
+    buildGenericAvroRecord(is)
   }
 
   def roundTripsGenericRecord(implicit injection: Injection[GenericRecord, Array[Byte]]) = {
@@ -81,4 +81,3 @@ class GenericAvroCodecLaws extends CheckProperties with BaseProperties {
     roundTripsGenericRecordToJson(GenericAvroCodecs.toJson[GenericRecord](testSchema))
   }
 }
-

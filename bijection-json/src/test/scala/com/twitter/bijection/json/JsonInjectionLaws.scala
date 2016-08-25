@@ -18,15 +18,15 @@ package com.twitter.bijection.json
 
 import com.twitter.bijection.Conversion.asMethod
 
-import com.twitter.bijection.{ CheckProperties, BaseProperties, Bijection, Injection }
-import org.scalatest.{ PropSpec, MustMatchers }
+import com.twitter.bijection.{CheckProperties, BaseProperties, Bijection, Injection}
+import org.scalatest.{PropSpec, MustMatchers}
 import org.scalatest.prop.PropertyChecks
 
 import org.scalacheck.Prop.forAll
 import org.scalacheck.Arbitrary
 
 import org.codehaus.jackson.JsonNode
-import com.twitter.bijection.json.JsonNodeInjection.{ fromJsonNode, toJsonNode }
+import com.twitter.bijection.json.JsonNodeInjection.{fromJsonNode, toJsonNode}
 import scala.util.Try
 
 class JsonInjectionLaws extends CheckProperties with BaseProperties {
@@ -124,9 +124,15 @@ class JsonInjectionLaws extends CheckProperties with BaseProperties {
     roundTripJson[Option[Int]]
   }
 
-  implicit val arbSeq: Arbitrary[Seq[Int]] = arbitraryViaFn { s: List[Int] => s.toSeq }
-  implicit val arbVec: Arbitrary[Vector[Int]] = arbitraryViaFn { s: List[Int] => Vector(s: _*) }
-  implicit val arbIndexed: Arbitrary[IndexedSeq[Int]] = arbitraryViaFn { s: List[Int] => s.toIndexedSeq }
+  implicit val arbSeq: Arbitrary[Seq[Int]] = arbitraryViaFn { s: List[Int] =>
+    s.toSeq
+  }
+  implicit val arbVec: Arbitrary[Vector[Int]] = arbitraryViaFn { s: List[Int] =>
+    Vector(s: _*)
+  }
+  implicit val arbIndexed: Arbitrary[IndexedSeq[Int]] = arbitraryViaFn { s: List[Int] =>
+    s.toIndexedSeq
+  }
 
   property("Seq[Int]") {
     roundTripJson[Seq[Int]]
@@ -143,16 +149,16 @@ class JsonInjectionLaws extends CheckProperties with BaseProperties {
   // Handle Mixed values:
   property("Mixed values") {
     forAll { (kv: List[(String, Int, List[String])]) =>
-
       val mixedMap = kv.map {
         case (key, intv, lv) =>
-          if (scala.math.random < 0.5) { (key + "i", toJsonNode(intv)) }
-          else { (key + "l", toJsonNode(lv)) }
+          if (scala.math.random < 0.5) { (key + "i", toJsonNode(intv)) } else {
+            (key + "l", toJsonNode(lv))
+          }
       }.toMap
 
       val jsonMixed = mixedMap.as[UnparsedJson]
 
-      jsonMixed.as[Try[Map[String, JsonNode]]].get.forall{ kup: (String, JsonNode) =>
+      jsonMixed.as[Try[Map[String, JsonNode]]].get.forall { kup: (String, JsonNode) =>
         val (k, up) = kup
         if (k.endsWith("i")) {
           fromJsonNode[Int](up).get == fromJsonNode[Int](mixedMap(k)).get

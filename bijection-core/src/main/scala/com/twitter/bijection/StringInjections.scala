@@ -12,14 +12,14 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 
 package com.twitter.bijection
 
 import com.twitter.bijection.Inversion.attempt
-import java.net.{ URLDecoder, URLEncoder, URL }
-import java.nio.charset.{ Charset, CharsetDecoder, CoderResult, CodingErrorAction }
-import java.nio.{ ByteBuffer, CharBuffer }
+import java.net.{URLDecoder, URLEncoder, URL}
+import java.nio.charset.{Charset, CharsetDecoder, CoderResult, CodingErrorAction}
+import java.nio.{ByteBuffer, CharBuffer}
 import java.util.UUID
 import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
@@ -36,9 +36,8 @@ trait StringInjections extends NumericInjections {
 
       private[this] def mkSharedState =
         new AtomicSharedState({ () =>
-          val dec = Charset.forName(encoding)
-            .newDecoder
-            .onUnmappableCharacter(CodingErrorAction.REPORT)
+          val dec =
+            Charset.forName(encoding).newDecoder.onUnmappableCharacter(CodingErrorAction.REPORT)
           val buf = CharBuffer.allocate(1024) // something big enough, if not big enough, allocate
           (dec, buf)
         })
@@ -84,11 +83,14 @@ trait StringInjections extends NumericInjections {
       override def invert(s: String) = attempt(s)(UUID.fromString(_))
     }
 
-  implicit val string2UrlEncodedString: Injection[String, URLEncodedString] = new AbstractInjection[String, URLEncodedString] {
-    override def apply(a: String): URLEncodedString = URLEncodedString(URLEncoder.encode(a, "UTF-8"))
+  implicit val string2UrlEncodedString: Injection[String, URLEncodedString] =
+    new AbstractInjection[String, URLEncodedString] {
+      override def apply(a: String): URLEncodedString =
+        URLEncodedString(URLEncoder.encode(a, "UTF-8"))
 
-    override def invert(b: URLEncodedString): Try[String] = attempt(b)(s => URLDecoder.decode(s.encodedString, "UTF-8"))
-  }
+      override def invert(b: URLEncodedString): Try[String] =
+        attempt(b)(s => URLDecoder.decode(s.encodedString, "UTF-8"))
+    }
 }
 
 object StringCodec extends StringInjections {

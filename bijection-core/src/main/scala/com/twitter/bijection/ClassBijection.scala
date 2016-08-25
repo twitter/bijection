@@ -12,13 +12,13 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 
 package com.twitter.bijection
 
 /**
- *  Bijection between Class objects and string.
- */
+  *  Bijection between Class objects and string.
+  */
 class ClassBijection[T] extends Bijection[Class[T], String @@ Rep[Class[T]]] {
   override def apply(k: Class[T]) = Tag(k.getName)
   override def invert(s: String @@ Rep[Class[T]]) = Class.forName(s).asInstanceOf[Class[T]]

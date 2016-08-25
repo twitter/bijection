@@ -12,16 +12,22 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 
 package com.twitter.bijection
 
-import java.io.{ ByteArrayInputStream, ByteArrayOutputStream, ObjectOutputStream, ObjectInputStream, Serializable }
+import java.io.{
+  ByteArrayInputStream,
+  ByteArrayOutputStream,
+  ObjectOutputStream,
+  ObjectInputStream,
+  Serializable
+}
 import java.util.Arrays
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.forAll
 import org.scalatest.prop.PropertyChecks
-import org.scalatest.{ PropSpec, MustMatchers }
+import org.scalatest.{PropSpec, MustMatchers}
 import scala.math.Equiv
 import scala.reflect.ClassTag
 import scala.util.Success
@@ -54,7 +60,9 @@ trait BaseProperties {
 
   implicit def barrEq[T](implicit eqt: Equiv[T]): Equiv[Array[T]] = new Equiv[Array[T]] {
     def equiv(a1: Array[T], a2: Array[T]) =
-      a1.zip(a2).forall { tup: (T, T) => eqt.equiv(tup._1, tup._2) }
+      a1.zip(a2).forall { tup: (T, T) =>
+        eqt.equiv(tup._1, tup._2)
+      }
   }
 
   def rt[A, B](a: A)(implicit bij: Bijection[A, B]): A = rtInjective[A, B](a)
@@ -62,20 +70,18 @@ trait BaseProperties {
   def rtInjective[A, B](a: A)(implicit bij: Bijection[A, B]): A = bij.invert(bij(a))
 
   /**
-   * Checks that we can always invert all A
-   * does not requires that all B that return Some[A] return to exact same B
-   */
-  def isLooseInjection[A, B](implicit arba: Arbitrary[A],
-    inj: Injection[A, B], eqa: Equiv[A]) =
+    * Checks that we can always invert all A
+    * does not requires that all B that return Some[A] return to exact same B
+    */
+  def isLooseInjection[A, B](implicit arba: Arbitrary[A], inj: Injection[A, B], eqa: Equiv[A]) =
     forAll { (a: A) =>
       val b = inj(a)
-      b != null &&
-        {
-          val bofa = inj.invert(b)
-          bofa != null &&
-            bofa.isSuccess &&
-            eqa.equiv(bofa.get, a)
-        }
+      b != null && {
+        val bofa = inj.invert(b)
+        bofa != null &&
+        bofa.isSuccess &&
+        eqa.equiv(bofa.get, a)
+      }
     }
 
   def invertIsStrict[A, B](implicit arbb: Arbitrary[B], inj: Injection[A, B], eqb: Equiv[B]) =
@@ -89,25 +95,43 @@ trait BaseProperties {
     }
 
   def isInjection[A, B](implicit a: Arbitrary[A],
-    inj: Injection[A, B], barb: Arbitrary[B], eqa: Equiv[A], eqb: Equiv[B]) =
+                        inj: Injection[A, B],
+                        barb: Arbitrary[B],
+                        eqa: Equiv[A],
+                        eqb: Equiv[B]) =
     isLooseInjection[A, B] && invertIsStrict[A, B]
 
   def isSerializableInjection[A, B](implicit arba: Arbitrary[A],
-    inj: Injection[A, B], barb: Arbitrary[B], eqa: Equiv[A], eqb: Equiv[B]) =
+                                    inj: Injection[A, B],
+                                    barb: Arbitrary[B],
+                                    eqa: Equiv[A],
+                                    eqb: Equiv[B]) =
     isInjection[A, B] && (isInjection(arba, jrt(inj), barb, eqa, eqb).label("Serializable check"))
 
   def isInjective[A, B](implicit a: Arbitrary[A], bij: ImplicitBijection[A, B], eqa: Equiv[A]) =
-    forAll { (a: A) => eqa.equiv(a, rt(a)(bij.bijection)) }
+    forAll { (a: A) =>
+      eqa.equiv(a, rt(a)(bij.bijection))
+    }
 
-  def invertIsInjection[A, B](implicit b: Arbitrary[B], bij: ImplicitBijection[A, B], eqb: Equiv[B]) =
-    forAll { b: B => eqb.equiv(b, rtInjective(b)(bij.bijection.inverse)) }
+  def invertIsInjection[A, B](implicit b: Arbitrary[B],
+                              bij: ImplicitBijection[A, B],
+                              eqb: Equiv[B]) =
+    forAll { b: B =>
+      eqb.equiv(b, rtInjective(b)(bij.bijection.inverse))
+    }
 
   def isBijection[A, B](implicit arba: Arbitrary[A],
-    arbb: Arbitrary[B], bij: ImplicitBijection[A, B], eqa: Equiv[A], eqb: Equiv[B]) =
+                        arbb: Arbitrary[B],
+                        bij: ImplicitBijection[A, B],
+                        eqa: Equiv[A],
+                        eqb: Equiv[B]) =
     isInjective[A, B] && invertIsInjection[A, B]
 
   def isSerializableBijection[A, B](implicit arba: Arbitrary[A],
-    arbb: Arbitrary[B], bij: ImplicitBijection[A, B], eqa: Equiv[A], eqb: Equiv[B]) =
+                                    arbb: Arbitrary[B],
+                                    bij: ImplicitBijection[A, B],
+                                    eqa: Equiv[A],
+                                    eqb: Equiv[B]) =
     isBijection[A, B] && (isBijection(arba, arbb, jrt(bij), eqa, eqb).label("Serializable check"))
 
   def arbitraryViaBijection[A, B](implicit bij: Bijection[A, B], arb: Arbitrary[A]): Arbitrary[B] =

@@ -12,16 +12,16 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 
 package com.twitter.bijection
 
 import com.twitter.bijection.Inversion.attemptWhen
-import java.util.zip.{ GZIPInputStream, GZIPOutputStream }
+import java.util.zip.{GZIPInputStream, GZIPOutputStream}
 import java.nio.ByteBuffer
 // copied java code from Apache commons 1.7
 import com.twitter.bijection.codec.Base64
-import java.io.{ OutputStream, InputStream, ByteArrayInputStream, ByteArrayOutputStream }
+import java.io.{OutputStream, InputStream, ByteArrayInputStream, ByteArrayOutputStream}
 import annotation.tailrec
 
 case class GZippedBytes(bytes: Array[Byte]) extends AnyVal {
@@ -49,16 +49,17 @@ object Base64String {
 }
 
 /**
- * A collection of utilities for encoding strings and byte arrays to
- * and decoding from strings compressed from with gzip.
- *
- * This object is thread-safe because there are no streams shared
- * outside of method scope, and therefore no contention for shared byte arrays.
- */
+  * A collection of utilities for encoding strings and byte arrays to
+  * and decoding from strings compressed from with gzip.
+  *
+  * This object is thread-safe because there are no streams shared
+  * outside of method scope, and therefore no contention for shared byte arrays.
+  */
 trait BinaryBijections extends StringBijections {
+
   /**
-   * Bijection between byte array and java.nio.ByteBuffer.
-   */
+    * Bijection between byte array and java.nio.ByteBuffer.
+    */
   implicit val bytes2Buffer: Bijection[Array[Byte], ByteBuffer] =
     new AbstractBijection[Array[Byte], ByteBuffer] {
       def apply(b: Array[Byte]) = ByteBuffer.wrap(b)
@@ -80,9 +81,10 @@ trait BinaryBijections extends StringBijections {
         copy(inputStream, outputStream, bufferSize)
     }
   }
+
   /**
-   * Bijection between byte array and GZippedBytes.
-   */
+    * Bijection between byte array and GZippedBytes.
+    */
   implicit lazy val bytes2GzippedBytes: Bijection[Array[Byte], GZippedBytes] =
     new AbstractBijection[Array[Byte], GZippedBytes] {
       def apply(bytes: Array[Byte]) = {
@@ -102,12 +104,12 @@ trait BinaryBijections extends StringBijections {
     }
 
   /**
-   * Bijection between byte array and Base64 encoded string.
-   *
-   * The "trim" here is important, as encodeBase64String sometimes
-   * tags a newline on the end of its encoding. DON'T REMOVE THIS
-   * CALL TO TRIM.
-   */
+    * Bijection between byte array and Base64 encoded string.
+    *
+    * The "trim" here is important, as encodeBase64String sometimes
+    * tags a newline on the end of its encoding. DON'T REMOVE THIS
+    * CALL TO TRIM.
+    */
   implicit lazy val bytes2Base64: Bijection[Array[Byte], Base64String] =
     new AbstractBijection[Array[Byte], Base64String] {
       def apply(bytes: Array[Byte]) = Base64String(Base64.encodeBase64String(bytes).trim)
