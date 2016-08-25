@@ -1,4 +1,4 @@
-## Bijection [![Build Status](https://secure.travis-ci.org/twitter/bijection.png)](http://travis-ci.org/twitter/bijection)
+## Bijection [![Build Status](https://secure.travis-ci.org/twitter/bijection.png)](http://travis-ci.org/twitter/bijection) [![Codecov](https://img.shields.io/codecov/c/github/twitter/bijection.svg?maxAge=2592000)]()
 
 A Bijection is an invertible function that converts back and forth between two types, with
 the contract that a round-trip through the Bijection will bring back the original object. Moreover,
