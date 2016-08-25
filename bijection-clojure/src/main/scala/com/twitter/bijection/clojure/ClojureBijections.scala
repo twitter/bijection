@@ -12,16 +12,15 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 
 package com.twitter.bijection.clojure
 
 /**
- * Bijections between Clojure and Scala's types.
- *
- *  @author Sam Ritchie
- */
-
+  * Bijections between Clojure and Scala's types.
+  *
+  *  @author Sam Ritchie
+  */
 trait ClojureBijections extends GeneratedIFnBijections {
   // TODO: Fill in bijections between data structures.
 }

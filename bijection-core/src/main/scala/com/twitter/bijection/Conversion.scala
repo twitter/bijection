@@ -12,24 +12,24 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 
 package com.twitter.bijection
 
 import java.io.Serializable
-import scala.util.{ Success, Try }
+import scala.util.{Success, Try}
 
 /**
- * Convert allows the user to convert an instance of type A to type B given an implicit Conversion
- * that goes between the two.
- *
- * For example, with an implicit Bijection[String,Array[Byte]], the following works:
- * Array(1.toByte, 2.toByte).as[String]
- *
- * Thanks to
- * [hylotech](https://github.com/hylotech/suits/blob/master/src/main/scala/hylotech/util/Bijection.scala)
- * for the following "as" pattern.
- */
+  * Convert allows the user to convert an instance of type A to type B given an implicit Conversion
+  * that goes between the two.
+  *
+  * For example, with an implicit Bijection[String,Array[Byte]], the following works:
+  * Array(1.toByte, 2.toByte).as[String]
+  *
+  * Thanks to
+  * [hylotech](https://github.com/hylotech/suits/blob/master/src/main/scala/hylotech/util/Bijection.scala)
+  * for the following "as" pattern.
+  */
 case class Convert[A](a: A) extends AnyVal {
   // Not clear to me why this fails on the String @@ Rep[T] pattern, but it seems to:
   // TODO: fix this?
@@ -44,7 +44,8 @@ trait Conversion[A, B] extends Serializable {
 
 trait CrazyLowPriorityConversion extends Serializable {
   // If you want to an Option[B]
-  implicit def fromInjectionOptInverse[A, B](implicit inj: Injection[B, A]): Conversion[A, Option[B]] =
+  implicit def fromInjectionOptInverse[A, B](
+      implicit inj: Injection[B, A]): Conversion[A, Option[B]] =
     new Conversion[A, Option[B]] {
       def apply(a: A) = inj.invert(a) match {
         case Success(value) => Some(value)
@@ -64,9 +65,10 @@ trait SuperLowPriorityConversion extends CrazyLowPriorityConversion {
 }
 
 trait NotSuperLowPriorityConversion extends SuperLowPriorityConversion {
-  implicit def fromBijectionInv[A, B](implicit fn: ImplicitBijection[B, A]) = new Conversion[A, B] {
-    def apply(a: A) = fn.bijection.invert(a)
-  }
+  implicit def fromBijectionInv[A, B](implicit fn: ImplicitBijection[B, A]) =
+    new Conversion[A, B] {
+      def apply(a: A) = fn.bijection.invert(a)
+    }
 }
 
 trait LowPriorityConversion extends NotSuperLowPriorityConversion {

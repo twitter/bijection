@@ -19,24 +19,25 @@ object BufferableGenerator {
           (bufb, (a,b))
         }
       }
-  */
+   */
 
   val lowerLetters = ('a' to 'z').toIndexedSeq
   val upperLetters = ('A' to 'Z').toIndexedSeq
 
-  def bufferableParam(idx: Int) = "b" + lowerLetters(idx) + ": Bufferable[" + upperLetters(idx) + "]"
+  def bufferableParam(idx: Int) =
+    "b" + lowerLetters(idx) + ": Bufferable[" + upperLetters(idx) + "]"
 
   def typeList(cnt: Int) =
-    upperLetters.slice(0, cnt) map { _.toString } mkString(",")
+    upperLetters.slice(0, cnt) map { _.toString } mkString (",")
 
   def tupleTypeList(cnt: Int) = "Tuple" + cnt + "[" + typeList(cnt) + "]"
 
   def reallocatingPut(idx: Int) =
-    "nextBb = reallocatingPut(nextBb) { b" + lowerLetters(idx) + ".put(_, tup._" + (idx+1) +") }"
+    "nextBb = reallocatingPut(nextBb) { b" + lowerLetters(idx) + ".put(_, tup._" + (idx + 1) + ") }"
 
   def bufferGet(idx: Int) = {
     val getFrom = if (idx == 0) "bytebuf" else ("buf" + lowerLetters(idx - 1))
-      val lowlet = lowerLetters(idx)
+    val lowlet = lowerLetters(idx)
     "val (buf%s, %s) = b%s.unsafeGet(%s)".format(lowlet, lowlet, lowlet, getFrom)
   }
 
@@ -45,19 +46,20 @@ object BufferableGenerator {
   // Here we put it all together:
   def implicitTuple(cnt: Int): String =
     "  implicit def tuple" + cnt + "[" + typeList(cnt) + "](implicit " +
-      ((0 until cnt) map { bufferableParam(_) } mkString(", ") ) + "):\n" +
-    "    Bufferable[" + tupleTypeList(cnt) + "] = new AbstractBufferable[" + tupleTypeList(cnt) +"] {\n" +
-    "      def put(bytebuf: ByteBuffer, tup: "+ tupleTypeList(cnt) +") = {\n" +
-    "        var nextBb = bytebuf\n" +
-    "        " + ((0 until cnt) map { reallocatingPut(_) }).mkString("","\n        ","\n") +
-    "        nextBb\n" +
-    "      }\n"+
-    "      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>\n" +
-    "        " + ((0 until cnt) map { bufferGet(_) }).mkString("","\n        ","\n") +
-    "        val res = Tuple" + cnt +(0 until cnt).map { lowerLetters(_) }.mkString("(",", ",")") + "\n" +
-    "        (buf" + lowerLetters(cnt - 1) +", res)\n" +
-    "      }\n" +
-    "    }"
+      ((0 until cnt) map { bufferableParam(_) } mkString (", ")) + "):\n" +
+      "    Bufferable[" + tupleTypeList(cnt) + "] = new AbstractBufferable[" + tupleTypeList(cnt) + "] {\n" +
+      "      def put(bytebuf: ByteBuffer, tup: " + tupleTypeList(cnt) + ") = {\n" +
+      "        var nextBb = bytebuf\n" +
+      "        " + ((0 until cnt) map { reallocatingPut(_) }).mkString("", "\n        ", "\n") +
+      "        nextBb\n" +
+      "      }\n" +
+      "      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>\n" +
+      "        " + ((0 until cnt) map { bufferGet(_) }).mkString("", "\n        ", "\n") +
+      "        val res = Tuple" + cnt + (0 until cnt).map { lowerLetters(_) }
+      .mkString("(", ", ", ")") + "\n" +
+      "        (buf" + lowerLetters(cnt - 1) + ", res)\n" +
+      "      }\n" +
+      "    }"
 
   def generate = {
     val b = new StringBuffer
@@ -69,7 +71,9 @@ object BufferableGenerator {
     b.append("import com.twitter.bijection.Inversion.attempt\n")
 
     b.append("\ntrait GeneratedTupleBufferable {\n")
-    (1 to 22).foreach { cnt => b.append(implicitTuple(cnt)).append("\n") }
+    (1 to 22).foreach { cnt =>
+      b.append(implicitTuple(cnt)).append("\n")
+    }
     b.append("}")
 
     b.toString

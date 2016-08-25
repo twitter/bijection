@@ -14,25 +14,27 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
-
-import scala.util.{ Success, Try }
-import com.twitter.bijection.InversionFailure.{ failedAttempt, partialFailure }
-/**
- * Factory for applying inversion attempts
  */
+
+import scala.util.{Success, Try}
+import com.twitter.bijection.InversionFailure.{failedAttempt, partialFailure}
+
+/**
+  * Factory for applying inversion attempts
+  */
 object Inversion {
+
   /**
-   *  The analog of Exception.allCatch either where exceptions
-   *  are wrapped by the InversionFailure type
-   */
+    *  The analog of Exception.allCatch either where exceptions
+    *  are wrapped by the InversionFailure type
+    */
   def attempt[A, B](b: B)(inv: B => A): Try[A] =
     Try(inv(b)).recoverWith(partialFailure(b))
 
   /**
-   * Applies tests for known inversion failure before returning
-   * a success or failure
-   */
+    * Applies tests for known inversion failure before returning
+    * a success or failure
+    */
   def attemptWhen[A, B](b: B)(test: B => Boolean)(inv: B => A): Try[A] =
     if (test(b)) Success(inv(b)) else failedAttempt(b)
 }

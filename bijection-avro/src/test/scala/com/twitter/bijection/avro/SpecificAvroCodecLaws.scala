@@ -1,13 +1,13 @@
 package com.twitter.bijection.avro
 
 import avro.FiscalRecord
-import com.twitter.bijection.{ BaseProperties, CheckProperties, Injection }
+import com.twitter.bijection.{BaseProperties, CheckProperties, Injection}
 import org.apache.avro.Schema
 
 /**
- * @author Muhammad Ashraf
- * @since 10/5/13
- */
+  * @author Muhammad Ashraf
+  * @since 10/5/13
+  */
 class SpecificAvroCodecLaws extends CheckProperties with BaseProperties {
   val testSchema = new Schema.Parser().parse("""{
                                                    "type":"record",
@@ -36,15 +36,11 @@ class SpecificAvroCodecLaws extends CheckProperties with BaseProperties {
                                                 }""")
 
   def buildSpecificAvroRecord(i: (String, Int, Int)): FiscalRecord = {
-    FiscalRecord.newBuilder()
-      .setCalendarDate(i._1)
-      .setFiscalWeek(i._2)
-      .setFiscalYear(i._3)
-      .build()
+    FiscalRecord.newBuilder().setCalendarDate(i._1).setFiscalWeek(i._2).setFiscalYear(i._3).build()
   }
 
-  implicit val testSpecificRecord = arbitraryViaFn {
-    is: (String, Int, Int) => buildSpecificAvroRecord(is)
+  implicit val testSpecificRecord = arbitraryViaFn { is: (String, Int, Int) =>
+    buildSpecificAvroRecord(is)
   }
 
   def roundTripsSpecificRecord(implicit injection: Injection[FiscalRecord, Array[Byte]]) = {
@@ -68,4 +64,3 @@ class SpecificAvroCodecLaws extends CheckProperties with BaseProperties {
   }
 
 }
-

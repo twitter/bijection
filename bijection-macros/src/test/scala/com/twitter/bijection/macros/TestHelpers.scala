@@ -12,7 +12,7 @@ import _root_.java.io.{
   ObjectOutputStream
 }
 
-import _root_.java.util.concurrent.atomic.{ AtomicBoolean, AtomicReference }
+import _root_.java.util.concurrent.atomic.{AtomicBoolean, AtomicReference}
 
 object MacroCaseClasses extends java.io.Serializable {
   type Atup = (Int, String)
@@ -27,7 +27,11 @@ object MacroCaseClasses extends java.io.Serializable {
 
   case class SampleClassA(x: Int, y: String)
   case class SampleClassB(a1: SampleClassA, a2: SampleClassA, y: String)
-  case class SampleClassC(a: SampleClassA, b: SampleClassB, c: SampleClassA, d: SampleClassB, e: SampleClassB)
+  case class SampleClassC(a: SampleClassA,
+                          b: SampleClassB,
+                          c: SampleClassA,
+                          d: SampleClassB,
+                          e: SampleClassB)
   class SampleClassD // Non-case class
 }
 
@@ -40,9 +44,9 @@ object Externalizer {
 }
 
 /**
- * This is a simplified version of com.twitter.chill.Externalizer
- * which only does Java serialization
- */
+  * This is a simplified version of com.twitter.chill.Externalizer
+  * which only does Java serialization
+  */
 class Externalizer[T] extends Externalizable {
   // Either points to a result or a delegate Externalizer to fufil that result.
   private var item: Either[Externalizer[T], Option[T]] = Right(None)
@@ -61,10 +65,10 @@ class Externalizer[T] extends Externalizable {
   def get: T = getOption.get // This should never be None when get is called
 
   /**
-   * Unfortunately, Java serialization requires mutable objects if
-   * you are going to control how the serialization is done.
-   * Use the companion object to creat new instances of this
-   */
+    * Unfortunately, Java serialization requires mutable objects if
+    * you are going to control how the serialization is done.
+    * Use the companion object to creat new instances of this
+    */
   def set(it: T): Unit = {
     item match {
       case Left(e) => e.set(it)
@@ -84,8 +88,8 @@ class Externalizer[T] extends Externalizable {
     }
 
   /**
-   * Try to round-trip and see if it works without error
-   */
+    * Try to round-trip and see if it works without error
+    */
   private def probeJavaWorks: Boolean = {
     if (!testing.compareAndSet(false, true)) return true
     try {

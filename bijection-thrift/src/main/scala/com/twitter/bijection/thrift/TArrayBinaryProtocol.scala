@@ -27,9 +27,9 @@ import org.apache.thrift.TException
 import org.apache.thrift.transport.TTransport
 
 /**
- * Binary protocol implementation for thrift.
- *
- */
+  * Binary protocol implementation for thrift.
+  *
+  */
 object TArrayBinaryProtocol {
   private val ANONYMOUS_STRUCT: TStruct = new TStruct()
 }

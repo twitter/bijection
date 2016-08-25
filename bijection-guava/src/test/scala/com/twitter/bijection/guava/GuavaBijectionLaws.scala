@@ -16,9 +16,9 @@
 
 package com.twitter.bijection.guava
 
-import java.lang.{ Long => JLong }
+import java.lang.{Long => JLong}
 
-import com.google.common.base.{ Function => GFn, Optional, Predicate, Supplier }
+import com.google.common.base.{Function => GFn, Optional, Predicate, Supplier}
 import com.twitter.bijection.Conversion.asMethod
 import com.twitter.bijection._
 import org.scalacheck.Arbitrary
@@ -38,25 +38,34 @@ class GuavaBijectionLaws extends CheckProperties with BaseProperties {
     isBijection[Option[Long], Optional[Long]]
   }
 
-  def roundTripsFn[A, B](fn: A => B)(implicit arb: Arbitrary[A], bij: Bijection[A => B, GFn[A, B]], eqb: Equiv[B]) = {
+  def roundTripsFn[A, B](
+      fn: A => B)(implicit arb: Arbitrary[A], bij: Bijection[A => B, GFn[A, B]], eqb: Equiv[B]) = {
     val rtFn = bij(fn)
-    forAll { a: A => eqb.equiv(fn(a), rtFn.apply(a)) }
+    forAll { a: A =>
+      eqb.equiv(fn(a), rtFn.apply(a))
+    }
   }
 
   property("round trips Int => Long -> GuavaFn[Int, Long]") {
-    roundTripsFn[Int, Long] { x => (x * x).toLong }
+    roundTripsFn[Int, Long] { x =>
+      (x * x).toLong
+    }
   }
 
   property("round trips () => Long -> Supplier[JLong]") {
     forAll { l: Long =>
-      val fn = { () => l }
+      val fn = { () =>
+        l
+      }
       fn() == fn.as[Supplier[JLong]].get.as[Long]
     }
   }
 
   property("round trips Long => Boolean -> Predicate[JLong]") {
     forAll { l: Long =>
-      val isEven = { l: Long => l % 2 == 0 }
+      val isEven = { l: Long =>
+        l % 2 == 0
+      }
       isEven(l) == isEven.as[Predicate[JLong]].apply(l.as[JLong])
     }
   }

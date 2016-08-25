@@ -12,11 +12,18 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 
 package com.twitter.bijection
 
-import java.lang.{ Byte => JByte, Double => JDouble, Float => JFloat, Integer => JInt, Long => JLong, Short => JShort }
+import java.lang.{
+  Byte => JByte,
+  Double => JDouble,
+  Float => JFloat,
+  Integer => JInt,
+  Long => JLong,
+  Short => JShort
+}
 import java.nio.ByteBuffer
 
 import org.scalacheck.Arbitrary
@@ -33,10 +40,14 @@ trait BaseBufferable {
     Equiv[T].equiv(t, rtt) && Equiv[T].equiv(t, copyT) && (newBuf2.position == pos)
   }
   implicit protected def aeq[T: Equiv]: Equiv[Array[T]] = Equiv.fromFunction { (a1, a2) =>
-    a1.zip(a2).forall { tup => Equiv[T].equiv(tup._1, tup._2) }
+    a1.zip(a2).forall { tup =>
+      Equiv[T].equiv(tup._1, tup._2)
+    }
   }
   def itereq[C <: Iterable[T], T: Equiv]: Equiv[C] = Equiv.fromFunction { (a1, a2) =>
-    a1.zip(a2).forall { tup => Equiv[T].equiv(tup._1, tup._2) }
+    a1.zip(a2).forall { tup =>
+      Equiv[T].equiv(tup._1, tup._2)
+    }
   }
 }
 
@@ -48,8 +59,8 @@ class BufferableLaws extends CheckProperties with BaseBufferable {
       bb.position(bytes.size)
       val newBb = Bufferable.reallocate(bb)
       Bufferable.getBytes(bb).toList == Bufferable.getBytes(newBb).toList &&
-        newBb.capacity > bb.capacity &&
-        newBb.position == bb.position
+      newBb.capacity > bb.capacity &&
+      newBb.position == bb.position
     }
   }
 
@@ -129,8 +140,7 @@ class BufferableLaws extends CheckProperties with BaseBufferable {
   }
 
   implicit val symbolArb = Arbitrary {
-    implicitly[Arbitrary[String]]
-      .arbitrary.map { Symbol(_) }
+    implicitly[Arbitrary[String]].arbitrary.map { Symbol(_) }
   }
 
   property("Symbol roundtrip") {

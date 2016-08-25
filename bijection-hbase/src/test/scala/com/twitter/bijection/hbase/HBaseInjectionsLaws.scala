@@ -14,12 +14,12 @@
 
 package com.twitter.bijection.hbase
 
-import org.scalatest.{ PropSpec, MustMatchers }
+import org.scalatest.{PropSpec, MustMatchers}
 import org.scalatest.prop.PropertyChecks
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 
-import com.twitter.bijection.{ CheckProperties, BaseProperties, Injection }
+import com.twitter.bijection.{CheckProperties, BaseProperties, Injection}
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
 
 object HBaseInjectionsLaws {
@@ -32,9 +32,9 @@ object HBaseInjectionsLaws {
 }
 
 /**
- * @author Muhammad Ashraf
- * @since 7/10/13
- */
+  * @author Muhammad Ashraf
+  * @since 7/10/13
+  */
 class HBaseInjectionsLaws extends CheckProperties with BaseProperties {
   import HBaseInjections._
   import HBaseInjectionsLaws.arbitaryImmutableBytesWritable

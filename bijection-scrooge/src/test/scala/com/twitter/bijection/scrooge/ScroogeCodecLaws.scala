@@ -16,12 +16,12 @@
 
 package com.twitter.bijection.scrooge
 
-import com.twitter.bijection.{ CheckProperties, BaseProperties, Bijection, Injection }
+import com.twitter.bijection.{CheckProperties, BaseProperties, Bijection, Injection}
 
-import org.scalatest.{ PropSpec, MustMatchers }
+import org.scalatest.{PropSpec, MustMatchers}
 import org.scalatest.prop.PropertyChecks
 
-import org.scalacheck.{ Gen, Arbitrary }
+import org.scalacheck.{Gen, Arbitrary}
 
 class ScroogeCodecLaws extends CheckProperties with BaseProperties {
   implicit val testScrooge: Arbitrary[TestStruct] = Arbitrary {
@@ -50,4 +50,3 @@ class ScroogeCodecLaws extends CheckProperties with BaseProperties {
     roundTripsScrooge[String](JsonScalaCodec(TestStruct))
   }
 }
-

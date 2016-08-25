@@ -24,10 +24,10 @@ import scala.util.Try
 import scala.util.Success
 
 /**
- * Provides various HBase specific Injections by wrapping org.apache.hadoop.hbase.util.Bytes
- * @author Mansur Ashraf
- * @since 9/10/13
- */
+  * Provides various HBase specific Injections by wrapping org.apache.hadoop.hbase.util.Bytes
+  * @author Mansur Ashraf
+  * @since 9/10/13
+  */
 object HBaseInjections {
   import Injection.buildCatchInvert
 
@@ -53,9 +53,9 @@ object HBaseInjections {
     }
 
   /**
-   * ImmutableBytesWritable injections avoid copying when possible and use the
-   * slice (offset and length) of the underlying byte array.
-   */
+    * ImmutableBytesWritable injections avoid copying when possible and use the
+    * slice (offset and length) of the underlying byte array.
+    */
   implicit lazy val string2BytesWritableInj: Injection[String, ImmutableBytesWritable] =
     new ImmutableBytesWritableInjection[String] {
       override def invert(b: ImmutableBytesWritable) =
@@ -105,7 +105,8 @@ object HBaseInjections {
       override def invert(b: ImmutableBytesWritable) = Try(b.copyBytes)
     }
 
-  abstract class ImmutableBytesWritableInjection[T](implicit inj: Injection[T, Array[Byte]]) extends AbstractInjection[T, ImmutableBytesWritable] {
+  abstract class ImmutableBytesWritableInjection[T](implicit inj: Injection[T, Array[Byte]])
+      extends AbstractInjection[T, ImmutableBytesWritable] {
     override def apply(a: T): ImmutableBytesWritable = new ImmutableBytesWritable(inj(a))
   }
 }

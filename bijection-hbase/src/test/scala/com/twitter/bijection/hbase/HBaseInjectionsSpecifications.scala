@@ -21,9 +21,9 @@ import org.apache.hadoop.hbase.io.ImmutableBytesWritable
 import org.scalatest.WordSpec
 
 /**
- * @author Muhammad Ashraf
- * @since 7/10/13
- */
+  * @author Muhammad Ashraf
+  * @since 7/10/13
+  */
 class HBaseInjectionsSpecifications extends WordSpec {
   "HBaseInjections" should {
     "respect ImmutableBytesWritable offset and length" in {

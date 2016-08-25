@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 
 package com.twitter.bijection
 
@@ -31,26 +31,41 @@ import java.util.UUID
 import org.scalacheck.Gen
 import org.scalacheck.Prop.forAll
 
-import org.scalatest.{ PropSpec, MustMatchers }
+import org.scalatest.{PropSpec, MustMatchers}
 import org.scalatest.prop.PropertyChecks
 
 import Conversion.asMethod // get the .as syntax
 
 object JavaNumArbs extends BaseProperties {
 
-  implicit val byteA = arbitraryViaFn { v: Byte => JByte.valueOf(v) }
-  implicit val shortA = arbitraryViaFn { v: Short => JShort.valueOf(v) }
-  implicit val longA = arbitraryViaFn { v: Long => JLong.valueOf(v) }
-  implicit val intA = arbitraryViaFn { v: Int => JInt.valueOf(v) }
-  implicit val floatA = arbitraryViaFn { v: Float => JFloat.valueOf(v) }
-  implicit val doubleA = arbitraryViaFn { v: Double => JDouble.valueOf(v) }
+  implicit val byteA = arbitraryViaFn { v: Byte =>
+    JByte.valueOf(v)
+  }
+  implicit val shortA = arbitraryViaFn { v: Short =>
+    JShort.valueOf(v)
+  }
+  implicit val longA = arbitraryViaFn { v: Long =>
+    JLong.valueOf(v)
+  }
+  implicit val intA = arbitraryViaFn { v: Int =>
+    JInt.valueOf(v)
+  }
+  implicit val floatA = arbitraryViaFn { v: Float =>
+    JFloat.valueOf(v)
+  }
+  implicit val doubleA = arbitraryViaFn { v: Double =>
+    JDouble.valueOf(v)
+  }
   implicit val bigInteger = arbitraryViaFn { (l1l2: (Long, Long)) =>
     (new BigInteger(l1l2._1.toString)).multiply(new BigInteger(l1l2._2.toString))
   }
 }
 
-class NumericBijectionLaws extends PropSpec with PropertyChecks with MustMatchers
-  with BaseProperties {
+class NumericBijectionLaws
+    extends PropSpec
+    with PropertyChecks
+    with MustMatchers
+    with BaseProperties {
   import StringArbs._
   import JavaNumArbs._
 
@@ -181,8 +196,12 @@ class NumericBijectionLaws extends PropSpec with PropertyChecks with MustMatcher
   }
 
   // Some other types through numbers:
-  implicit val uuid = arbitraryViaFn { (uplow: (Long, Long)) => new UUID(uplow._1, uplow._2) }
-  implicit val date = arbitraryViaFn { (dtime: Long) => new java.util.Date(dtime) }
+  implicit val uuid = arbitraryViaFn { (uplow: (Long, Long)) =>
+    new UUID(uplow._1, uplow._2)
+  }
+  implicit val date = arbitraryViaFn { (dtime: Long) =>
+    new java.util.Date(dtime)
+  }
   property("round trips (Long,Long) -> UUID") {
     isBijection[(Long, Long), UUID]
   }
@@ -193,7 +212,9 @@ class NumericBijectionLaws extends PropSpec with PropertyChecks with MustMatcher
 
   property("as works") {
     forAll { (i: Int) =>
-      assert((i.as[String @@ Rep[Int]] == i.toString) && (Tag[String, Rep[Int]](i.toString).as[Int] == i))
+      assert(
+        (i.as[String @@ Rep[Int]] == i.toString) && (Tag[String, Rep[Int]](i.toString)
+          .as[Int] == i))
     }
   }
 }

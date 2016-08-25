@@ -14,41 +14,47 @@
 
 package com.twitter.bijection.json4s
 
-import com.twitter.bijection.{ BaseProperties, CheckProperties, Injection }
-import org.json4s.JsonAST.{ JString, _ }
+import com.twitter.bijection.{BaseProperties, CheckProperties, Injection}
+import org.json4s.JsonAST.{JString, _}
 
 import scala.reflect.ClassTag
 import scala.reflect.runtime.universe.TypeTag
 
 /**
- * @author Mansur Ashraf
- * @since 1/10/14
- */
-class Json4sInjectionLaws extends CheckProperties
-  with BaseProperties {
+  * @author Mansur Ashraf
+  * @since 1/10/14
+  */
+class Json4sInjectionLaws extends CheckProperties with BaseProperties {
 
-  def createTwit(i: (String, Int, String, List[Int], String)): Twit = Twit(i._1, i._2, i._3, i._4, i._5)
+  def createTwit(i: (String, Int, String, List[Int], String)): Twit =
+    Twit(i._1, i._2, i._3, i._4, i._5)
 
   implicit val testCaseClassToJson = arbitraryViaFn {
-    in: (String, Int, String, List[Int], String) => createTwit(in)
-  }
-
-  implicit val testJValueToJson = arbitraryViaFn[(String, Int, String, List[Int], String), JValue] {
     in: (String, Int, String, List[Int], String) =>
-      JObject(
-        List(
-          JField("name", JString(in._1)),
-          JField("id", JInt(in._2)),
-          JField("id_String", JString(in._3)),
-          JField("indices", JArray(in._4.map(JInt(_)))),
-          JField("screen_name", JString(in._5))))
+      createTwit(in)
   }
 
-  def roundTripCaseClassToJson(implicit inj: Injection[Twit, String], tt: TypeTag[Twit], ct: ClassTag[Twit]) = isLooseInjection[Twit, String]
+  implicit val testJValueToJson =
+    arbitraryViaFn[(String, Int, String, List[Int], String), JValue] {
+      in: (String, Int, String, List[Int], String) =>
+        JObject(
+          List(JField("name", JString(in._1)),
+               JField("id", JInt(in._2)),
+               JField("id_String", JString(in._3)),
+               JField("indices", JArray(in._4.map(JInt(_)))),
+               JField("screen_name", JString(in._5))))
+    }
 
-  def roundTripCaseClassToJValue(implicit inj: Injection[Twit, JValue], tt: TypeTag[Twit], ct: ClassTag[Twit]) = isLooseInjection[Twit, JValue]
+  def roundTripCaseClassToJson(implicit inj: Injection[Twit, String],
+                               tt: TypeTag[Twit],
+                               ct: ClassTag[Twit]) = isLooseInjection[Twit, String]
 
-  def roundTripJValueToString(implicit inj: Injection[JValue, String]) = isLooseInjection[JValue, String]
+  def roundTripCaseClassToJValue(implicit inj: Injection[Twit, JValue],
+                                 tt: TypeTag[Twit],
+                                 ct: ClassTag[Twit]) = isLooseInjection[Twit, JValue]
+
+  def roundTripJValueToString(implicit inj: Injection[JValue, String]) =
+    isLooseInjection[JValue, String]
 
   property("round trip Case Class to Json") {
     import com.twitter.bijection.json4s.Json4sInjections.caseClass2Json

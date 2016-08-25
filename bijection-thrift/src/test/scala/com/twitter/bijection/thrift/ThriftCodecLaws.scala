@@ -16,11 +16,11 @@
 
 package com.twitter.bijection.thrift
 
-import com.twitter.bijection.{ CheckProperties, BaseProperties, Bijection, Injection }
-import org.scalatest.{ PropSpec, MustMatchers }
+import com.twitter.bijection.{CheckProperties, BaseProperties, Bijection, Injection}
+import org.scalatest.{PropSpec, MustMatchers}
 import org.scalatest.prop.PropertyChecks
 
-import org.scalacheck.{ Gen, Arbitrary }
+import org.scalacheck.{Gen, Arbitrary}
 import org.scalatest._
 
 class ThriftCodecLaws extends CheckProperties with BaseProperties {
@@ -61,7 +61,7 @@ class TEnumTest extends WordSpec with Matchers with BaseProperties {
     val male = Gender.findByValue(0)
     val female = Gender.findByValue(1)
     male == rt(male) &&
-      female == rt(female) &&
-      b.invert(2).isFailure
+    female == rt(female) &&
+    b.invert(2).isFailure
   }
 }

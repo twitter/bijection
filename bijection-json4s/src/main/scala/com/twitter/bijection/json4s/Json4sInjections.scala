@@ -15,7 +15,7 @@
 package com.twitter.bijection.json4s
 
 import org.json4s._
-import com.twitter.bijection.{ Injection, AbstractInjection }
+import com.twitter.bijection.{Injection, AbstractInjection}
 import org.json4s.native.JsonMethods._
 import scala.util.Try
 import com.twitter.bijection.Inversion._
@@ -24,14 +24,14 @@ import scala.reflect.runtime.universe.TypeTag
 import scala.reflect.ClassTag
 
 /**
- * @author Mansur Ashraf
- * @since 1/10/14
- */
+  * @author Mansur Ashraf
+  * @since 1/10/14
+  */
 object Json4sInjections {
 
   /**
-   * JValue to Json Injection
-   */
+    * JValue to Json Injection
+    */
   implicit val jvalue2Json: Injection[JValue, String] = new AbstractInjection[JValue, String] {
     override def apply(a: JValue): String = compact(render(a))
 
@@ -39,24 +39,30 @@ object Json4sInjections {
   }
 
   /**
-   * Case Class to Json Injection
-   * @tparam A Case Class
-   * @return Json String
-   */
-  implicit def caseClass2Json[A <: AnyRef](implicit tt: TypeTag[A], ct: ClassTag[A], fmt: Formats): Injection[A, String] = new AbstractInjection[A, String] {
-    override def apply(a: A): String = write(a)
+    * Case Class to Json Injection
+    * @tparam A Case Class
+    * @return Json String
+    */
+  implicit def caseClass2Json[A <: AnyRef](implicit tt: TypeTag[A],
+                                           ct: ClassTag[A],
+                                           fmt: Formats): Injection[A, String] =
+    new AbstractInjection[A, String] {
+      override def apply(a: A): String = write(a)
 
-    override def invert(b: String): Try[A] = attempt(b)(read[A])
-  }
+      override def invert(b: String): Try[A] = attempt(b)(read[A])
+    }
 
   /**
-   * Case Class to JValue Injection
-   * @tparam A Case Class
-   * @return JValue
-   */
-  implicit def caseClass2JValue[A <: AnyRef](implicit tt: TypeTag[A], ct: ClassTag[A], fmt: Formats): Injection[A, JValue] = new AbstractInjection[A, JValue] {
-    override def apply(a: A): JValue = Extraction.decompose(a)
+    * Case Class to JValue Injection
+    * @tparam A Case Class
+    * @return JValue
+    */
+  implicit def caseClass2JValue[A <: AnyRef](implicit tt: TypeTag[A],
+                                             ct: ClassTag[A],
+                                             fmt: Formats): Injection[A, JValue] =
+    new AbstractInjection[A, JValue] {
+      override def apply(a: A): JValue = Extraction.decompose(a)
 
-    override def invert(b: JValue): Try[A] = attempt(b)(_.extract[A])
-  }
+      override def invert(b: JValue): Try[A] = attempt(b)(_.extract[A])
+    }
 }

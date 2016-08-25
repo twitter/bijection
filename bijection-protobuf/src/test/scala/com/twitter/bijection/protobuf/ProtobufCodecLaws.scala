@@ -16,9 +16,9 @@
 
 package com.twitter.bijection.protobuf
 
-import com.twitter.bijection.{ CheckProperties, BaseProperties, Bijection }
-import com.twitter.bijection.protobuf.TestMessages.{ FatigueCount, Gender }
-import org.scalatest.{ PropSpec, MustMatchers }
+import com.twitter.bijection.{CheckProperties, BaseProperties, Bijection}
+import com.twitter.bijection.protobuf.TestMessages.{FatigueCount, Gender}
+import org.scalatest.{PropSpec, MustMatchers}
 import org.scalatest.prop.PropertyChecks
 
 import org.scalacheck.Arbitrary
@@ -26,14 +26,17 @@ import org.scalatest._
 
 class ProtobufCodecLaws extends CheckProperties with BaseProperties {
   def buildFatigueCount(tuple: (Long, Long, Int)) =
-    FatigueCount.newBuilder()
+    FatigueCount
+      .newBuilder()
       .setTargetId(tuple._1)
       .setSuggestedId(tuple._2)
       .setServeCount(tuple._3)
       .build
 
   implicit val fatigueCount: Arbitrary[FatigueCount] =
-    arbitraryViaFn { input: (Long, Long, Int) => buildFatigueCount(input) }
+    arbitraryViaFn { input: (Long, Long, Int) =>
+      buildFatigueCount(input)
+    }
 
   property("round trips protobuf -> Array[Byte]") {
     implicit val b = ProtobufCodec[FatigueCount]
@@ -48,7 +51,7 @@ class ProtobufEnumTest extends WordSpec with Matchers with BaseProperties {
     val female = Gender.valueOf(1)
 
     male == rt(male) &&
-      female == rt(female) &&
-      b.invert(2).isFailure
+    female == rt(female) &&
+    b.invert(2).isFailure
   }
 }

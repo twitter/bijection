@@ -12,15 +12,15 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 
 package com.twitter.bijection
 import scala.util.Success
 
 /**
- * A common injection on numbers: N -> (m = N mod K, (N-m)/K)
- * The first element in result tuple is always [0, modulus)
- */
+  * A common injection on numbers: N -> (m = N mod K, (N-m)/K)
+  * The first element in result tuple is always [0, modulus)
+  */
 class IntModDivInjection(val modulus: Int) extends Injection[Int, (Int, Int)] {
   require(modulus > 0, "Modulus must be positive: " + modulus)
   override def apply(n: Int) = {
@@ -38,16 +38,16 @@ class IntModDivInjection(val modulus: Int) extends Injection[Int, (Int, Int)] {
     val (mod, div) = moddiv
     val res = div * modulus + mod
     if (mod >= 0 && mod < modulus && div <= maxDiv && div >= minDiv &&
-      // We could wrap around if we get bad input:
-      ((res >= 0) == (div >= 0))) Success(res)
+        // We could wrap around if we get bad input:
+        ((res >= 0) == (div >= 0))) Success(res)
     else InversionFailure.failedAttempt(moddiv)
   }
 }
 
 /**
- * A common injection on numbers: N -> (m = N mod K, (N-m)/K)
- * The first element in result tuple is always [0, modulus)
- */
+  * A common injection on numbers: N -> (m = N mod K, (N-m)/K)
+  * The first element in result tuple is always [0, modulus)
+  */
 class LongModDivInjection(val modulus: Long) extends Injection[Long, (Long, Long)] {
   require(modulus > 0, "Modulus must be positive: " + modulus)
   override def apply(n: Long) = {
@@ -65,7 +65,7 @@ class LongModDivInjection(val modulus: Long) extends Injection[Long, (Long, Long
     val (mod, div) = moddiv
     val res = div * modulus + mod
     if (mod >= 0 && mod < modulus && div <= maxDiv && div >= minDiv &&
-      ((res >= 0) == (div >= 0))) Success(res)
+        ((res >= 0) == (div >= 0))) Success(res)
     else InversionFailure.failedAttempt(moddiv)
   }
 }

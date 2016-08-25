@@ -12,7 +12,7 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 
 package com.twitter.bijection
 
@@ -23,13 +23,21 @@ class CollectionLaws extends CheckProperties with BaseProperties {
   import com.twitter.bijection.StringArbs._
 
   implicit def vectorArb[A](implicit la: Arbitrary[List[A]]) =
-    arbitraryViaFn { (l: List[A]) => Vector(l: _*) }
+    arbitraryViaFn { (l: List[A]) =>
+      Vector(l: _*)
+    }
   implicit def seqArb[A](implicit la: Arbitrary[List[A]]) =
-    arbitraryViaFn { (l: List[A]) => Seq(l: _*) }
+    arbitraryViaFn { (l: List[A]) =>
+      Seq(l: _*)
+    }
   implicit def indexedSeqArb[A](implicit la: Arbitrary[List[A]]) =
-    arbitraryViaFn { (l: List[A]) => IndexedSeq(l: _*) }
+    arbitraryViaFn { (l: List[A]) =>
+      IndexedSeq(l: _*)
+    }
   implicit def traversableArb[A](implicit la: Arbitrary[List[A]]) =
-    arbitraryViaFn { (l: List[A]) => l.toTraversable }
+    arbitraryViaFn { (l: List[A]) =>
+      l.toTraversable
+    }
 
   property("round trip List[Int] <=> Vector[String @@ Rep[Int]]") {
     isBijection[List[Int], Vector[String @@ Rep[Int]]]

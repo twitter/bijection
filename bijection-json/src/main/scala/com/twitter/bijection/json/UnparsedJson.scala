@@ -12,26 +12,29 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 
 package com.twitter.bijection.json
 
-import com.twitter.bijection.{ Bijection, AbstractBijection, AbstractInjection, Injection }
+import com.twitter.bijection.{Bijection, AbstractBijection, AbstractInjection, Injection}
 import com.twitter.bijection.Inversion.attempt
-import JsonNodeInjection.{ fromJsonNode, toJsonNode }
+import JsonNodeInjection.{fromJsonNode, toJsonNode}
 
 import org.codehaus.jackson.JsonNode
 
 /**
- * Value class representing unparsed Json text
- */
+  * Value class representing unparsed Json text
+  */
 case class UnparsedJson(str: String) extends AnyVal
 
 object UnparsedJson {
 
   implicit def injection[T](implicit json: JsonNodeInjection[T]): Injection[T, UnparsedJson] =
     new AbstractInjection[T, UnparsedJson] {
-      def apply(t: T) = (json andThen { n: JsonNode => JsonNodeInjection.unparsed.invert(n).get })(t)
+      def apply(t: T) =
+        (json andThen { n: JsonNode =>
+          JsonNodeInjection.unparsed.invert(n).get
+        })(t)
       override def invert(up: UnparsedJson) = fromJsonNode[T](toJsonNode(up))
     }
 

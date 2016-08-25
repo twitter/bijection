@@ -12,11 +12,11 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 
 package com.twitter.bijection.finagle_mysql
 
-import com.twitter.bijection.{ CheckProperties, BaseProperties, Bijection }
+import com.twitter.bijection.{CheckProperties, BaseProperties, Bijection}
 import org.scalacheck.Arbitrary
 import com.twitter.finagle.exp.mysql._
 import java.sql.Timestamp
@@ -97,15 +97,16 @@ class MySqlConversionLaws extends CheckProperties with BaseProperties {
     isInjection[NullValue.type, Option[String]]
   }
   property("Timestamp") {
+
     /**
-     * Custom equivalence typeclass for RawValue
-     * This is here to compare two RawValues generated from Timestamps.
-     * Because they contain byte arrays, just =='ing them does not work as expected.
-     */
+      * Custom equivalence typeclass for RawValue
+      * This is here to compare two RawValues generated from Timestamps.
+      * Because they contain byte arrays, just =='ing them does not work as expected.
+      */
     implicit val valueEquiv = new scala.math.Equiv[Value] {
       override def equiv(a: Value, b: Value) = (a, b) match {
         case (RawValue(Type.Timestamp, Charset.Binary, true, bytes1),
-          RawValue(Type.Timestamp, Charset.Binary, true, bytes2)) =>
+              RawValue(Type.Timestamp, Charset.Binary, true, bytes2)) =>
           bytes1.toList == bytes2.toList
         case _ => false
       }

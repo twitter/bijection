@@ -12,15 +12,15 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
 
 package com.twitter.bijection
 
 /**
- * Deals with the type-system issue around resolving implicit bijections.
- * Bijection[A,B] or Bijection[B,A], which should
- * be equivalent. Only use this type as an implicit parameter.
- */
+  * Deals with the type-system issue around resolving implicit bijections.
+  * Bijection[A,B] or Bijection[B,A], which should
+  * be equivalent. Only use this type as an implicit parameter.
+  */
 import scala.annotation.implicitNotFound
 @implicitNotFound(msg = "Cannot find ImplicitBijection type class from ${A} to ${B}")
 sealed trait ImplicitBijection[A, B] extends java.io.Serializable {

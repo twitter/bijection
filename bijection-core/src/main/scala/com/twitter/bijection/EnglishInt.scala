@@ -1,30 +1,56 @@
 /**
- * Convert integers in the interval [0-1 BILLION] to spoken english & vice versa
- * examples -
- * six hundred ninety one million one hundred forty five thousand eight hundred twenty five is 691145825
- * six hundred ninety one million one hundred fifty eight thousand one hundred seventy is 691158170
- * six hundred ninety one million one hundred seventy thousand five hundred fifteen is 691170515
- * 2 is two
- * 23 is twenty three
- * 234 is two hundred thirty four
- *
- * Author: Krishnan Raman, kraman@twitter.com
- */
-
+  * Convert integers in the interval [0-1 BILLION] to spoken english & vice versa
+  * examples -
+  * six hundred ninety one million one hundred forty five thousand eight hundred twenty five is 691145825
+  * six hundred ninety one million one hundred fifty eight thousand one hundred seventy is 691158170
+  * six hundred ninety one million one hundred seventy thousand five hundred fifteen is 691170515
+  * 2 is two
+  * 23 is twenty three
+  * 234 is two hundred thirty four
+  *
+  * Author: Krishnan Raman, kraman@twitter.com
+  */
 package com.twitter.bijection
 
 case class EnglishInt(get: String) extends AnyVal
 
 object EnglishInt {
-  implicit val bijectionToInt: Bijection[Int, EnglishInt] = new AbstractBijection[Int, EnglishInt] {
-    def apply(num: Int): EnglishInt = EnglishInt(toEnglish(num).get)
-    override def invert(s: EnglishInt): Int = fromEnglish(s.get).get
-  }
+  implicit val bijectionToInt: Bijection[Int, EnglishInt] =
+    new AbstractBijection[Int, EnglishInt] {
+      def apply(num: Int): EnglishInt = EnglishInt(toEnglish(num).get)
+      override def invert(s: EnglishInt): Int = fromEnglish(s.get).get
+    }
 
   val (t, d, k, m, g) = (10, 100, 1000, 1000 * 1000, 1000 * 1000 * 1000)
-  val units = Map(0 -> "zero", 1 -> "one", 2 -> "two", 3 -> "three", 4 -> "four", 5 -> "five", 6 -> "six", 7 -> "seven", 8 -> "eight", 9 -> "nine")
-  val tens = Map(t -> "ten", 20 -> "twenty", 30 -> "thirty", 40 -> "forty", 50 -> "fifty", 60 -> "sixty", 70 -> "seventy", 80 -> "eighty", 90 -> "ninety")
-  val teens = Map(t -> "ten", 11 -> "eleven", 12 -> "twelve", 13 -> "thirteen", 14 -> "fourteen", 15 -> "fifteen", 16 -> "sixteen", 17 -> "seventeen", 18 -> "eighteen", 19 -> "nineteen")
+  val units = Map(0 -> "zero",
+                  1 -> "one",
+                  2 -> "two",
+                  3 -> "three",
+                  4 -> "four",
+                  5 -> "five",
+                  6 -> "six",
+                  7 -> "seven",
+                  8 -> "eight",
+                  9 -> "nine")
+  val tens = Map(t -> "ten",
+                 20 -> "twenty",
+                 30 -> "thirty",
+                 40 -> "forty",
+                 50 -> "fifty",
+                 60 -> "sixty",
+                 70 -> "seventy",
+                 80 -> "eighty",
+                 90 -> "ninety")
+  val teens = Map(t -> "ten",
+                  11 -> "eleven",
+                  12 -> "twelve",
+                  13 -> "thirteen",
+                  14 -> "fourteen",
+                  15 -> "fifteen",
+                  16 -> "sixteen",
+                  17 -> "seventeen",
+                  18 -> "eighteen",
+                  19 -> "nineteen")
   val tenmult = Map(d -> "hundred", k -> "thousand", m -> "million", g -> "billion")
   val all = units ++ tens ++ teens ++ tenmult
   val word2num: Map[String, Int] = (units ++ tens ++ teens ++ tenmult).map(kv => (kv._2, kv._1))
@@ -95,7 +121,7 @@ object EnglishInt {
 
   // folds List[Int] to Int
   private def fold(numbers: List[Int]): Int = {
-    val res = numbers.foldLeft(0, 0) ((adderaccum: (Int, Int), b: Int) => {
+    val res = numbers.foldLeft(0, 0)((adderaccum: (Int, Int), b: Int) => {
       val (adder, accum) = (adderaccum._1, adderaccum._2)
       if (b == 100 || b == 1000 || b == 1000 * 1000 || b == 1000 * 1000 * 1000) {
         (0, accum + (adder * b))
@@ -110,7 +136,7 @@ object EnglishInt {
   // eg. (7, 100, 1000) = 700,000
   // eg. (2,100, 1000000) = 200,000,000
   private def fold100(numbers: List[Int]): Int = {
-    val res = numbers.foldLeft(0, 0) ((adderaccum: (Int, Int), b: Int) => {
+    val res = numbers.foldLeft(0, 0)((adderaccum: (Int, Int), b: Int) => {
       val (adder, accum) = (adderaccum._1, adderaccum._2)
       if (b == 100) {
         (0, adder * b)
@@ -122,4 +148,3 @@ object EnglishInt {
     res._1 + res._2
   }
 }
-
