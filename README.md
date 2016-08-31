@@ -122,15 +122,25 @@ of Java or Scala, please contribute!
 `Bufferable[T]` instances for all primitives/tuples/containers are provided. Bijections and
 Injections to any of these types give you binary serialization via Bufferable.
 
-## Community and Documentation
-
-This, and all github.com/twitter projects, are under the [Twitter Open Source Code of Conduct](https://engineering.twitter.com/opensource/code-of-conduct). Additionally, see the [Typelevel Code of Conduct](http://typelevel.org/conduct) for specific examples of harassing behavior that are not tolerated.
+## Documentation
 
 To learn more and find links to tutorials and information around the web, check out the [Bijection Wiki](https://github.com/twitter/bijection/wiki).
 
 The latest ScalaDocs are hosted on Bijection's [Github Project Page](http://twitter.github.io/bijection).
 
-Discussion occurs primarily on the [Bijection mailing list](https://groups.google.com/forum/#!forum/bijection). Issues should be reported on the [GitHub issue tracker](https://github.com/twitter/bijection/issues).
+## Get Involved + Code of Conduct
+Pull requests and bug reports are always welcome!
+
+Discussion occurs primarily on the [Bijection mailing list](https://groups.google.com/forum/#!forum/bijection). 
+Issues should be reported on the [GitHub issue tracker](https://github.com/twitter/bijection/issues).
+
+We use a lightweight form of project governence inspired by the one used by Apache projects.
+Please see [Contributing and Committership](https://github.com/twitter/analytics-infra-governance#contributing-and-committership) for our code of conduct and our pull request review process.
+The TL;DR is send us a pull request, iterate on the feedback + discussion, and get a +1 from a [Committer](COMMITTERS.md) in order to get your PR accepted.
+
+The current list of active committers (who can +1 a pull request) can be found here: [Committers](COMMITTERS.md)
+
+A list of contributors to the project can be found here: [Contributors](https://github.com/twitter/bijection/graphs/contributors)
 
 ## Maven
 
