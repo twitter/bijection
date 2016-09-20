@@ -104,11 +104,37 @@ class SpecificAvroCodecsSpecification extends WordSpec with Matchers with BasePr
       assert(attempt.get == testRecord)
     }
 
+    "Round trip specific record using Binary Injection With Schema for Scala case classes with explicit schema" in {
+      implicit val specificBinaryInjection =
+        SpecificAvroCodecs.toBinary[FiscalRecordScala](FiscalRecordScala.SCHEMA$)
+      val testRecord = FiscalRecordScala("2012-01-01", Some(1), Some(12))
+      val bytes = Injection[FiscalRecordScala, Array[Byte]](testRecord)
+      val attempt = Injection.invert[FiscalRecordScala, Array[Byte]](bytes)
+      assert(attempt.get == testRecord)
+    }
+
     "Round trip specific record using Json Injection" in {
-      implicit val specificJsonInjection = SpecificAvroCodecs.toJson[FiscalRecord](testSchema)
+      implicit val specificJsonInjection = SpecificAvroCodecs.toJson[FiscalRecord]
       val testRecord = buildSpecificAvroRecord(("2012-01-01", 1, 12))
       val jsonString = Injection[FiscalRecord, String](testRecord)
       val attempt = Injection.invert[FiscalRecord, String](jsonString)
+      assert(attempt.get == testRecord)
+    }
+
+    "Round trip specific record using Json Injection with explicit schema" in {
+      implicit val specificJsonInjection =
+        SpecificAvroCodecs.toJson[FiscalRecord](FiscalRecord.SCHEMA$)
+      val testRecord = buildSpecificAvroRecord(("2012-01-01", 1, 12))
+      val jsonString = Injection[FiscalRecord, String](testRecord)
+      val attempt = Injection.invert[FiscalRecord, String](jsonString)
+      assert(attempt.get == testRecord)
+    }
+
+    "Round trip specific record using Json Injection for Scala case classes" in {
+      implicit val specificJsonInjection = SpecificAvroCodecs.toJson[FiscalRecordScala]
+      val testRecord = FiscalRecordScala("2012-01-01", Some(1), Some(12))
+      val jsonString = Injection[FiscalRecordScala, String](testRecord)
+      val attempt = Injection.invert[FiscalRecordScala, String](jsonString)
       assert(attempt.get == testRecord)
     }
   }
