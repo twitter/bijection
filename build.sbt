@@ -9,11 +9,12 @@ def isScala210x(scalaVersion: String) = scalaVersion match {
   case _ => false
 }
 
+scalaVersion in ThisBuild := "2.11.8"
+
 val sharedSettings = osgiSettings ++ Seq(
     organization := "com.twitter",
     crossScalaVersions := Seq("2.10.6", "2.11.8"),
     scalaVersion := "2.11.8",
-    scalafmtConfig := Some(file(".scalafmt")),
     javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
     javacOptions in doc := Seq("-source", "1.6"),
     libraryDependencies ++= Seq(

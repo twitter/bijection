@@ -2,7 +2,6 @@ resolvers ++= Seq(
   "jgit-repo" at "http://download.eclipse.org/jgit/maven"
 )
 
-addSbtPlugin("com.geirsson" % "sbt-scalafmt" % "0.3.1")
 addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.0")
 addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.0.0")
 addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "0.1.9")
