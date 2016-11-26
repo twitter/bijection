@@ -26,7 +26,7 @@ object HBaseInjectionsLaws {
   implicit val arbitaryImmutableBytesWritable: Arbitrary[ImmutableBytesWritable] =
     Arbitrary(for {
       bytes <- Arbitrary.arbitrary[Array[Byte]]
-      offset <- Gen.choose(0, bytes.length - 1)
+      offset <- Gen.choose(0, (bytes.length - 1) max 0)
       len <- Gen.choose(0, bytes.length - offset)
     } yield new ImmutableBytesWritable(bytes, offset, len))
 }
