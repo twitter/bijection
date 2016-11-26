@@ -109,7 +109,7 @@ val sharedSettings = Seq(
     "*"
   ),
   OsgiKeys.additionalHeaders := Map("-removeheaders" -> "Include-Resource,Private-Package")
-) ++ mimaDefaultSettings
+)
 
 val unreleasedModules = Set[String]()
 
