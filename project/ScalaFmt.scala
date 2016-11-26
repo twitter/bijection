@@ -10,17 +10,15 @@ object ScalaFmt extends AutoPlugin with ScalaFmtKeys {
 
   object autoImport extends ScalaFmtKeys
 
-  lazy val scalaFmtStub = {
-    project
-    .in(file("project/scalafmt"))
-    .settings(
+  lazy val scalafmtStub = {
+    Project(base = file("project/scalafmt"), id = "scalafmt-stub").settings(
       libraryDependencies += "com.geirsson" %% "scalafmt-cli" % "0.4.10",
       mainClass in Compile := Some("org.scalafmt.cli.Cli")
     )
   }
-  override def extraProjects = Seq(scalaFmtStub)
+  override def extraProjects = Seq(scalafmtStub)
   override def projectSettings = Seq(
-    scalaFmtTest := Def.taskDyn {
+    scalafmtTest := Def.taskDyn {
       val scalaSourceFiles = {
         (unmanagedSources in Compile).value ++ (unmanagedSources in Test).value
       }.filter(_.ext == "scala").flatMap { f =>
@@ -34,13 +32,13 @@ object ScalaFmt extends AutoPlugin with ScalaFmtKeys {
         "--files="++scalaSourceFiles
       ).mkString(" ")
       if (scalaSourceFiles.nonEmpty) {
-        (run in (scalaFmtStub, Compile)).toTask(args)
+        (run in (scalafmtStub, Compile)).toTask(args)
       } else Def.task { () }
     }.value
   )
 }
 
 trait ScalaFmtKeys {
-  val scalaFmtTest = taskKey[Unit]("Run scalafmt --test for the current project")
+  val scalafmtTest = taskKey[Unit]("Run scalafmt --test for the current project")
 }
 
