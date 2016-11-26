@@ -1,6 +1,7 @@
 import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 import com.typesafe.tools.mima.plugin.MimaKeys.{mimaBinaryIssueFilters, mimaPreviousArtifacts}
-import com.typesafe.sbt.osgi.SbtOsgi._
+import com.typesafe.sbt.osgi.SbtOsgi
+import com.typesafe.sbt.osgi.SbtOsgi.autoImport._
 import ReleaseTransformations._ // for sbt-release.
 import bijection._
 
@@ -146,7 +147,7 @@ lazy val bijection = Project(
     test := {},
     publish := {}, // skip publishing for this root project.
     publishLocal := {}
-  ).enablePlugins(DocGen)
+  ).enablePlugins(DocGen, SbtOsgi)
   .aggregate(
     bijectionCore,
     bijectionProtobuf,
@@ -173,7 +174,7 @@ def module(name: String) = {
       Keys.name := id,
       mimaPreviousArtifacts := youngestForwardCompatible(name),
       mimaBinaryIssueFilters ++= ignoredABIProblems)
-    )
+    ).enablePlugins(SbtOsgi)
 }
 
 /** No dependencies in bijection other than java + scala */
