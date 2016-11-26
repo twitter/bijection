@@ -1,5 +1,5 @@
 import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
-import com.typesafe.tools.mima.plugin.MimaKeys.{binaryIssueFilters, previousArtifact}
+import com.typesafe.tools.mima.plugin.MimaKeys.{mimaBinaryIssueFilters, mimaPreviousArtifacts}
 import com.typesafe.sbt.osgi.SbtOsgi._
 import ReleaseTransformations._ // for sbt-release.
 import bijection._
@@ -118,7 +118,7 @@ val unreleasedModules = Set[String]()
 def youngestForwardCompatible(subProj: String) =
   Some(subProj).filterNot(unreleasedModules.contains(_)).map { s =>
     "com.twitter" %% ("bijection-" + s) % "0.9.1"
-  }
+  }.toSet
 
 /**
   * Empty this each time we publish a new version (and bump the minor number)
@@ -168,10 +168,12 @@ lazy val bijection = Project(
 def module(name: String) = {
   val id = "bijection-%s".format(name)
   Project(id = id,
-          base = file(id),
-          settings = sharedSettings ++ Seq(Keys.name := id,
-                                           previousArtifact := youngestForwardCompatible(name),
-                                           binaryIssueFilters ++= ignoredABIProblems))
+    base = file(id),
+    settings = sharedSettings ++ Seq(
+      Keys.name := id,
+      mimaPreviousArtifacts := youngestForwardCompatible(name),
+      mimaBinaryIssueFilters ++= ignoredABIProblems)
+    )
 }
 
 /** No dependencies in bijection other than java + scala */
