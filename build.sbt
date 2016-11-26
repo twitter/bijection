@@ -36,18 +36,17 @@ val sharedSettings = osgiSettings ++ Seq(
     // note changing this parameter will change the binaries
     // obviously. When the name is too long, it is hashed with
     // md5.
-    scalacOptions <++= (scalaVersion) map { sv =>
-    if (sv startsWith "2.10")
-      Seq("-Xdivergence211")
-    else
-      Seq()
-  },
-    OsgiKeys.importPackage <<= scalaVersion { sv =>
-    Seq("""scala.*;version="$<range;[==,=+);%s>"""".format(sv))
-  },
+    scalacOptions ++= {
+      if (scalaVersion.value startsWith "2.10") Seq("-Xdivergence211")
+      else Seq.empty
+    },
+    OsgiKeys.importPackage := {
+      Seq("""scala.*;version="$<range;[==,=+);%s>"""".format(scalaVersion.value))
+    },
     OsgiKeys.importPackage ++= Seq(
       "com.twitter.bijection.*;version=\"[${Bundle-Version}, ${Bundle-Version}]\"",
-      "*"),
+      "*"
+    ),
     OsgiKeys.additionalHeaders := Map("-removeheaders" -> "Include-Resource,Private-Package"),
     // Publishing options:
     releaseCrossBuild := true,
@@ -56,8 +55,8 @@ val sharedSettings = osgiSettings ++ Seq(
     publishMavenStyle := true,
     publishArtifact in Test := false,
     pomIncludeRepository := { x =>
-    false
-  },
+      false
+    },
     releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
       inquireVersions,
@@ -70,15 +69,12 @@ val sharedSettings = osgiSettings ++ Seq(
       setNextVersion,
       commitNextVersion,
       ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
-      pushChanges),
-    publishTo <<= version { v =>
-    Some(
-      if (v.trim.endsWith("SNAPSHOT"))
-        Opts.resolver.sonatypeSnapshots
-      else
-        Opts.resolver.sonatypeStaging
-    )
-  },
+      pushChanges
+    ),
+    publishTo := Some {
+      if (version.value.trim.endsWith("SNAPSHOT")) Opts.resolver.sonatypeSnapshots
+      else Opts.resolver.sonatypeStaging
+    },
     pomExtra := (<url>https://github.com/twitter/bijection</url>
     <licenses>
       <license>
@@ -184,7 +180,9 @@ lazy val bijectionCore = module("core").settings(
     "com.novocode" % "junit-interface" % "0.10-M1" % "test",
     "org.scalatest" %% "scalatest" % "1.9.1" % "test"
   ),
-  sourceGenerators in Compile <+= (sourceManaged in Compile, streams) map { (main, out) =>
+  sourceGenerators in Compile += Def.task {
+    val main = (sourceManaged in Compile).value
+    val out = streams.value
     val pkg = main / "scala" / "com" / "twitter" / "bijection"
     def genSrc(name: String, gen: => String) = {
       val srcFile = pkg / name
@@ -192,9 +190,11 @@ lazy val bijectionCore = module("core").settings(
       out.log.debug("generated %s" format srcFile)
       srcFile
     }
-    Seq(genSrc("GeneratedTupleBijections.scala", Generator.generate),
-        genSrc("GeneratedTupleBuffer.scala", BufferableGenerator.generate))
-  }
+    Seq(
+      genSrc("GeneratedTupleBijections.scala", Generator.generate),
+      genSrc("GeneratedTupleBuffer.scala", BufferableGenerator.generate)
+    )
+  }.taskValue
 )
 
 lazy val bijectionProtobuf = module("protobuf")
@@ -324,13 +324,14 @@ lazy val bijectionJson4s = module("json4s")
 
 lazy val bijectionMacros = module("macros")
   .settings(
-    libraryDependencies <++= (scalaVersion) { scalaVersion =>
-      Seq(
-        "org.scala-lang" % "scala-library" % scalaVersion,
-        "org.scala-lang" % "scala-reflect" % scalaVersion,
-        "org.scalatest" %% "scalatest" % "2.2.2" % "test"
-      ) ++ (if (scalaVersion.startsWith("2.10")) Seq("org.scalamacros" %% "quasiquotes" % "2.1.0")
-            else Seq())
+    libraryDependencies ++= Seq(
+      "org.scala-lang" % "scala-library" % scalaVersion.value,
+      "org.scala-lang" % "scala-reflect" % scalaVersion.value,
+      "org.scalatest" %% "scalatest" % "2.2.2" % "test"
+    ),
+    libraryDependencies ++= {
+      if (scalaVersion.value.startsWith("2.10")) Seq("org.scalamacros" %% "quasiquotes" % "2.1.0")
+      else Seq.empty
     },
     addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
   )
