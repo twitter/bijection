@@ -5,11 +5,6 @@ import com.typesafe.sbt.osgi.SbtOsgi.autoImport._
 import ReleaseTransformations._ // for sbt-release.
 import bijection._
 
-def isScala210x(scalaVersion: String) = scalaVersion match {
-  case version if version startsWith "2.10" => true
-  case _ => false
-}
-
 val buildLevelSettings = Seq(
   organization := "com.twitter",
   scalaVersion := "2.11.8",
@@ -43,33 +38,6 @@ val buildLevelSettings = Seq(
     "org.scalatest" %% "scalatest" % "3.0.1" % "test"
   ),
   parallelExecution in Test := true,
-  // Publishing options:
-  releaseCrossBuild := true,
-  releasePublishArtifactsAction := (PgpKeys.publishSigned in ThisProject).value,
-  releaseVersionBump := sbtrelease.Version.Bump.Minor, // need to tweak based on mima results
-  publishMavenStyle := true,
-  publishArtifact in Test := false,
-  pomIncludeRepository := { x =>
-    false
-  },
-  releaseProcess := Seq[ReleaseStep](
-    checkSnapshotDependencies,
-    inquireVersions,
-    runClean,
-    runTest,
-    setReleaseVersion,
-    commitReleaseVersion,
-    tagRelease,
-    publishArtifacts,
-    setNextVersion,
-    commitNextVersion,
-    ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
-    pushChanges
-  ),
-  publishTo := Some {
-    if (version.value.trim.endsWith("SNAPSHOT")) Opts.resolver.sonatypeSnapshots
-    else Opts.resolver.sonatypeStaging
-  },
   homepage := Some(url("https://github.com/twitter/bijection")),
   licenses += "Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"),
   scmInfo := Some(
@@ -103,6 +71,33 @@ val buildLevelSettings = Seq(
 inThisBuild(buildLevelSettings)
 
 val sharedSettings = Seq(
+  // Publishing options:
+  publishTo := Some {
+    if (version.value.trim.endsWith("SNAPSHOT")) Opts.resolver.sonatypeSnapshots
+    else Opts.resolver.sonatypeStaging
+  },
+  releaseCrossBuild := true,
+  releasePublishArtifactsAction := (PgpKeys.publishSigned in ThisProject).value,
+  releaseVersionBump := sbtrelease.Version.Bump.Minor, // need to tweak based on mima results
+  publishMavenStyle := true,
+  publishArtifact in Test := false,
+  pomIncludeRepository := { x =>
+    false
+  },
+  releaseProcess := Seq[ReleaseStep](
+    checkSnapshotDependencies,
+    inquireVersions,
+    runClean,
+    runTest,
+    setReleaseVersion,
+    commitReleaseVersion,
+    tagRelease,
+    publishArtifacts,
+    setNextVersion,
+    commitNextVersion,
+    ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
+    pushChanges
+  ),
   OsgiKeys.importPackage ++= Seq(
     s"""scala.*;version="$$<range;[==,=+);${scalaVersion.value}>"""",
     "com.twitter.bijection.*;version=\"[${Bundle-Version}, ${Bundle-Version}]\"",
@@ -188,7 +183,7 @@ lazy val bijectionCore = {
   module("core").settings(
     osgiExportAll("com.twitter.bijection"),
     libraryDependencies ++= Seq(
-      "com.novocode" % "junit-interface" % "0.10-M1" % "test"
+      "com.novocode" % "junit-interface" % "0.11" % "test"
     ),
     sourceGenerators in Compile += Def.task {
       val main = (sourceManaged in Compile).value
