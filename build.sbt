@@ -18,8 +18,7 @@ val buildLevelSettings = Seq(
     "-language:implicitConversions",
     "-language:higherKinds",
     "-language:existentials",
-    "-Xmax-classfile-name",
-    "200"
+    "-Xmax-classfile-name", "200"
     // People using encrypted file-systems can have problems if the names get too long
     // note changing this parameter will change the binaries
     // obviously. When the name is too long, it is hashed with
