@@ -9,7 +9,10 @@ import com.typesafe.sbt.SbtSite.{site, SiteKeys}
 import com.typesafe.sbt.SbtGhPages.{ghpages, GhPagesKeys => ghkeys}
 import com.typesafe.sbt.SbtGit.GitKeys.gitRemoteRepo
 
-object DocGen {
+object DocGen extends AutoPlugin {
+
+  override def requires = Unidoc
+
   val docDirectory = "target/site"
   val aggregateName = "bijection"
 
@@ -28,7 +31,7 @@ object DocGen {
     ()
   }
 
-  lazy val unidocSettings: Seq[sbt.Setting[_]] =
+  def unidocSettings: Seq[sbt.Setting[_]] =
     site.includeScaladoc(docDirectory) ++ Seq(
       scalacOptions in doc <++= (version, baseDirectory in LocalProject(aggregateName)).map {
         (v, rootBase) =>
@@ -41,5 +44,6 @@ object DocGen {
       ghkeys.synchLocal <<= syncLocal
     )
 
-  lazy val publishSettings = site.settings ++ Unidoc.settings ++ ghpages.settings ++ unidocSettings
+  override def projectSettings = site.settings ++ ghpages.settings ++ unidocSettings
+
 }

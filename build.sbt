@@ -144,12 +144,12 @@ def osgiExportAll(packs: String*) =
 lazy val bijection = Project(
   id = "bijection",
   base = file("."),
-  settings = sharedSettings ++ DocGen.publishSettings
+  settings = sharedSettings
 ).settings(
     test := {},
     publish := {}, // skip publishing for this root project.
     publishLocal := {}
-  )
+  ).enablePlugins(DocGen)
   .aggregate(
     bijectionCore,
     bijectionProtobuf,
