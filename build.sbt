@@ -7,7 +7,6 @@ import bijection._
 
 val buildLevelSettings = Seq(
   organization := "com.twitter",
-  scalaVersion := "2.11.8",
   crossScalaVersions := Seq("2.10.6", "2.11.8"),
   scalaVersion := "2.11.8",
   javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
