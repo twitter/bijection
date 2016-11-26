@@ -5,62 +5,60 @@ import sbt.Keys._
 import sbt.Project.Initialize
 
 /** Borrowed from https://github.com/akka/akka/blob/master/project/Unidoc.scala */
-object Unidoc {
+object Unidoc extends AutoPlugin {
+
+  override def requires = plugins.JvmPlugin
+
   val unidocDirectory = SettingKey[File]("unidoc-directory")
-  val unidocExclude = SettingKey[Seq[String]]("unidoc-exclude")
-  val unidocAllSources = TaskKey[Seq[Seq[File]]]("unidoc-all-sources")
+  val unidocAllSources = TaskKey[Seq[File]]("unidoc-all-sources")
   val unidocSources = TaskKey[Seq[File]]("unidoc-sources")
   val unidocAllClasspaths = TaskKey[Seq[Classpath]]("unidoc-all-classpaths")
   val unidocClasspath = TaskKey[Seq[File]]("unidoc-classpath")
   val unidoc = TaskKey[File]("unidoc", "Create unified scaladoc for all aggregates")
 
-  lazy val settings = Seq(
-    unidocDirectory <<= crossTarget / "unidoc",
-    unidocExclude := Seq.empty,
-    unidocAllSources <<= (thisProjectRef, buildStructure, unidocExclude) flatMap allSources,
-    unidocSources <<= unidocAllSources map { _.flatten },
-    unidocAllClasspaths <<= (thisProjectRef, buildStructure, unidocExclude) flatMap allClasspaths,
-    unidocClasspath <<= unidocAllClasspaths map { _.flatten.map(_.data).distinct },
-    unidoc <<= unidocTask
+  override def projectSettings = Seq(
+    unidocDirectory := crossTarget.value / "unidoc",
+    unidocAllSources := Def.taskDyn {
+      val projectRef =  thisProjectRef.value
+      val structure = buildStructure.value
+      val projects = aggregated(projectRef, structure)
+      val compositeTask = projects.map { proj =>
+        (sources in (proj, Compile))
+      }.join
+      compositeTask
+    }.value.flatten,
+    unidocSources := unidocAllSources.value,
+    unidocAllClasspaths := Def.taskDyn {
+      val projectRef =  thisProjectRef.value
+      val structure = buildStructure.value
+      val projects = aggregated(projectRef, structure)
+      val compositeTask = projects.map { proj =>
+        (dependencyClasspath  in (proj, Compile))
+      }.join
+      compositeTask
+    }.value,
+    unidocClasspath := unidocAllClasspaths.value.flatten.map(_.data).distinct,
+    unidoc := {
+      val scaladoc = Doc.scaladoc("main", streams.value.cacheDirectory / "unidoc", compilers.value.scalac)
+      scaladoc(
+        unidocSources.value,
+        unidocClasspath.value,
+        unidocDirectory.value,
+        (scalacOptions in doc).value,
+        100,
+        streams.value.log
+      )
+      unidocDirectory.value
+    }
   )
 
-  def allSources(projectRef: ProjectRef,
-                 structure: Load.BuildStructure,
-                 exclude: Seq[String]): Task[Seq[Seq[File]]] = {
-    val projects = aggregated(projectRef, structure, exclude)
-    projects flatMap { sources in Compile in LocalProject(_) get structure.data } join
+  def aggregated(
+    projectRef: ProjectRef,
+    structure: BuildStructure
+  ): Seq[ProjectRef] = {
+    val maybeProject: Option[ResolvedProject] = Project.getProjectForReference(projectRef, structure)
+    val aggregatedRefs: Seq[ProjectRef] = maybeProject.toSeq.flatMap(_.aggregate)
+    aggregatedRefs flatMap { ref => ref +: aggregated(ref, structure) }
   }
 
-  def allClasspaths(projectRef: ProjectRef,
-                    structure: Load.BuildStructure,
-                    exclude: Seq[String]): Task[Seq[Classpath]] = {
-    val projects = aggregated(projectRef, structure, exclude)
-    projects flatMap { dependencyClasspath in Compile in LocalProject(_) get structure.data } join
-  }
-
-  def aggregated(projectRef: ProjectRef,
-                 structure: Load.BuildStructure,
-                 exclude: Seq[String]): Seq[String] = {
-    val aggregate = Project.getProject(projectRef, structure).toSeq.flatMap(_.aggregate)
-    aggregate flatMap { ref =>
-      if (exclude contains ref.project) Seq.empty
-      else ref.project +: aggregated(ref, structure, exclude)
-    }
-  }
-
-  def unidocTask: Initialize[Task[File]] = {
-    (compilers,
-     cacheDirectory,
-     unidocSources,
-     unidocClasspath,
-     unidocDirectory,
-     scalacOptions in doc,
-     streams) map { (compilers, cache, sources, classpath, target, options, s) =>
-      {
-        val scaladoc = new Scaladoc(100, compilers.scalac)
-        scaladoc.cached(cache / "unidoc", "main", sources, classpath, target, options, s.log)
-        target
-      }
-    }
-  }
 }

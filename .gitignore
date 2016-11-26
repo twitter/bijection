@@ -11,6 +11,9 @@ sonatype.sbt
 /target/
 /src/jline/target/
 
+#scalafmt
+/project/scalafmt/
+
 # target directories for ant build
 /build/
 /dists/

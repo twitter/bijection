@@ -9,12 +9,17 @@ import com.typesafe.sbt.SbtSite.{site, SiteKeys}
 import com.typesafe.sbt.SbtGhPages.{ghpages, GhPagesKeys => ghkeys}
 import com.typesafe.sbt.SbtGit.GitKeys.gitRemoteRepo
 
-object DocGen {
+object DocGen extends AutoPlugin {
+
+  override def requires = Unidoc
+
   val docDirectory = "target/site"
   val aggregateName = "bijection"
 
-  def syncLocal = (ghkeys.updatedRepository, GitKeys.gitRunner, streams) map { (repo, git, s) =>
-    cleanSite(repo, git, s) // First, remove 'stale' files.
+  def syncLocal = Def.task {
+    val repo = ghkeys.updatedRepository.value
+    val git = GitKeys.gitRunner.value
+    cleanSite(repo, git, streams.value) // First, remove 'stale' files.
     val rootPath = file(docDirectory) // Now copy files.
     IO.copyDirectory(rootPath, repo)
     IO.touch(repo / ".nojekyll")
@@ -28,18 +33,18 @@ object DocGen {
     ()
   }
 
-  lazy val unidocSettings: Seq[sbt.Setting[_]] =
+  def unidocSettings: Seq[sbt.Setting[_]] =
     site.includeScaladoc(docDirectory) ++ Seq(
-      scalacOptions in doc <++= (version, baseDirectory in LocalProject(aggregateName)).map {
-        (v, rootBase) =>
-          val tagOrBranch = if (v.endsWith("-SNAPSHOT")) "develop" else v
-          val docSourceUrl = "https://github.com/twitter/" + aggregateName + "/tree/" + tagOrBranch + "€{FILE_PATH}.scala"
-          Seq("-sourcepath", rootBase.getAbsolutePath, "-doc-source-url", docSourceUrl)
+      scalacOptions in doc ++= {
+        val tagOrBranch = if (version.value.endsWith("-SNAPSHOT")) "develop" else version.value
+        val docSourceUrl = "https://github.com/twitter/" + aggregateName + "/tree/" + tagOrBranch + "€{FILE_PATH}.scala"
+        Seq("-sourcepath", baseDirectory.value.getAbsolutePath, "-doc-source-url", docSourceUrl)
       },
       Unidoc.unidocDirectory := file(docDirectory),
       gitRemoteRepo := "git@github.com:twitter/" + aggregateName + ".git",
-      ghkeys.synchLocal <<= syncLocal
+      ghkeys.synchLocal := syncLocal.value
     )
 
-  lazy val publishSettings = site.settings ++ Unidoc.settings ++ ghpages.settings ++ unidocSettings
+  override def projectSettings = site.settings ++ ghpages.settings ++ unidocSettings
+
 }
