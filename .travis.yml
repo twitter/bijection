@@ -3,12 +3,12 @@ sudo: false
 matrix:
   include:
     - scala: 2.10.6
-      script: ./sbt "+++$TRAVIS_SCALA_VERSION clean"  "+++$TRAVIS_SCALA_VERSION test" "+++$TRAVIS_SCALA_VERSION mimaReportBinaryIssues"
+      script: ./sbt "+++$TRAVIS_SCALA_VERSION clean" "+++$TRAVIS_SCALA_VERSION scalafmtTest" "+++$TRAVIS_SCALA_VERSION test" "+++$TRAVIS_SCALA_VERSION mimaReportBinaryIssues"
 
     - scala: 2.11.8
-      script: ./sbt "+++$TRAVIS_SCALA_VERSION clean" "+++$TRAVIS_SCALA_VERSION test" "+++$TRAVIS_SCALA_VERSION coverageReport" "+++$TRAVIS_SCALA_VERSION mimaReportBinaryIssues"
+      script: ./sbt "+++$TRAVIS_SCALA_VERSION clean" "+++$TRAVIS_SCALA_VERSION scalafmtTest" "+++$TRAVIS_SCALA_VERSION test" "+++$TRAVIS_SCALA_VERSION coverageReport" "+++$TRAVIS_SCALA_VERSION mimaReportBinaryIssues"
 
     - scala: 2.12.0
-      script: ./sbt "+++$TRAVIS_SCALA_VERSION clean" "+++$TRAVIS_SCALA_VERSION test" "+++$TRAVIS_SCALA_VERSION coverageReport" "+++$TRAVIS_SCALA_VERSION mimaReportBinaryIssues"
+      script: ./sbt "+++$TRAVIS_SCALA_VERSION clean" "+++$TRAVIS_SCALA_VERSION scalafmtTest" "+++$TRAVIS_SCALA_VERSION test" "+++$TRAVIS_SCALA_VERSION coverageReport" "+++$TRAVIS_SCALA_VERSION mimaReportBinaryIssues"
       after_success:
         - bash <(curl -s https://codecov.io/bash)
