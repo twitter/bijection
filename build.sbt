@@ -11,6 +11,7 @@ val buildLevelSettings = Seq(
   scalaVersion := "2.11.8",
   javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
   javacOptions in doc := Seq("-source", "1.6"),
+  coverageEnabled := true,
   scalacOptions ++= Seq(
     "-unchecked",
     "-deprecation",
