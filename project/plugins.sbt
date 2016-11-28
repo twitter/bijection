@@ -3,6 +3,7 @@ resolvers ++= Seq(
 )
 
 addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.3")
+addSbtPlugin("com.eed3si9n" % "sbt-doge" % "0.1.5")
 addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.0.0")
 addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "0.1.11")
 addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.5.4")

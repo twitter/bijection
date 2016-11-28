@@ -7,7 +7,7 @@ import bijection._
 
 val buildLevelSettings = Seq(
   organization := "com.twitter",
-  crossScalaVersions := Seq("2.10.6", "2.11.8"),
+  crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0"),
   scalaVersion := "2.11.8",
   javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
   javacOptions in doc := Seq("-source", "1.6"),
@@ -141,7 +141,7 @@ lazy val bijection = {
     id = "bijection",
     base = file("."),
     settings = sharedSettings
-  ).enablePlugins(DocGen, SbtOsgi)
+  ).enablePlugins(DocGen, SbtOsgi, CrossPerProjectPlugin)
   .settings(
     test := {},
     publish := {}, // skip publishing for this root project.
@@ -244,6 +244,7 @@ lazy val bijectionGuava = {
 
 lazy val bijectionScrooge = {
   module("scrooge").settings(
+    crossScalaVersions := crossScalaVersions.value.filterNot(_.startsWith("2.12")),
     osgiExportAll("com.twitter.bijection.scrooge"),
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude ("junit", "junit"),
@@ -269,6 +270,7 @@ lazy val bijectionJson = {
 
 lazy val bijectionUtil = {
   module("util").settings(
+    crossScalaVersions := crossScalaVersions.value.filterNot(_.startsWith("2.12")),
     osgiExportAll("com.twitter.bijection.twitter_util"),
     libraryDependencies += "com.twitter" %% "util-core" % "6.24.0"
   ).dependsOn(
@@ -278,6 +280,7 @@ lazy val bijectionUtil = {
 
 lazy val bijectionFinagleMySql = {
   module("finagle-mysql").settings(
+    crossScalaVersions := crossScalaVersions.value.filterNot(_.startsWith("2.12")),
     osgiExportAll("com.twitter.bijection.finagle_mysql"),
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-mysql" % "6.25.0",
@@ -347,8 +350,8 @@ lazy val bijectionJson4s = {
     osgiExportAll("com.twitter.bijection.json4s"),
     libraryDependencies ++= Seq(
       "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-      "org.json4s" %% "json4s-native" % "3.2.10",
-      "org.json4s" %% "json4s-ext" % "3.2.10"
+      "org.json4s" %% "json4s-native" % "3.5.0",
+      "org.json4s" %% "json4s-ext" % "3.5.0"
     )
   ).dependsOn(
     bijectionCore % "test->test;compile->compile"
