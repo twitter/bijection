@@ -8,10 +8,10 @@ import bijection._
 val buildLevelSettings = Seq(
   organization := "com.twitter",
   crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0"),
-  scalaVersion := "2.11.8",
   javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
   javacOptions in doc := Seq("-source", "1.6"),
-  coverageEnabled := true,
+  scalaVersion := "2.11.8",
+  coverageEnabled := (if (scalaVersion.value startsWith "2.11") true else false),
   scalacOptions ++= Seq(
     "-unchecked",
     "-deprecation",
@@ -67,7 +67,6 @@ val buildLevelSettings = Seq(
     )
   )
 )
-inThisBuild(buildLevelSettings)
 
 val sharedSettings = Seq(
   // Publishing options:
@@ -141,7 +140,7 @@ lazy val bijection = {
   Project(
     id = "bijection",
     base = file("."),
-    settings = sharedSettings
+    settings = buildLevelSettings ++ sharedSettings 
   ).enablePlugins(DocGen, SbtOsgi, CrossPerProjectPlugin)
   .settings(
     test := {},
@@ -170,7 +169,7 @@ def module(name: String) = {
   val id = s"bijection-$name"
   Project(id = id, base = file(id))
     .enablePlugins(SbtOsgi)
-    .settings(sharedSettings)
+    .settings(buildLevelSettings ++ sharedSettings)
     .settings(
       mimaPreviousArtifacts := youngestForwardCompatible(name),
       mimaBinaryIssueFilters ++= ignoredABIProblems
