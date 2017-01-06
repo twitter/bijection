@@ -3,7 +3,7 @@ sudo: false
 matrix:
   include:
     - scala: 2.10.6
-      script: ./sbt ++$TRAVIS_SCALA_VERSION clean scalafmtTest test mimaReportBinaryIssues
+      script: ./sbt "+++$TRAVIS_SCALA_VERSION clean" "+++$TRAVIS_SCALA_VERSION test" "+++$TRAVIS_SCALA_VERSION mimaReportBinaryIssues"
 
     - scala: 2.11.8
       script: ./sbt ++$TRAVIS_SCALA_VERSION clean coverage scalafmtTest test coverageReport mimaReportBinaryIssues
@@ -12,7 +12,7 @@ matrix:
 
     - scala: 2.12.1
       jdk: oraclejdk8
-      script: ./sbt "+++$TRAVIS_SCALA_VERSION clean" "+++$TRAVIS_SCALA_VERSION test"
+      script: ./sbt ++$TRAVIS_SCALA_VERSION clean test
 
 cache:
   directories:

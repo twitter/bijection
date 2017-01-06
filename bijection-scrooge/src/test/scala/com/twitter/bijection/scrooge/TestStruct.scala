@@ -3,12 +3,9 @@
   */
 package com.twitter.bijection.scrooge
 
-import com.twitter.scrooge.{ThriftException, ThriftStruct, ThriftStructCodec3}
+import com.twitter.scrooge.{ThriftStruct, ThriftStructCodec3}
 import org.apache.thrift.protocol._
-import java.nio.ByteBuffer
-import com.twitter.finagle.SourcedException
-import scala.collection.mutable
-import scala.collection.{Map, Set}
+import scala.util.hashing.MurmurHash3
 
 object TestStruct extends ThriftStructCodec3[TestStruct] {
   val Struct = new TStruct("TestStruct")
@@ -135,11 +132,16 @@ trait TestStruct
 
   override def canEqual(other: Any): Boolean = other.isInstanceOf[TestStruct]
 
-  override def equals(other: Any): Boolean = runtime.ScalaRunTime._equals(this, other)
+  // from runtime.ScalaRunTime._equals as that has been yanked out in 2.12.0
+  override def equals(other: Any): Boolean = other match {
+    case y: Product if (productArity == y.productArity) =>
+      productIterator sameElements y.productIterator
+    case _ => false
+  }
 
-  override def hashCode: Int = runtime.ScalaRunTime._hashCode(this)
+  override def hashCode: Int = MurmurHash3.productHash(this)
 
-  override def toString: String = runtime.ScalaRunTime._toString(this)
+  override def toString: String = productIterator.mkString(productPrefix + "(", ",", ")")
 
   override def productArity: Int = 2
 

@@ -18,7 +18,7 @@ package com.twitter.bijection.finagle_mysql
 
 import com.twitter.bijection.{CheckProperties, BaseProperties, Bijection}
 import org.scalacheck.Arbitrary
-import com.twitter.finagle.exp.mysql._
+import com.twitter.finagle.mysql._
 import java.sql.Timestamp
 import java.util.Date
 
