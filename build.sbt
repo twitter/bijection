@@ -5,17 +5,36 @@ import com.typesafe.sbt.osgi.SbtOsgi.autoImport._
 import ReleaseTransformations._ // for sbt-release.
 import bijection._
 
-val finagleVersion = "6.25.0"
+val finagleVersion210 = "6.35.0"
+val finagleVersion = "6.41.0"
+
 val scalatestVersion = "3.0.1"
 val scalacheckVersion = "1.13.4"
-val utilVersion = "6.34.0"
-val utilVersion212 = "6.39.0"
+
+val utilVersion210 = "6.34.0"
+val utilVersion = "6.39.0"
+
+val scroogeSerializerVersion210 = "3.17.0"
+val scroogeSerializerVersion = "4.13.0"
 
 def util(mod: String, scalaVersion: String) = {
-  val version =
-    if (scalaVersion startsWith "2.12") utilVersion212
-    else utilVersion
+  val version = versionFallback(scalaVersion, utilVersion210, utilVersion)
   "com.twitter" %% (s"util-$mod") % version
+}
+
+def finagle(mod: String, scalaVersion: String) = {
+  val version = versionFallback(scalaVersion, finagleVersion210, finagleVersion)
+  "com.twitter" %% (s"finagle-$mod") % version
+}
+
+def scroogeSerializer(scalaVersion: String) = {
+  val version = versionFallback(scalaVersion, scroogeSerializerVersion210, scroogeSerializerVersion)
+  "com.twitter" %% "scrooge-serializer" % version
+}
+
+def versionFallback(scalaVersion: String, packageVersion210: String, version: String) = {
+  if (scalaVersion startsWith "2.10") packageVersion210
+  else version
 }
 
 val buildLevelSettings = Seq(
@@ -256,13 +275,12 @@ lazy val bijectionGuava = {
 
 lazy val bijectionScrooge = {
   module("scrooge").settings(
-    crossScalaVersions := crossScalaVersions.value.filterNot(_.startsWith("2.12")),
     osgiExportAll("com.twitter.bijection.scrooge"),
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude ("junit", "junit"),
-      "com.twitter" %% "scrooge-serializer" % "3.17.0",
+      scroogeSerializer(scalaVersion.value),
       util("core", scalaVersion.value),
-      "com.twitter" %% "finagle-core" % finagleVersion % "test"
+      finagle("core", scalaVersion.value) % "test"
     )
   ).dependsOn(
     bijectionCore % "test->test;compile->compile",
@@ -291,10 +309,10 @@ lazy val bijectionUtil = {
 
 lazy val bijectionFinagleMySql = {
   module("finagle-mysql").settings(
-    crossScalaVersions := crossScalaVersions.value.filterNot(_.startsWith("2.12")),
+    crossScalaVersions := crossScalaVersions.value.filterNot(_.startsWith("2.10")),
     osgiExportAll("com.twitter.bijection.finagle_mysql"),
     libraryDependencies ++= Seq(
-      "com.twitter" %% "finagle-mysql" % finagleVersion,
+      finagle("mysql", scalaVersion.value),
       util("core", scalaVersion.value)
     )
   ).dependsOn(
