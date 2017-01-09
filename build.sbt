@@ -5,13 +5,44 @@ import com.typesafe.sbt.osgi.SbtOsgi.autoImport._
 import ReleaseTransformations._ // for sbt-release.
 import bijection._
 
+val finagleVersion210 = "6.35.0"
+val finagleVersion = "6.41.0"
+
+val scalatestVersion = "3.0.1"
+val scalacheckVersion = "1.13.4"
+
+val utilVersion210 = "6.34.0"
+val utilVersion = "6.39.0"
+
+val scroogeSerializerVersion210 = "3.17.0"
+val scroogeSerializerVersion = "4.13.0"
+
+def util(mod: String, scalaVersion: String) = {
+  val version = versionFallback(scalaVersion, utilVersion210, utilVersion)
+  "com.twitter" %% (s"util-$mod") % version
+}
+
+def finagle(mod: String, scalaVersion: String) = {
+  val version = versionFallback(scalaVersion, finagleVersion210, finagleVersion)
+  "com.twitter" %% (s"finagle-$mod") % version
+}
+
+def scroogeSerializer(scalaVersion: String) = {
+  val version = versionFallback(scalaVersion, scroogeSerializerVersion210, scroogeSerializerVersion)
+  "com.twitter" %% "scrooge-serializer" % version
+}
+
+def versionFallback(scalaVersion: String, packageVersion210: String, version: String) = {
+  if (scalaVersion startsWith "2.10") packageVersion210
+  else version
+}
+
 val buildLevelSettings = Seq(
   organization := "com.twitter",
-  crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0"),
+  crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.1"),
   javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
   javacOptions in doc := Seq("-source", "1.6"),
   scalaVersion := "2.11.8",
-  coverageEnabled := (if (scalaVersion.value startsWith "2.11") true else false),
   scalacOptions ++= Seq(
     "-unchecked",
     "-deprecation",
@@ -33,8 +64,8 @@ val buildLevelSettings = Seq(
     "releases" at "https://oss.sonatype.org/content/repositories/releases"
   ),
   libraryDependencies ++= Seq(
-    "org.scalacheck" %% "scalacheck" % "1.13.4" % "test",
-    "org.scalatest" %% "scalatest" % "3.0.1" % "test"
+    "org.scalacheck" %% "scalacheck" % scalacheckVersion % "test",
+    "org.scalatest" %% "scalatest" % scalatestVersion % "test"
   ),
   parallelExecution in Test := true,
   homepage := Some(url("https://github.com/twitter/bijection")),
@@ -140,8 +171,8 @@ lazy val bijection = {
   Project(
     id = "bijection",
     base = file("."),
-    settings = buildLevelSettings ++ sharedSettings 
-  ).enablePlugins(DocGen, SbtOsgi, CrossPerProjectPlugin)
+    settings = buildLevelSettings ++ sharedSettings
+  ).enablePlugins(SbtOsgi, CrossPerProjectPlugin)
   .settings(
     test := {},
     publish := {}, // skip publishing for this root project.
@@ -244,13 +275,12 @@ lazy val bijectionGuava = {
 
 lazy val bijectionScrooge = {
   module("scrooge").settings(
-    crossScalaVersions := crossScalaVersions.value.filterNot(_.startsWith("2.12")),
     osgiExportAll("com.twitter.bijection.scrooge"),
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude ("junit", "junit"),
-      "com.twitter" %% "scrooge-serializer" % "3.17.0",
-      "com.twitter" %% "util-core" % "6.24.0",
-      "com.twitter" %% "finagle-core" % "6.25.0" % "test"
+      scroogeSerializer(scalaVersion.value),
+      util("core", scalaVersion.value),
+      finagle("core", scalaVersion.value) % "test"
     )
   ).dependsOn(
     bijectionCore % "test->test;compile->compile",
@@ -270,9 +300,8 @@ lazy val bijectionJson = {
 
 lazy val bijectionUtil = {
   module("util").settings(
-    crossScalaVersions := crossScalaVersions.value.filterNot(_.startsWith("2.12")),
     osgiExportAll("com.twitter.bijection.twitter_util"),
-    libraryDependencies += "com.twitter" %% "util-core" % "6.24.0"
+    libraryDependencies += util("core", scalaVersion.value)
   ).dependsOn(
     bijectionCore % "test->test;compile->compile"
   )
@@ -280,11 +309,11 @@ lazy val bijectionUtil = {
 
 lazy val bijectionFinagleMySql = {
   module("finagle-mysql").settings(
-    crossScalaVersions := crossScalaVersions.value.filterNot(_.startsWith("2.12")),
+    crossScalaVersions := crossScalaVersions.value.filterNot(_.startsWith("2.10")),
     osgiExportAll("com.twitter.bijection.finagle_mysql"),
     libraryDependencies ++= Seq(
-      "com.twitter" %% "finagle-mysql" % "6.25.0",
-      "com.twitter" %% "util-core" % "6.24.0"
+      finagle("mysql", scalaVersion.value),
+      util("core", scalaVersion.value)
     )
   ).dependsOn(
     bijectionCore % "test->test;compile->compile"

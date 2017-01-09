@@ -1,4 +1,8 @@
-## Bijection [![Build Status](https://secure.travis-ci.org/twitter/bijection.png)](http://travis-ci.org/twitter/bijection) [![Codecov](https://img.shields.io/codecov/c/github/twitter/bijection.svg?maxAge=2592000)](https://codecov.io/github/twitter/bijection)
+## Bijection
+
+[![Build Status](https://secure.travis-ci.org/twitter/bijection.png)](http://travis-ci.org/twitter/bijection) [![Codecov](https://img.shields.io/codecov/c/github/twitter/bijection.svg?maxAge=2592000)](https://codecov.io/github/twitter/bijection)
+[![Latest version](https://index.scala-lang.org/twitter/bijection/bijection-core/latest.svg?color=orange)](https://index.scala-lang.org/twitter/bijection/bijection-core)
+[![Chat](https://badges.gitter.im/twitter/bijection.svg)](https://gitter.im/twitter/bijection?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 A Bijection is an invertible function that converts back and forth between two types, with
 the contract that a round-trip through the Bijection will bring back the original object. Moreover,
@@ -131,7 +135,7 @@ The latest ScalaDocs are hosted on Bijection's [Github Project Page](http://twit
 ## Get Involved + Code of Conduct
 Pull requests and bug reports are always welcome!
 
-Discussion occurs primarily on the [Bijection mailing list](https://groups.google.com/forum/#!forum/bijection). 
+Discussion occurs primarily on the [Bijection mailing list](https://groups.google.com/forum/#!forum/bijection).
 Issues should be reported on the [GitHub issue tracker](https://github.com/twitter/bijection/issues).
 
 We use a lightweight form of project governence inspired by the one used by Apache projects.
@@ -144,7 +148,7 @@ A list of contributors to the project can be found here: [Contributors](https://
 
 ## Maven
 
-Bijection modules are available on maven central. The current groupid and version for all modules is, respectively, `"com.twitter"` and  `0.9.4`.
+Bijection modules are available on maven central. The current groupid and version for all modules is, respectively, `"com.twitter"` and  `0.9.5`.
 
 Current published artifacts are
 
@@ -160,9 +164,9 @@ Current published artifacts are
 * `bijection-avro`
 * `bijection-hbase`
 
-Every artifact is published against Scala `"2.10"` and `"2.11"`. We currently publish a subset of bijection's modules against Scala `"2.12"`.  Bijection modules - bijection-util and bijection-scrooge depend on other projects to publish 2.12 artifacts and currently aren't being published. To pull in the jars, make sure to add your desired scala version as a suffix, ie:
+Every artifact is published against Scala `"2.10"`,  `"2.11"` and `"2.12"`. To pull in the jars, make sure to add your desired scala version as a suffix, ie:
 
-`bijection-core_2.10` or `bijection-core_2.11` or `bijection-core_2.12`. 
+`bijection-core_2.10` or `bijection-core_2.11` or `bijection-core_2.12`.
 
 ## Chat
 [![Gitter](https://badges.gitter.im/twitter/bijection.svg)](https://gitter.im/twitter/bijection?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
