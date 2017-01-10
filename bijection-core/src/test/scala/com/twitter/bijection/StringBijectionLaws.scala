@@ -35,6 +35,15 @@ object StringArbs extends BaseProperties {
   implicit val strFloat = arbitraryViaBijection[Float, String @@ Rep[Float]]
   implicit val strDouble = arbitraryViaBijection[Double, String @@ Rep[Double]]
 }
+/**
+ * We had an issue with giant strings. Make sure they work
+ */
+class StringRegressions extends FunSuite {
+  test("Strings larger that 2^24, the largest integer range floats can store work") {
+    val bigString = Array.fill(70824427)(42.toByte)
+    assert(Injection.utf8.invert(bigString).isSuccess)
+  }
+}
 
 /**
   * We had an issue with giant strings. Make sure they work
