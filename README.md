@@ -4,6 +4,8 @@
 [![Latest version](https://index.scala-lang.org/twitter/bijection/bijection-core/latest.svg?color=orange)](https://index.scala-lang.org/twitter/bijection/bijection-core)
 [![Chat](https://badges.gitter.im/twitter/bijection.svg)](https://gitter.im/twitter/bijection?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+[![Join the chat at https://gitter.im/twitter/bijection](https://badges.gitter.im/twitter/bijection.svg)](https://gitter.im/twitter/bijection?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 A Bijection is an invertible function that converts back and forth between two types, with
 the contract that a round-trip through the Bijection will bring back the original object. Moreover,
 the inverse has the same property.
