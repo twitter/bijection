@@ -123,6 +123,18 @@ object Bijection extends CollectionBijections with Serializable {
                              bij4: ImplicitBijection[D, E]): Bijection[A, E] =
     connect[A, B, C, D] andThen (bij4.bijection)
 
+  def bridge[A, B, C](implicit bij: ImplicitBijection[A, C], bij2: ImplicitBijection[B, C]): Bijection[A, B] = new AbstractBijection[A, B] {
+    override def apply(a: A): B = bij2.invert(bij(a))
+
+    override def invert(b: B): A = bij.invert(bij2(b))
+  }
+
+  def join[A, B, C](implicit bij: ImplicitBijection[A, B], bij2: ImplicitBijection[A, C]): Bijection[B, C] = new AbstractBijection[B, C] {
+    override def apply(b: B): C = bij2(bij.invert(b))
+
+    override def invert(c: C): B = bij(bij2.invert(c))
+  }
+
   implicit def identity[A]: Bijection[A, A] = new IdentityBijection[A]
 
   /**
