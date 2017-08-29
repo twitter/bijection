@@ -129,12 +129,13 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
   }
 
   // This automatically doubles the ByteBuffer if we get a buffer-overflow
+  @tailrec
   def reallocatingPut(bb: ByteBuffer)(putfn: (ByteBuffer) => ByteBuffer): ByteBuffer = {
     val init = bb.duplicate
     try {
       putfn(init)
     } catch {
-      case ex: BufferOverflowException => reallocatingPut(reallocate(bb))(putfn)
+      case _: BufferOverflowException => reallocatingPut(reallocate(bb))(putfn)
     }
   }
 
