@@ -6,7 +6,7 @@ import ReleaseTransformations._ // for sbt-release.
 import bijection._
 
 val finagleVersion210 = "6.35.0"
-val finagleVersion = "6.41.0"
+val finagleVersion = "7.0.0"
 
 val scalatestVersion = "3.0.1"
 val scalacheckVersion = "1.13.4"
@@ -15,7 +15,7 @@ val utilVersion210 = "6.34.0"
 val utilVersion = "7.0.0"
 
 val scroogeSerializerVersion210 = "3.17.0"
-val scroogeSerializerVersion = "4.13.0"
+val scroogeSerializerVersion = "4.19.0"
 
 def util(mod: String, scalaVersion: String) = {
   val version = versionFallback(scalaVersion, utilVersion210, utilVersion)
