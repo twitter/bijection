@@ -12,7 +12,7 @@ val scalatestVersion = "3.0.1"
 val scalacheckVersion = "1.13.4"
 
 val utilVersion210 = "6.34.0"
-val utilVersion = "6.39.0"
+val utilVersion = "7.0.0"
 
 val scroogeSerializerVersion210 = "3.17.0"
 val scroogeSerializerVersion = "4.13.0"
