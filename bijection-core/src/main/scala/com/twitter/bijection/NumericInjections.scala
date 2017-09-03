@@ -25,9 +25,7 @@ import java.lang.{
   Byte => JByte
 }
 import java.nio.ByteBuffer
-import java.util.UUID
 import scala.util.Success
-import Bijection.build
 import Inversion.{attempt, attemptWhen}
 
 trait NumericInjections extends GeneratedTupleInjections {

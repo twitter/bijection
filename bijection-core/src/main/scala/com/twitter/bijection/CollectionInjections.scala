@@ -16,19 +16,6 @@ limitations under the License.
 
 package com.twitter.bijection
 
-import java.lang.{Iterable => JIterable}
-import java.util.{
-  Collection => JCollection,
-  Dictionary => JDictionary,
-  Enumeration => JEnumeration,
-  Iterator => JIterator,
-  List => JList,
-  Map => JMap,
-  Set => JSet
-}
-import java.util.concurrent.{ConcurrentMap => JConcurrentMap}
-import scala.collection.JavaConverters._
-import scala.collection.mutable
 import scala.collection.generic.CanBuildFrom
 import scala.util.{Success, Try}
 

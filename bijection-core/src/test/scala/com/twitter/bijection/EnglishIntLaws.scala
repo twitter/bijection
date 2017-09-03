@@ -17,9 +17,7 @@ limitations under the License.
 package com.twitter.bijection
 
 import org.scalacheck.{Prop, Gen}
-import org.scalacheck.Prop.forAll
-import org.scalatest.{PropSpec, MustMatchers}
-import org.scalatest.prop.PropertyChecks
+import org.scalatest.MustMatchers
 
 import Conversion.asMethod // get the .as syntax
 

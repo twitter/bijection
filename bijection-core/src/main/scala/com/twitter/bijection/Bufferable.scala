@@ -18,10 +18,9 @@ package com.twitter.bijection
 
 import java.io.Serializable
 import java.nio.{ByteBuffer, BufferOverflowException}
-import java.nio.channels.Channel
 import scala.annotation.implicitNotFound
 import scala.annotation.tailrec
-import scala.collection.mutable.{Builder, Map => MMap, Set => MSet, Buffer => MBuffer}
+import scala.collection.mutable.{Map => MMap, Set => MSet, Buffer => MBuffer}
 import scala.collection.generic.CanBuildFrom
 import scala.util.{Failure, Success, Try}
 import com.twitter.bijection.Inversion.attempt
