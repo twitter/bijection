@@ -15,7 +15,7 @@ limitations under the License.
  */
 package com.twitter.bijection
 
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Try}
 import scala.util.control.NonFatal
 
 /**

@@ -23,11 +23,8 @@ import java.io.{
   ObjectInputStream,
   Serializable
 }
-import java.util.Arrays
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.forAll
-import org.scalatest.prop.PropertyChecks
-import org.scalatest.{PropSpec, MustMatchers}
 import scala.math.Equiv
 import scala.reflect.ClassTag
 import scala.util.Success

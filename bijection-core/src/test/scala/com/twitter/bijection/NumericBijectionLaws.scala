@@ -29,7 +29,6 @@ import java.math.BigInteger
 import java.util.UUID
 
 import org.scalacheck.Gen
-import org.scalacheck.Prop.forAll
 
 import org.scalatest.{PropSpec, MustMatchers}
 import org.scalatest.prop.PropertyChecks

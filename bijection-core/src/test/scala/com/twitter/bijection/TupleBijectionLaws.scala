@@ -16,18 +16,6 @@ limitations under the License.
 
 package com.twitter.bijection
 
-import java.lang.{
-  Short => JShort,
-  Integer => JInt,
-  Long => JLong,
-  Float => JFloat,
-  Double => JDouble,
-  Byte => JByte
-}
-
-import org.scalatest.{PropSpec, MustMatchers}
-import org.scalatest.prop.PropertyChecks
-
 class TupleBijectionLaws extends CheckProperties with BaseProperties {
   import StringArbs._
 

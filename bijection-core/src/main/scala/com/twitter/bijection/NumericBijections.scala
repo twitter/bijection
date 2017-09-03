@@ -26,10 +26,7 @@ import java.lang.{
 }
 
 import java.math.BigInteger
-import java.nio.ByteBuffer
 import java.util.UUID
-
-import Bijection.{build, fromInjection}
 
 trait NumericBijections extends GeneratedTupleBijections {
 
