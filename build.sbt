@@ -6,30 +6,30 @@ import ReleaseTransformations._ // for sbt-release.
 import bijection._
 
 val finagleVersion210 = "6.35.0"
-val finagleVersion = "7.0.0"
+val finagleVersion = "6.41.0"
 
 val scalatestVersion = "3.0.1"
 val scalacheckVersion = "1.13.4"
 
 val utilVersion210 = "6.34.0"
-val utilVersion = "7.0.0"
+val utilVersion = "6.39.0"
 
 val scroogeSerializerVersion210 = "3.17.0"
-val scroogeSerializerVersion = "4.19.0"
+val scroogeSerializerVersion = "4.13.0"
 
 def util(mod: String, scalaVersion: String) = {
   val version = versionFallback(scalaVersion, utilVersion210, utilVersion)
-  "com.twitter" %% (s"util-$mod") % version
+  "com.twitter" %% (s"util-$mod") % version % "provided"
 }
 
 def finagle(mod: String, scalaVersion: String) = {
   val version = versionFallback(scalaVersion, finagleVersion210, finagleVersion)
-  "com.twitter" %% (s"finagle-$mod") % version
+  "com.twitter" %% (s"finagle-$mod") % version % "provided"
 }
 
 def scroogeSerializer(scalaVersion: String) = {
   val version = versionFallback(scalaVersion, scroogeSerializerVersion210, scroogeSerializerVersion)
-  "com.twitter" %% "scrooge-serializer" % version
+  "com.twitter" %% "scrooge-serializer" % version % "provided"
 }
 
 def versionFallback(scalaVersion: String, packageVersion210: String, version: String) = {
@@ -280,7 +280,7 @@ lazy val bijectionScrooge = {
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude ("junit", "junit"),
       scroogeSerializer(scalaVersion.value),
       util("core", scalaVersion.value),
-      finagle("core", scalaVersion.value) % "test"
+      finagle("core", scalaVersion.value)
     )
   ).dependsOn(
     bijectionCore % "test->test;compile->compile",
