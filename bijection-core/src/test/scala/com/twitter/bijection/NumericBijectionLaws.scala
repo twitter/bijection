@@ -28,14 +28,17 @@ import java.lang.{
 import java.math.BigInteger
 import java.util.UUID
 
-import org.scalacheck.Gen
+import org.scalacheck.{ Gen, Prop }
 
-import org.scalatest.{PropSpec, MustMatchers}
-import org.scalatest.prop.PropertyChecks
+import org.scalatest.{PropSpec, Tag => stTag}
+import org.scalatest.prop.{ Checkers, PropertyChecks }
+import Checkers.check
+import PropertyChecks.forAll
 
 import Conversion.asMethod // get the .as syntax
 
-object JavaNumArbs extends BaseProperties {
+object JavaNumArbs {
+  import BaseProperties._
 
   implicit val byteA = arbitraryViaFn { v: Byte =>
     JByte.valueOf(v)
@@ -60,102 +63,99 @@ object JavaNumArbs extends BaseProperties {
   }
 }
 
-class NumericBijectionLaws
-    extends PropSpec
-    with PropertyChecks
-    with MustMatchers
-    with BaseProperties {
+class NumericBijectionLaws extends PropSpec {
   import StringArbs._
   import JavaNumArbs._
+  import BaseProperties._
 
   property("round trips byte -> jbyte") {
-    isBijection[Byte, JByte]
+    check(isBijection[Byte, JByte])
   }
 
   property("round trips short -> jshort") {
-    isBijection[Short, JShort]
+    check(isBijection[Short, JShort])
   }
 
   property("round trips int -> jint") {
-    isBijection[Int, JInt]
+    check(isBijection[Int, JInt])
   }
 
   property("round trips long -> jlong") {
-    isBijection[Long, JLong]
+    check(isBijection[Long, JLong])
   }
 
   property("round trips float -> jfloat") {
-    isBijection[Float, JFloat]
+    check(isBijection[Float, JFloat])
   }
 
   property("round trips double -> jdouble") {
-    isBijection[Double, JDouble]
+    check(isBijection[Double, JDouble])
   }
 
   property("round trips BigInt <-> java.math.BigInteger") {
-    isBijection[BigInt, BigInteger]
+    check(isBijection[BigInt, BigInteger])
   }
 
   property("round trips byte -> string") {
-    isBijection[Byte, String @@ Rep[Byte]]
+    check(isBijection[Byte, String @@ Rep[Byte]])
   }
 
   property("round trips short -> string") {
-    isBijection[Short, String @@ Rep[Short]]
+    check(isBijection[Short, String @@ Rep[Short]])
   }
 
   property("round trips int -> string") {
-    isBijection[Int, String @@ Rep[Int]]
+    check(isBijection[Int, String @@ Rep[Int]])
   }
 
   property("round trips long -> string") {
-    isBijection[Long, String @@ Rep[Long]]
+    check(isBijection[Long, String @@ Rep[Long]])
   }
 
   property("round trips float -> string") {
-    isBijection[Float, String @@ Rep[Float]]
+    check(isBijection[Float, String @@ Rep[Float]])
   }
 
   property("round trips double -> string") {
-    isBijection[Double, String @@ Rep[Double]]
+    check(isBijection[Double, String @@ Rep[Double]])
   }
 
   // Embedding in larger numbers:
   property("round trips Short <-> (Byte,Byte)") {
-    isBijection[Short, (Byte, Byte)]
+    check(isBijection[Short, (Byte, Byte)])
   }
 
   property("round trips Int <-> (Short,Short)") {
-    isBijection[Int, (Short, Short)]
+    check(isBijection[Int, (Short, Short)])
   }
 
   property("round trips Long <-> (Int,Int)") {
-    isBijection[Long, (Int, Int)]
+    check(isBijection[Long, (Int, Int)])
   }
 
   // Upcasting:
   property("byte -> short") {
-    isInjection[Byte, Short]
+    check(isInjection[Byte, Short])
   }
 
   property("short -> int") {
-    isInjection[Short, Int]
+    check(isInjection[Short, Int])
   }
 
   property("int -> long") {
-    isInjection[Int, Long]
+    check(isInjection[Int, Long])
   }
 
   property("long -> BigInt") {
-    isInjection[Long, BigInt]
+    check(isInjection[Long, BigInt])
   }
 
   property("int -> double") {
-    isLooseInjection[Int, Double]
+    check(isLooseInjection[Int, Double])
   }
 
   property("float -> double") {
-    isLooseInjection[Float, Double]
+    check(isLooseInjection[Float, Double])
   }
 
   // ModDiv
