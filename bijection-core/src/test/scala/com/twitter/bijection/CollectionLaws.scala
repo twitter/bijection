@@ -83,6 +83,18 @@ class CollectionLaws extends CheckProperties with BaseProperties {
     isBijection[Vector[Int], IndexedSeq[Int]]
   }
 
+  property("Seq[Long] <=> IndexedSeq[Long]") {
+    isBijection[Seq[Long], IndexedSeq[Long]]
+  }
+
+  property("Seq[Long] <=> List[Long]") {
+    isBijection[Seq[Long], List[Long]]
+  }
+
+  property("IndexedSeq[Long] <=> IndexedSeq[(Int, Int)]") {
+    isBijection[IndexedSeq[Long], IndexedSeq[(Int, Int)]]
+  }
+
   property("List[Int] <=> IndexedSeq[String @@ Rep[Int]]") {
     isBijection[List[Int], IndexedSeq[String @@ Rep[Int]]]
   }
