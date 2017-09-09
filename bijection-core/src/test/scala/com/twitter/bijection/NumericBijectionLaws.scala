@@ -162,36 +162,36 @@ class NumericBijectionLaws extends PropSpec {
   property("Int -> (Int,Int) by ModDiv") {
     forAll(Gen.choose(1, Int.MaxValue)) { mod =>
       implicit val modDiv: Injection[Int, (Int, Int)] = new IntModDivInjection(mod)
-      isInjection[Int, (Int, Int)]
+      check(isInjection[Int, (Int, Int)])
     }
   }
 
   property("Long -> (Long,Long) by ModDiv") {
     forAll(Gen.choose(1L, Long.MaxValue)) { mod =>
       implicit val modDiv: Injection[Long, (Long, Long)] = new LongModDivInjection(mod)
-      isInjection[Long, (Long, Long)]
+      check(isInjection[Long, (Long, Long)])
     }
   }
 
   // TODO need Rep[Int], etc... on the Array[Byte]
   property("round trips short -> Array[Byte]") {
-    isLooseInjection[Short, Array[Byte]]
+    check(isLooseInjection[Short, Array[Byte]])
   }
 
   property("round trips int -> Array[Byte]") {
-    isLooseInjection[Int, Array[Byte]]
+    check(isLooseInjection[Int, Array[Byte]])
   }
 
   property("round trips long -> Array[Byte]") {
-    isLooseInjection[Long, Array[Byte]]
+    check(isLooseInjection[Long, Array[Byte]])
   }
 
   property("round trips float -> Array[Byte]") {
-    isLooseInjection[Float, Array[Byte]]
+    check(isLooseInjection[Float, Array[Byte]])
   }
 
   property("round trips double -> Array[Byte]") {
-    isLooseInjection[Double, Array[Byte]]
+    check(isLooseInjection[Double, Array[Byte]])
   }
 
   // Some other types through numbers:
@@ -202,11 +202,11 @@ class NumericBijectionLaws extends PropSpec {
     new java.util.Date(dtime)
   }
   property("round trips (Long,Long) -> UUID") {
-    isBijection[(Long, Long), UUID]
+    check(isBijection[(Long, Long), UUID])
   }
 
   property("round trips Long -> Date") {
-    isBijection[Long, java.util.Date]
+    check(isBijection[Long, java.util.Date])
   }
 
   property("as works") {
