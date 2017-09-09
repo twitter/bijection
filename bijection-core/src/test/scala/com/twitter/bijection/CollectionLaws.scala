@@ -102,4 +102,16 @@ class CollectionLaws extends CheckProperties with BaseProperties {
   property("round trip Set[Int] -> List[String]") {
     isInjection[Set[Int], List[String]]
   }
+
+  property("round trip Set[Int] -> Vector[String]") {
+    isInjection[Set[Int], Vector[String]]
+  }
+
+  property("round trip List[Int] -> List[String]") {
+    isInjection[List[Int], List[String]]
+  }
+
+  property("round trip Set[Int] -> Set[String]") {
+    isInjection[Set[Int], Set[String]]
+  }
 }
