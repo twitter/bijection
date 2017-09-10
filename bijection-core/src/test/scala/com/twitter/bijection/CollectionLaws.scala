@@ -83,6 +83,18 @@ class CollectionLaws extends CheckProperties with BaseProperties {
     isBijection[Vector[Int], IndexedSeq[Int]]
   }
 
+  property("Seq[Long] <=> IndexedSeq[Long]") {
+    isBijection[Seq[Long], IndexedSeq[Long]]
+  }
+
+  property("Seq[Long] <=> List[Long]") {
+    isBijection[Seq[Long], List[Long]]
+  }
+
+  property("IndexedSeq[Long] <=> IndexedSeq[(Int, Int)]") {
+    isBijection[IndexedSeq[Long], IndexedSeq[(Int, Int)]]
+  }
+
   property("List[Int] <=> IndexedSeq[String @@ Rep[Int]]") {
     isBijection[List[Int], IndexedSeq[String @@ Rep[Int]]]
   }
@@ -101,5 +113,17 @@ class CollectionLaws extends CheckProperties with BaseProperties {
 
   property("round trip Set[Int] -> List[String]") {
     isInjection[Set[Int], List[String]]
+  }
+
+  property("round trip Set[Int] -> Vector[String]") {
+    isInjection[Set[Int], Vector[String]]
+  }
+
+  property("round trip List[Int] -> List[String]") {
+    isInjection[List[Int], List[String]]
+  }
+
+  property("round trip Set[Int] -> Set[String]") {
+    isInjection[Set[Int], Set[String]]
   }
 }

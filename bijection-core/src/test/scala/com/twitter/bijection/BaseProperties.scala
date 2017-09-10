@@ -138,3 +138,5 @@ trait BaseProperties {
   def arbitraryViaInjection[A, B](implicit inj: Injection[A, B], arb: Arbitrary[A]): Arbitrary[B] =
     Arbitrary { arb.arbitrary.map { inj(_) } }
 }
+
+object BaseProperties extends BaseProperties

@@ -26,7 +26,8 @@ import org.scalatest.FunSuite
 
 import scala.util.Try
 
-object StringArbs extends BaseProperties {
+object StringArbs {
+  import BaseProperties._
 
   implicit val strByte = arbitraryViaBijection[Byte, String @@ Rep[Byte]]
   implicit val strShort = arbitraryViaBijection[Short, String @@ Rep[Short]]
