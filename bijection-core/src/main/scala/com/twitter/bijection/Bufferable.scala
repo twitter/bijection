@@ -18,10 +18,9 @@ package com.twitter.bijection
 
 import java.io.Serializable
 import java.nio.{ByteBuffer, BufferOverflowException}
-import java.nio.channels.Channel
 import scala.annotation.implicitNotFound
 import scala.annotation.tailrec
-import scala.collection.mutable.{Builder, Map => MMap, Set => MSet, Buffer => MBuffer}
+import scala.collection.mutable.{Map => MMap, Set => MSet, Buffer => MBuffer}
 import scala.collection.generic.CanBuildFrom
 import scala.util.{Failure, Success, Try}
 import com.twitter.bijection.Inversion.attempt
@@ -129,12 +128,13 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
   }
 
   // This automatically doubles the ByteBuffer if we get a buffer-overflow
+  @tailrec
   def reallocatingPut(bb: ByteBuffer)(putfn: (ByteBuffer) => ByteBuffer): ByteBuffer = {
     val init = bb.duplicate
     try {
       putfn(init)
     } catch {
-      case ex: BufferOverflowException => reallocatingPut(reallocate(bb))(putfn)
+      case _: BufferOverflowException => reallocatingPut(reallocate(bb))(putfn)
     }
   }
 

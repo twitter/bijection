@@ -16,9 +16,6 @@ limitations under the License.
 
 package com.twitter.bijection
 
-import java.net.URL
-import java.util.UUID
-
 import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
 

@@ -26,14 +26,12 @@ import java.util.{
   Map => JMap,
   Set => JSet
 }
-import java.util.concurrent.{ConcurrentMap => JConcurrentMap}
 import scala.collection.JavaConverters._
 import scala.collection.mutable
 import collection.generic.CanBuildFrom
 import scala.reflect.ClassTag
 
 trait CollectionBijections extends BinaryBijections {
-  import Conversion.asMethod
 
   /**
     * Bijections between collection types defined in scala.collection.JavaConverters.

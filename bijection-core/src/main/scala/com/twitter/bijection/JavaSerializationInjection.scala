@@ -18,8 +18,6 @@ package com.twitter.bijection
 
 import java.io._
 import scala.util.{Failure, Try}
-import scala.util.control.Exception.allCatch
-import com.twitter.bijection.Inversion.attempt
 import scala.reflect.ClassTag
 
 object JavaSerializationInjection extends Serializable {

@@ -21,8 +21,6 @@ import java.net.{URLDecoder, URLEncoder, URL}
 import java.nio.charset.{Charset, CharsetDecoder, CoderResult, CodingErrorAction}
 import java.nio.{ByteBuffer, CharBuffer}
 import java.util.UUID
-import scala.annotation.tailrec
-import scala.collection.generic.CanBuildFrom
 import scala.util.Try
 
 trait StringInjections extends NumericInjections {
