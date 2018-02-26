@@ -502,7 +502,7 @@ public class Base64 extends BaseNCodec {
      *
      * @param octet
      *            The value to test
-     * @return {@code true} if the value is defined in the the base 64 alphabet, {@code false} otherwise.
+     * @return {@code true} if the value is defined in the base 64 alphabet, {@code false} otherwise.
      * @since 1.4
      */
     public static boolean isBase64(final byte octet) {
@@ -767,7 +767,7 @@ public class Base64 extends BaseNCodec {
      *
      * @param octet
      *            The value to test
-     * @return {@code true} if the value is defined in the the Base64 alphabet {@code false} otherwise.
+     * @return {@code true} if the value is defined in the Base64 alphabet {@code false} otherwise.
      */
     @Override
     protected boolean isInAlphabet(final byte octet) {

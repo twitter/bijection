@@ -148,7 +148,7 @@ trait UtilBijections {
 
   /**
     * Bijection on Try.
-    * If the the bijection throws, the result will be a throw
+    * If the bijection throws, the result will be a throw
     */
   implicit def tryBijection[A, B](
       implicit bij: ImplicitBijection[A, B]): Bijection[TwitterTry[A], TwitterTry[B]] =
@@ -159,7 +159,7 @@ trait UtilBijections {
 
   /**
     * Bijection on scala Try.
-    * If the the bijection throws, the result will be a throw
+    * If the bijection throws, the result will be a throw
     */
   implicit def tryScalaBijection[A, B](
       implicit bij: ImplicitBijection[A, B]): Bijection[ScalaTry[A], ScalaTry[B]] =
