@@ -16,7 +16,8 @@ limitations under the License.
 
 package com.twitter.bijection.twitter_util
 
-import java.util.concurrent.{Future => JavaFuture}
+import java.util.concurrent.{Future => JavaFuture, CompletableFuture => JavaCompletableFuture}
+import java.util.function.{Supplier => JSupplier}
 
 import com.twitter.bijection._
 import com.twitter.io.Buf
@@ -175,6 +176,22 @@ trait UtilBijections {
     new AbstractBijection[FuturePool, ExecutionContext] {
       override def apply(pool: FuturePool) = new TwitterExecutionContext(pool)
       override def invert(context: ExecutionContext) = new ScalaFuturePool(context)
+    }
+
+  /**
+    * Bijection from Java Future to CompletableFuture
+    */
+  implicit def futureToCompletableFuture[A]: Bijection[JavaFuture[A], JavaCompletableFuture[A]] =
+    new AbstractBijection[JavaFuture[A], JavaCompletableFuture[A]] {
+      override def apply(javaFuture: JavaFuture[A]): JavaCompletableFuture[A] = javaFuture match {
+        case javaCompletableFuture: JavaCompletableFuture[A] => javaCompletableFuture
+        case _ => JavaCompletableFuture.supplyAsync(new JSupplier[A] {
+          override def get(): A = javaFuture.get()
+        })
+      }
+
+      override def invert(javaCompletableFuture: JavaCompletableFuture[A]): JavaFuture[A] =
+        javaCompletableFuture
     }
 
   object Owned {

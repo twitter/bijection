@@ -26,7 +26,8 @@ import com.twitter.util.{
   JavaTimer
 }
 import java.lang.{Integer => JInt, Long => JLong}
-import java.util.concurrent.{Future => JavaFuture, Callable, FutureTask}
+import java.util.concurrent.{Future => JavaFuture, Callable, FutureTask, CompletableFuture => JavaCompletableFuture}
+import java.util.function.{Supplier => JSupplier}
 import org.scalacheck.Arbitrary
 import org.scalatest.BeforeAndAfterAll
 
@@ -57,6 +58,13 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties with BeforeA
       override def call(): T = t
     })
     f.run()
+    f
+  }
+  implicit def javaCompletableFutureArb[T: Arbitrary] = arbitraryViaFn[T, JavaCompletableFuture[T]] { t =>
+    val f = JavaCompletableFuture.supplyAsync(new JSupplier[T] {
+      override def get(): T = t
+    })
+    f.get()
     f
   }
   implicit def tryArb[T: Arbitrary] = arbitraryViaFn[T, TwitterTry[T]] { TwitterTry(_) }
@@ -129,6 +137,10 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties with BeforeA
                                                          javaFutureArb[ToMap],
                                                          futureEq,
                                                          javaFutureEq)
+  }
+
+  property("round trips JavaFuture[String] <-> JavaCompletableFuture[String]") {
+    isBijection[JavaFuture[ToMap], JavaCompletableFuture[ToMap]]
   }
 
   property("round trips shared com.twitter.io.Buf <-> Array[Byte]") {
