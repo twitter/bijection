@@ -159,6 +159,9 @@ val ignoredABIProblems = {
     ),
     exclude[ReversedMissingMethodProblem](
       "com.twitter.bijection.twitter_util.UtilBijections.twitter2JavaFutureInjection"
+    ),
+    exclude[ReversedMissingMethodProblem](
+       "com.twitter.bijection.twitter_util.UtilBijections.futureToCompletableFuture"
     )
   )
 }
