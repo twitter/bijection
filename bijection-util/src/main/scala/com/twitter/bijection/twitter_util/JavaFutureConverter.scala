@@ -20,6 +20,8 @@ import java.util.concurrent.{Future => JFuture}
 
 import com.twitter.util._
 
+import scala.util.control.NonFatal
+
 /**
   * Base class for converting java futures to twitter futures
   */
