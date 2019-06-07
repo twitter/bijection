@@ -1,5 +1,5 @@
 resolvers ++= Seq(
-  "jgit-repo" at "http://download.eclipse.org/jgit/maven"
+  "jgit-repo" at "https://download.eclipse.org/jgit/maven"
 )
 
 addSbtPlugin("com.github.gseitz" % "sbt-release"     % "1.0.6")
