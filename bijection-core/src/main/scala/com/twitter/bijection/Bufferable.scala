@@ -39,9 +39,9 @@ trait Bufferable[T] extends Serializable {
   /** Retrieve the value of get or throw an exception if the operation fails */
   def unsafeGet(from: ByteBuffer): (ByteBuffer, T) =
     get(from) match {
-      case Success(tup @ _) => tup
+      case Success(tup @ _)                => tup
       case Failure(InversionFailure(_, t)) => throw t
-      case Failure(t) => throw t
+      case Failure(t)                      => throw t
     }
 }
 
@@ -81,8 +81,7 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     result
   }
   // With Bijections:
-  def viaBijection[A, B](implicit buf: Bufferable[B],
-                         bij: ImplicitBijection[A, B]): Bufferable[A] =
+  def viaBijection[A, B](implicit buf: Bufferable[B], bij: ImplicitBijection[A, B]): Bufferable[A] =
     Bufferable.build[A] { (bb, a) =>
       buf.put(bb, bij(a))
     } { bb =>
@@ -142,19 +141,23 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     * remember: putfn and getfn must call duplicate and not change the input ByteBuffer
     * We are duplicating the ByteBuffer state, not the backing array (which IS mutated)
     */
-  def build[T](putfn: (ByteBuffer, T) => ByteBuffer)(
-      getfn: (ByteBuffer) => Try[(ByteBuffer, T)]): Bufferable[T] = new AbstractBufferable[T] {
-    override def put(into: ByteBuffer, t: T) = putfn(into, t)
-    override def get(from: ByteBuffer) = getfn(from)
-  }
-  def buildCatchDuplicate[T](putfn: (ByteBuffer, T) => ByteBuffer)(
-      getfn: (ByteBuffer) => T): Bufferable[T] = new AbstractBufferable[T] {
-    override def put(into: ByteBuffer, t: T) = putfn(into, t)
-    override def get(from: ByteBuffer) = attempt(from) { from =>
-      val dup = from.duplicate
-      (dup, getfn(dup))
+  def build[T](
+      putfn: (ByteBuffer, T) => ByteBuffer
+  )(getfn: (ByteBuffer) => Try[(ByteBuffer, T)]): Bufferable[T] =
+    new AbstractBufferable[T] {
+      override def put(into: ByteBuffer, t: T) = putfn(into, t)
+      override def get(from: ByteBuffer) = getfn(from)
     }
-  }
+  def buildCatchDuplicate[T](
+      putfn: (ByteBuffer, T) => ByteBuffer
+  )(getfn: (ByteBuffer) => T): Bufferable[T] =
+    new AbstractBufferable[T] {
+      override def put(into: ByteBuffer, t: T) = putfn(into, t)
+      override def get(from: ByteBuffer) = attempt(from) { from =>
+        val dup = from.duplicate
+        (dup, getfn(dup))
+      }
+    }
 
   // Primitives:
   implicit val booleanBufferable: Bufferable[Boolean] =
@@ -225,8 +228,10 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
       }
     }
 
-  implicit def either[L, R](implicit bufl: Bufferable[L],
-                            bufr: Bufferable[R]): Bufferable[Either[L, R]] =
+  implicit def either[L, R](
+      implicit bufl: Bufferable[L],
+      bufr: Bufferable[R]
+  ): Bufferable[Either[L, R]] =
     build[Either[L, R]] { (bb, eith) =>
       eith match {
         case Left(l) => {
@@ -253,15 +258,17 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     }
 
   def putCollection[T](bb: ByteBuffer, l: Traversable[T])(
-      implicit buf: Bufferable[T]): ByteBuffer = {
+      implicit buf: Bufferable[T]
+  ): ByteBuffer = {
     val size = l.size
     val nextBb = reallocatingPut(bb) { _.putInt(size) }
     l.foldLeft(nextBb) { (oldbb, t) =>
       reallocatingPut(oldbb) { buf.put(_, t) }
     }
   }
-  def getCollection[T, C](initbb: ByteBuffer)(implicit cbf: CanBuildFrom[Nothing, T, C],
-                                              buf: Bufferable[T]): Try[(ByteBuffer, C)] = Try {
+  def getCollection[T, C](
+      initbb: ByteBuffer
+  )(implicit cbf: CanBuildFrom[Nothing, T, C], buf: Bufferable[T]): Try[(ByteBuffer, C)] = Try {
 
     var bb: ByteBuffer = initbb.duplicate
     val size = bb.getInt
@@ -278,8 +285,10 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
     (bb, builder.result)
   }
 
-  def collection[C <: Traversable[T], T](implicit buf: Bufferable[T],
-                                         cbf: CanBuildFrom[Nothing, T, C]): Bufferable[C] =
+  def collection[C <: Traversable[T], T](
+      implicit buf: Bufferable[T],
+      cbf: CanBuildFrom[Nothing, T, C]
+  ): Bufferable[C] =
     build[C] { (bb, l) =>
       putCollection(bb, l)
     } { bb =>
@@ -299,8 +308,10 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
   implicit def mset[T](implicit buf: Bufferable[T]) = collection[MSet[T], T]
 
   // TODO we could add IntBuffer/FloatBuffer etc.. to have faster implementations Array[Int]
-  implicit def array[T](implicit buf: Bufferable[T],
-                        cbf: CanBuildFrom[Nothing, T, Array[T]]): Bufferable[Array[T]] =
+  implicit def array[T](
+      implicit buf: Bufferable[T],
+      cbf: CanBuildFrom[Nothing, T, Array[T]]
+  ): Bufferable[Array[T]] =
     build[Array[T]] { (bb, l) =>
       putCollection(bb, l.toTraversable)
     } { bb =>

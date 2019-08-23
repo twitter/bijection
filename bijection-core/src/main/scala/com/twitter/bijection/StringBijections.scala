@@ -48,8 +48,10 @@ object StringJoinBijection {
     new AbstractBijection[Iterable[String], Option[String]] {
       override def apply(xs: Iterable[String]) = {
         // TODO: Instead of throwing, escape the separator in the encoded string.
-        assert(!xs.exists(_.contains(separator)),
-               "Can't encode strings that include the separator.")
+        assert(
+          !xs.exists(_.contains(separator)),
+          "Can't encode strings that include the separator."
+        )
         if (xs.isEmpty)
           None
         else
@@ -70,9 +72,12 @@ object StringJoinBijection {
     * collection:
     * TODO add a Tag appoach to Say that N has no zero-length representations
     */
-  def nonEmptyValues[N, B <: TraversableOnce[N]](separator: String = DEFAULT_SEP)(
+  def nonEmptyValues[N, B <: TraversableOnce[N]](
+      separator: String = DEFAULT_SEP
+  )(
       implicit bij: ImplicitBijection[N, String],
-      ab: CanBuildFrom[Nothing, N, B]): Bijection[B, String] =
+      ab: CanBuildFrom[Nothing, N, B]
+  ): Bijection[B, String] =
     Bijection
       .toContainer[N, String, B, Iterable[String]]
       .andThen(apply(separator))
@@ -92,8 +97,11 @@ object StringJoinBijection {
     *
     * viaContainer[Int,Set[Int]] andThen Bijection.getOrElse(0.as[String]): Bijection[Set[Int],String]
     */
-  def viaContainer[A, B <: TraversableOnce[A]](separator: String = DEFAULT_SEP)(
+  def viaContainer[A, B <: TraversableOnce[A]](
+      separator: String = DEFAULT_SEP
+  )(
       implicit bij: Bijection[A, String],
-      ab: CanBuildFrom[Nothing, A, B]): Bijection[B, Option[String]] =
+      ab: CanBuildFrom[Nothing, A, B]
+  ): Bijection[B, Option[String]] =
     Bijection.toContainer[A, String, B, Iterable[String]] andThen apply(separator)
 }

@@ -27,7 +27,7 @@ object ThriftCodec {
     * For scala instantiation. Uses reflection.
     */
   def apply[T <: TBase[_, _]: ClassTag, P <: TProtocolFactory: ClassTag]
-    : Injection[T, Array[Byte]] = {
+      : Injection[T, Array[Byte]] = {
     val klass = classTag[T].runtimeClass.asInstanceOf[Class[T]]
     val factory = classTag[P].runtimeClass.asInstanceOf[Class[P]].newInstance
     apply(klass, factory)
@@ -36,8 +36,10 @@ object ThriftCodec {
   /**
     * For java instantiation. No reflection, supplied classes only.
     */
-  def apply[T <: TBase[_, _], P <: TProtocolFactory](klass: Class[T],
-                                                     factory: P): Injection[T, Array[Byte]] =
+  def apply[T <: TBase[_, _], P <: TProtocolFactory](
+      klass: Class[T],
+      factory: P
+  ): Injection[T, Array[Byte]] =
     new ThriftCodec[T, P](klass, factory)
 
   implicit def toBinary[T <: TBase[_, _]: ClassTag]: Injection[T, Array[Byte]] =
@@ -102,8 +104,10 @@ object JsonThriftCodec {
     fromClass(classTag[T].runtimeClass.asInstanceOf[Class[T]])
   def fromClass[T <: TBase[_, _]](klass: Class[T]): Injection[T, String] =
     // This is not really unsafe because we know JsonThriftCodec gives utf8 bytes as output
-    (new JsonThriftCodec[T](klass)).andThen(
-      Injection.unsafeToBijection(StringCodec.utf8).inverse: Bijection[Array[Byte], String])
+    (new JsonThriftCodec[T](klass))
+      .andThen(
+        Injection.unsafeToBijection(StringCodec.utf8).inverse: Bijection[Array[Byte], String]
+      )
 }
 
 class JsonThriftCodec[T <: TBase[_, _]](klass: Class[T])

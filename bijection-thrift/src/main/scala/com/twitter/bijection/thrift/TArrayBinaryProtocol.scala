@@ -124,14 +124,14 @@ case class TArrayBinaryProtocol(transport: TArrayByteTransport) extends TProtoco
   def readI64: Long = {
     val off = transport.bufferPos
     advance(8)
-    ((transport.buf(off) & 0xffL) << 56) |
-      ((transport.buf(off + 1) & 0xffL) << 48) |
-      ((transport.buf(off + 2) & 0xffL) << 40) |
-      ((transport.buf(off + 3) & 0xffL) << 32) |
-      ((transport.buf(off + 4) & 0xffL) << 24) |
-      ((transport.buf(off + 5) & 0xffL) << 16) |
-      ((transport.buf(off + 6) & 0xffL) << 8) |
-      ((transport.buf(off + 7) & 0xffL))
+    ((transport.buf(off) & 0XFFL) << 56) |
+      ((transport.buf(off + 1) & 0XFFL) << 48) |
+      ((transport.buf(off + 2) & 0XFFL) << 40) |
+      ((transport.buf(off + 3) & 0XFFL) << 32) |
+      ((transport.buf(off + 4) & 0XFFL) << 24) |
+      ((transport.buf(off + 5) & 0XFFL) << 16) |
+      ((transport.buf(off + 6) & 0XFFL) << 8) |
+      ((transport.buf(off + 7) & 0XFFL))
   }
 
   def readDouble: Double =

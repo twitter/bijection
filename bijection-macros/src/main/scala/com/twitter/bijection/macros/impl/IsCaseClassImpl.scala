@@ -16,7 +16,8 @@ object IsCaseClassImpl {
         c.abort(c.enclosingPosition, "Case class with type parameters currently not supported")
       } else {
         c.Expr[IsCaseClass[T]](
-          q"""_root_.com.twitter.bijection.macros.impl.MacroGeneratedIsCaseClass[$T]()""")
+          q"""_root_.com.twitter.bijection.macros.impl.MacroGeneratedIsCaseClass[$T]()"""
+        )
       }
     } else {
       c.abort(c.enclosingPosition, "Type parameter is not a case class")

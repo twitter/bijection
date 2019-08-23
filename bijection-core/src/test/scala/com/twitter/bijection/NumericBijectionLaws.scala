@@ -28,10 +28,10 @@ import java.lang.{
 import java.math.BigInteger
 import java.util.UUID
 
-import org.scalacheck.{ Gen, Prop }
+import org.scalacheck.{Gen, Prop}
 
 import org.scalatest.{PropSpec, Tag => stTag}
-import org.scalatest.prop.{ Checkers, PropertyChecks }
+import org.scalatest.prop.{Checkers, PropertyChecks}
 import Checkers.check
 import PropertyChecks.forAll
 
@@ -213,7 +213,8 @@ class NumericBijectionLaws extends PropSpec {
     forAll { (i: Int) =>
       assert(
         (i.as[String @@ Rep[Int]] == i.toString) && (Tag[String, Rep[Int]](i.toString)
-          .as[Int] == i))
+          .as[Int] == i)
+      )
     }
   }
 }

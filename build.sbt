@@ -132,7 +132,7 @@ val sharedSettings = Seq(
     "com.twitter.bijection.*;version=\"[${Bundle-Version}, ${Bundle-Version}]\"",
     "*"
   ),
-  OsgiKeys.additionalHeaders := Map("-removeheaders" -> "Include-Resource,Private-Package")
+  OsgiKeys.additionalHeaders := Map("-removeheaders" -> "Include-Resource,Private-Package"),
 )
 
 val unreleasedModules = Set[String]()
@@ -140,7 +140,7 @@ val unreleasedModules = Set[String]()
 // This returns the youngest jar we released that is compatible with the current
 def youngestForwardCompatible(subProj: String) = {
   Some(subProj).filterNot(unreleasedModules.contains(_)).map { s =>
-    "com.twitter" %% ("bijection-" + s) % "0.9.1"
+    "com.twitter" %% ("bijection-" + s) % "0.9.6"
   }.toSet
 }
 
@@ -179,6 +179,7 @@ lazy val bijection = {
     sharedSettings
   )
   .settings(
+    mimaFailOnNoPrevious := false,
     test := {},
     publish := {}, // skip publishing for this root project.
     publishLocal := {}

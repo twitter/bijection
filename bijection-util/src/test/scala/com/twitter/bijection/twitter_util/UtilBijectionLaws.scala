@@ -110,25 +110,29 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties with BeforeA
 
   property(
     "round trips TwitterFuture[Map[JInt, JLong]] <-> JavaFuture[Map[JInt, JLong]] " +
-      "using FuturePool") {
+      "using FuturePool"
+  ) {
     implicit val converter = new FuturePoolJavaFutureConverter(FuturePool.unboundedPool, true)
     isBijection[TwitterFuture[ToMap], JavaFuture[ToMap]]
   }
 
   property(
     "round trips TwitterFuture[Map[JInt, JLong]] <-> JavaFuture[Map[JInt, JLong]] " +
-      "using Timer") {
+      "using Timer"
+  ) {
     implicit val converter =
       new TimerJavaFutureConverter(new JavaTimer, com.twitter.util.Duration.fromSeconds(1), true)
     isBijection[TwitterFuture[ToMap], JavaFuture[ToMap]]
   }
 
   property("TwitterFuture[Map[JInt, JLong]] -> JavaFuture[Map[JInt, JLong]]") {
-    isInjection[TwitterFuture[ToMap], JavaFuture[ToMap]](futureArb[ToMap],
-                                                         twitter2JavaFutureInjection,
-                                                         javaFutureArb[ToMap],
-                                                         futureEq,
-                                                         javaFutureEq)
+    isInjection[TwitterFuture[ToMap], JavaFuture[ToMap]](
+      futureArb[ToMap],
+      twitter2JavaFutureInjection,
+      javaFutureArb[ToMap],
+      futureEq,
+      javaFutureEq
+    )
   }
 
   property("round trips shared com.twitter.io.Buf <-> Array[Byte]") {

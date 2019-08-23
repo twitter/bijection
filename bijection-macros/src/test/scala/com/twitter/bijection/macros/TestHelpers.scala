@@ -27,11 +27,13 @@ object MacroCaseClasses extends java.io.Serializable {
 
   case class SampleClassA(x: Int, y: String)
   case class SampleClassB(a1: SampleClassA, a2: SampleClassA, y: String)
-  case class SampleClassC(a: SampleClassA,
-                          b: SampleClassB,
-                          c: SampleClassA,
-                          d: SampleClassB,
-                          e: SampleClassB)
+  case class SampleClassC(
+      a: SampleClassA,
+      b: SampleClassB,
+      c: SampleClassA,
+      d: SampleClassB,
+      e: SampleClassB
+  )
   class SampleClassD // Non-case class
 }
 
@@ -58,7 +60,7 @@ class Externalizer[T] extends Externalizable {
   // No vals or var's below this line!
 
   def getOption: Option[T] = item match {
-    case Left(e) => e.getOption
+    case Left(e)  => e.getOption
     case Right(i) => i
   }
 
@@ -84,7 +86,7 @@ class Externalizer[T] extends Externalizable {
   def javaWorks: Boolean =
     doesJavaWork.get match {
       case Some(v) => v
-      case None => probeJavaWorks
+      case None    => probeJavaWorks
     }
 
   /**

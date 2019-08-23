@@ -29,7 +29,7 @@ class MacroUnitTests extends WordSpec with Matchers with MacroTestHelper {
       "give a Failure with expection" in {
         Macros.fastTry(sys.error("oh no")) match {
           case Failure(e) => e.getMessage.contains("oh no") should be(true)
-          case _ => alwaysFail()
+          case _          => alwaysFail()
         }
         Macros.fastTry {
           val l = List(1, 2, 3)
@@ -51,11 +51,11 @@ class MacroUnitTests extends WordSpec with Matchers with MacroTestHelper {
       "give a InversionFailure on error" in {
         Macros.fastAttempt("12m")("12m".toInt) match {
           case Failure(InversionFailure(d, e)) => d should be("12m")
-          case _ => alwaysFail()
+          case _                               => alwaysFail()
         }
         Macros.fastAttempt("12m")(sys.error("This is lazy")) match {
           case Failure(InversionFailure(d, e)) => d should be("12m")
-          case _ => alwaysFail()
+          case _                               => alwaysFail()
         }
       }
       "give Success when correct" in {

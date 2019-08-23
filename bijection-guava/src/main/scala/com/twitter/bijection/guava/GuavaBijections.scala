@@ -27,7 +27,8 @@ import Conversion.asMethod
   */
 object GuavaBijections {
   implicit def optional2Option[T, U](
-      implicit bij: ImplicitBijection[T, U]): Bijection[Optional[T], Option[U]] =
+      implicit bij: ImplicitBijection[T, U]
+  ): Bijection[Optional[T], Option[U]] =
     Bijection.build[Optional[T], Option[U]] { opt =>
       if (opt.isPresent) Some(bij(opt.get)) else None
     } { opt =>
@@ -39,7 +40,8 @@ object GuavaBijections {
     */
   implicit def fn2GuavaFn[A, B, C, D](
       implicit bij1: ImplicitBijection[A, B],
-      bij2: ImplicitBijection[C, D]): Bijection[A => C, GFn[B, D]] =
+      bij2: ImplicitBijection[C, D]
+  ): Bijection[A => C, GFn[B, D]] =
     new AbstractBijection[A => C, GFn[B, D]] {
       def apply(fn: A => C) =
         new GFn[B, D] {
@@ -54,7 +56,8 @@ object GuavaBijections {
     * Converts a scala Function0 into a Guava Supplier.
     */
   implicit def fn2Supplier[T, U](
-      implicit bij: ImplicitBijection[T, U]): Bijection[() => T, Supplier[U]] =
+      implicit bij: ImplicitBijection[T, U]
+  ): Bijection[() => T, Supplier[U]] =
     new AbstractBijection[() => T, Supplier[U]] {
       override def apply(fn: () => T) = new Supplier[U] {
         override def get: U = fn.apply.as[U]
@@ -68,7 +71,8 @@ object GuavaBijections {
     * Converts a scala Function1[T, Boolean] into a Guava Predicate.
     */
   implicit def fn2Predicate[T, U](
-      implicit bij: ImplicitBijection[T, U]): Bijection[T => Boolean, Predicate[U]] =
+      implicit bij: ImplicitBijection[T, U]
+  ): Bijection[T => Boolean, Predicate[U]] =
     new AbstractBijection[T => Boolean, Predicate[U]] {
       override def apply(fn: T => Boolean) = new Predicate[U] {
         override def apply(u: U): Boolean = fn(u.as[T])

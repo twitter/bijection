@@ -91,18 +91,22 @@ trait BaseProperties {
       }
     }
 
-  def isInjection[A, B](implicit a: Arbitrary[A],
-                        inj: Injection[A, B],
-                        barb: Arbitrary[B],
-                        eqa: Equiv[A],
-                        eqb: Equiv[B]) =
+  def isInjection[A, B](
+      implicit a: Arbitrary[A],
+      inj: Injection[A, B],
+      barb: Arbitrary[B],
+      eqa: Equiv[A],
+      eqb: Equiv[B]
+  ) =
     isLooseInjection[A, B] && invertIsStrict[A, B]
 
-  def isSerializableInjection[A, B](implicit arba: Arbitrary[A],
-                                    inj: Injection[A, B],
-                                    barb: Arbitrary[B],
-                                    eqa: Equiv[A],
-                                    eqb: Equiv[B]) =
+  def isSerializableInjection[A, B](
+      implicit arba: Arbitrary[A],
+      inj: Injection[A, B],
+      barb: Arbitrary[B],
+      eqa: Equiv[A],
+      eqb: Equiv[B]
+  ) =
     isInjection[A, B] && (isInjection(arba, jrt(inj), barb, eqa, eqb).label("Serializable check"))
 
   def isInjective[A, B](implicit a: Arbitrary[A], bij: ImplicitBijection[A, B], eqa: Equiv[A]) =
@@ -110,25 +114,31 @@ trait BaseProperties {
       eqa.equiv(a, rt(a)(bij.bijection))
     }
 
-  def invertIsInjection[A, B](implicit b: Arbitrary[B],
-                              bij: ImplicitBijection[A, B],
-                              eqb: Equiv[B]) =
+  def invertIsInjection[A, B](
+      implicit b: Arbitrary[B],
+      bij: ImplicitBijection[A, B],
+      eqb: Equiv[B]
+  ) =
     forAll { b: B =>
       eqb.equiv(b, rtInjective(b)(bij.bijection.inverse))
     }
 
-  def isBijection[A, B](implicit arba: Arbitrary[A],
-                        arbb: Arbitrary[B],
-                        bij: ImplicitBijection[A, B],
-                        eqa: Equiv[A],
-                        eqb: Equiv[B]) =
+  def isBijection[A, B](
+      implicit arba: Arbitrary[A],
+      arbb: Arbitrary[B],
+      bij: ImplicitBijection[A, B],
+      eqa: Equiv[A],
+      eqb: Equiv[B]
+  ) =
     isInjective[A, B] && invertIsInjection[A, B]
 
-  def isSerializableBijection[A, B](implicit arba: Arbitrary[A],
-                                    arbb: Arbitrary[B],
-                                    bij: ImplicitBijection[A, B],
-                                    eqa: Equiv[A],
-                                    eqb: Equiv[B]) =
+  def isSerializableBijection[A, B](
+      implicit arba: Arbitrary[A],
+      arbb: Arbitrary[B],
+      bij: ImplicitBijection[A, B],
+      eqa: Equiv[A],
+      eqb: Equiv[B]
+  ) =
     isBijection[A, B] && (isBijection(arba, arbb, jrt(bij), eqa, eqb).label("Serializable check"))
 
   def arbitraryViaBijection[A, B](implicit bij: Bijection[A, B], arb: Arbitrary[A]): Arbitrary[B] =

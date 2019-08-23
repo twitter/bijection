@@ -70,8 +70,10 @@ object FakeAlgebird {
         override def plus(left: String, right: String) = left + right
       }
 
-    implicit def tup2Semigroup[A, B](implicit s1: Semigroup[A],
-                                     s2: Semigroup[B]): Semigroup[(A, B)] =
+    implicit def tup2Semigroup[A, B](
+        implicit s1: Semigroup[A],
+        s2: Semigroup[B]
+    ): Semigroup[(A, B)] =
       new Semigroup[(A, B)] {
         override def plus(l: (A, B), r: (A, B)) = (s1.plus(l._1, r._1), s2.plus(l._2, r._2))
       }
