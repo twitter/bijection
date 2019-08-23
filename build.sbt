@@ -42,7 +42,7 @@ val buildLevelSettings = Seq(
   crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.1"),
   javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
   javacOptions in doc := Seq("-source", "1.6"),
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.12.1",
   scalacOptions ++= Seq(
     "-unchecked",
     "-deprecation",
@@ -171,8 +171,13 @@ lazy val bijection = {
   Project(
     id = "bijection",
     base = file("."),
-    settings = buildLevelSettings ++ sharedSettings
-  ).enablePlugins(SbtOsgi, CrossPerProjectPlugin)
+  ).enablePlugins(SbtOsgi)
+  .settings(
+    buildLevelSettings
+  )
+  .settings(
+    sharedSettings
+  )
   .settings(
     test := {},
     publish := {}, // skip publishing for this root project.
