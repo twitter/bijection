@@ -5,41 +5,29 @@ import com.typesafe.sbt.osgi.SbtOsgi.autoImport._
 import ReleaseTransformations._ // for sbt-release.
 import bijection._
 
-val finagleVersion210 = "6.35.0"
 val finagleVersion = "6.41.0"
 
 val scalatestVersion = "3.0.1"
 val scalacheckVersion = "1.13.4"
 
-val utilVersion210 = "6.34.0"
 val utilVersion = "6.39.0"
 
-val scroogeSerializerVersion210 = "3.17.0"
 val scroogeSerializerVersion = "4.13.0"
 
-def util(mod: String, scalaVersion: String) = {
-  val version = versionFallback(scalaVersion, utilVersion210, utilVersion)
-  "com.twitter" %% (s"util-$mod") % version % "provided"
+def util(mod: String) =
+  "com.twitter" %% (s"util-$mod") % utilVersion % "provided"
+
+def finagle(mod: String) =
+  "com.twitter" %% (s"finagle-$mod") % finagleVersion % "provided"
+
+def scroogeSerializer = {
+  "com.twitter" %% "scrooge-serializer" % scroogeSerializerVersion % "provided"
 }
 
-def finagle(mod: String, scalaVersion: String) = {
-  val version = versionFallback(scalaVersion, finagleVersion210, finagleVersion)
-  "com.twitter" %% (s"finagle-$mod") % version % "provided"
-}
-
-def scroogeSerializer(scalaVersion: String) = {
-  val version = versionFallback(scalaVersion, scroogeSerializerVersion210, scroogeSerializerVersion)
-  "com.twitter" %% "scrooge-serializer" % version % "provided"
-}
-
-def versionFallback(scalaVersion: String, packageVersion210: String, version: String) = {
-  if (scalaVersion startsWith "2.10") packageVersion210
-  else version
-}
 
 val buildLevelSettings = Seq(
   organization := "com.twitter",
-  crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.1"),
+  crossScalaVersions := Seq("2.11.8", "2.12.1"),
   javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
   javacOptions in doc := Seq("-source", "1.6"),
   scalaVersion := "2.12.1",
@@ -55,10 +43,6 @@ val buildLevelSettings = Seq(
     // obviously. When the name is too long, it is hashed with
     // md5.
   ),
-  scalacOptions ++= {
-    if (scalaVersion.value startsWith "2.10") Seq("-Xdivergence211")
-    else Seq.empty
-  },
   resolvers ++= Seq(
     "snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
     "releases" at "https://oss.sonatype.org/content/repositories/releases"
@@ -284,9 +268,9 @@ lazy val bijectionScrooge = {
     osgiExportAll("com.twitter.bijection.scrooge"),
     libraryDependencies ++= Seq(
       "org.apache.thrift" % "libthrift" % "0.6.1" exclude ("junit", "junit"),
-      scroogeSerializer(scalaVersion.value),
-      util("core", scalaVersion.value),
-      finagle("core", scalaVersion.value)
+      scroogeSerializer,
+      util("core"),
+      finagle("core"),
     )
   ).dependsOn(
     bijectionCore % "test->test;compile->compile",
@@ -307,7 +291,7 @@ lazy val bijectionJson = {
 lazy val bijectionUtil = {
   module("util").settings(
     osgiExportAll("com.twitter.bijection.twitter_util"),
-    libraryDependencies += util("core", scalaVersion.value)
+    libraryDependencies += util("core")
   ).dependsOn(
     bijectionCore % "test->test;compile->compile"
   )
@@ -315,11 +299,10 @@ lazy val bijectionUtil = {
 
 lazy val bijectionFinagleMySql = {
   module("finagle-mysql").settings(
-    crossScalaVersions := crossScalaVersions.value.filterNot(_.startsWith("2.10")),
     osgiExportAll("com.twitter.bijection.finagle_mysql"),
     libraryDependencies ++= Seq(
-      finagle("mysql", scalaVersion.value),
-      util("core", scalaVersion.value)
+      finagle("mysql"),
+      util("core")
     )
   ).dependsOn(
     bijectionCore % "test->test;compile->compile"
@@ -399,10 +382,6 @@ lazy val bijectionMacros = {
       "org.scala-lang" % "scala-library" % scalaVersion.value,
       "org.scala-lang" % "scala-reflect" % scalaVersion.value
     ),
-    libraryDependencies ++= {
-      if (scalaVersion.value.startsWith("2.10")) Seq("org.scalamacros" %% "quasiquotes" % "2.1.0")
-      else Seq.empty
-    },
     addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
   ).dependsOn(
     bijectionCore
