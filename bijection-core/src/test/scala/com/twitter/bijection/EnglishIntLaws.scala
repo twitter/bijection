@@ -31,10 +31,12 @@ class EnglishIntLaws extends CheckProperties with MustMatchers with BaseProperti
     })
   }
 
-  val (tiny, small, medium, large) = (Gen.choose(0, 100),
-                                      Gen.choose(100, 1000),
-                                      Gen.choose(1000, 100 * 1000),
-                                      Gen.choose(100 * 1000, 1000 * 1000 * 1000))
+  val (tiny, small, medium, large) = (
+    Gen.choose(0, 100),
+    Gen.choose(100, 1000),
+    Gen.choose(1000, 100 * 1000),
+    Gen.choose(100 * 1000, 1000 * 1000 * 1000)
+  )
   property("as works") {
     List(tiny, small, medium, large).map(test).reduceLeft((a, b) => a && b)
   }

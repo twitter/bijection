@@ -88,8 +88,7 @@ abstract class AbstractInjection[A, B] extends Injection[A, B] {
 
 trait LowPriorityInjections {
   // All Bijections are Injections
-  implicit def fromImplicitBijection[A, B](
-      implicit bij: ImplicitBijection[A, B]): Injection[A, B] =
+  implicit def fromImplicitBijection[A, B](implicit bij: ImplicitBijection[A, B]): Injection[A, B] =
     new AbstractInjection[A, B] {
       override def apply(a: A) = bij(a)
       override def invert(b: B) = Success(bij.invert(b))
@@ -128,14 +127,18 @@ object Injection extends CollectionInjections with Serializable {
   def connect[A, B](implicit bij: Injection[A, B]): Injection[A, B] = bij
   def connect[A, B, C](implicit bij: Injection[A, B], bij2: Injection[B, C]): Injection[A, C] =
     bij andThen bij2
-  def connect[A, B, C, D](implicit bij: Injection[A, B],
-                          bij2: Injection[B, C],
-                          bij3: Injection[C, D]): Injection[A, D] =
+  def connect[A, B, C, D](
+      implicit bij: Injection[A, B],
+      bij2: Injection[B, C],
+      bij3: Injection[C, D]
+  ): Injection[A, D] =
     connect[A, B, C] andThen bij3
-  def connect[A, B, C, D, E](implicit bij: Injection[A, B],
-                             bij2: Injection[B, C],
-                             bij3: Injection[C, D],
-                             bij4: Injection[D, E]): Injection[A, E] =
+  def connect[A, B, C, D, E](
+      implicit bij: Injection[A, B],
+      bij2: Injection[B, C],
+      bij3: Injection[C, D],
+      bij4: Injection[D, E]
+  ): Injection[A, E] =
     connect[A, B, C, D] andThen bij4
 
   implicit def either1[A, B]: Injection[A, Either[B, A]] =
@@ -143,7 +146,7 @@ object Injection extends CollectionInjections with Serializable {
       override def apply(a: A) = Right(a)
       override def invert(e: Either[B, A]) = e match {
         case Right(a) => Success(a)
-        case _ => InversionFailure.failedAttempt(e)
+        case _        => InversionFailure.failedAttempt(e)
       }
     }
 
@@ -191,8 +194,9 @@ object Injection extends CollectionInjections with Serializable {
   /**
     * Get a partial from B => D from injections and a function from A => C
     */
-  def toPartial[A, C, B, D](fn: A => C)(implicit inj1: Injection[A, B],
-                                        inj2: Injection[C, D]): PartialFunction[B, D] =
+  def toPartial[A, C, B, D](
+      fn: A => C
+  )(implicit inj1: Injection[A, B], inj2: Injection[C, D]): PartialFunction[B, D] =
     new PartialFunction[B, D] {
       override def isDefinedAt(b: B) = inj1.invert(b).isSuccess
       override def apply(b: B): D = inj2.apply(fn(inj1.invert(b).get))

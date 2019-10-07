@@ -1,10 +1,11 @@
 /** MACHINE-GENERATED FROM AVRO SCHEMA. DO NOT EDIT DIRECTLY */
 package avro
 
-case class FiscalRecordScala(var calendarDate: String,
-                             var fiscalWeek: Option[Int],
-                             var fiscalYear: Option[Int])
-    extends org.apache.avro.specific.SpecificRecordBase {
+case class FiscalRecordScala(
+    var calendarDate: String,
+    var fiscalWeek: Option[Int],
+    var fiscalYear: Option[Int]
+) extends org.apache.avro.specific.SpecificRecordBase {
   def this() = this("", Some(1), Some(1))
   def get(field: Int): AnyRef = {
     field match {
@@ -14,13 +15,13 @@ case class FiscalRecordScala(var calendarDate: String,
       case pos if pos == 1 => {
         fiscalWeek match {
           case Some(x) => x
-          case None => null
+          case None    => null
         }
       }.asInstanceOf[AnyRef]
       case pos if pos == 2 => {
         fiscalYear match {
           case Some(x) => x
-          case None => null
+          case None    => null
         }
       }.asInstanceOf[AnyRef]
       case _ => new org.apache.avro.AvroRuntimeException("Bad index")
@@ -32,7 +33,7 @@ case class FiscalRecordScala(var calendarDate: String,
         this.calendarDate = {
           value match {
             case (value: org.apache.avro.util.Utf8) => value.toString
-            case _ => value
+            case _                                  => value
           }
         }.asInstanceOf[String]
       case pos if pos == 1 =>
@@ -52,5 +53,6 @@ case class FiscalRecordScala(var calendarDate: String,
 
 object FiscalRecordScala {
   val SCHEMA$ = new org.apache.avro.Schema.Parser().parse(
-    "{\"type\":\"record\",\"name\":\"FiscalRecordScala\",\"namespace\":\"avro\",\"fields\":[{\"name\":\"calendarDate\",\"type\":\"string\"},{\"name\":\"fiscalWeek\",\"type\":[\"int\",\"null\"]},{\"name\":\"fiscalYear\",\"type\":[\"int\",\"null\"]}]}")
+    "{\"type\":\"record\",\"name\":\"FiscalRecordScala\",\"namespace\":\"avro\",\"fields\":[{\"name\":\"calendarDate\",\"type\":\"string\"},{\"name\":\"fiscalWeek\",\"type\":[\"int\",\"null\"]},{\"name\":\"fiscalYear\",\"type\":[\"int\",\"null\"]}]}"
+  )
 }

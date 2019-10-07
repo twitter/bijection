@@ -52,7 +52,8 @@ object SpecificAvroCodecs {
     * @return Injection
     */
   def withCompression[T <: SpecificRecordBase: ClassTag](
-      codecFactory: CodecFactory): Injection[T, Array[Byte]] = {
+      codecFactory: CodecFactory
+  ): Injection[T, Array[Byte]] = {
     val klass = classTag[T].runtimeClass.asInstanceOf[Class[T]]
     new SpecificAvroCodec[T](klass, Some(codecFactory))
   }
@@ -75,9 +76,12 @@ object SpecificAvroCodecs {
     * @return Injection
     */
   def withDeflateCompression[T <: SpecificRecordBase: ClassTag](
-      compressionLevel: Int): Injection[T, Array[Byte]] = {
-    require(1 <= compressionLevel && compressionLevel <= 9,
-            "Compression level should be between 1 and 9, inclusive")
+      compressionLevel: Int
+  ): Injection[T, Array[Byte]] = {
+    require(
+      1 <= compressionLevel && compressionLevel <= 9,
+      "Compression level should be between 1 and 9, inclusive"
+    )
     withCompression(CodecFactory.deflateCodec(compressionLevel))
   }
 
@@ -174,7 +178,8 @@ object GenericAvroCodecs {
     */
   def withCompression[T <: GenericRecord: ClassTag](
       schema: Schema,
-      codecFactory: CodecFactory): Injection[T, Array[Byte]] =
+      codecFactory: CodecFactory
+  ): Injection[T, Array[Byte]] =
     new GenericAvroCodec[T](schema, Some(codecFactory))
 
   /**
@@ -184,7 +189,8 @@ object GenericAvroCodecs {
     * @return Injection
     */
   def withBzip2Compression[T <: GenericRecord: ClassTag](
-      schema: Schema): Injection[T, Array[Byte]] =
+      schema: Schema
+  ): Injection[T, Array[Byte]] =
     withCompression(schema, CodecFactory.bzip2Codec())
 
   /**
@@ -197,9 +203,12 @@ object GenericAvroCodecs {
     */
   def withDeflateCompression[T <: GenericRecord: ClassTag](
       schema: Schema,
-      compressionLevel: Int = 5): Injection[T, Array[Byte]] = {
-    require(1 <= compressionLevel && compressionLevel <= 9,
-            "Compression level should be between 1 and 9, inclusive")
+      compressionLevel: Int = 5
+  ): Injection[T, Array[Byte]] = {
+    require(
+      1 <= compressionLevel && compressionLevel <= 9,
+      "Compression level should be between 1 and 9, inclusive"
+    )
     withCompression(schema, CodecFactory.deflateCodec(compressionLevel))
   }
 
@@ -210,7 +219,8 @@ object GenericAvroCodecs {
     * @return Injection
     */
   def withSnappyCompression[T <: GenericRecord: ClassTag](
-      schema: Schema): Injection[T, Array[Byte]] =
+      schema: Schema
+  ): Injection[T, Array[Byte]] =
     withCompression(schema, CodecFactory.snappyCodec())
 
   /**
@@ -242,15 +252,16 @@ object GenericAvroCodecs {
   * @param klass class of complied record
   * @tparam T compiled record
   */
-class SpecificAvroCodec[T <: SpecificRecordBase](klass: Class[T],
-                                                 codecFactory: Option[CodecFactory] = None)
-    extends Injection[T, Array[Byte]] {
+class SpecificAvroCodec[T <: SpecificRecordBase](
+    klass: Class[T],
+    codecFactory: Option[CodecFactory] = None
+) extends Injection[T, Array[Byte]] {
   def apply(a: T): Array[Byte] = {
     val writer = new SpecificDatumWriter[T](a.getSchema)
     val fileWriter = new DataFileWriter[T](writer)
     codecFactory match {
       case Some(cf) => fileWriter.setCodec(cf)
-      case None =>
+      case None     =>
     }
     val stream = new ByteArrayOutputStream()
     fileWriter.create(a.getSchema, stream)
@@ -273,15 +284,16 @@ class SpecificAvroCodec[T <: SpecificRecordBase](klass: Class[T],
   * @param schema avro schema
   * @tparam T generic record
   */
-class GenericAvroCodec[T <: GenericRecord](schema: Schema,
-                                           codecFactory: Option[CodecFactory] = None)
-    extends Injection[T, Array[Byte]] {
+class GenericAvroCodec[T <: GenericRecord](
+    schema: Schema,
+    codecFactory: Option[CodecFactory] = None
+) extends Injection[T, Array[Byte]] {
   def apply(a: T): Array[Byte] = {
     val writer = new GenericDatumWriter[T](a.getSchema)
     val fileWriter = new DataFileWriter[T](writer)
     codecFactory match {
       case Some(cf) => fileWriter.setCodec(cf)
-      case None =>
+      case None     =>
     }
     val stream = new ByteArrayOutputStream()
     fileWriter.create(a.getSchema, stream)

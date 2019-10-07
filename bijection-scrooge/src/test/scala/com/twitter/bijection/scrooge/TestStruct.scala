@@ -72,7 +72,8 @@ object TestStruct extends ThriftStructCodec3[TestStruct] {
       _iprot.readStructEnd()
       if (!_got_someInt)
         throw new TProtocolException(
-          "Required field 'TestStruct' was not found in serialized data for struct TestStruct")
+          "Required field 'TestStruct' was not found in serialized data for struct TestStruct"
+        )
       new Immutable(someInt, if (_got_someString) Some(someString) else None)
     }
   }
@@ -96,10 +97,7 @@ object TestStruct extends ThriftStructCodec3[TestStruct] {
   }
 }
 
-trait TestStruct
-    extends ThriftStruct
-    with Product2[Int, Option[String]]
-    with java.io.Serializable {
+trait TestStruct extends ThriftStruct with Product2[Int, Option[String]] with java.io.Serializable {
   import TestStruct._
 
   def someInt: Int

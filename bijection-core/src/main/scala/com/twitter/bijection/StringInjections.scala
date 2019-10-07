@@ -46,7 +46,9 @@ trait StringInjections extends NumericInjections {
         attempt(ByteBuffer.wrap(b)) { bb =>
           //these are mutable, so it can't be shared trivially
           //avoid GC pressure and (probably) perform better
-          if (null == decRef) { decRef = mkSharedState }
+          if (null == decRef) {
+            decRef = mkSharedState
+          }
           val decBuf = decRef.get
           val dec = decBuf._1
           val buf = decBuf._2

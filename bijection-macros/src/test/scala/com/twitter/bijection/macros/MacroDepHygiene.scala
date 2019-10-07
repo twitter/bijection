@@ -15,7 +15,8 @@ class MacroDepHygiene extends WordSpec with Matchers with MacroTestHelper {
     val dummy = new com.twitter.bijection.macros.IsCaseClass[Nothing] {}
     def isCaseClassAvailable[T](
         implicit proof: com.twitter.bijection.macros.IsCaseClass[T] =
-          dummy.asInstanceOf[com.twitter.bijection.macros.IsCaseClass[T]]) {
+          dummy.asInstanceOf[com.twitter.bijection.macros.IsCaseClass[T]]
+    ) {
       proof shouldBe a[MacroGenerated]
       canExternalize(proof)
     }

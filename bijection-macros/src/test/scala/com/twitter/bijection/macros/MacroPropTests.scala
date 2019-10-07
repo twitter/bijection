@@ -35,14 +35,12 @@ trait MacroPropTests extends PropSpec with PropertyChecks with Matchers with Mac
 }
 
 trait CaseClassToTuplePropTests extends MacroPropTests {
-  def shouldRoundTrip[A, B <: Product](t: A)(implicit proof: IsCaseClass[A],
-                                             bij: Bijection[A, B]) {
+  def shouldRoundTrip[A, B <: Product](t: A)(implicit proof: IsCaseClass[A], bij: Bijection[A, B]) {
     bij shouldBe a[MacroGenerated]
     t shouldBe bij.invert(bij(t))
   }
 
-  def shouldRoundTrip[A, B <: Product](t: B)(implicit proof: IsCaseClass[A],
-                                             bij: Bijection[A, B]) {
+  def shouldRoundTrip[A, B <: Product](t: B)(implicit proof: IsCaseClass[A], bij: Bijection[A, B]) {
     bij shouldBe a[MacroGenerated]
     t shouldBe bij(bij.invert(t))
   }
@@ -132,14 +130,16 @@ class CaseClassToTupleNonRecursivelyAppliedPropTests extends CaseClassToTuplePro
 }
 
 trait CaseClassToMapPropTests extends MacroPropTests {
-  def shouldRoundTrip[A](t: A)(implicit proof: IsCaseClass[A],
-                               inj: Injection[A, Map[String, Any]]) {
+  def shouldRoundTrip[A](
+      t: A
+  )(implicit proof: IsCaseClass[A], inj: Injection[A, Map[String, Any]]) {
     inj shouldBe a[MacroGenerated]
     Success(t) shouldEqual inj.invert(inj(t))
   }
 
-  def shouldRoundTrip[A](t: Map[String, Any])(implicit proof: IsCaseClass[A],
-                                              inj: Injection[A, Map[String, Any]]) {
+  def shouldRoundTrip[A](
+      t: Map[String, Any]
+  )(implicit proof: IsCaseClass[A], inj: Injection[A, Map[String, Any]]) {
     inj shouldBe a[MacroGenerated]
     inj.invert(t).get
     Success(t) shouldEqual inj.invert(t).map { inj(_) }
@@ -178,9 +178,12 @@ class CaseClassToMapRecursivelyAppliedPropTests extends CaseClassToMapPropTests 
   property("case class B(A, A, String) should round trip in reverse") {
     forAll { v: Btup =>
       shouldRoundTrip[SampleClassB](
-        Map[String, Any]("a1" -> Map[String, Any]("x" -> v._1._1, "y" -> v._1._2),
-                         "a2" -> Map[String, Any]("x" -> v._2._1, "y" -> v._2._2),
-                         "y" -> v._3))
+        Map[String, Any](
+          "a1" -> Map[String, Any]("x" -> v._1._1, "y" -> v._1._2),
+          "a2" -> Map[String, Any]("x" -> v._2._1, "y" -> v._2._2),
+          "y" -> v._3
+        )
+      )
     }
   }
 
@@ -189,16 +192,24 @@ class CaseClassToMapRecursivelyAppliedPropTests extends CaseClassToMapPropTests 
       shouldRoundTrip[SampleClassC](
         Map[String, Any](
           "a" -> Map[String, Any]("x" -> v._1._1, "y" -> v._1._2),
-          "b" -> Map[String, Any]("a1" -> Map[String, Any]("x" -> v._2._1._1, "y" -> v._2._1._2),
-                                  "a2" -> Map[String, Any]("x" -> v._2._2._1, "y" -> v._2._2._2),
-                                  "y" -> v._2._3),
+          "b" -> Map[String, Any](
+            "a1" -> Map[String, Any]("x" -> v._2._1._1, "y" -> v._2._1._2),
+            "a2" -> Map[String, Any]("x" -> v._2._2._1, "y" -> v._2._2._2),
+            "y" -> v._2._3
+          ),
           "c" -> Map[String, Any]("x" -> v._3._1, "y" -> v._3._2),
-          "d" -> Map[String, Any]("a1" -> Map[String, Any]("x" -> v._4._1._1, "y" -> v._4._1._2),
-                                  "a2" -> Map[String, Any]("x" -> v._4._2._1, "y" -> v._4._2._2),
-                                  "y" -> v._4._3),
-          "e" -> Map[String, Any]("a1" -> Map[String, Any]("x" -> v._5._1._1, "y" -> v._5._1._2),
-                                  "a2" -> Map[String, Any]("x" -> v._5._2._1, "y" -> v._5._2._2),
-                                  "y" -> v._5._3)))
+          "d" -> Map[String, Any](
+            "a1" -> Map[String, Any]("x" -> v._4._1._1, "y" -> v._4._1._2),
+            "a2" -> Map[String, Any]("x" -> v._4._2._1, "y" -> v._4._2._2),
+            "y" -> v._4._3
+          ),
+          "e" -> Map[String, Any](
+            "a1" -> Map[String, Any]("x" -> v._5._1._1, "y" -> v._5._1._2),
+            "a2" -> Map[String, Any]("x" -> v._5._2._1, "y" -> v._5._2._2),
+            "y" -> v._5._3
+          )
+        )
+      )
     }
   }
 }
@@ -229,7 +240,8 @@ class CaseClassToMapNonRecursivelyAppliedPropTests extends CaseClassToMapPropTes
     forAll { v: Atupnr =>
       shouldRoundTrip[SampleClassA](Map[String, Any]("x" -> v._1, "y" -> v._2))(
         implicitly,
-        Macros.caseClassToMap[SampleClassA](false))
+        Macros.caseClassToMap[SampleClassA](false)
+      )
     }
   }
 
@@ -237,16 +249,19 @@ class CaseClassToMapNonRecursivelyAppliedPropTests extends CaseClassToMapPropTes
     forAll { v: Btupnr =>
       shouldRoundTrip[SampleClassB](Map[String, Any]("a1" -> v._1, "a2" -> v._2, "y" -> v._3))(
         implicitly,
-        Macros.caseClassToMap[SampleClassB](false))
+        Macros.caseClassToMap[SampleClassB](false)
+      )
     }
   }
 
   property("case class C(A, B, A, B, B) should round trip in reverse") {
     forAll { v: Ctupnr =>
       shouldRoundTrip[SampleClassC](
-        Map[String, Any]("a" -> v._1, "b" -> v._2, "c" -> v._3, "d" -> v._4, "e" -> v._5))(
+        Map[String, Any]("a" -> v._1, "b" -> v._2, "c" -> v._3, "d" -> v._4, "e" -> v._5)
+      )(
         implicitly,
-        Macros.caseClassToMap[SampleClassC](false))
+        Macros.caseClassToMap[SampleClassC](false)
+      )
     }
   }
 }

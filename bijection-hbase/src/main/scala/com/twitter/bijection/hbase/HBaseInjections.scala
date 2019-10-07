@@ -61,7 +61,7 @@ object HBaseInjections {
       override def invert(b: ImmutableBytesWritable) =
         fastAttempt(b)(Bytes.toString(b.get, b.getOffset, b.getLength) match {
           case null => sys.error(s"$b decoded to null, which is disallowed.")
-          case str => str
+          case str  => str
         })
     }
   implicit lazy val int2BytesWritableInj: Injection[Int, ImmutableBytesWritable] =

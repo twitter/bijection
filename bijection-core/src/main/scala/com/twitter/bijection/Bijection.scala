@@ -110,17 +110,23 @@ object Bijection extends CollectionBijections with Serializable {
     * val composed = connect[Long, Array[Byte], Base64String]: Bijection[Long, Base64String]
     */
   def connect[A, B](implicit bij: ImplicitBijection[A, B]): Bijection[A, B] = bij.bijection
-  def connect[A, B, C](implicit bij: ImplicitBijection[A, B],
-                       bij2: ImplicitBijection[B, C]): Bijection[A, C] =
+  def connect[A, B, C](
+      implicit bij: ImplicitBijection[A, B],
+      bij2: ImplicitBijection[B, C]
+  ): Bijection[A, C] =
     (bij.bijection) andThen (bij2.bijection)
-  def connect[A, B, C, D](implicit bij1: ImplicitBijection[A, B],
-                          bij2: ImplicitBijection[B, C],
-                          bij3: ImplicitBijection[C, D]): Bijection[A, D] =
+  def connect[A, B, C, D](
+      implicit bij1: ImplicitBijection[A, B],
+      bij2: ImplicitBijection[B, C],
+      bij3: ImplicitBijection[C, D]
+  ): Bijection[A, D] =
     connect[A, B, C] andThen (bij3.bijection)
-  def connect[A, B, C, D, E](implicit bij1: ImplicitBijection[A, B],
-                             bij2: ImplicitBijection[B, C],
-                             bij3: ImplicitBijection[C, D],
-                             bij4: ImplicitBijection[D, E]): Bijection[A, E] =
+  def connect[A, B, C, D, E](
+      implicit bij1: ImplicitBijection[A, B],
+      bij2: ImplicitBijection[B, C],
+      bij3: ImplicitBijection[C, D],
+      bij4: ImplicitBijection[D, E]
+  ): Bijection[A, E] =
     connect[A, B, C, D] andThen (bij4.bijection)
 
   implicit def identity[A]: Bijection[A, A] = new IdentityBijection[A]
@@ -139,8 +145,10 @@ object Bijection extends CollectionBijections with Serializable {
     * Converts a function that transforms type A into a function that
     * transforms type B.
     */
-  implicit def fnBijection[A, B, C, D](implicit bij1: ImplicitBijection[A, B],
-                                       bij2: ImplicitBijection[C, D]): Bijection[A => C, B => D] =
+  implicit def fnBijection[A, B, C, D](
+      implicit bij1: ImplicitBijection[A, B],
+      bij2: ImplicitBijection[C, D]
+  ): Bijection[A => C, B => D] =
     new AbstractBijection[A => C, B => D] {
       def apply(fn: A => C) = { b =>
         bij2.apply(fn(bij1.invert(b)))
@@ -159,7 +167,8 @@ object Bijection extends CollectionBijections with Serializable {
   implicit def fn2Bijection[A, B, C, D, E, F](
       implicit bab: ImplicitBijection[A, B],
       bcd: ImplicitBijection[C, D],
-      bef: ImplicitBijection[E, F]): Bijection[(A, C) => E, (B, D) => F] =
+      bef: ImplicitBijection[E, F]
+  ): Bijection[(A, C) => E, (B, D) => F] =
     new AbstractBijection[(A, C) => E, (B, D) => F] {
       def apply(fn: (A, C) => E) = { (b, d) =>
         bef.apply(fn(bab.invert(b), bcd.invert(d)))

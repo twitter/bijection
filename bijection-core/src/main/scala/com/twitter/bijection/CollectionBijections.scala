@@ -146,7 +146,8 @@ trait CollectionBijections extends BinaryBijections {
   def toContainer[A, B, C <: TraversableOnce[A], D <: TraversableOnce[B]](
       implicit bij: ImplicitBijection[A, B],
       cd: CanBuildFrom[Nothing, B, D],
-      dc: CanBuildFrom[Nothing, A, C]): Bijection[C, D] =
+      dc: CanBuildFrom[Nothing, A, C]
+  ): Bijection[C, D] =
     new AbstractBijection[C, D] {
       def apply(c: C) = {
         val builder = cd()
@@ -160,8 +161,10 @@ trait CollectionBijections extends BinaryBijections {
       }
     }
 
-  implicit def betweenMaps[K1, V1, K2, V2](implicit kBijection: ImplicitBijection[K1, K2],
-                                           vBijection: ImplicitBijection[V1, V2]) =
+  implicit def betweenMaps[K1, V1, K2, V2](
+      implicit kBijection: ImplicitBijection[K1, K2],
+      vBijection: ImplicitBijection[V1, V2]
+  ) =
     toContainer[(K1, V1), (K2, V2), Map[K1, V1], Map[K2, V2]]
 
   implicit def betweenVectors[T, U](implicit bij: ImplicitBijection[T, U]) =
@@ -180,18 +183,21 @@ trait CollectionBijections extends BinaryBijections {
     toContainer[T, U, List[T], List[U]]
 
   implicit def option[T, U](
-      implicit bij: ImplicitBijection[T, U]): Bijection[Option[T], Option[U]] =
+      implicit bij: ImplicitBijection[T, U]
+  ): Bijection[Option[T], Option[U]] =
     new AbstractBijection[Option[T], Option[U]] {
       override def apply(optt: Option[T]) = optt.map(bij.bijection)
       override def invert(optu: Option[U]) = optu.map(bij.bijection.inverse)
     }
   // Always requires a copy
   implicit def vector2List[A, B](
-      implicit bij: ImplicitBijection[A, B]): Bijection[Vector[A], List[B]] =
+      implicit bij: ImplicitBijection[A, B]
+  ): Bijection[Vector[A], List[B]] =
     toContainer[A, B, Vector[A], List[B]]
 
   implicit def indexedSeq2List[A, B](
-      implicit bij: ImplicitBijection[A, B]): Bijection[IndexedSeq[A], List[B]] =
+      implicit bij: ImplicitBijection[A, B]
+  ): Bijection[IndexedSeq[A], List[B]] =
     toContainer[A, B, IndexedSeq[A], List[B]]
 
   /**

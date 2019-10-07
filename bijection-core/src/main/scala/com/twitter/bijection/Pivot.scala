@@ -59,10 +59,13 @@ trait PivotEncoder[K, K1, K2] extends (Iterable[K] => Map[K1, Iterable[K2]]) wit
     * instances of K2 for each K1 into an iterable.
     */
   def apply(pairs: Iterable[K]): Map[K1, Iterable[K2]] =
-    pairs.map { k =>
-      val (k1, k2) = enc(k)
-      (k1 -> List(k2))
-    }.groupBy { _._1 }.mapValues { _.map { case (_, k2s) => k2s }.flatten }
+    pairs
+      .map { k =>
+        val (k1, k2) = enc(k)
+        (k1 -> List(k2))
+      }
+      .groupBy { _._1 }
+      .mapValues { _.map { case (_, k2s) => k2s }.flatten }
 
   /**
     * "Uncurries" the supplied nested fn of K1 and K2  into a function
@@ -89,10 +92,11 @@ trait PivotDecoder[K, K1, K2] extends (Map[K1, Iterable[K2]] => Iterable[K]) wit
     * Curries the supplied fn of K into a nested function
     * of K1 then K2 using the inversion of `pivot`.
     */
-  def split[V](fn: K => V): K1 => K2 => V = { k1 =>
-    { k2 =>
-      fn(dec((k1, k2)))
-    }
+  def split[V](fn: K => V): K1 => K2 => V = {
+    k1 =>
+      { k2 =>
+        fn(dec((k1, k2)))
+      }
   }
 }
 

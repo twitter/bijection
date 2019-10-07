@@ -38,20 +38,29 @@ class Json4sInjectionLaws extends CheckProperties with BaseProperties {
     arbitraryViaFn[(String, Int, String, List[Int], String), JValue] {
       in: (String, Int, String, List[Int], String) =>
         JObject(
-          List(JField("name", JString(in._1)),
-               JField("id", JInt(in._2)),
-               JField("id_String", JString(in._3)),
-               JField("indices", JArray(in._4.map(JInt(_)))),
-               JField("screen_name", JString(in._5))))
+          List(
+            JField("name", JString(in._1)),
+            JField("id", JInt(in._2)),
+            JField("id_String", JString(in._3)),
+            JField("indices", JArray(in._4.map(JInt(_)))),
+            JField("screen_name", JString(in._5))
+          )
+        )
     }
 
-  def roundTripCaseClassToJson(implicit inj: Injection[Twit, String],
-                               tt: TypeTag[Twit],
-                               ct: ClassTag[Twit]) = isLooseInjection[Twit, String]
+  def roundTripCaseClassToJson(
+      implicit inj: Injection[Twit, String],
+      tt: TypeTag[Twit],
+      ct: ClassTag[Twit]
+  ) =
+    isLooseInjection[Twit, String]
 
-  def roundTripCaseClassToJValue(implicit inj: Injection[Twit, JValue],
-                                 tt: TypeTag[Twit],
-                                 ct: ClassTag[Twit]) = isLooseInjection[Twit, JValue]
+  def roundTripCaseClassToJValue(
+      implicit inj: Injection[Twit, JValue],
+      tt: TypeTag[Twit],
+      ct: ClassTag[Twit]
+  ) =
+    isLooseInjection[Twit, JValue]
 
   def roundTripJValueToString(implicit inj: Injection[JValue, String]) =
     isLooseInjection[JValue, String]

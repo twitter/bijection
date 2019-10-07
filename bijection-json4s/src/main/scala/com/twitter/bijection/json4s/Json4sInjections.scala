@@ -43,9 +43,11 @@ object Json4sInjections {
     * @tparam A Case Class
     * @return Json String
     */
-  implicit def caseClass2Json[A <: AnyRef](implicit tt: TypeTag[A],
-                                           ct: ClassTag[A],
-                                           fmt: Formats): Injection[A, String] =
+  implicit def caseClass2Json[A <: AnyRef](
+      implicit tt: TypeTag[A],
+      ct: ClassTag[A],
+      fmt: Formats
+  ): Injection[A, String] =
     new AbstractInjection[A, String] {
       override def apply(a: A): String = write(a)
 
@@ -57,9 +59,11 @@ object Json4sInjections {
     * @tparam A Case Class
     * @return JValue
     */
-  implicit def caseClass2JValue[A <: AnyRef](implicit tt: TypeTag[A],
-                                             ct: ClassTag[A],
-                                             fmt: Formats): Injection[A, JValue] =
+  implicit def caseClass2JValue[A <: AnyRef](
+      implicit tt: TypeTag[A],
+      ct: ClassTag[A],
+      fmt: Formats
+  ): Injection[A, JValue] =
     new AbstractInjection[A, JValue] {
       override def apply(a: A): JValue = Extraction.decompose(a)
 

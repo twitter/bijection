@@ -47,7 +47,8 @@ trait UtilBijections {
     * if the bijection throws, the result will be a Throw.
     */
   implicit def futureBijection[A, B](
-      implicit bij: ImplicitBijection[A, B]): Bijection[TwitterFuture[A], TwitterFuture[B]] =
+      implicit bij: ImplicitBijection[A, B]
+  ): Bijection[TwitterFuture[A], TwitterFuture[B]] =
     new AbstractBijection[TwitterFuture[A], TwitterFuture[B]] {
       override def apply(fa: TwitterFuture[A]) = fa.map(bij(_))
       override def invert(fb: TwitterFuture[B]) = fb.map(bij.invert)
@@ -59,7 +60,8 @@ trait UtilBijections {
     */
   implicit def futureScalaBijection[A, B](
       implicit bij: ImplicitBijection[A, B],
-      executor: ExecutionContext): Bijection[ScalaFuture[A], ScalaFuture[B]] =
+      executor: ExecutionContext
+  ): Bijection[ScalaFuture[A], ScalaFuture[B]] =
     new AbstractBijection[ScalaFuture[A], ScalaFuture[B]] {
       override def apply(fa: ScalaFuture[A]) = fa.map(bij(_))
       override def invert(fb: ScalaFuture[B]) = fb.map(bij.invert)
@@ -69,12 +71,13 @@ trait UtilBijections {
     * Bijection between twitter and scala style Futures
     */
   implicit def twitter2ScalaFuture[A](
-      implicit executor: ExecutionContext): Bijection[TwitterFuture[A], ScalaFuture[A]] = {
+      implicit executor: ExecutionContext
+  ): Bijection[TwitterFuture[A], ScalaFuture[A]] = {
     new AbstractBijection[TwitterFuture[A], ScalaFuture[A]] {
       override def apply(f: TwitterFuture[A]): ScalaFuture[A] = {
         val p = ScalaPromise[A]()
         f.respond {
-          case Return(value) => p success value
+          case Return(value)    => p success value
           case Throw(exception) => p failure exception
         }
         p.future
@@ -83,7 +86,7 @@ trait UtilBijections {
       override def invert(f: ScalaFuture[A]): TwitterFuture[A] = {
         val p = new TwitterPromise[A]()
         f.onComplete {
-          case Success(value) => p.setValue(value)
+          case Success(value)     => p.setValue(value)
           case Failure(exception) => p.setException(exception)
         }
         p
@@ -119,7 +122,8 @@ trait UtilBijections {
     *   <code>checkFrequency</code>.
     */
   implicit def twitter2JavaFutureBijection[A](
-      implicit converter: JavaFutureConverter): Bijection[TwitterFuture[A], JavaFuture[A]] = {
+      implicit converter: JavaFutureConverter
+  ): Bijection[TwitterFuture[A], JavaFuture[A]] = {
     new AbstractBijection[TwitterFuture[A], JavaFuture[A]] {
       override def apply(f: TwitterFuture[A]): JavaFuture[A] =
         f.toJavaFuture.asInstanceOf[JavaFuture[A]]
@@ -135,12 +139,12 @@ trait UtilBijections {
   implicit def twitter2ScalaTry[A]: Bijection[TwitterTry[A], ScalaTry[A]] = {
     new AbstractBijection[TwitterTry[A], ScalaTry[A]] {
       override def apply(t: TwitterTry[A]): ScalaTry[A] = t match {
-        case Return(value) => Success(value)
+        case Return(value)    => Success(value)
         case Throw(exception) => Failure(exception)
       }
 
       override def invert(t: ScalaTry[A]): TwitterTry[A] = t match {
-        case Success(value) => Return(value)
+        case Success(value)     => Return(value)
         case Failure(exception) => Throw(exception)
       }
     }
@@ -151,7 +155,8 @@ trait UtilBijections {
     * If the bijection throws, the result will be a throw
     */
   implicit def tryBijection[A, B](
-      implicit bij: ImplicitBijection[A, B]): Bijection[TwitterTry[A], TwitterTry[B]] =
+      implicit bij: ImplicitBijection[A, B]
+  ): Bijection[TwitterTry[A], TwitterTry[B]] =
     new AbstractBijection[TwitterTry[A], TwitterTry[B]] {
       override def apply(fa: TwitterTry[A]) = fa.map(bij(_))
       override def invert(fb: TwitterTry[B]) = fb.map(bij.invert)
@@ -162,7 +167,8 @@ trait UtilBijections {
     * If the bijection throws, the result will be a throw
     */
   implicit def tryScalaBijection[A, B](
-      implicit bij: ImplicitBijection[A, B]): Bijection[ScalaTry[A], ScalaTry[B]] =
+      implicit bij: ImplicitBijection[A, B]
+  ): Bijection[ScalaTry[A], ScalaTry[B]] =
     new AbstractBijection[ScalaTry[A], ScalaTry[B]] {
       override def apply(fa: ScalaTry[A]) = fa.map(bij(_))
       override def invert(fb: ScalaTry[B]) = fb.map(bij.invert)

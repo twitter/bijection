@@ -75,7 +75,7 @@ class HBaseInjectionsSpecifications extends WordSpec {
     }
 
     "round trip Float -> Array[Byte]" in {
-      val expected = 42.0F
+      val expected = 42.0f
       val bytes = Injection[Float, Array[Byte]](expected)
       val result = Injection.invert[Float, Array[Byte]](bytes)
       assert(Success(expected) == result)
@@ -131,7 +131,7 @@ class HBaseInjectionsSpecifications extends WordSpec {
     }
 
     "round trip Float -> ImmutableBytesWritable" in {
-      val expected = 42.0F
+      val expected = 42.0f
       val bytes = Injection[Float, ImmutableBytesWritable](expected)
       val result = Injection.invert[Float, ImmutableBytesWritable](bytes)
       assert(Success(expected) == result)

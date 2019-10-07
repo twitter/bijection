@@ -69,10 +69,11 @@ class FuturePoolJavaFutureConverter(futurePool: FuturePool, mayInterruptIfRunnin
   * @param mayInterruptIfRunning whether or not the initial java future can be interrupted if it's
   *                              running
   */
-class TimerJavaFutureConverter(timer: Timer,
-                               checkFrequency: Duration,
-                               mayInterruptIfRunning: Boolean)
-    extends JavaFutureConverter {
+class TimerJavaFutureConverter(
+    timer: Timer,
+    checkFrequency: Duration,
+    mayInterruptIfRunning: Boolean
+) extends JavaFutureConverter {
   override def apply[T](javaFuture: JFuture[T]): Future[T] = {
     val p = Promise[T]
     lazy val task: TimerTask = timer.schedule(checkFrequency) {

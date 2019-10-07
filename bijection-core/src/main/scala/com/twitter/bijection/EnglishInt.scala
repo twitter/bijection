@@ -22,35 +22,41 @@ object EnglishInt {
     }
 
   val (t, d, k, m, g) = (10, 100, 1000, 1000 * 1000, 1000 * 1000 * 1000)
-  val units = Map(0 -> "zero",
-                  1 -> "one",
-                  2 -> "two",
-                  3 -> "three",
-                  4 -> "four",
-                  5 -> "five",
-                  6 -> "six",
-                  7 -> "seven",
-                  8 -> "eight",
-                  9 -> "nine")
-  val tens = Map(t -> "ten",
-                 20 -> "twenty",
-                 30 -> "thirty",
-                 40 -> "forty",
-                 50 -> "fifty",
-                 60 -> "sixty",
-                 70 -> "seventy",
-                 80 -> "eighty",
-                 90 -> "ninety")
-  val teens = Map(t -> "ten",
-                  11 -> "eleven",
-                  12 -> "twelve",
-                  13 -> "thirteen",
-                  14 -> "fourteen",
-                  15 -> "fifteen",
-                  16 -> "sixteen",
-                  17 -> "seventeen",
-                  18 -> "eighteen",
-                  19 -> "nineteen")
+  val units = Map(
+    0 -> "zero",
+    1 -> "one",
+    2 -> "two",
+    3 -> "three",
+    4 -> "four",
+    5 -> "five",
+    6 -> "six",
+    7 -> "seven",
+    8 -> "eight",
+    9 -> "nine"
+  )
+  val tens = Map(
+    t -> "ten",
+    20 -> "twenty",
+    30 -> "thirty",
+    40 -> "forty",
+    50 -> "fifty",
+    60 -> "sixty",
+    70 -> "seventy",
+    80 -> "eighty",
+    90 -> "ninety"
+  )
+  val teens = Map(
+    t -> "ten",
+    11 -> "eleven",
+    12 -> "twelve",
+    13 -> "thirteen",
+    14 -> "fourteen",
+    15 -> "fifteen",
+    16 -> "sixteen",
+    17 -> "seventeen",
+    18 -> "eighteen",
+    19 -> "nineteen"
+  )
   val tenmult = Map(d -> "hundred", k -> "thousand", m -> "million", g -> "billion")
   val all = units ++ tens ++ teens ++ tenmult
   val word2num: Map[String, Int] = (units ++ tens ++ teens ++ tenmult).map(kv => (kv._2, kv._1))
@@ -63,14 +69,14 @@ object EnglishInt {
   // the quotient & remainder are converted to Enmglish recurisively
   private def toEnglish(num: Int): Option[String] = {
     num match {
-      case num if num < 0 => None
-      case num if num > g => None
+      case num if num < 0  => None
+      case num if num > g  => None
       case num if num < 20 => Some(all(num))
-      case num if num < d => divide(num, t)
-      case num if num < k => divide(num, d)
-      case num if num < m => divide(num, k)
-      case num if num < g => divide(num, m)
-      case _ => None
+      case num if num < d  => divide(num, t)
+      case num if num < k  => divide(num, d)
+      case num if num < m  => divide(num, k)
+      case num if num < g  => divide(num, m)
+      case _               => None
     }
   }
 
