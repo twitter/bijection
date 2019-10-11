@@ -356,7 +356,7 @@ lazy val bijectionJodaTime = {
     osgiExportAll("com.twitter.bijection.jodatime"),
     libraryDependencies ++= Seq(
       "joda-time" % "joda-time" % "2.3",
-      "org.joda" % "joda-convert" % "1.6"
+      "org.joda" % "joda-convert" % "1.9.2"
     )
   ).dependsOn(
     bijectionCore % "test->test;compile->compile"
