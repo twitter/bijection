@@ -10,7 +10,7 @@ val finagleVersion = "6.45.0"
 val scalatestVersion = "3.0.8"
 val scalacheckVersion = "1.13.5"
 
-val utilVersion = "6.39.0"
+val utilVersion = "6.45.0"
 
 val scroogeSerializerVersion = "4.20.0"
 
