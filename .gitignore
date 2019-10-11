@@ -23,7 +23,7 @@ sonatype.sbt
 /bin/
 /sandbox/
 
-# eclipse, intellij
+# eclipse, intellij, metals, bloop
 /.classpath
 /.project
 /src/intellij/*.iml
@@ -33,6 +33,8 @@ sonatype.sbt
 /.idea
 /.settings
 .idea_modules
+.metals
+.bloop
 
 # bak files produced by ./cleanup-commit
 *.bak
