@@ -312,7 +312,7 @@ lazy val bijectionFinagleMySql = {
 lazy val bijectionClojure = {
   module("clojure").settings(
     osgiExportAll("com.twitter.bijection.clojure"),
-    libraryDependencies += "org.clojure" % "clojure" % "1.5.1"
+    libraryDependencies += "org.clojure" % "clojure" % "1.10.1"
   ).dependsOn(
     bijectionCore % "test->test;compile->compile"
   )
