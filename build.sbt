@@ -5,7 +5,7 @@ import com.typesafe.sbt.osgi.SbtOsgi.autoImport._
 import ReleaseTransformations._ // for sbt-release.
 import bijection._
 
-val finagleVersion = "6.41.0"
+val finagleVersion = "6.45.0"
 
 val scalatestVersion = "3.0.8"
 val scalacheckVersion = "1.13.4"
