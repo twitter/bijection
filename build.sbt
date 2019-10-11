@@ -5,14 +5,14 @@ import com.typesafe.sbt.osgi.SbtOsgi.autoImport._
 import ReleaseTransformations._ // for sbt-release.
 import bijection._
 
-val finagleVersion = "6.41.0"
+val finagleVersion = "6.45.0"
 
-val scalatestVersion = "3.0.1"
-val scalacheckVersion = "1.13.4"
+val scalatestVersion = "3.0.8"
+val scalacheckVersion = "1.13.5"
 
 val utilVersion = "6.39.0"
 
-val scroogeSerializerVersion = "4.13.0"
+val scroogeSerializerVersion = "4.20.0"
 
 def util(mod: String) =
   "com.twitter" %% (s"util-$mod") % utilVersion % "provided"
@@ -233,7 +233,7 @@ lazy val bijectionProtobuf = {
   )
 }
 
-val jsonParser = "org.codehaus.jackson" % "jackson-mapper-asl" % "1.9.2"
+val jsonParser = "org.codehaus.jackson" % "jackson-mapper-asl" % "1.9.11"
 
 lazy val bijectionThrift = {
   module("thrift").settings(
@@ -255,7 +255,7 @@ lazy val bijectionGuava = {
       // This dependency is required because scalac needs access to all java
       // runtime annotations even though javac does not as detailed here:
       // http://code.google.com/p/guava-libraries/issues/detail?id=1095
-      "com.google.code.findbugs" % "jsr305" % "1.3.9",
+      "com.google.code.findbugs" % "jsr305" % "3.0.2",
       "com.google.guava" % "guava" % "14.0"
     )
   ).dependsOn(
@@ -312,7 +312,7 @@ lazy val bijectionFinagleMySql = {
 lazy val bijectionClojure = {
   module("clojure").settings(
     osgiExportAll("com.twitter.bijection.clojure"),
-    libraryDependencies += "org.clojure" % "clojure" % "1.5.1"
+    libraryDependencies += "org.clojure" % "clojure" % "1.10.1"
   ).dependsOn(
     bijectionCore % "test->test;compile->compile"
   )
@@ -321,7 +321,7 @@ lazy val bijectionClojure = {
 lazy val bijectionNetty = {
   module("netty").settings(
     osgiExportAll("com.twitter.bijection.netty"),
-    libraryDependencies += "io.netty" % "netty" % "3.5.11.Final"
+    libraryDependencies += "io.netty" % "netty" % "3.5.13.Final"
   ).dependsOn(
     bijectionCore % "test->test;compile->compile"
   )
@@ -331,7 +331,7 @@ lazy val bijectionAvro = {
   module("avro").settings(
     osgiExportAll("com.twitter.bijection.avro"),
     libraryDependencies ++= Seq(
-      "org.apache.avro" % "avro" % "1.7.5"
+      "org.apache.avro" % "avro" % "1.7.7"
     )
   ).dependsOn(
     bijectionCore % "test->test;compile->compile"
@@ -342,7 +342,7 @@ lazy val bijectionHbase = {
   module("hbase").settings(
     osgiExportAll("com.twitter.bijection.hbase"),
     libraryDependencies ++= Seq(
-      "org.apache.hbase" % "hbase" % "0.94.4" % "provided->default" exclude ("org.jruby", "jruby-complete"),
+      "org.apache.hbase" % "hbase" % "0.94.27" % "provided->default" exclude ("org.jruby", "jruby-complete"),
       "org.apache.hadoop" % "hadoop-core" % "1.2.1" % "provided->default"
     )
   ).dependsOn(
@@ -356,7 +356,7 @@ lazy val bijectionJodaTime = {
     osgiExportAll("com.twitter.bijection.jodatime"),
     libraryDependencies ++= Seq(
       "joda-time" % "joda-time" % "2.3",
-      "org.joda" % "joda-convert" % "1.6"
+      "org.joda" % "joda-convert" % "1.9.2"
     )
   ).dependsOn(
     bijectionCore % "test->test;compile->compile"
@@ -368,8 +368,8 @@ lazy val bijectionJson4s = {
     osgiExportAll("com.twitter.bijection.json4s"),
     libraryDependencies ++= Seq(
       "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-      "org.json4s" %% "json4s-native" % "3.5.0",
-      "org.json4s" %% "json4s-ext" % "3.5.0"
+      "org.json4s" %% "json4s-native" % "3.5.5",
+      "org.json4s" %% "json4s-ext" % "3.5.5"
     )
   ).dependsOn(
     bijectionCore % "test->test;compile->compile"
