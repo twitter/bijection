@@ -343,7 +343,7 @@ lazy val bijectionHbase = {
     osgiExportAll("com.twitter.bijection.hbase"),
     libraryDependencies ++= Seq(
       "org.apache.hbase" % "hbase" % "0.94.4" % "provided->default" exclude ("org.jruby", "jruby-complete"),
-      "org.apache.hadoop" % "hadoop-core" % "1.0.4" % "provided->default"
+      "org.apache.hadoop" % "hadoop-core" % "1.2.1" % "provided->default"
     )
   ).dependsOn(
     bijectionCore % "test->test;compile->compile",
