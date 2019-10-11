@@ -7,7 +7,7 @@ import bijection._
 
 val finagleVersion = "6.41.0"
 
-val scalatestVersion = "3.0.1"
+val scalatestVersion = "3.0.8"
 val scalacheckVersion = "1.13.4"
 
 val utilVersion = "6.39.0"
