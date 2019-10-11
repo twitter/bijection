@@ -233,7 +233,7 @@ lazy val bijectionProtobuf = {
   )
 }
 
-val jsonParser = "org.codehaus.jackson" % "jackson-mapper-asl" % "1.9.2"
+val jsonParser = "org.codehaus.jackson" % "jackson-mapper-asl" % "1.9.11"
 
 lazy val bijectionThrift = {
   module("thrift").settings(
