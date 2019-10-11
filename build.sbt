@@ -226,7 +226,7 @@ lazy val bijectionProtobuf = {
   module("protobuf").settings(
     osgiExportAll("com.twitter.bijection.protobuf"),
     libraryDependencies ++= Seq(
-      "com.google.protobuf" % "protobuf-java" % "2.4.1"
+      "com.google.protobuf" % "protobuf-java" % "2.6.1"
     )
   ).dependsOn(
     bijectionCore % "test->test;compile->compile"
