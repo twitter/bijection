@@ -12,7 +12,7 @@ val scalacheckVersion = "1.13.4"
 
 val utilVersion = "6.39.0"
 
-val scroogeSerializerVersion = "4.13.0"
+val scroogeSerializerVersion = "4.20.0"
 
 def util(mod: String) =
   "com.twitter" %% (s"util-$mod") % utilVersion % "provided"
