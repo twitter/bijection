@@ -87,7 +87,7 @@ class StringBijectionLaws extends CheckProperties with BaseProperties {
   property("rts through StringJoinBijection") {
     forAll { (sep: String, xs: List[String]) =>
       val sjBij = StringJoinBijection(sep)
-      val iter = xs.toIterable
+      val iter: Iterable[String] = xs
       (!iter.exists(_.contains(sep))) ==> (iter == rt(iter)(sjBij))
     }
   }

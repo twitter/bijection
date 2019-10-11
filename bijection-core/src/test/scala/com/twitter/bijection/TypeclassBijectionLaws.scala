@@ -23,23 +23,6 @@ class TypeclassBijectionLaws
       def apply[A, B](tc: Ordering[A], bij: Bijection[A, B]) = tc.on { bij.invert(_) }
     }
 
-  implicit val numericTypeclassBijection: TypeclassBijection[Numeric] =
-    new TypeclassBijection[Numeric] {
-      def apply[A, B](tc: Numeric[A], bij: Bijection[A, B]) =
-        new Numeric[B] {
-          def plus(x: B, y: B) = bij(tc.plus(bij.invert(x), bij.invert(y)))
-          def minus(x: B, y: B) = bij(tc.minus(bij.invert(x), bij.invert(y)))
-          def times(x: B, y: B) = bij(tc.times(bij.invert(x), bij.invert(y)))
-          def negate(x: B) = bij(tc.negate(bij.invert(x)))
-          def fromInt(x: Int) = bij(tc.fromInt(x))
-          def toInt(x: B) = tc.toInt(bij.invert(x))
-          def toLong(x: B) = tc.toLong(bij.invert(x))
-          def toFloat(x: B) = tc.toFloat(bij.invert(x))
-          def toDouble(x: B) = tc.toDouble(bij.invert(x))
-          def compare(x: B, y: B) = tc.compare(bij.invert(x), bij.invert(y))
-        }
-    }
-
   case class Wrapper(get: Int)
   implicit val wrapperbij: Bijection[Wrapper, Int] = Bijection.build[Wrapper, Int] { _.get } {
     Wrapper(_)
@@ -54,7 +37,6 @@ class TypeclassBijectionLaws
     deriveFor[Semigroup, A]
     deriveFor[Ordering, A]
     deriveFor[Ordering, Wrapper]
-    deriveFor[Numeric, Wrapper]
   }
 }
 
