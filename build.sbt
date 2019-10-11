@@ -255,7 +255,7 @@ lazy val bijectionGuava = {
       // This dependency is required because scalac needs access to all java
       // runtime annotations even though javac does not as detailed here:
       // http://code.google.com/p/guava-libraries/issues/detail?id=1095
-      "com.google.code.findbugs" % "jsr305" % "1.3.9",
+      "com.google.code.findbugs" % "jsr305" % "3.0.2",
       "com.google.guava" % "guava" % "14.0"
     )
   ).dependsOn(
