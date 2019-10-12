@@ -321,7 +321,7 @@ lazy val bijectionClojure = {
 lazy val bijectionNetty = {
   module("netty").settings(
     osgiExportAll("com.twitter.bijection.netty"),
-    libraryDependencies += "io.netty" % "netty" % "3.5.13.Final"
+    libraryDependencies += "io.netty" % "netty" % "3.10.6.Final"
   ).dependsOn(
     bijectionCore % "test->test;compile->compile"
   )
