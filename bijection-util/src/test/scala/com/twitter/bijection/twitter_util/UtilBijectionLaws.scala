@@ -33,7 +33,6 @@ import org.scalatest.BeforeAndAfterAll
 import scala.concurrent.{Future => ScalaFuture, Await => ScalaAwait}
 import scala.concurrent.duration.Duration
 import scala.util.{Try => ScalaTry}
-import scala.concurrent.future
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class UtilBijectionLaws extends CheckProperties with BaseProperties with BeforeAndAfterAll {
@@ -51,7 +50,9 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties with BeforeA
   implicit def futureArb[T: Arbitrary] = arbitraryViaFn[T, TwitterFuture[T]] {
     TwitterFuture.value
   }
-  implicit def scalaFutureArb[T: Arbitrary] = arbitraryViaFn[T, ScalaFuture[T]] { future(_) }
+  implicit def scalaFutureArb[T: Arbitrary] = arbitraryViaFn[T, ScalaFuture[T]] {
+    ScalaFuture.apply(_)
+  }
   implicit def javaFutureArb[T: Arbitrary] = arbitraryViaFn[T, JavaFuture[T]] { t =>
     val f = new FutureTask[T](new Callable[T] {
       override def call(): T = t
