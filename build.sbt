@@ -28,8 +28,7 @@ val buildLevelSettings = Seq(
   organization := "com.twitter",
   crossScalaVersions := Seq("2.11.12", scalaVersion.value),
   javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
-  javacOptions in doc := Seq("-source", "1.6",    "-Xlint:deprecation",
-  "-Xlint:unchecked"),
+  javacOptions in doc := Seq("-source", "1.6", "-Xlint:deprecation", "-Xlint:unchecked"),
   scalaVersion := "2.12.8",
   scalacOptions ++= Seq(
     "-unchecked",
