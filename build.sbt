@@ -383,7 +383,7 @@ lazy val bijectionJodaTime = {
       osgiExportAll("com.twitter.bijection.jodatime"),
       libraryDependencies ++= Seq(
         "joda-time" % "joda-time" % "2.10.4",
-        "org.joda" % "joda-convert" % "1.9.2"
+        "org.joda" % "joda-convert" % "2.2.1"
       )
     )
     .dependsOn(
@@ -397,8 +397,8 @@ lazy val bijectionJson4s = {
       osgiExportAll("com.twitter.bijection.json4s"),
       libraryDependencies ++= Seq(
         "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-        "org.json4s" %% "json4s-native" % "3.5.5",
-        "org.json4s" %% "json4s-ext" % "3.5.5"
+        "org.json4s" %% "json4s-native" % "3.6.7",
+        "org.json4s" %% "json4s-ext" % "3.6.7"
       )
     )
     .dependsOn(
