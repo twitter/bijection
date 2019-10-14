@@ -4,14 +4,29 @@ matrix:
   include:
     - scala: 2.11.8
       jdk: openjdk8
-      script: ./sbt ++$TRAVIS_SCALA_VERSION clean test
+      script:
+        - >
+          sbt
+          "++$TRAVIS_SCALA_VERSION clean"
+          "++$TRAVIS_SCALA_VERSION test"
 
+    - name: checks
+      scala: 2.12.1
+      jdk: openjdk8
+      script: sbt scalafmtCheckAll scalafmtSbtCheck
+        
     - scala: 2.12.1
       jdk: openjdk8
-      script: ./sbt ++$TRAVIS_SCALA_VERSION clean coverage scalafmtCheck test:scalafmtCheck test coverageReport mimaReportBinaryIssues
+      script:
+        - >
+          sbt
+          coverage
+          "++$TRAVIS_SCALA_VERSION clean"
+          "++$TRAVIS_SCALA_VERSION test"
+          "++$TRAVIS_SCALA_VERSION coverageReport"
+          "++$TRAVIS_SCALA_VERSION mimaReportBinaryIssues"
       after_success:
         - bash <(curl -s https://codecov.io/bash)
-
 
 cache:
   directories:
