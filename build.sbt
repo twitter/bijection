@@ -27,10 +27,11 @@ def scroogeSerializer = {
 
 val buildLevelSettings = Seq(
   organization := "com.twitter",
-  crossScalaVersions := Seq("2.11.8", "2.12.1"),
+  crossScalaVersions := Seq("2.11.12", scalaVersion.value),
   javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
-  javacOptions in doc := Seq("-source", "1.6"),
-  scalaVersion := "2.12.1",
+  javacOptions in doc := Seq("-source", "1.6",    "-Xlint:deprecation",
+  "-Xlint:unchecked"),
+  scalaVersion := "2.12.8",
   scalacOptions ++= Seq(
     "-unchecked",
     "-deprecation",
@@ -143,6 +144,12 @@ val ignoredABIProblems = {
     ),
     exclude[ReversedMissingMethodProblem](
       "com.twitter.bijection.twitter_util.UtilBijections.twitter2JavaFutureInjection"
+    ),
+    exclude[DirectMissingMethodProblem](
+      "com.twitter.bijection.netty.ChannelBufferBijection.invert"
+    ),
+    exclude[DirectMissingMethodProblem](
+      "com.twitter.bijection.Bijection.trav2Vector"
     )
   )
 }

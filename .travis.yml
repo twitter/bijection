@@ -2,11 +2,11 @@ language: scala
 sudo: false
 matrix:
   include:
-    - scala: 2.11.8
+    - scala: 2.11.12
       jdk: openjdk8
       script: ./sbt ++$TRAVIS_SCALA_VERSION clean test
 
-    - scala: 2.12.1
+    - scala: 2.12.8
       jdk: openjdk8
       script: ./sbt ++$TRAVIS_SCALA_VERSION clean coverage scalafmtCheck test:scalafmtCheck test coverageReport mimaReportBinaryIssues
       after_success:
