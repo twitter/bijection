@@ -55,7 +55,8 @@ object BufferableGenerator {
       "      }\n" +
       "      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>\n" +
       "        " + ((0 until cnt) map { bufferGet(_) }).mkString("", "\n        ", "\n") +
-      "        val res = Tuple" + cnt + (0 until cnt).map { lowerLetters(_) }
+      "        val res = Tuple" + cnt + (0 until cnt)
+      .map { lowerLetters(_) }
       .mkString("(", ", ", ")") + "\n" +
       "        (buf" + lowerLetters(cnt - 1) + ", res)\n" +
       "      }\n" +
