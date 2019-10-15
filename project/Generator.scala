@@ -92,7 +92,8 @@ object Generator {
       "](implicit " + ((0 until cnt) map { bijectionParameter(_, "Injection") } mkString (", ")) + "):\n    " +
       tupleBijectionType(cnt, "Injection") + " = new Abstract" + tupleBijectionType(
       cnt,
-      "Injection") + " {\n" +
+      "Injection"
+    ) + " {\n" +
       "      " + applyMethod(cnt) + "\n" +
       "      " + invertInj(cnt) + "\n" +
       "    }"
