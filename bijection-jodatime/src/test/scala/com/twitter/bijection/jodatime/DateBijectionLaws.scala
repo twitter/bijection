@@ -4,7 +4,6 @@ import org.scalacheck.{Arbitrary, Gen}
 import org.scalacheck.Prop._
 
 import org.scalatest.{PropSpec, MustMatchers}
-import org.scalatest.prop.PropertyChecks
 
 import com.twitter.bijection.{Bijection, BaseProperties, ImplicitBijection}
 import java.util.Date

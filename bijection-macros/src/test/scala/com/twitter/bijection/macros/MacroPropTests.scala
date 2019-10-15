@@ -4,12 +4,16 @@ import scala.util.Success
 
 import org.scalacheck.Arbitrary
 import org.scalatest.{Matchers, PropSpec}
-import org.scalatest.prop.PropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 import com.twitter.bijection._
 import com.twitter.bijection.macros._
 
-trait MacroPropTests extends PropSpec with PropertyChecks with Matchers with MacroTestHelper {
+trait MacroPropTests
+    extends PropSpec
+    with ScalaCheckPropertyChecks
+    with Matchers
+    with MacroTestHelper {
   import MacroImplicits._
   import MacroCaseClasses._
 

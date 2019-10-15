@@ -15,7 +15,6 @@
 package com.twitter.bijection.hbase
 
 import org.scalatest.{PropSpec, MustMatchers}
-import org.scalatest.prop.PropertyChecks
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 
