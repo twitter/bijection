@@ -16,14 +16,12 @@ limitations under the License.
 
 package com.twitter.bijection.json
 
-import com.twitter.bijection.{Bijection, Injection, InversionFailure, ImplicitBijection}
+import com.twitter.bijection.{Bijection, Injection, InversionFailure}
 import com.twitter.bijection.Inversion.{attempt, attemptWhen}
-import org.codehaus.jackson.{JsonParser, JsonNode, JsonFactory}
+import org.codehaus.jackson.{JsonNode, JsonFactory}
 import org.codehaus.jackson.map.ObjectMapper
-import org.codehaus.jackson.node.{BooleanNode, IntNode, JsonNodeFactory, LongNode}
+import org.codehaus.jackson.node.JsonNodeFactory
 
-import scala.collection.Factory
-import scala.collection.mutable.Builder
 import scala.collection.JavaConverters._
 import scala.util.{Success, Try}
 import scala.util.control.NonFatal
@@ -73,7 +71,7 @@ trait LowPriorityJson {
   * You need to import all the methods of this object to get general
   * Injection[T,JsonNode] to work
   */
-object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
+object JsonNodeInjection extends CollectionJson with LowPriorityJson with java.io.Serializable {
 
   def toJsonNode[T](t: T)(implicit json: JsonNodeInjection[T]): JsonNode =
     json.apply(t)
@@ -132,35 +130,6 @@ object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
           case NonFatal(_) =>
             fromJsonNode[L](n).map { Left(_) }.recoverWith(InversionFailure.partialFailure(n))
         }
-    }
-
-  // This causes diverging implicits
-  def collectionJson[T, C <: Traversable[T]](
-      implicit fact: Factory[T, C],
-      jbij: JsonNodeInjection[T]
-  ): JsonNodeInjection[C] =
-    new AbstractJsonNodeInjection[C] {
-      def apply(l: C) = {
-        val ary = JsonNodeFactory.instance.arrayNode
-        l foreach { t =>
-          ary.add(jbij(t))
-        }
-        ary
-      }
-      override def invert(n: JsonNode): Try[C] = {
-        val builder = fact.newBuilder
-        var inCount = 0
-        n.getElements.asScala.foreach { jn =>
-          inCount += 1
-          val thisC = jbij.invert(jn)
-          if (thisC.isFailure) {
-            return InversionFailure.failedAttempt(n)
-          }
-          builder += thisC.get
-        }
-        val res = builder.result
-        if (res.size == inCount) Success(res) else InversionFailure.failedAttempt(n)
-      }
     }
 
   implicit def listJson[T: JsonNodeInjection]: JsonNodeInjection[List[T]] =
