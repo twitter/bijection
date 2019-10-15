@@ -360,7 +360,7 @@ lazy val bijectionAvro = {
     .settings(
       osgiExportAll("com.twitter.bijection.avro"),
       libraryDependencies ++= Seq(
-        "org.apache.avro" % "avro" % "1.7.7"
+        "org.apache.avro" % "avro" % "1.9.1"
       )
     )
     .dependsOn(
