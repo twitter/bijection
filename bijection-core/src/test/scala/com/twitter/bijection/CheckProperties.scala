@@ -1,7 +1,7 @@
 package com.twitter.bijection
 
 import org.scalatest.PropSpec
-import org.scalatest.prop.Checkers
+import org.scalatestplus.scalacheck.Checkers
 
 /**
   * @author Mansur Ashraf.

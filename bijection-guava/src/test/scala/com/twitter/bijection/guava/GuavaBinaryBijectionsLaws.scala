@@ -16,7 +16,6 @@ package com.twitter.bijection.guava
 
 import com.twitter.bijection.{CheckProperties, BaseProperties}
 import org.scalatest.{PropSpec, MustMatchers}
-import org.scalatest.prop.PropertyChecks
 
 import com.twitter.bijection.guava.GuavaBinaryBijections._
 import com.twitter.bijection.guava.GuavaBinaryBijections.Base64String

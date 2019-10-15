@@ -19,7 +19,6 @@ package com.twitter.bijection.protobuf
 import com.twitter.bijection.{CheckProperties, BaseProperties, Bijection}
 import com.twitter.bijection.protobuf.TestMessages.{FatigueCount, Gender}
 import org.scalatest.{PropSpec, MustMatchers}
-import org.scalatest.prop.PropertyChecks
 
 import org.scalacheck.Arbitrary
 import org.scalatest._

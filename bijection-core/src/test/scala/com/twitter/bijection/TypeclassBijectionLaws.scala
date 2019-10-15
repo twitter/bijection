@@ -1,11 +1,11 @@
 package com.twitter.bijection
 
 import org.scalatest.{PropSpec, MustMatchers}
-import org.scalatest.prop.PropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class TypeclassBijectionLaws
     extends PropSpec
-    with PropertyChecks
+    with ScalaCheckPropertyChecks
     with MustMatchers
     with BaseProperties {
   import FakeAlgebird._

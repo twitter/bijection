@@ -20,7 +20,6 @@ import com.twitter.bijection.Conversion.asMethod
 
 import com.twitter.bijection.{CheckProperties, BaseProperties, Bijection, Injection}
 import org.scalatest.{PropSpec, MustMatchers}
-import org.scalatest.prop.PropertyChecks
 
 import org.scalacheck.Prop.forAll
 import org.scalacheck.Arbitrary

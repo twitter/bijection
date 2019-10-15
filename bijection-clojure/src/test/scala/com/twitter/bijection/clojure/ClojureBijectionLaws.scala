@@ -19,8 +19,8 @@ package com.twitter.bijection.clojure
 import com.twitter.bijection.{BaseProperties, Bijection}
 import org.scalacheck.{Arbitrary}
 import org.scalatest.PropSpec
-import org.scalatest.prop.PropertyChecks
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-class ClojureBijectionLaws extends PropSpec with PropertyChecks with BaseProperties {
+class ClojureBijectionLaws extends PropSpec with ScalaCheckPropertyChecks with BaseProperties {
   // TODO: Fill in tests.
 }

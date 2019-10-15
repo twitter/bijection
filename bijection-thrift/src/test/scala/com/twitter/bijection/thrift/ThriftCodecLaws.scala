@@ -18,7 +18,6 @@ package com.twitter.bijection.thrift
 
 import com.twitter.bijection.{CheckProperties, BaseProperties, Bijection, Injection}
 import org.scalatest.{PropSpec, MustMatchers}
-import org.scalatest.prop.PropertyChecks
 
 import org.scalacheck.{Gen, Arbitrary}
 import org.scalatest._
