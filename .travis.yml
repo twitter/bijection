@@ -11,11 +11,11 @@ matrix:
           "++$TRAVIS_SCALA_VERSION test"
 
     - name: checks
-      scala: 2.12.8
+      scala: 2.12.10
       jdk: openjdk8
       script: sbt scalafmtCheckAll scalafmtSbtCheck
         
-    - scala: 2.12.8
+    - scala: 2.12.10
       jdk: openjdk8
       script:
         - >

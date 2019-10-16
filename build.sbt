@@ -29,7 +29,7 @@ val buildLevelSettings = Seq(
   crossScalaVersions := Seq("2.11.12", scalaVersion.value),
   javacOptions ++= Seq("-source", "1.6", "-target", "1.6"),
   javacOptions in doc := Seq("-source", "1.6", "-Xlint:deprecation", "-Xlint:unchecked"),
-  scalaVersion := "2.12.8",
+  scalaVersion := "2.12.10",
   scalacOptions ++= Seq(
     "-unchecked",
     "-deprecation",
@@ -132,6 +132,43 @@ def youngestForwardCompatible(subProj: String) = {
 }
 
 /**
+  * Generic AnyVal's were incorrectly reported as the underlying type in
+  * the signature, while they were in fact instantiated AnyVal wrappers.
+  *
+  * This changed the reported binary signature, but not the actual binary
+  * signature. This is source-breaking against java, but not binary
+  * breaking
+  * see https://github.com/scala/scala/pull/8127 for more details
+  */
+val changedSignatures8127 = List(
+  "Base64String.unwrap",
+  "Bijection.bytes2Base64",
+  "Bijection.bytes2GZippedBase64",
+  "Bijection.bytes2GzippedBytes",
+  "BinaryBijections.bytes2Base64",
+  "BinaryBijections.bytes2GZippedBase64",
+  "BinaryBijections.bytes2GzippedBytes",
+  "EnglishInt.bijectionToInt",
+  "GZippedBase64String.unwrap",
+  "GZippedBytes.andThen",
+  "GZippedBytes.compose",
+  "Injection.string2UrlEncodedString",
+  "NumberSystems.binary",
+  "NumberSystems.hexadecimal",
+  "NumberSystems.octal",
+  "StringCodec.string2UrlEncodedString",
+  "StringInjections.string2UrlEncodedString",
+  "guava.GuavaBinaryBijections.bytes2Base16",
+  "guava.GuavaBinaryBijections.bytes2Base32",
+  "guava.GuavaBinaryBijections.bytes2Base32HEX",
+  "guava.GuavaBinaryBijections.bytes2Base64",
+  "guava.GuavaBinaryBijections.bytes2Base64Url",
+  "json.JsonNodeInjection.unparsed",
+  "json.UnparsedJson.injection",
+  "json.UnparsedJson.unwrap"
+).map(part => s"com.twitter.bijection.$part")
+
+/**
   * Empty this each time we publish a new version (and bump the minor number)
   */
 val ignoredABIProblems = {
@@ -153,7 +190,7 @@ val ignoredABIProblems = {
     exclude[DirectMissingMethodProblem](
       "com.twitter.bijection.Bijection.trav2Vector"
     )
-  )
+  ) ++ changedSignatures8127.map(exclude[IncompatibleSignatureProblem])
 }
 
 def osgiExportAll(packs: String*) = {
