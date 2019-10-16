@@ -49,16 +49,20 @@ public class TestBijectionInJava extends JUnitSuite {
     //TODO include a cleaner way to get to the scala Bijections than Bijection$.MODULE$.
     @Test
     public void testBase64Bijection() {
-        // Note, value classes return the underlying types in Java. But Java users usually
-        // don't care much about type safety, so punting on this for now
-        Bijection<byte[], String> bytes2Base64 = Bijection$.MODULE$.bytes2Base64();
+        //https://github.com/scala/scala/pull/8127
+        //generic AnyVal signatures pre-2.12.9 incorrectly had the underlying
+        //type, while in reality it's the boxed AnyVal
+        //the cast is required only for 2.11.x
+        Bijection<byte[], Base64String> bytes2Base64 = (Bijection<byte[], Base64String>)(Object)Bijection$.MODULE$.bytes2Base64();
     }
 
     @Test
     public void testBase64BijectionGzip() {
-        // Note, value classes return the underlying types in Java. But Java users usually
-        // don't care much about type safety, so punting on this for now
-        Bijection<byte[], String> bytes2GZippedBase64 = Bijection$.MODULE$.bytes2GZippedBase64();
+        //https://github.com/scala/scala/pull/8127
+        //generic AnyVal signatures pre-2.12.9 incorrectly had the underlying
+        //type, while in reality it's the boxed AnyVal
+        //the cast is required only for 2.11.x
+        Bijection<byte[], GZippedBase64String> bytes2GZippedBase64 = (Bijection<byte[], GZippedBase64String>)(Object)Bijection$.MODULE$.bytes2GZippedBase64();
     }
 
     // Instantiate a Bijection to String // Looks like the Long is erased
