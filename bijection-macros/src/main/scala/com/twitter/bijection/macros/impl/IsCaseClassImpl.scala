@@ -1,8 +1,6 @@
 package com.twitter.bijection.macros.impl
 
-import scala.language.experimental.macros
 import scala.reflect.macros.Context
-import scala.reflect.runtime.universe._
 import scala.util.{Try => BasicTry}
 
 import com.twitter.bijection.macros.{IsCaseClass, MacroGenerated}

@@ -16,7 +16,7 @@
 
 package com.twitter.bijection.scrooge
 
-import com.twitter.bijection.{Bijection, Injection}
+import com.twitter.bijection.Injection
 import com.twitter.bijection.Inversion.attempt
 import com.twitter.bijection.macros.Macros
 import com.twitter.scrooge._

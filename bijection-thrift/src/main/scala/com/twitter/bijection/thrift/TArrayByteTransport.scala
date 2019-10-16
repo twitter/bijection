@@ -1,7 +1,5 @@
 package com.twitter.bijection.thrift
 
-import org.apache.thrift.protocol._
-import org.apache.thrift.TException
 import org.apache.thrift.transport.TTransport
 
 case class TArrayByteTransport(buf: Array[Byte]) extends TTransport {

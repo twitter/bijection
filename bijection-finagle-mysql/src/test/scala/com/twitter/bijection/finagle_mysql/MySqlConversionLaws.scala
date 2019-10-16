@@ -16,13 +16,11 @@ limitations under the License.
 
 package com.twitter.bijection.finagle_mysql
 
-import com.twitter.bijection.{CheckProperties, BaseProperties, Bijection}
+import com.twitter.bijection.{CheckProperties, BaseProperties}
 import org.scalacheck.Arbitrary
 import com.twitter.finagle.mysql._
 import java.sql.Timestamp
-import java.util.Date
 
-import org.scalacheck.Prop.forAll
 import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary

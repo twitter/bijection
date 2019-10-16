@@ -1,6 +1,6 @@
 package com.twitter.bijection.protobuf
 
-import com.twitter.bijection.{Bijection, Conversion, Injection, InversionFailure}
+import com.twitter.bijection.{Conversion, Injection, InversionFailure}
 import com.twitter.bijection.Inversion.attempt
 import com.google.protobuf.Message
 import com.google.protobuf.ProtocolMessageEnum

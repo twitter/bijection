@@ -1,9 +1,7 @@
 package com.twitter.bijection.macros.impl
 
 import scala.collection.mutable.{Map => MMap}
-import scala.language.experimental.macros
 import scala.reflect.macros.Context
-import scala.reflect.runtime.universe._
 
 class TupleUtils[C <: Context](val c: C) {
   import c.universe._

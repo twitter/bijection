@@ -16,14 +16,13 @@ limitations under the License.
 
 package com.twitter.bijection.json
 
-import com.twitter.bijection.{Bijection, Injection, InversionFailure, ImplicitBijection}
+import com.twitter.bijection.{Bijection, Injection, InversionFailure}
 import com.twitter.bijection.Inversion.{attempt, attemptWhen}
-import org.codehaus.jackson.{JsonParser, JsonNode, JsonFactory}
+import org.codehaus.jackson.{JsonNode, JsonFactory}
 import org.codehaus.jackson.map.ObjectMapper
-import org.codehaus.jackson.node.{BooleanNode, IntNode, JsonNodeFactory, LongNode}
+import org.codehaus.jackson.node.JsonNodeFactory
 
 import scala.collection.generic.CanBuildFrom
-import scala.collection.mutable.Builder
 import scala.collection.JavaConverters._
 import scala.util.{Success, Try}
 import scala.util.control.NonFatal

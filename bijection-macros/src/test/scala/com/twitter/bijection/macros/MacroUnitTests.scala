@@ -3,7 +3,6 @@ package com.twitter.bijection.macros
 import org.scalatest.{Matchers, WordSpec}
 
 import com.twitter.bijection._
-import com.twitter.bijection.macros._
 
 import scala.util.{Failure, Success}
 

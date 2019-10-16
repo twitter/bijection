@@ -24,7 +24,6 @@ import java.nio.ByteBuffer
 
 import org.apache.thrift.protocol._
 import org.apache.thrift.TException
-import org.apache.thrift.transport.TTransport
 
 /**
   * Binary protocol implementation for thrift.

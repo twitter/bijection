@@ -28,9 +28,9 @@ import java.lang.{
 import java.math.BigInteger
 import java.util.UUID
 
-import org.scalacheck.{Gen, Prop}
+import org.scalacheck.Gen
 
-import org.scalatest.{PropSpec, Tag => stTag}
+import org.scalatest.PropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import org.scalatestplus.scalacheck.Checkers
 

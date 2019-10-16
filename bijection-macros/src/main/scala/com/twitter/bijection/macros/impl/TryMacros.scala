@@ -1,11 +1,8 @@
 package com.twitter.bijection.macros.impl
 
-import scala.language.experimental.macros
 import scala.reflect.macros.Context
 import scala.reflect.runtime.universe._
 import scala.util.Try
-
-import com.twitter.bijection._
 
 private[bijection] object TryMacros {
   def fastAttempt[A, B](
