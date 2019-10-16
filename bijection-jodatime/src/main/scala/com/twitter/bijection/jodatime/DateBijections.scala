@@ -1,7 +1,6 @@
 package com.twitter.bijection.jodatime
 
 import com.twitter.bijection.{Bijection, AbstractBijection}
-import java.util.Date
 import org.joda.time.DateTime
 
 trait DateBijections {

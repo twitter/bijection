@@ -16,14 +16,6 @@ limitations under the License.
 
 package com.twitter.bijection
 
-import java.lang.{
-  Byte => JByte,
-  Double => JDouble,
-  Float => JFloat,
-  Integer => JInt,
-  Long => JLong,
-  Short => JShort
-}
 import java.nio.ByteBuffer
 
 import org.scalacheck.Arbitrary

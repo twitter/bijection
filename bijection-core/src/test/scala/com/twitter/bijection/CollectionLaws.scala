@@ -17,7 +17,6 @@ limitations under the License.
 package com.twitter.bijection
 
 import org.scalacheck.Arbitrary
-import org.scalatest.MustMatchers
 
 class CollectionLaws extends CheckProperties with BaseProperties {
   import com.twitter.bijection.StringArbs._

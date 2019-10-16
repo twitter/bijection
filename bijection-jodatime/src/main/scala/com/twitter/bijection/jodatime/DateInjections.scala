@@ -3,7 +3,7 @@ package com.twitter.bijection.jodatime
 import java.util.Date
 import org.joda.time.{DateTime, LocalDate, LocalTime, YearMonth, MonthDay}
 import com.twitter.bijection.Inversion.attempt
-import com.twitter.bijection.{Injection, InversionFailure, AbstractInjection}
+import com.twitter.bijection.{Injection, AbstractInjection}
 
 trait DateInjections {
 

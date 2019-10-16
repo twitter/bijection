@@ -16,8 +16,7 @@
 
 package com.twitter.bijection.clojure
 
-import com.twitter.bijection.{BaseProperties, Bijection}
-import org.scalacheck.{Arbitrary}
+import com.twitter.bijection.BaseProperties
 import org.scalatest.PropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 

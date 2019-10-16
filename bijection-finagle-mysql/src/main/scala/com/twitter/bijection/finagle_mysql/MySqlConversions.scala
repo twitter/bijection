@@ -19,7 +19,7 @@ package com.twitter.bijection.finagle_mysql
 import com.twitter.bijection._
 import com.twitter.finagle.mysql._
 import java.sql.Timestamp
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Success}
 
 /**
   * Bijections and injections for mapping twitter-finagle's MySql datatypes to Scala datatypes

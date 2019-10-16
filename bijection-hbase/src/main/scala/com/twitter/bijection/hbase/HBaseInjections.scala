@@ -17,11 +17,9 @@ package com.twitter.bijection.hbase
 import com.twitter.bijection.AbstractInjection
 import com.twitter.bijection.Injection
 import com.twitter.bijection.macros.Macros.fastAttempt
-import com.twitter.bijection.Tag
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
 import org.apache.hadoop.hbase.util.Bytes
 import scala.util.Try
-import scala.util.Success
 
 /**
   * Provides various HBase specific Injections by wrapping org.apache.hadoop.hbase.util.Bytes

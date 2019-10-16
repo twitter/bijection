@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.twitter.bijection.json
 
-import com.twitter.bijection.{Bijection, AbstractBijection, AbstractInjection, Injection}
+import com.twitter.bijection.{AbstractInjection, Injection}
 import com.twitter.bijection.Inversion.attempt
 import JsonNodeInjection.{fromJsonNode, toJsonNode}
 

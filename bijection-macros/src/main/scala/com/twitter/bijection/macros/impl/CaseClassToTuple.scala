@@ -1,13 +1,10 @@
 package com.twitter.bijection.macros.impl
 
 import scala.collection.mutable.{Map => MMap}
-import scala.language.experimental.macros
 import scala.reflect.macros.Context
-import scala.reflect.runtime.universe._
-import scala.util.Try
 
 import com.twitter.bijection._
-import com.twitter.bijection.macros.{IsCaseClass, MacroGenerated}
+import com.twitter.bijection.macros.IsCaseClass
 
 private[bijection] object CaseClassToTuple {
   def caseClassToTupleImplWithOption[T, Tup](c: Context)(

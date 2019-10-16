@@ -52,7 +52,6 @@ object Externalizer {
 class Externalizer[T] extends Externalizable {
   // Either points to a result or a delegate Externalizer to fufil that result.
   private var item: Either[Externalizer[T], Option[T]] = Right(None)
-  import Externalizer._
 
   @transient private val doesJavaWork = new AtomicReference[Option[Boolean]](None)
   @transient private val testing = new AtomicBoolean(false)

@@ -1,11 +1,8 @@
 package com.twitter.bijection.jodatime
 
 import org.scalacheck.{Arbitrary, Gen}
-import org.scalacheck.Prop._
 
-import org.scalatest.{PropSpec, MustMatchers}
-
-import com.twitter.bijection.{Bijection, BaseProperties, ImplicitBijection}
+import com.twitter.bijection.BaseProperties
 import java.util.Date
 import org.joda.time.{DateTime, LocalDate, LocalTime, YearMonth, MonthDay}
 import com.twitter.bijection._
@@ -15,8 +12,6 @@ class DateBijectionsLaws
     with BaseProperties
     with DateBijections
     with DateInjections {
-
-  import Rep._
 
   implicit val strByte = arbitraryViaBijection[Date, String @@ Rep[Date]]
 
