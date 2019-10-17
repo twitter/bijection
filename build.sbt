@@ -8,7 +8,7 @@ import bijection._
 val finagleVersion = "6.45.0"
 
 val scalatestVersion = "3.0.8"
-val scalacheckVersion = "1.13.5"
+val scalacheckVersion = "1.14.2"
 
 val utilVersion = "6.45.0"
 
@@ -456,7 +456,7 @@ lazy val bijectionMacros = {
         "org.scala-lang" % "scala-library" % scalaVersion.value,
         "org.scala-lang" % "scala-reflect" % scalaVersion.value
       ),
-      addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
+      addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
     )
     .dependsOn(
       bijectionCore
