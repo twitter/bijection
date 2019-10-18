@@ -104,8 +104,8 @@ class MySqlConversionLaws extends CheckProperties with BaseProperties {
     implicit val valueEquiv = new scala.math.Equiv[Value] {
       override def equiv(a: Value, b: Value) = (a, b) match {
         case (
-            RawValue(Type.Timestamp, Charset.Binary, true, bytes1),
-            RawValue(Type.Timestamp, Charset.Binary, true, bytes2)
+            RawValue(Type.Timestamp, MysqlCharset.Binary, true, bytes1),
+            RawValue(Type.Timestamp, MysqlCharset.Binary, true, bytes2)
             ) =>
           bytes1.toList == bytes2.toList
         case _ => false
