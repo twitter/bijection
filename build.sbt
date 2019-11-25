@@ -276,14 +276,14 @@ lazy val bijectionProtobuf = {
     )
 }
 
-val jsonParser = "org.codehaus.jackson" % "jackson-mapper-asl" % "1.9.11"
+val jsonParser = "org.codehaus.jackson" % "jackson-mapper-asl" % "1.9.13"
 
 lazy val bijectionThrift = {
   module("thrift")
     .settings(
       osgiExportAll("com.twitter.bijection.thrift"),
       libraryDependencies ++= Seq(
-        "org.apache.thrift" % "libthrift" % "0.6.1" exclude ("junit", "junit"),
+        "org.apache.thrift" % "libthrift" % "0.13.0" exclude ("junit", "junit"),
         jsonParser
       )
     )
