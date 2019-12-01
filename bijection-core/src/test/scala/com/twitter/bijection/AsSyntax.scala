@@ -18,8 +18,10 @@ package com.twitter.bijection
 
 import org.scalatest._
 import scala.util.Success
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class AsSyntax extends WordSpec with Matchers {
+class AsSyntax extends AnyWordSpec with Matchers {
   import Conversion.asMethod
 
   "As syntax" should {

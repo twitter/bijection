@@ -30,11 +30,11 @@ import java.util.UUID
 
 import org.scalacheck.Gen
 
-import org.scalatest.PropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import org.scalatestplus.scalacheck.Checkers
 
-import Conversion.asMethod // get the .as syntax
+import Conversion.asMethod
+import org.scalatest.propspec.AnyPropSpec // get the .as syntax
 
 object JavaNumArbs {
   import BaseProperties._
@@ -62,7 +62,7 @@ object JavaNumArbs {
   }
 }
 
-class NumericBijectionLaws extends PropSpec with Checkers with ScalaCheckPropertyChecks {
+class NumericBijectionLaws extends AnyPropSpec with Checkers with ScalaCheckPropertyChecks {
   import StringArbs._
   import JavaNumArbs._
   import BaseProperties._

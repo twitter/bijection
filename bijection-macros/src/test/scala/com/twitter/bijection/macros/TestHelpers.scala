@@ -1,6 +1,5 @@
 package com.twitter.bijection.macros
 
-import org.scalatest.Matchers
 
 import _root_.java.io.{
   ByteArrayOutputStream,
@@ -13,6 +12,7 @@ import _root_.java.io.{
 }
 
 import _root_.java.util.concurrent.atomic.{AtomicBoolean, AtomicReference}
+import org.scalatest.matchers.should.Matchers
 
 object MacroCaseClasses extends java.io.Serializable {
   type Atup = (Int, String)

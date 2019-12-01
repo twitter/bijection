@@ -22,9 +22,9 @@ import java.util.UUID
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen._
 import org.scalacheck.Prop._
-import org.scalatest.FunSuite
 
 import scala.util.Try
+import org.scalatest.funsuite.AnyFunSuite
 
 object StringArbs {
   import BaseProperties._
@@ -40,7 +40,7 @@ object StringArbs {
 /**
   * We had an issue with giant strings. Make sure they work
   */
-class StringRegressions extends FunSuite {
+class StringRegressions extends AnyFunSuite {
   test("Strings larger that 2^24, the largest integer range floats can store work") {
     val bigString = Array.fill(70824427)(42.toByte)
     assert(Injection.utf8.invert(bigString).isSuccess)

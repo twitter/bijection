@@ -3,13 +3,14 @@ package com.twitter.bijection.macros
 import scala.util.Success
 
 import org.scalacheck.Arbitrary
-import org.scalatest.{Matchers, PropSpec}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 import com.twitter.bijection._
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.propspec.AnyPropSpec
 
 trait MacroPropTests
-    extends PropSpec
+    extends AnyPropSpec
     with ScalaCheckPropertyChecks
     with Matchers
     with MacroTestHelper {

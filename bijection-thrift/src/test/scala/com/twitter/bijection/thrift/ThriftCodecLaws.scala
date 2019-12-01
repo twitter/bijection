@@ -20,6 +20,8 @@ import com.twitter.bijection.{CheckProperties, BaseProperties, Injection}
 
 import org.scalacheck.{Gen, Arbitrary}
 import org.scalatest._
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
 class ThriftCodecLaws extends CheckProperties with BaseProperties {
   def buildThrift(i: (Int, String)) =
@@ -53,7 +55,7 @@ class ThriftCodecLaws extends CheckProperties with BaseProperties {
   }
 }
 
-class TEnumTest extends WordSpec with Matchers with BaseProperties {
+class TEnumTest extends AnyWordSpec with Matchers with BaseProperties {
   "TEnum should roundtrip through TEnumCodec" in {
     implicit val b = TEnumCodec[Gender]
     val male = Gender.findByValue(0)
