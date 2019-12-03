@@ -21,7 +21,6 @@ import scala.util.{Failure, Try}
 import scala.reflect.ClassTag
 
 object JavaSerializationInjection extends Serializable {
-
   /**
     * Construct a new JavaSerializationInjection instance
     */

@@ -22,7 +22,6 @@ import scala.util.control.NonFatal
   *  Factory for producing InversionFailures
   */
 object InversionFailure {
-
   /**
     *  Produces a new InversionFailure of a given type
     */

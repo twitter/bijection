@@ -70,7 +70,6 @@ abstract class AbstractBijection[A, B] extends Bijection[A, B] {
 }
 
 trait LowPriorityBijections {
-
   /**
     * Encoding half of the Cantor–Bernstein–Schroeder theorem
     * http://en.wikipedia.org/wiki/Cantor%E2%80%93Bernstein%E2%80%93Schroeder_theorem
@@ -91,7 +90,6 @@ private[bijection] class BijectionFn[A, B](bij: Bijection[A, B])
 }
 
 object Bijection extends CollectionBijections with Serializable {
-
   implicit def toFunction[A, B](bij: Bijection[A, B]): (A => B) = bij.toFunction
 
   def apply[A, B](a: A)(implicit bij: ImplicitBijection[A, B]): B = bij.bijection(a)

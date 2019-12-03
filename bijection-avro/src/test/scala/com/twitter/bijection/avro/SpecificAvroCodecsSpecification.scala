@@ -37,7 +37,6 @@ class SpecificAvroCodecsSpecification extends WordSpec with Matchers with BasePr
                                                 }""")
 
   "Avro codec" should {
-
     "Round trip specific record using Specific Injection" in {
       implicit val specificInjection = SpecificAvroCodecs[FiscalRecord]
       val testRecord = buildSpecificAvroRecord(("2012-01-01", 1, 12))

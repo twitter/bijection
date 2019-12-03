@@ -109,7 +109,6 @@ object EnglishInt {
     val has_higher = (ik > -1 || im > -1)
     val hundred_before_higher = has_100 && has_higher && ((id < ik) || (id < im))
     if (hundred_before_higher) {
-
       val ilist = List(ik, im).filter(x => x != -1).filter(x => x > id)
 
       val ix = if (ilist.size > 1) {

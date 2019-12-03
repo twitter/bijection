@@ -23,7 +23,6 @@ import com.twitter.bijection.InversionFailure.{failedAttempt, partialFailure}
   * Factory for applying inversion attempts
   */
 object Inversion {
-
   /**
     *  The analog of Exception.allCatch either where exceptions
     *  are wrapped by the InversionFailure type

@@ -12,7 +12,6 @@ class DateBijectionsLaws
     with BaseProperties
     with DateBijections
     with DateInjections {
-
   implicit val strByte = arbitraryViaBijection[Date, String @@ Rep[Date]]
 
   /**
@@ -73,5 +72,4 @@ class DateBijectionsLaws
   property("round trips MonthDay -> String") {
     isLooseInjection[MonthDay, String]
   }
-
 }

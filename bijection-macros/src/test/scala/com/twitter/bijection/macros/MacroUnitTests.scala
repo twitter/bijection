@@ -64,7 +64,6 @@ class MacroUnitTests extends WordSpec with Matchers with MacroTestHelper {
   }
 
   "Recursively applied" when {
-
     "MacroGenerated Bijection to tuple" should {
       "be serializable for case class A" in { doesJavaWork[SampleClassA, Atup] }
       "be serializable for case class B" in { doesJavaWork[SampleClassB, Btup] }

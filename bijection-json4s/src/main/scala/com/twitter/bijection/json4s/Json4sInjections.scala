@@ -28,7 +28,6 @@ import scala.reflect.ClassTag
   * @since 1/10/14
   */
 object Json4sInjections {
-
   /**
     * JValue to Json Injection
     */

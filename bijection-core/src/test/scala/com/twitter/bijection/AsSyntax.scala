@@ -35,5 +35,4 @@ class AsSyntax extends WordSpec with Matchers {
       23.as[String] should be("23")
     }
   }
-
 }

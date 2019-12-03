@@ -52,7 +52,6 @@ class GenericAvroCodecsSpecification extends WordSpec with Matchers with BasePro
                                                 }""")
 
   "Generic Avro codec" should {
-
     "Round trip generic record using Generic Injection" in {
       implicit val genericInjection = GenericAvroCodecs[GenericRecord](testSchema)
       val testRecord = buildGenericAvroRecord(("2012-01-01", 1, 12))
@@ -125,7 +124,6 @@ class GenericAvroCodecsSpecification extends WordSpec with Matchers with BasePro
   }
 
   def buildGenericAvroRecord(i: (String, Int, Int)): GenericRecord = {
-
     val fiscalRecord = new GenericData.Record(testSchema)
     fiscalRecord.put("calendarDate", i._1)
     fiscalRecord.put("fiscalWeek", i._2)
