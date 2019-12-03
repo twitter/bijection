@@ -95,7 +95,6 @@ class MySqlConversionLaws extends CheckProperties with BaseProperties {
     isInjection[NullValue.type, Option[String]]
   }
   property("Timestamp") {
-
     /**
       * Custom equivalence typeclass for RawValue
       * This is here to compare two RawValues generated from Timestamps.

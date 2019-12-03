@@ -10,7 +10,6 @@ import com.twitter.util.FuturePool
   */
 class TwitterExecutionContext(pool: FuturePool, report: Throwable => Unit)
     extends ExecutionContext {
-
   def this(pool: FuturePool) = this(pool, TwitterExecutionContext.ignore)
 
   override def execute(runnable: Runnable): Unit = {

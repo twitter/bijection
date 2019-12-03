@@ -25,7 +25,6 @@ import scala.reflect.runtime.universe.TypeTag
   * @since 1/10/14
   */
 class Json4sInjectionLaws extends CheckProperties with BaseProperties {
-
   def createTwit(i: (String, Int, String, List[Int], String)): Twit =
     Twit(i._1, i._2, i._3, i._4, i._5)
 

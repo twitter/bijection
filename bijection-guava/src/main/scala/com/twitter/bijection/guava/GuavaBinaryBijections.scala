@@ -22,7 +22,6 @@ import com.google.common.io.BaseEncoding
   * @since 7/7/13
   */
 object GuavaBinaryBijections {
-
   trait BaseEncoding extends Any {
     def str: String
   }

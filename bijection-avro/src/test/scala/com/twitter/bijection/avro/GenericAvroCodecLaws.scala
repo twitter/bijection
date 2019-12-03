@@ -49,7 +49,6 @@ class GenericAvroCodecLaws extends CheckProperties with BaseProperties {
                                                 }""")
 
   def buildGenericAvroRecord(i: (String, Int, Int)): GenericRecord = {
-
     val fiscalRecord = new GenericData.Record(testSchema)
     fiscalRecord.put("calendarDate", i._1)
     fiscalRecord.put("fiscalWeek", i._2)

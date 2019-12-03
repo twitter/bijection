@@ -29,7 +29,6 @@ import java.math.BigInteger
 import java.util.UUID
 
 trait NumericBijections extends GeneratedTupleBijections {
-
   /**
     * Bijections between the numeric types and their java versions.
     */

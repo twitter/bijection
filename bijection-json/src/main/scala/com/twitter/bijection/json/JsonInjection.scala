@@ -73,7 +73,6 @@ trait LowPriorityJson {
   * Injection[T,JsonNode] to work
   */
 object JsonNodeInjection extends LowPriorityJson with java.io.Serializable {
-
   def toJsonNode[T](t: T)(implicit json: JsonNodeInjection[T]): JsonNode =
     json.apply(t)
 

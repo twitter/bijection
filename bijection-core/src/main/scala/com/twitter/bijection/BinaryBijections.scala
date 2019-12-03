@@ -56,7 +56,6 @@ object Base64String {
   * outside of method scope, and therefore no contention for shared byte arrays.
   */
 trait BinaryBijections extends StringBijections {
-
   /**
     * Bijection between byte array and java.nio.ByteBuffer.
     */
