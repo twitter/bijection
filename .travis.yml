@@ -14,7 +14,7 @@ matrix:
       scala: 2.12.10
       jdk: openjdk8
       script: sbt scalafmtCheckAll scalafmtSbtCheck
-        
+
     - scala: 2.12.10
       jdk: openjdk8
       script:
@@ -30,7 +30,6 @@ matrix:
 
 cache:
   directories:
-  - $HOME/.sbt/0.13/dependency
   - $HOME/.sbt/boot/scala*
   - $HOME/.sbt/launchers
   - $HOME/.ivy2/cache
