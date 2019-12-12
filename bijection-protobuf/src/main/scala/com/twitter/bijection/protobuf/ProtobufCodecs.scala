@@ -13,6 +13,7 @@ import scala.reflect._
   * Bijections for use in serializing and deserializing Protobufs.
   */
 object ProtobufCodec {
+
   /**
     * For scala instantiation. Uses reflection.
     */
@@ -37,6 +38,7 @@ class ProtobufCodec[T <: Message](klass: Class[T]) extends Injection[T, Array[By
 }
 
 object ProtobufEnumCodec {
+
   /**
     * For scala instantiation. Uses reflection.
     */

@@ -32,6 +32,7 @@ import scala.reflect._
   * @since 7/4/13
   */
 object SpecificAvroCodecs {
+
   /**
     * Returns Injection capable of serializing and deserializing a compiled Avro record using SpecificDatumWriter and
     * SpecificDatumReader
@@ -157,6 +158,7 @@ object SpecificAvroCodecs {
 }
 
 object GenericAvroCodecs {
+
   /**
     * Returns Injection capable of serializing and deserializing a generic record using GenericDatumReader and
     * GenericDatumReader

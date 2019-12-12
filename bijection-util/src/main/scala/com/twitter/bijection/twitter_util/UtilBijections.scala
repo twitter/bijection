@@ -41,6 +41,7 @@ import scala.util.{Success, Failure, Try => ScalaTry}
   *  @author Moses Nakamura
   */
 trait UtilBijections {
+
   /**
     * Bijection on Twitter Future
     * if the bijection throws, the result will be a Throw.
@@ -183,6 +184,7 @@ trait UtilBijections {
     }
 
   object Owned {
+
     /**
       * A bijection using Buf's Owned api which minimizes copying of the underlying
       * array data but places the onus of immutability on the user.
@@ -195,6 +197,7 @@ trait UtilBijections {
   }
 
   object Shared {
+
     /**
       * A bijection using Buf's Shared api which avoids sharing state at the cost
       * added allocations for defensive copies.

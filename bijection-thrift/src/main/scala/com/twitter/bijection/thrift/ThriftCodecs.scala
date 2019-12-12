@@ -22,6 +22,7 @@ import scala.reflect._
   * Codecs for use in serializing and deserializing Thrift structures.
   */
 object ThriftCodec {
+
   /**
     * For scala instantiation. Uses reflection.
     */
@@ -116,6 +117,7 @@ class JsonThriftCodec[T <: TBase[_, _]](klass: Class[T])
 }
 
 object TEnumCodec {
+
   /**
     * For scala instantiation. Uses reflection.
     */

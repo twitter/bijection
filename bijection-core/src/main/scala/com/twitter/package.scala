@@ -27,6 +27,7 @@ import scala.util.Try
   * libraries (Bijection[MyTrait, YourTrait]) and many other purposes.
   */
 package object bijection {
+
   /**
     * Injections may not be defined for their inverse conversion.
     * This type represents the attempted conversion. A failure

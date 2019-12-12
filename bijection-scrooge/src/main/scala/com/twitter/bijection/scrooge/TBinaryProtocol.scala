@@ -33,6 +33,7 @@ import org.apache.thrift.protocol.{
   * in Elephant-Bird.
   */
 object TBinaryProtocol {
+
   /**
     * Factory implementation that returns the updated TBinaryProtocol.
     */
