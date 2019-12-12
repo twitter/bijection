@@ -32,6 +32,7 @@ import collection.generic.CanBuildFrom
 import scala.reflect.ClassTag
 
 trait CollectionBijections extends BinaryBijections {
+
   /**
     * Bijections between collection types defined in scala.collection.JavaConverters.
     */
