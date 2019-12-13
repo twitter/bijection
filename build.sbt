@@ -7,7 +7,7 @@ import bijection._
 
 val twitterLibVersion = "19.11.0"
 val scalatestVersion = "3.0.8"
-val scalacheckVersion = "1.14.2"
+val scalacheckVersion = "1.14.3"
 
 def util(mod: String) =
   "com.twitter" %% (s"util-$mod") % twitterLibVersion % "provided"
