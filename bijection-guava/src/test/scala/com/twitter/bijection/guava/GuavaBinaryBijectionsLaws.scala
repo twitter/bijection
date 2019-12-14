@@ -25,7 +25,6 @@ import com.twitter.bijection.guava.GuavaBinaryBijections.Base64URLString
   * @since 7/7/13
   */
 class GuavaBinaryBijectionsLaws extends CheckProperties with BaseProperties {
-
   property("rts Array[Byte] -> Base64String") {
     isInjective[Array[Byte], Base64String]
   }
@@ -45,5 +44,4 @@ class GuavaBinaryBijectionsLaws extends CheckProperties with BaseProperties {
   property("rts Array[Byte] -> Base16String") {
     isInjective[Array[Byte], Base16String]
   }
-
 }

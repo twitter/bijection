@@ -5,9 +5,9 @@ import com.typesafe.sbt.osgi.SbtOsgi.autoImport._
 import ReleaseTransformations._ // for sbt-release.
 import bijection._
 
-val twitterLibVersion = "19.11.0"
-val scalatestVersion = "3.1.0"
-val scalacheckVersion = "1.14.2"
+val twitterLibVersion = "19.12.0"
+val scalatestVersion = "3.0.8"
+val scalacheckVersion = "1.14.3"
 
 def util(mod: String) =
   "com.twitter" %% (s"util-$mod") % twitterLibVersion % "provided"
@@ -283,7 +283,7 @@ lazy val bijectionThrift = {
     .settings(
       osgiExportAll("com.twitter.bijection.thrift"),
       libraryDependencies ++= Seq(
-        "org.apache.thrift" % "libthrift" % "0.6.1" exclude ("junit", "junit"),
+        "org.apache.thrift" % "libthrift" % "0.13.0" exclude ("junit", "junit"),
         jsonParser
       )
     )
@@ -315,7 +315,7 @@ lazy val bijectionScrooge = {
     .settings(
       osgiExportAll("com.twitter.bijection.scrooge"),
       libraryDependencies ++= Seq(
-        "org.apache.thrift" % "libthrift" % "0.6.1" exclude ("junit", "junit"),
+        "org.apache.thrift" % "libthrift" % "0.13.0" exclude ("junit", "junit"),
         scroogeSerializer,
         util("core"),
         finagle("core")
@@ -419,7 +419,7 @@ lazy val bijectionJodaTime = {
     .settings(
       osgiExportAll("com.twitter.bijection.jodatime"),
       libraryDependencies ++= Seq(
-        "joda-time" % "joda-time" % "2.10.4",
+        "joda-time" % "joda-time" % "2.10.5",
         "org.joda" % "joda-convert" % "2.2.1"
       )
     )

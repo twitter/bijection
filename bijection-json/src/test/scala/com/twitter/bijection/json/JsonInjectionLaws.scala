@@ -168,5 +168,4 @@ class JsonInjectionLaws extends CheckProperties with BaseProperties {
       }
     }
   }
-
 }

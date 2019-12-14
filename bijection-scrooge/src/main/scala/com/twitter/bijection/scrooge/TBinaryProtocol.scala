@@ -44,13 +44,8 @@ object TBinaryProtocol {
 
     def this() = this(false, true, 0)
 
-    override def getProtocol(trans: TTransport): TProtocol = {
-      val proto = new TBinaryProtocol(trans, strictRead, strictWrite)
-      if (readLength != 0) {
-        proto.setReadLength(readLength);
-      }
-      proto
-    }
+    override def getProtocol(trans: TTransport): TProtocol =
+      new TBinaryProtocol(trans, strictRead, strictWrite)
   }
 }
 

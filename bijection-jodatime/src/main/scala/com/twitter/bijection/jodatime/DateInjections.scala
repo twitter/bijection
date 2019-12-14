@@ -6,12 +6,10 @@ import com.twitter.bijection.Inversion.attempt
 import com.twitter.bijection.{Injection, AbstractInjection}
 
 trait DateInjections {
-
   implicit val date2String: Injection[Date, String] =
     new AbstractInjection[Date, String] {
       def apply(d: Date) = d.toString
       override def invert(s: String) = attempt(s)(new DateTime(_).toDate())
-
     }
 
   implicit val joda2String: Injection[DateTime, String] =

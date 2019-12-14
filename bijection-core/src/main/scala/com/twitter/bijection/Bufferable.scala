@@ -269,7 +269,6 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
   def getCollection[T, C](
       initbb: ByteBuffer
   )(implicit cbf: CanBuildFrom[Nothing, T, C], buf: Bufferable[T]): Try[(ByteBuffer, C)] = Try {
-
     var bb: ByteBuffer = initbb.duplicate
     val size = bb.getInt
     var idx = 0

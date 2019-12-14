@@ -4,7 +4,6 @@ import com.twitter.bijection.{Bijection, AbstractBijection}
 import org.joda.time.DateTime
 
 trait DateBijections {
-
   implicit val date2joda: Bijection[java.util.Date, DateTime] =
     new AbstractBijection[java.util.Date, DateTime] {
       def apply(d: java.util.Date) = new DateTime(d)
@@ -16,5 +15,4 @@ trait DateBijections {
       def apply(d: DateTime) = d.getMillis()
       override def invert(l: Long) = new DateTime(l)
     }
-
 }

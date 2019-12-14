@@ -90,6 +90,5 @@ private[bijection] object CaseClassToMap {
       }
     }
     """)
-
   }
 }

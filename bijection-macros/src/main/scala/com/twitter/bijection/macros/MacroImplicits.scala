@@ -14,7 +14,6 @@ trait LowerPriorityMacroImplicits {
 }
 
 object MacroImplicits extends LowerPriorityMacroImplicits {
-
   implicit def materializeCaseClassToTuple[T: IsCaseClass, Tup]: Bijection[T, Tup] =
     macro CaseClassToTuple.caseClassToTupleImpl[T, Tup]
   implicit def materializeCaseClassToMap[T: IsCaseClass]: Injection[T, Map[String, Any]] =

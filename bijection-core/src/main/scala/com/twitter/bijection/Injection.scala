@@ -96,7 +96,6 @@ trait LowPriorityInjections {
 }
 
 object Injection extends CollectionInjections with Serializable {
-
   implicit def toFunction[A, B](inj: Injection[A, B]): (A => B) = inj.toFunction
 
   def apply[A, B](a: A)(implicit inj: Injection[A, B]): B = inj(a)

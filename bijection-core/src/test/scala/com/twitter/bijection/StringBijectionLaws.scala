@@ -48,7 +48,6 @@ class StringRegressions extends AnyFunSuite {
 }
 
 class StringBijectionLaws extends CheckProperties with BaseProperties {
-
   property("round trips string -> Array[String]") {
     isSerializableInjection[String, Array[Byte]]
   }
@@ -100,5 +99,4 @@ class StringBijectionLaws extends CheckProperties with BaseProperties {
   // property("viaCollection List[Int] -> String") {
   // roundTrips[List[Int], String @@ Rep[List[Int]]]()
   // }
-
 }

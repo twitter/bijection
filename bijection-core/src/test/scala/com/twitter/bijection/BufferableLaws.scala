@@ -44,7 +44,6 @@ trait BaseBufferable {
 }
 
 class BufferableLaws extends CheckProperties with BaseBufferable {
-
   property("Reallocate works properly") {
     forAll { (bytes: Array[Byte]) =>
       val bb = ByteBuffer.wrap(bytes)

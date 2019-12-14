@@ -153,5 +153,4 @@ case class TArrayBinaryProtocol(transport: TArrayByteTransport) extends TProtoco
     advance(size)
     bb
   }
-
 }

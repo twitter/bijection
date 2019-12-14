@@ -20,7 +20,6 @@ import scala.collection.generic.CanBuildFrom
 import scala.util.{Success, Try}
 
 trait CollectionInjections extends StringInjections {
-
   implicit def optionInjection[A, B](
       implicit inj: Injection[A, B]
   ): Injection[Option[A], Option[B]] =

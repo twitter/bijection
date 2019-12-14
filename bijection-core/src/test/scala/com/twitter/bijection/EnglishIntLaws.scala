@@ -40,5 +40,4 @@ class EnglishIntLaws extends CheckProperties with Matchers with BaseProperties {
   property("as works") {
     List(tiny, small, medium, large).map(test).reduceLeft((a, b) => a && b)
   }
-
 }

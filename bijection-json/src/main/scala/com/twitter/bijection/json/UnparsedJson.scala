@@ -28,7 +28,6 @@ import org.codehaus.jackson.JsonNode
 case class UnparsedJson(str: String) extends AnyVal
 
 object UnparsedJson {
-
   implicit def injection[T](implicit json: JsonNodeInjection[T]): Injection[T, UnparsedJson] =
     new AbstractInjection[T, UnparsedJson] {
       def apply(t: T) =
@@ -49,5 +48,4 @@ object UnparsedJson {
           res
         }
     }
-
 }

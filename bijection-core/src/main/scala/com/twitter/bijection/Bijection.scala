@@ -91,7 +91,6 @@ private[bijection] class BijectionFn[A, B](bij: Bijection[A, B])
 }
 
 object Bijection extends CollectionBijections with Serializable {
-
   implicit def toFunction[A, B](bij: Bijection[A, B]): (A => B) = bij.toFunction
 
   def apply[A, B](a: A)(implicit bij: ImplicitBijection[A, B]): B = bij.bijection(a)
