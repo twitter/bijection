@@ -1,7 +1,7 @@
 package com.twitter.bijection;
 
 import org.junit.Test;
-import org.scalatest.junit.JUnitSuite;
+import org.scalatestplus.junit.JUnitSuite;
 import scala.util.Failure;
 import scala.util.Success;
 import scala.util.Try;

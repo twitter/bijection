@@ -6,8 +6,10 @@ import ReleaseTransformations._ // for sbt-release.
 import bijection._
 
 val twitterLibVersion = "19.12.0"
-val scalatestVersion = "3.0.8"
+val scalatestVersion = "3.1.0"
 val scalacheckVersion = "1.14.3"
+val scalatestPlusScalacheckVersion = "3.1.0.0-RC2"
+val scalatestPlusJunitVersion = "1.0.0-M2"
 
 def util(mod: String) =
   "com.twitter" %% (s"util-$mod") % twitterLibVersion % "provided"
@@ -43,7 +45,8 @@ val buildLevelSettings = Seq(
   ),
   libraryDependencies ++= Seq(
     "org.scalacheck" %% "scalacheck" % scalacheckVersion % "test",
-    "org.scalatest" %% "scalatest" % scalatestVersion % "test"
+    "org.scalatest" %% "scalatest" % scalatestVersion % "test",
+    "org.scalatestplus" %% "scalatestplus-scalacheck" % scalatestPlusScalacheckVersion % "test"
   ),
   parallelExecution in Test := true,
   homepage := Some(url("https://github.com/twitter/bijection")),
@@ -243,7 +246,8 @@ lazy val bijectionCore = {
   module("core").settings(
     osgiExportAll("com.twitter.bijection"),
     libraryDependencies ++= Seq(
-      "com.novocode" % "junit-interface" % "0.11" % "test"
+      "com.novocode" % "junit-interface" % "0.11" % "test",
+      "org.scalatestplus" %% "scalatestplus-junit" % scalatestPlusJunitVersion % "test"
     ),
     sourceGenerators in Compile += Def.task {
       val main = (sourceManaged in Compile).value
