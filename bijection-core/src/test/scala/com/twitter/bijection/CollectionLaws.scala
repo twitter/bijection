@@ -21,25 +21,27 @@ import org.scalacheck.Arbitrary
 class CollectionLaws extends CheckProperties with BaseProperties {
   import com.twitter.bijection.StringArbs._
 
-  implicit def vectorArb[A](implicit la: Arbitrary[List[A]]) =
-    arbitraryViaFn { (l: List[A]) =>
-      Vector(l: _*)
-    }
-  implicit def seqArb[A](implicit la: Arbitrary[List[A]]) =
-    arbitraryViaFn { (l: List[A]) =>
-      Seq(l: _*)
-    }
-  implicit def indexedSeqArb[A](implicit la: Arbitrary[List[A]]) =
-    arbitraryViaFn { (l: List[A]) =>
-      IndexedSeq(l: _*)
-    }
-  implicit def traversableArb[A](implicit la: Arbitrary[List[A]]) =
-    arbitraryViaFn { (l: List[A]) =>
-      l.toTraversable
-    }
+  implicit def vectorArb[A](implicit la: Arbitrary[List[A]]): Arbitrary[Vector[A]] =
+    arbitraryViaFn[List[A], Vector[A]]((l: List[A]) => Vector(l: _*))
+
+  implicit def seqArb[A](implicit la: Arbitrary[List[A]]): Arbitrary[Seq[A]] =
+    arbitraryViaFn[List[A], Seq[A]]((l: List[A]) => Seq(l: _*))
+
+  implicit def indexedSeqArb[A](implicit la: Arbitrary[List[A]]): Arbitrary[IndexedSeq[A]] =
+    arbitraryViaFn[List[A], IndexedSeq[A]]((l: List[A]) => IndexedSeq(l: _*))
+
+  implicit def traversableArb[A](implicit la: Arbitrary[List[A]]): Arbitrary[Traversable[A]] =
+    arbitraryViaFn[List[A], Traversable[A]]((l: List[A]) => l.toTraversable)
 
   property("round trip List[Int] <=> Vector[String @@ Rep[Int]]") {
-    isBijection[List[Int], Vector[String @@ Rep[Int]]]
+    type R = String @@ Rep[Int]
+    type VR = Vector[R]
+    //having this in scope guides the implicit resolution to success,
+    //but only if we're using a type alias for the right side of isBijection.
+    //that sounds like a scalac bug.
+    //TODO: Should be minimized and reported
+    implicit val i1: Bijection[Int, R] = Bijection.fromInjection(Injection.int2String)
+    isBijection[List[Int], VR]
   }
 
   property("round trip List[long] <=> List[String @@ Rep[Int]]") {
@@ -98,10 +100,6 @@ class CollectionLaws extends CheckProperties with BaseProperties {
     isBijection[List[Int], IndexedSeq[String @@ Rep[Int]]]
   }
 
-  property("List[Int] <=> Vector[String @@ Rep[Int]]") {
-    isBijection[List[Int], Vector[String @@ Rep[Int]]]
-  }
-
   property("Option[Int] <=> Option[Long]") {
     isInjection[Option[Int], Option[Long]]
   }
@@ -125,4 +123,5 @@ class CollectionLaws extends CheckProperties with BaseProperties {
   property("round trip Set[Int] -> Set[String]") {
     isInjection[Set[Int], Set[String]]
   }
+
 }

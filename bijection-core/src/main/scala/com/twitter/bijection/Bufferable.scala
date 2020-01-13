@@ -21,7 +21,6 @@ import java.nio.{ByteBuffer, BufferOverflowException}
 import scala.annotation.implicitNotFound
 import scala.annotation.tailrec
 import scala.collection.mutable.{Map => MMap, Set => MSet, Buffer => MBuffer}
-import scala.collection.generic.CanBuildFrom
 import scala.util.{Failure, Success, Try}
 import com.twitter.bijection.Inversion.attempt
 
@@ -55,7 +54,10 @@ trait LowPriorityBufferable {
 
 }*/
 
-object Bufferable extends GeneratedTupleBufferable with Serializable {
+object Bufferable
+    extends BufferableVersionSpecific
+    with GeneratedTupleBufferable
+    with Serializable {
   val DEFAULT_SIZE = 1024
   // To enable: Bufferable.on[Int] syntax
   def on[T](implicit buf: Bufferable[T]): Bufferable[T] = buf
@@ -266,33 +268,6 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
       reallocatingPut(oldbb) { buf.put(_, t) }
     }
   }
-  def getCollection[T, C](
-      initbb: ByteBuffer
-  )(implicit cbf: CanBuildFrom[Nothing, T, C], buf: Bufferable[T]): Try[(ByteBuffer, C)] = Try {
-    var bb: ByteBuffer = initbb.duplicate
-    val size = bb.getInt
-    var idx = 0
-    val builder = cbf()
-    builder.clear()
-    builder.sizeHint(size)
-    while (idx < size) {
-      val tup = buf.get(bb).get
-      bb = tup._1
-      builder += tup._2
-      idx += 1
-    }
-    (bb, builder.result)
-  }
-
-  def collection[C <: Traversable[T], T](
-      implicit buf: Bufferable[T],
-      cbf: CanBuildFrom[Nothing, T, C]
-  ): Bufferable[C] =
-    build[C] { (bb, l) =>
-      putCollection(bb, l)
-    } { bb =>
-      getCollection(bb)
-    }
 
   implicit def list[T](implicit buf: Bufferable[T]) = collection[List[T], T]
   implicit def set[T](implicit buf: Bufferable[T]) = collection[Set[T], T]
@@ -306,14 +281,4 @@ object Bufferable extends GeneratedTupleBufferable with Serializable {
   implicit def buffer[T](implicit buf: Bufferable[T]) = collection[MBuffer[T], T]
   implicit def mset[T](implicit buf: Bufferable[T]) = collection[MSet[T], T]
 
-  // TODO we could add IntBuffer/FloatBuffer etc.. to have faster implementations Array[Int]
-  implicit def array[T](
-      implicit buf: Bufferable[T],
-      cbf: CanBuildFrom[Nothing, T, Array[T]]
-  ): Bufferable[Array[T]] =
-    build[Array[T]] { (bb, l) =>
-      putCollection(bb, l.toTraversable)
-    } { bb =>
-      getCollection(bb)
-    }
 }

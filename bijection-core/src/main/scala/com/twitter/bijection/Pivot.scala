@@ -65,7 +65,7 @@ trait PivotEncoder[K, K1, K2] extends (Iterable[K] => Map[K1, Iterable[K2]]) wit
         (k1 -> List(k2))
       }
       .groupBy { _._1 }
-      .mapValues { _.map { case (_, k2s) => k2s }.flatten }
+      .transform { case (_, v) => v.map { case (_, k2s) => k2s }.flatten }
 
   /**
     * "Uncurries" the supplied nested fn of K1 and K2  into a function

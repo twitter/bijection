@@ -72,7 +72,11 @@ trait BinaryBijections extends StringBijections {
     }
 
   @tailrec
-  private def copy(inputStream: InputStream, outputStream: OutputStream, bufferSize: Int = 1024) {
+  private def copy(
+      inputStream: InputStream,
+      outputStream: OutputStream,
+      bufferSize: Int = 1024
+  ): Unit = {
     val buf = new Array[Byte](bufferSize)
     inputStream.read(buf, 0, buf.size) match {
       case -1 => ()
