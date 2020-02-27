@@ -72,9 +72,7 @@ object BufferableGenerator {
     b.append("import com.twitter.bijection.Inversion.attempt\n")
 
     b.append("\ntrait GeneratedTupleBufferable {\n")
-    (1 to 22).foreach { cnt =>
-      b.append(implicitTuple(cnt)).append("\n")
-    }
+    (1 to 22).foreach { cnt => b.append(implicitTuple(cnt)).append("\n") }
     b.append("}")
 
     b.toString

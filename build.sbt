@@ -95,9 +95,7 @@ val sharedSettings = Seq(
   releaseVersionBump := sbtrelease.Version.Bump.Minor, // need to tweak based on mima results
   publishMavenStyle := true,
   publishArtifact in Test := false,
-  pomIncludeRepository := { x =>
-    false
-  },
+  pomIncludeRepository := { x => false },
   releaseProcess := Seq[ReleaseStep](
     checkSnapshotDependencies,
     inquireVersions,
@@ -126,9 +124,7 @@ val unreleasedModules = Set[String]()
 def youngestForwardCompatible(subProj: String) = {
   Some(subProj)
     .filterNot(unreleasedModules.contains(_))
-    .map { s =>
-      "com.twitter" %% ("bijection-" + s) % "0.9.6"
-    }
+    .map { s => "com.twitter" %% ("bijection-" + s) % "0.9.6" }
     .toSet
 }
 
