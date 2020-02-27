@@ -31,9 +31,7 @@ object GuavaBijections {
   ): Bijection[Optional[T], Option[U]] =
     Bijection.build[Optional[T], Option[U]] { opt =>
       if (opt.isPresent) Some(bij(opt.get)) else None
-    } { opt =>
-      if (opt.isDefined) Optional.of[T](bij.invert(opt.get)) else Optional.absent[T]
-    }
+    } { opt => if (opt.isDefined) Optional.of[T](bij.invert(opt.get)) else Optional.absent[T] }
 
   /**
     * Converts a scala Function1 into a Guava Function.
@@ -47,9 +45,7 @@ object GuavaBijections {
         new GFn[B, D] {
           override def apply(b: B): D = fn(b.as[A]).as[D]
         }
-      override def invert(fn: GFn[B, D]) = { a =>
-        fn(a.as[B]).as[C]
-      }
+      override def invert(fn: GFn[B, D]) = { a => fn(a.as[B]).as[C] }
     }
 
   /**
@@ -62,9 +58,7 @@ object GuavaBijections {
       override def apply(fn: () => T) = new Supplier[U] {
         override def get: U = fn.apply.as[U]
       }
-      override def invert(supplier: Supplier[U]) = { () =>
-        supplier.get.as[T]
-      }
+      override def invert(supplier: Supplier[U]) = { () => supplier.get.as[T] }
     }
 
   /**
@@ -77,8 +71,6 @@ object GuavaBijections {
       override def apply(fn: T => Boolean) = new Predicate[U] {
         override def apply(u: U): Boolean = fn(u.as[T])
       }
-      override def invert(pred: Predicate[U]) = { t: T =>
-        pred(t.as[U])
-      }
+      override def invert(pred: Predicate[U]) = { t: T => pred(t.as[U]) }
     }
 }

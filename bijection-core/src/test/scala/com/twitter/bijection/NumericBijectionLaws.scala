@@ -39,24 +39,12 @@ import Conversion.asMethod // get the .as syntax
 object JavaNumArbs {
   import BaseProperties._
 
-  implicit val byteA = arbitraryViaFn { v: Byte =>
-    JByte.valueOf(v)
-  }
-  implicit val shortA = arbitraryViaFn { v: Short =>
-    JShort.valueOf(v)
-  }
-  implicit val longA = arbitraryViaFn { v: Long =>
-    JLong.valueOf(v)
-  }
-  implicit val intA = arbitraryViaFn { v: Int =>
-    JInt.valueOf(v)
-  }
-  implicit val floatA = arbitraryViaFn { v: Float =>
-    JFloat.valueOf(v)
-  }
-  implicit val doubleA = arbitraryViaFn { v: Double =>
-    JDouble.valueOf(v)
-  }
+  implicit val byteA = arbitraryViaFn { v: Byte => JByte.valueOf(v) }
+  implicit val shortA = arbitraryViaFn { v: Short => JShort.valueOf(v) }
+  implicit val longA = arbitraryViaFn { v: Long => JLong.valueOf(v) }
+  implicit val intA = arbitraryViaFn { v: Int => JInt.valueOf(v) }
+  implicit val floatA = arbitraryViaFn { v: Float => JFloat.valueOf(v) }
+  implicit val doubleA = arbitraryViaFn { v: Double => JDouble.valueOf(v) }
   implicit val bigInteger = arbitraryViaFn { (l1l2: (Long, Long)) =>
     (new BigInteger(l1l2._1.toString)).multiply(new BigInteger(l1l2._2.toString))
   }
@@ -194,12 +182,8 @@ class NumericBijectionLaws extends PropSpec with Checkers with ScalaCheckPropert
   }
 
   // Some other types through numbers:
-  implicit val uuid = arbitraryViaFn { (uplow: (Long, Long)) =>
-    new UUID(uplow._1, uplow._2)
-  }
-  implicit val date = arbitraryViaFn { (dtime: Long) =>
-    new java.util.Date(dtime)
-  }
+  implicit val uuid = arbitraryViaFn { (uplow: (Long, Long)) => new UUID(uplow._1, uplow._2) }
+  implicit val date = arbitraryViaFn { (dtime: Long) => new java.util.Date(dtime) }
   property("round trips (Long,Long) -> UUID") {
     check(isBijection[(Long, Long), UUID])
   }

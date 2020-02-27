@@ -38,9 +38,7 @@ trait Injection[A, B] extends Serializable { self =>
   def andThen[C](g: Injection[B, C]): Injection[A, C] =
     new AbstractInjection[A, C] {
       override def apply(a: A) = g(self.apply(a))
-      override def invert(c: C) = g.invert(c).flatMap { b =>
-        self.invert(b)
-      }
+      override def invert(c: C) = g.invert(c).flatMap { b => self.invert(b) }
     }
 
   /**
@@ -61,9 +59,7 @@ trait Injection[A, B] extends Serializable { self =>
   def compose[T](bij: Bijection[T, A]): Injection[T, B] =
     new AbstractInjection[T, B] {
       override def apply(t: T) = self.apply(bij(t))
-      override def invert(b: B) = self.invert(b).map { a =>
-        bij.invert(a)
-      }
+      override def invert(b: B) = self.invert(b).map { a => bij.invert(a) }
     }
   def compose[T](g: (T => A)): (T => B) = g andThen (this.toFunction)
 
@@ -155,9 +151,7 @@ object Injection extends CollectionInjections with Serializable {
   def fromBijectionRep[A, B](implicit bij: ImplicitBijection[A, B @@ Rep[A]]): Injection[A, B] =
     new AbstractInjection[A, B] {
       override def apply(a: A) = bij(a)
-      override def invert(b: B) = attempt(b) { bin =>
-        bij.invert(bin.asInstanceOf[B @@ Rep[A]])
-      }
+      override def invert(b: B) = attempt(b) { bin => bij.invert(bin.asInstanceOf[B @@ Rep[A]]) }
     }
   implicit def option[A]: Injection[A, Option[A]] =
     new AbstractInjection[A, Option[A]] {

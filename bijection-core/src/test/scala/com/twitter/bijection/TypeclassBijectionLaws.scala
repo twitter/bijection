@@ -15,9 +15,7 @@ class TypeclassBijectionLaws
   case class A(x: Int, y: String)
   implicit val abij: Bijection[A, (Int, String)] = Bijection.build[A, (Int, String)] {
     A.unapply(_).get
-  } { x =>
-    A(x._1, x._2)
-  }
+  } { x => A(x._1, x._2) }
 
   implicit val orderingTypeclassBijection: TypeclassBijection[Ordering] =
     new TypeclassBijection[Ordering] {

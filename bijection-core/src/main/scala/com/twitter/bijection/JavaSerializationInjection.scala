@@ -53,9 +53,7 @@ class JavaSerializationInjection[T <: Serializable](klass: Class[T])
     val inOpt = Try(new ObjectInputStream(bis))
     try {
       inOpt
-        .map { in =>
-          klass.cast(in.readObject)
-        }
+        .map { in => klass.cast(in.readObject) }
         .recoverWith(InversionFailure.partialFailure(bytes))
     } catch {
       case t: Throwable => Failure(InversionFailure(bytes, t))

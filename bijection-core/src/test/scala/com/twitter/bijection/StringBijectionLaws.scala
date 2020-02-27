@@ -52,9 +52,7 @@ class StringBijectionLaws extends CheckProperties with BaseProperties {
     isSerializableInjection[String, Array[Byte]]
   }
 
-  implicit val symbol = arbitraryViaFn { (s: String) =>
-    Symbol(s)
-  }
+  implicit val symbol = arbitraryViaFn { (s: String) => Symbol(s) }
   property("round trips string -> symbol") {
     isBijection[String, Symbol]
   }
