@@ -10,18 +10,14 @@ trait GeneratedIFnBijections {
       def apply(fn: Function0[A]) = new AFn {
         override def invoke(): AnyRef = fn.apply().asInstanceOf[AnyRef]
       }
-      override def invert(fn: IFn) = { () =>
-        fn.invoke().asInstanceOf[A]
-      }
+      override def invert(fn: IFn) = { () => fn.invoke().asInstanceOf[A] }
     }
   implicit def function1ToIFn[A, B]: Bijection[Function1[A, B], IFn] =
     new AbstractBijection[Function1[A, B], IFn] {
       def apply(fn: Function1[A, B]) = new AFn {
         override def invoke(a: AnyRef): AnyRef = fn.apply(a.asInstanceOf[A]).asInstanceOf[AnyRef]
       }
-      override def invert(fn: IFn) = { (a) =>
-        fn.invoke(a).asInstanceOf[B]
-      }
+      override def invert(fn: IFn) = { (a) => fn.invoke(a).asInstanceOf[B] }
     }
   implicit def function2ToIFn[A, B, C]: Bijection[Function2[A, B, C], IFn] =
     new AbstractBijection[Function2[A, B, C], IFn] {
@@ -29,9 +25,7 @@ trait GeneratedIFnBijections {
         override def invoke(a: AnyRef, b: AnyRef): AnyRef =
           fn.apply(a.asInstanceOf[A], b.asInstanceOf[B]).asInstanceOf[AnyRef]
       }
-      override def invert(fn: IFn) = { (a, b) =>
-        fn.invoke(a, b).asInstanceOf[C]
-      }
+      override def invert(fn: IFn) = { (a, b) => fn.invoke(a, b).asInstanceOf[C] }
     }
   implicit def function3ToIFn[A, B, C, D]: Bijection[Function3[A, B, C, D], IFn] =
     new AbstractBijection[Function3[A, B, C, D], IFn] {
@@ -39,9 +33,7 @@ trait GeneratedIFnBijections {
         override def invoke(a: AnyRef, b: AnyRef, c: AnyRef): AnyRef =
           fn.apply(a.asInstanceOf[A], b.asInstanceOf[B], c.asInstanceOf[C]).asInstanceOf[AnyRef]
       }
-      override def invert(fn: IFn) = { (a, b, c) =>
-        fn.invoke(a, b, c).asInstanceOf[D]
-      }
+      override def invert(fn: IFn) = { (a, b, c) => fn.invoke(a, b, c).asInstanceOf[D] }
     }
   implicit def function4ToIFn[A, B, C, D, E]: Bijection[Function4[A, B, C, D, E], IFn] =
     new AbstractBijection[Function4[A, B, C, D, E], IFn] {
@@ -50,9 +42,7 @@ trait GeneratedIFnBijections {
           fn.apply(a.asInstanceOf[A], b.asInstanceOf[B], c.asInstanceOf[C], d.asInstanceOf[D])
             .asInstanceOf[AnyRef]
       }
-      override def invert(fn: IFn) = { (a, b, c, d) =>
-        fn.invoke(a, b, c, d).asInstanceOf[E]
-      }
+      override def invert(fn: IFn) = { (a, b, c, d) => fn.invoke(a, b, c, d).asInstanceOf[E] }
     }
   implicit def function5ToIFn[A, B, C, D, E, F]: Bijection[Function5[A, B, C, D, E, F], IFn] =
     new AbstractBijection[Function5[A, B, C, D, E, F], IFn] {
@@ -67,9 +57,7 @@ trait GeneratedIFnBijections {
             )
             .asInstanceOf[AnyRef]
       }
-      override def invert(fn: IFn) = { (a, b, c, d, e) =>
-        fn.invoke(a, b, c, d, e).asInstanceOf[F]
-      }
+      override def invert(fn: IFn) = { (a, b, c, d, e) => fn.invoke(a, b, c, d, e).asInstanceOf[F] }
     }
   implicit def function6ToIFn[A, B, C, D, E, F, G]: Bijection[Function6[A, B, C, D, E, F, G], IFn] =
     new AbstractBijection[Function6[A, B, C, D, E, F, G], IFn] {

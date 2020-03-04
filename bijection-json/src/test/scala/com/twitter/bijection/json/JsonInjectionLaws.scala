@@ -122,12 +122,8 @@ class JsonInjectionLaws extends CheckProperties with BaseProperties {
     roundTripJson[Option[Int]]
   }
 
-  implicit val arbSeq: Arbitrary[Seq[Int]] = arbitraryViaFn { s: List[Int] =>
-    s.toSeq
-  }
-  implicit val arbVec: Arbitrary[Vector[Int]] = arbitraryViaFn { s: List[Int] =>
-    Vector(s: _*)
-  }
+  implicit val arbSeq: Arbitrary[Seq[Int]] = arbitraryViaFn { s: List[Int] => s.toSeq }
+  implicit val arbVec: Arbitrary[Vector[Int]] = arbitraryViaFn { s: List[Int] => Vector(s: _*) }
   implicit val arbIndexed: Arbitrary[IndexedSeq[Int]] = arbitraryViaFn { s: List[Int] =>
     s.toIndexedSeq
   }

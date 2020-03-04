@@ -30,21 +30,13 @@ trait BufferableVersionSpecific {
       implicit buf: Bufferable[T],
       cbf: CanBuildFrom[Nothing, T, Array[T]]
   ): Bufferable[Array[T]] =
-    build[Array[T]] { (bb, l) =>
-      putCollection(bb, l.toTraversable)
-    } { bb =>
-      getCollection(bb)
-    }
+    build[Array[T]] { (bb, l) => putCollection(bb, l.toTraversable) } { bb => getCollection(bb) }
 
   def collection[C <: Traversable[T], T](
       implicit buf: Bufferable[T],
       cbf: CanBuildFrom[Nothing, T, C]
   ): Bufferable[C] =
-    build[C] { (bb, l) =>
-      putCollection(bb, l)
-    } { bb =>
-      getCollection(bb)
-    }
+    build[C] { (bb, l) => putCollection(bb, l) } { bb => getCollection(bb) }
 
   def getCollection[T, C](
       initbb: ByteBuffer

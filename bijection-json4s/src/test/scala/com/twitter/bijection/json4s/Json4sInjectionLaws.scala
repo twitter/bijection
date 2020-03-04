@@ -29,8 +29,7 @@ class Json4sInjectionLaws extends CheckProperties with BaseProperties {
     Twit(i._1, i._2, i._3, i._4, i._5)
 
   implicit val testCaseClassToJson = arbitraryViaFn {
-    in: (String, Int, String, List[Int], String) =>
-      createTwit(in)
+    in: (String, Int, String, List[Int], String) => createTwit(in)
   }
 
   implicit val testJValueToJson =

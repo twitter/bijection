@@ -61,15 +61,11 @@ trait CollectionInjections extends StringInjections {
 
   // This injection is always correct as long as all the items are inverted
   implicit def list2List[V1, V2](implicit inj: Injection[V1, V2]): Injection[List[V1], List[V2]] =
-    toContainer[V1, V2, List[V1], List[V2]] { (_, _) =>
-      true
-    }
+    toContainer[V1, V2, List[V1], List[V2]] { (_, _) => true }
 
   // This injection is always correct as long as all the items are inverted
   implicit def set2Set[V1, V2](implicit inj: Injection[V1, V2]): Injection[Set[V1], Set[V2]] =
-    toContainer[V1, V2, Set[V1], Set[V2]] { (_, _) =>
-      true
-    }
+    toContainer[V1, V2, Set[V1], Set[V2]] { (_, _) => true }
 
   // This is useful for defining injections, but is too general to be implicit
   def toContainer[A, B, C <: TraversableOnce[A], D <: TraversableOnce[B]](

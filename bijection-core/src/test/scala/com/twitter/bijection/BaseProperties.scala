@@ -57,9 +57,7 @@ trait BaseProperties {
 
   implicit def barrEq[T](implicit eqt: Equiv[T]): Equiv[Array[T]] = new Equiv[Array[T]] {
     def equiv(a1: Array[T], a2: Array[T]) =
-      a1.zip(a2).forall { tup: (T, T) =>
-        eqt.equiv(tup._1, tup._2)
-      }
+      a1.zip(a2).forall { tup: (T, T) => eqt.equiv(tup._1, tup._2) }
   }
 
   def rt[A, B](a: A)(implicit bij: Bijection[A, B]): A = rtInjective[A, B](a)
@@ -110,18 +108,14 @@ trait BaseProperties {
     isInjection[A, B] && (isInjection(arba, jrt(inj), barb, eqa, eqb).label("Serializable check"))
 
   def isInjective[A, B](implicit a: Arbitrary[A], bij: ImplicitBijection[A, B], eqa: Equiv[A]) =
-    forAll { (a: A) =>
-      eqa.equiv(a, rt(a)(bij.bijection))
-    }
+    forAll { (a: A) => eqa.equiv(a, rt(a)(bij.bijection)) }
 
   def invertIsInjection[A, B](
       implicit b: Arbitrary[B],
       bij: ImplicitBijection[A, B],
       eqb: Equiv[B]
   ) =
-    forAll { b: B =>
-      eqb.equiv(b, rtInjective(b)(bij.bijection.inverse))
-    }
+    forAll { b: B => eqb.equiv(b, rtInjective(b)(bij.bijection.inverse)) }
 
   def isBijection[A, B](
       implicit arba: Arbitrary[A],

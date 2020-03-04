@@ -92,12 +92,7 @@ trait PivotDecoder[K, K1, K2] extends (Map[K1, Iterable[K2]] => Iterable[K]) wit
     * Curries the supplied fn of K into a nested function
     * of K1 then K2 using the inversion of `pivot`.
     */
-  def split[V](fn: K => V): K1 => K2 => V = {
-    k1 =>
-      { k2 =>
-        fn(dec((k1, k2)))
-      }
-  }
+  def split[V](fn: K => V): K1 => K2 => V = { k1 => { k2 => fn(dec((k1, k2))) } }
 }
 
 /**

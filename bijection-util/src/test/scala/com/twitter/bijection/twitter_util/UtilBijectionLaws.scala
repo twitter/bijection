@@ -68,19 +68,13 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties with BeforeA
   implicit val bufArb: Arbitrary[Buf] = arbitraryViaFn[Array[Byte], Buf](Buf.ByteArray.Owned.apply)
 
   implicit protected def futureEq[T: Equiv]: Equiv[TwitterFuture[T]] =
-    Equiv.fromFunction { (f1, f2) =>
-      Equiv[Option[T]].equiv(toOption(f1), toOption(f2))
-    }
+    Equiv.fromFunction { (f1, f2) => Equiv[Option[T]].equiv(toOption(f1), toOption(f2)) }
 
   implicit protected def scalaFutureEq[T: Equiv]: Equiv[ScalaFuture[T]] =
-    Equiv.fromFunction { (f1, f2) =>
-      Equiv[Option[T]].equiv(toOption(f1), toOption(f2))
-    }
+    Equiv.fromFunction { (f1, f2) => Equiv[Option[T]].equiv(toOption(f1), toOption(f2)) }
 
   implicit protected def javaFutureEq[T: Equiv]: Equiv[JavaFuture[T]] =
-    Equiv.fromFunction { (f1, f2) =>
-      Equiv[Option[T]].equiv(toOption(f1), toOption(f2))
-    }
+    Equiv.fromFunction { (f1, f2) => Equiv[Option[T]].equiv(toOption(f1), toOption(f2)) }
 
   type FromMap = Map[Int, Long]
   type ToMap = Map[JInt, JLong]

@@ -83,9 +83,7 @@ trait MySqlInjections {
       private val timestampValue = new TimestampValue(UTC, UTC)
       def apply(t: Timestamp) = timestampValue(t)
       override def invert(v: Value) =
-        Inversion.attempt(v) { v =>
-          timestampValue.unapply(v).get
-        }
+        Inversion.attempt(v) { v => timestampValue.unapply(v).get }
     }
 
   implicit def nullValue[A]: Injection[NullValue.type, Option[A]] =

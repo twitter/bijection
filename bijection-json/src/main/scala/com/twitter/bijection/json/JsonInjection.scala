@@ -61,9 +61,7 @@ trait LowPriorityJson {
   ): JsonNodeInjection[T] =
     new AbstractJsonNodeInjection[T] {
       def apply(t: T) = ltoJ.apply(inj(t))
-      def invert(j: JsonNode) = ltoJ.invert(j).flatMap { l =>
-        inj.invert(l)
-      }
+      def invert(j: JsonNode) = ltoJ.invert(j).flatMap { l => inj.invert(l) }
     }
 }
 

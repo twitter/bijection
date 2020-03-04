@@ -31,9 +31,7 @@ object UnparsedJson {
   implicit def injection[T](implicit json: JsonNodeInjection[T]): Injection[T, UnparsedJson] =
     new AbstractInjection[T, UnparsedJson] {
       def apply(t: T) =
-        (json andThen { n: JsonNode =>
-          JsonNodeInjection.unparsed.invert(n).get
-        })(t)
+        (json andThen { n: JsonNode => JsonNodeInjection.unparsed.invert(n).get })(t)
       override def invert(up: UnparsedJson) = fromJsonNode[T](toJsonNode(up))
     }
 

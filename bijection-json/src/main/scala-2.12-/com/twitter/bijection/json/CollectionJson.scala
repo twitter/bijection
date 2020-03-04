@@ -33,9 +33,7 @@ trait CollectionJson {
     new AbstractJsonNodeInjection[C] {
       def apply(l: C) = {
         val ary = JsonNodeFactory.instance.arrayNode
-        l foreach { t =>
-          ary.add(jbij(t))
-        }
+        l foreach { t => ary.add(jbij(t)) }
         ary
       }
       override def invert(n: JsonNode): Try[C] = {

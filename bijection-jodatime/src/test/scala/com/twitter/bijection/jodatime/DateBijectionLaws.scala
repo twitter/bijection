@@ -21,25 +21,15 @@ class DateBijectionsLaws
   implicit val arbtimeStamp: Arbitrary[Timestamp] =
     Arbitrary(Gen.choose(Long.MinValue / 4, Long.MaxValue / 4).map(Timestamp(_)))
 
-  implicit val date = arbitraryViaFn { (dtime: Timestamp) =>
-    new DateTime(dtime.ts)
-  }
+  implicit val date = arbitraryViaFn { (dtime: Timestamp) => new DateTime(dtime.ts) }
 
-  implicit val localDate = arbitraryViaFn { (dtime: Timestamp) =>
-    new LocalDate(dtime.ts)
-  }
+  implicit val localDate = arbitraryViaFn { (dtime: Timestamp) => new LocalDate(dtime.ts) }
 
-  implicit val localTime = arbitraryViaFn { (dtime: Timestamp) =>
-    new LocalTime(dtime.ts)
-  }
+  implicit val localTime = arbitraryViaFn { (dtime: Timestamp) => new LocalTime(dtime.ts) }
 
-  implicit val yearMonth = arbitraryViaFn { (dtime: Timestamp) =>
-    new YearMonth(dtime.ts)
-  }
+  implicit val yearMonth = arbitraryViaFn { (dtime: Timestamp) => new YearMonth(dtime.ts) }
 
-  implicit val monthDay = arbitraryViaFn { (dtime: Timestamp) =>
-    new MonthDay(dtime.ts)
-  }
+  implicit val monthDay = arbitraryViaFn { (dtime: Timestamp) => new MonthDay(dtime.ts) }
 
   property("Long <=> Joda") {
     isBijection[Long, DateTime]

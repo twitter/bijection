@@ -120,12 +120,8 @@ object Bijection extends CollectionBijections with Serializable {
       bij2: ImplicitBijection[C, D]
   ): Bijection[A => C, B => D] =
     new AbstractBijection[A => C, B => D] {
-      def apply(fn: A => C) = { b =>
-        bij2.apply(fn(bij1.invert(b)))
-      }
-      override def invert(fn: B => D) = { a =>
-        bij2.invert(fn(bij1.apply(a)))
-      }
+      def apply(fn: A => C) = { b => bij2.apply(fn(bij1.invert(b))) }
+      override def invert(fn: B => D) = { a => bij2.invert(fn(bij1.apply(a))) }
     }
 
   /**
@@ -140,9 +136,7 @@ object Bijection extends CollectionBijections with Serializable {
       bef: ImplicitBijection[E, F]
   ): Bijection[(A, C) => E, (B, D) => F] =
     new AbstractBijection[(A, C) => E, (B, D) => F] {
-      def apply(fn: (A, C) => E) = { (b, d) =>
-        bef.apply(fn(bab.invert(b), bcd.invert(d)))
-      }
+      def apply(fn: (A, C) => E) = { (b, d) => bef.apply(fn(bab.invert(b), bcd.invert(d))) }
       override def invert(fn: (B, D) => F) = { (a, c) =>
         bef.invert(fn(bab.apply(a), bcd.apply(c)))
       }

@@ -32,14 +32,10 @@ trait BaseBufferable {
     Equiv[T].equiv(t, rtt) && Equiv[T].equiv(t, copyT) && (newBuf2.position == pos)
   }
   implicit protected def aeq[T: Equiv]: Equiv[Array[T]] = Equiv.fromFunction { (a1, a2) =>
-    a1.zip(a2).forall { tup =>
-      Equiv[T].equiv(tup._1, tup._2)
-    }
+    a1.zip(a2).forall { tup => Equiv[T].equiv(tup._1, tup._2) }
   }
   def itereq[C <: Iterable[T], T: Equiv]: Equiv[C] = Equiv.fromFunction { (a1, a2) =>
-    a1.zip(a2).forall { tup =>
-      Equiv[T].equiv(tup._1, tup._2)
-    }
+    a1.zip(a2).forall { tup => Equiv[T].equiv(tup._1, tup._2) }
   }
 }
 

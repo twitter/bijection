@@ -84,32 +84,22 @@ object Bufferable
   }
   // With Bijections:
   def viaBijection[A, B](implicit buf: Bufferable[B], bij: ImplicitBijection[A, B]): Bufferable[A] =
-    Bufferable.build[A] { (bb, a) =>
-      buf.put(bb, bij(a))
-    } { bb =>
-      buf.get(bb).map { tup =>
-        (tup._1, bij.invert(tup._2))
-      }
+    Bufferable.build[A] { (bb, a) => buf.put(bb, bij(a)) } { bb =>
+      buf.get(bb).map { tup => (tup._1, bij.invert(tup._2)) }
     }
 
   // TODO Bufferable should integrate with injection
   def viaInjection[A, B](implicit buf: Bufferable[B], inj: Injection[A, B]): Bufferable[A] =
-    Bufferable.build[A] { (bb, a) =>
-      buf.put(bb, inj(a))
-    } { bb =>
+    Bufferable.build[A] { (bb, a) => buf.put(bb, inj(a)) } { bb =>
       buf.get(bb).flatMap {
         case (rbb, b) =>
-          inj.invert(b).map { a =>
-            (rbb, a)
-          }
+          inj.invert(b).map { a => (rbb, a) }
       }
     }
 
   def injectionOf[T](implicit buf: Bufferable[T]): Injection[T, Array[Byte]] =
-    Injection.build[T, Array[Byte]] { t =>
-      getBytes(put(ByteBuffer.allocateDirect(128), t))
-    } { bytes =>
-      get[T](ByteBuffer.wrap(bytes)).map { _._2 }
+    Injection.build[T, Array[Byte]] { t => getBytes(put(ByteBuffer.allocateDirect(128), t)) } {
+      bytes => get[T](ByteBuffer.wrap(bytes)).map { _._2 }
     }
 
   def reallocate(bb: ByteBuffer): ByteBuffer = {
@@ -169,33 +159,21 @@ object Bufferable
     } { _.get == (1: Byte) }
 
   implicit val byteBufferable: Bufferable[Byte] =
-    buildCatchDuplicate[Byte] { (bb, x) =>
-      reallocatingPut(bb) { _.put(x) }
-    } { _.get }
+    buildCatchDuplicate[Byte] { (bb, x) => reallocatingPut(bb) { _.put(x) } } { _.get }
   implicit val charBufferable: Bufferable[Char] =
-    buildCatchDuplicate[Char] { (bb, x) =>
-      reallocatingPut(bb) { _.putChar(x) }
-    } { _.getChar }
+    buildCatchDuplicate[Char] { (bb, x) => reallocatingPut(bb) { _.putChar(x) } } { _.getChar }
   implicit val shortBufferable: Bufferable[Short] =
-    buildCatchDuplicate[Short] { (bb, x) =>
-      reallocatingPut(bb) { _.putShort(x) }
-    } { _.getShort }
+    buildCatchDuplicate[Short] { (bb, x) => reallocatingPut(bb) { _.putShort(x) } } { _.getShort }
   implicit val intBufferable: Bufferable[Int] =
-    buildCatchDuplicate[Int] { (bb, x) =>
-      reallocatingPut(bb) { _.putInt(x) }
-    } { _.getInt }
+    buildCatchDuplicate[Int] { (bb, x) => reallocatingPut(bb) { _.putInt(x) } } { _.getInt }
   implicit val longBufferable: Bufferable[Long] =
-    buildCatchDuplicate[Long] { (bb, x) =>
-      reallocatingPut(bb) { _.putLong(x) }
-    } { _.getLong }
+    buildCatchDuplicate[Long] { (bb, x) => reallocatingPut(bb) { _.putLong(x) } } { _.getLong }
   implicit val floatBufferable: Bufferable[Float] =
-    buildCatchDuplicate[Float] { (bb, x) =>
-      reallocatingPut(bb) { _.putFloat(x) }
-    } { _.getFloat }
+    buildCatchDuplicate[Float] { (bb, x) => reallocatingPut(bb) { _.putFloat(x) } } { _.getFloat }
   implicit val doubleBufferable: Bufferable[Double] =
-    buildCatchDuplicate[Double] { (bb, x) =>
-      reallocatingPut(bb) { _.putDouble(x) }
-    } { _.getDouble }
+    buildCatchDuplicate[Double] { (bb, x) => reallocatingPut(bb) { _.putDouble(x) } } {
+      _.getDouble
+    }
   // Writes a length prefix, and then the bytes
   implicit val byteArray: Bufferable[Array[Byte]] =
     buildCatchDuplicate[Array[Byte]] { (bb, ary) =>
@@ -224,9 +202,7 @@ object Bufferable
       val byte0 = 0: Byte
       if (dup.get == byte0) Success((dup, None))
       else {
-        buf.get(dup).map { tup =>
-          (tup._1, Some(tup._2))
-        }
+        buf.get(dup).map { tup => (tup._1, Some(tup._2)) }
       }
     }
 
@@ -249,13 +225,9 @@ object Bufferable
       val dup = bb.duplicate
       val byte0 = 0: Byte
       if (dup.get == byte0) {
-        bufl.get(dup).map { tup =>
-          (tup._1, Left(tup._2))
-        }
+        bufl.get(dup).map { tup => (tup._1, Left(tup._2)) }
       } else {
-        bufr.get(dup).map { tup =>
-          (tup._1, Right(tup._2))
-        }
+        bufr.get(dup).map { tup => (tup._1, Right(tup._2)) }
       }
     }
 
@@ -264,9 +236,7 @@ object Bufferable
   ): ByteBuffer = {
     val size = l.size
     val nextBb = reallocatingPut(bb) { _.putInt(size) }
-    l.foldLeft(nextBb) { (oldbb, t) =>
-      reallocatingPut(oldbb) { buf.put(_, t) }
-    }
+    l.foldLeft(nextBb) { (oldbb, t) => reallocatingPut(oldbb) { buf.put(_, t) } }
   }
 
   implicit def list[T](implicit buf: Bufferable[T]) = collection[List[T], T]

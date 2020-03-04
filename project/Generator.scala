@@ -138,21 +138,15 @@ object Generator {
     b.append(pkg).append("\n")
 
     b.append("\ntrait GeneratedTupleBijections extends LowPriorityBijections {\n")
-    (2 to 22).foreach { cnt =>
-      b.append(implicitTuple(cnt)).append("\n")
-    }
+    (2 to 22).foreach { cnt => b.append(implicitTuple(cnt)).append("\n") }
     b.append("}\n")
 
     b.append("\ntrait GeneratedTupleCollectionInjections extends LowPriorityInjections {\n")
-    (2 to 22).foreach { cnt =>
-      b.append(implicitTupleToCollInj(cnt)).append("\n")
-    }
+    (2 to 22).foreach { cnt => b.append(implicitTupleToCollInj(cnt)).append("\n") }
     b.append("}\n")
 
     b.append("\ntrait GeneratedTupleInjections extends GeneratedTupleCollectionInjections {\n")
-    (2 to 22).foreach { cnt =>
-      b.append(implicitTupleInj(cnt)).append("\n")
-    }
+    (2 to 22).foreach { cnt => b.append(implicitTupleInj(cnt)).append("\n") }
     b.append("}\n")
 
     b.toString

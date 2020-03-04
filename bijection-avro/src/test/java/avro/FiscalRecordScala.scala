@@ -10,20 +10,20 @@ case class FiscalRecordScala(
   def get(field: Int): AnyRef = {
     field match {
       case pos if pos == 0 => {
-        calendarDate
-      }.asInstanceOf[AnyRef]
+          calendarDate
+        }.asInstanceOf[AnyRef]
       case pos if pos == 1 => {
-        fiscalWeek match {
-          case Some(x) => x
-          case None    => null
-        }
-      }.asInstanceOf[AnyRef]
+          fiscalWeek match {
+            case Some(x) => x
+            case None    => null
+          }
+        }.asInstanceOf[AnyRef]
       case pos if pos == 2 => {
-        fiscalYear match {
-          case Some(x) => x
-          case None    => null
-        }
-      }.asInstanceOf[AnyRef]
+          fiscalYear match {
+            case Some(x) => x
+            case None    => null
+          }
+        }.asInstanceOf[AnyRef]
       case _ => new org.apache.avro.AvroRuntimeException("Bad index")
     }
   }

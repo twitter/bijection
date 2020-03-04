@@ -53,39 +53,27 @@ class CaseClassToTupleRecurisvelyAppliedPropTests extends CaseClassToTuplePropTe
   import MacroCaseClasses._
 
   property("case class A(Int, String) should round trip") {
-    forAll { v: SampleClassA =>
-      shouldRoundTrip[SampleClassA, Atup](v)
-    }
+    forAll { v: SampleClassA => shouldRoundTrip[SampleClassA, Atup](v) }
   }
 
   property("case class B(A, A, String) should round trip") {
-    forAll { v: SampleClassB =>
-      shouldRoundTrip[SampleClassB, Btup](v)
-    }
+    forAll { v: SampleClassB => shouldRoundTrip[SampleClassB, Btup](v) }
   }
 
   property("case class C(A, B, A, B, B) should round trip") {
-    forAll { v: SampleClassC =>
-      shouldRoundTrip[SampleClassC, Ctup](v)
-    }
+    forAll { v: SampleClassC => shouldRoundTrip[SampleClassC, Ctup](v) }
   }
 
   property("case class A(Int, String) should round trip in reverse") {
-    forAll { v: Atup =>
-      shouldRoundTrip[SampleClassA, Atup](v)
-    }
+    forAll { v: Atup => shouldRoundTrip[SampleClassA, Atup](v) }
   }
 
   property("case class B(A, A, String) should round trip in reverse") {
-    forAll { v: Btup =>
-      shouldRoundTrip[SampleClassB, Btup](v)
-    }
+    forAll { v: Btup => shouldRoundTrip[SampleClassB, Btup](v) }
   }
 
   property("case class C(A, B, A, B, B) should round trip in reverse") {
-    forAll { v: Ctup =>
-      shouldRoundTrip[SampleClassC, Ctup](v)
-    }
+    forAll { v: Ctup => shouldRoundTrip[SampleClassC, Ctup](v) }
   }
 }
 
@@ -94,39 +82,27 @@ class CaseClassToTupleNonRecursivelyAppliedPropTests extends CaseClassToTuplePro
   import MacroCaseClasses._
 
   property("case class A(Int, String) should round trip") {
-    forAll { v: SampleClassA =>
-      shouldRoundTrip[SampleClassA, Atupnr](v)
-    }
+    forAll { v: SampleClassA => shouldRoundTrip[SampleClassA, Atupnr](v) }
   }
 
   property("case class B(A, A, String) should round trip") {
-    forAll { v: SampleClassB =>
-      shouldRoundTrip[SampleClassB, Btupnr](v)
-    }
+    forAll { v: SampleClassB => shouldRoundTrip[SampleClassB, Btupnr](v) }
   }
 
   property("case class C(A, B, A, B, B) should round trip") {
-    forAll { v: SampleClassC =>
-      shouldRoundTrip[SampleClassC, Ctupnr](v)
-    }
+    forAll { v: SampleClassC => shouldRoundTrip[SampleClassC, Ctupnr](v) }
   }
 
   property("case class A(Int, String) should round trip in reverse") {
-    forAll { v: Atupnr =>
-      shouldRoundTrip[SampleClassA, Atupnr](v)
-    }
+    forAll { v: Atupnr => shouldRoundTrip[SampleClassA, Atupnr](v) }
   }
 
   property("case class B(A, A, String) should round trip in reverse") {
-    forAll { v: Btupnr =>
-      shouldRoundTrip[SampleClassB, Btupnr](v)
-    }
+    forAll { v: Btupnr => shouldRoundTrip[SampleClassB, Btupnr](v) }
   }
 
   property("case class C(A, B, A, B, B) should round trip in reverse") {
-    forAll { v: Ctupnr =>
-      shouldRoundTrip[SampleClassC, Ctupnr](v)
-    }
+    forAll { v: Ctupnr => shouldRoundTrip[SampleClassC, Ctupnr](v) }
   }
 }
 
@@ -153,27 +129,19 @@ class CaseClassToMapRecursivelyAppliedPropTests extends CaseClassToMapPropTests 
   import MacroCaseClasses._
 
   property("case class A(Int, String) should round trip") {
-    forAll { v: SampleClassA =>
-      shouldRoundTrip[SampleClassA](v)
-    }
+    forAll { v: SampleClassA => shouldRoundTrip[SampleClassA](v) }
   }
 
   property("case class B(A, A, String) should round trip") {
-    forAll { v: SampleClassB =>
-      shouldRoundTrip[SampleClassB](v)
-    }
+    forAll { v: SampleClassB => shouldRoundTrip[SampleClassB](v) }
   }
 
   property("case class C(A, B, A, B, B) should round trip") {
-    forAll { v: SampleClassC =>
-      shouldRoundTrip[SampleClassC](v)
-    }
+    forAll { v: SampleClassC => shouldRoundTrip[SampleClassC](v) }
   }
 
   property("case class A(Int, String) should round trip in reverse") {
-    forAll { v: Atup =>
-      shouldRoundTrip[SampleClassA](Map[String, Any]("x" -> v._1, "y" -> v._2))
-    }
+    forAll { v: Atup => shouldRoundTrip[SampleClassA](Map[String, Any]("x" -> v._1, "y" -> v._2)) }
   }
 
   property("case class B(A, A, String) should round trip in reverse") {
@@ -220,21 +188,15 @@ class CaseClassToMapNonRecursivelyAppliedPropTests extends CaseClassToMapPropTes
   import MacroCaseClasses._
 
   property("case class A(Int, String) should round trip") {
-    forAll { v: SampleClassA =>
-      shouldRoundTrip[SampleClassA](v)
-    }
+    forAll { v: SampleClassA => shouldRoundTrip[SampleClassA](v) }
   }
 
   property("case class B(A, A, String) should round trip") {
-    forAll { v: SampleClassB =>
-      shouldRoundTrip[SampleClassB](v)
-    }
+    forAll { v: SampleClassB => shouldRoundTrip[SampleClassB](v) }
   }
 
   property("case class C(A, B, A, B, B) should round trip") {
-    forAll { v: SampleClassC =>
-      shouldRoundTrip[SampleClassC](v)
-    }
+    forAll { v: SampleClassC => shouldRoundTrip[SampleClassC](v) }
   }
 
   property("case class A(Int, String) should round trip in reverse") {
