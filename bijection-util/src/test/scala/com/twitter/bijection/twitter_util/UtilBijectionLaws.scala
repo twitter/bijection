@@ -47,19 +47,22 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties with BeforeA
   protected def toOption[T](f: JavaFuture[T]): Option[T] =
     TwitterTry(f.get()).toOption
 
-  implicit def futureArb[T: Arbitrary] = arbitraryViaFn[T, TwitterFuture[T]] {
-    TwitterFuture.value
-  }
-  implicit def scalaFutureArb[T: Arbitrary] = arbitraryViaFn[T, ScalaFuture[T]] {
-    ScalaFuture.apply(_)
-  }
-  implicit def javaFutureArb[T: Arbitrary] = arbitraryViaFn[T, JavaFuture[T]] { t =>
-    val f = new FutureTask[T](new Callable[T] {
-      override def call(): T = t
-    })
-    f.run()
-    f
-  }
+  implicit def futureArb[T: Arbitrary] =
+    arbitraryViaFn[T, TwitterFuture[T]] {
+      TwitterFuture.value
+    }
+  implicit def scalaFutureArb[T: Arbitrary] =
+    arbitraryViaFn[T, ScalaFuture[T]] {
+      ScalaFuture.apply(_)
+    }
+  implicit def javaFutureArb[T: Arbitrary] =
+    arbitraryViaFn[T, JavaFuture[T]] { t =>
+      val f = new FutureTask[T](new Callable[T] {
+        override def call(): T = t
+      })
+      f.run()
+      f
+    }
   implicit def tryArb[T: Arbitrary] = arbitraryViaFn[T, TwitterTry[T]] { TwitterTry(_) }
   implicit def scalaTryArb[T: Arbitrary] = arbitraryViaFn[T, ScalaTry[T]] { ScalaTry(_) }
 

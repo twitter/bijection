@@ -43,8 +43,8 @@ object Json4sInjections {
     * @tparam A Case Class
     * @return Json String
     */
-  implicit def caseClass2Json[A <: AnyRef](
-      implicit tt: TypeTag[A],
+  implicit def caseClass2Json[A <: AnyRef](implicit
+      tt: TypeTag[A],
       ct: ClassTag[A],
       fmt: Formats
   ): Injection[A, String] =
@@ -59,8 +59,8 @@ object Json4sInjections {
     * @tparam A Case Class
     * @return JValue
     */
-  implicit def caseClass2JValue[A <: AnyRef](
-      implicit tt: TypeTag[A],
+  implicit def caseClass2JValue[A <: AnyRef](implicit
+      tt: TypeTag[A],
       ct: ClassTag[A],
       fmt: Formats
   ): Injection[A, JValue] =

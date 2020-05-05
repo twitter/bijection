@@ -145,10 +145,11 @@ object Bufferable
   )(getfn: (ByteBuffer) => T): Bufferable[T] =
     new AbstractBufferable[T] {
       override def put(into: ByteBuffer, t: T) = putfn(into, t)
-      override def get(from: ByteBuffer) = attempt(from) { from =>
-        val dup = from.duplicate
-        (dup, getfn(dup))
-      }
+      override def get(from: ByteBuffer) =
+        attempt(from) { from =>
+          val dup = from.duplicate
+          (dup, getfn(dup))
+        }
     }
 
   // Primitives:
@@ -206,8 +207,8 @@ object Bufferable
       }
     }
 
-  implicit def either[L, R](
-      implicit bufl: Bufferable[L],
+  implicit def either[L, R](implicit
+      bufl: Bufferable[L],
       bufr: Bufferable[R]
   ): Bufferable[Either[L, R]] =
     build[Either[L, R]] { (bb, eith) =>
@@ -231,8 +232,8 @@ object Bufferable
       }
     }
 
-  def putCollection[T](bb: ByteBuffer, l: Traversable[T])(
-      implicit buf: Bufferable[T]
+  def putCollection[T](bb: ByteBuffer, l: Traversable[T])(implicit
+      buf: Bufferable[T]
   ): ByteBuffer = {
     val size = l.size
     val nextBb = reallocatingPut(bb) { _.putInt(size) }

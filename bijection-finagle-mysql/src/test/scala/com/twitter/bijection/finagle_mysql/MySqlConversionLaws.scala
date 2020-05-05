@@ -102,14 +102,15 @@ class MySqlConversionLaws extends CheckProperties with BaseProperties {
       * Because they contain byte arrays, just =='ing them does not work as expected.
       */
     implicit val valueEquiv = new scala.math.Equiv[Value] {
-      override def equiv(a: Value, b: Value) = (a, b) match {
-        case (
-            RawValue(Type.Timestamp, MysqlCharset.Binary, true, bytes1),
-            RawValue(Type.Timestamp, MysqlCharset.Binary, true, bytes2)
-            ) =>
-          bytes1.toList == bytes2.toList
-        case _ => false
-      }
+      override def equiv(a: Value, b: Value) =
+        (a, b) match {
+          case (
+                RawValue(Type.Timestamp, MysqlCharset.Binary, true, bytes1),
+                RawValue(Type.Timestamp, MysqlCharset.Binary, true, bytes2)
+              ) =>
+            bytes1.toList == bytes2.toList
+          case _ => false
+        }
     }
 
     isInjection[Timestamp, Value]

@@ -36,10 +36,11 @@ object GuavaBinaryBijections {
 
   case class Base64URLString(str: String) extends AnyVal with BaseEncoding
 
-  implicit def unwrap(encodedString: BaseEncoding): String = Option(encodedString) match {
-    case Some(x) => x.str
-    case None    => null
-  }
+  implicit def unwrap(encodedString: BaseEncoding): String =
+    Option(encodedString) match {
+      case Some(x) => x.str
+      case None    => null
+    }
 
   implicit lazy val bytes2Base64: Bijection[Array[Byte], Base64String] =
     new AbstractBijection[Array[Byte], Base64String] {

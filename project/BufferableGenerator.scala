@@ -47,7 +47,9 @@ object BufferableGenerator {
   def implicitTuple(cnt: Int): String =
     "  implicit def tuple" + cnt + "[" + typeList(cnt) + "](implicit " +
       ((0 until cnt) map { bufferableParam(_) } mkString (", ")) + "):\n" +
-      "    Bufferable[" + tupleTypeList(cnt) + "] = new AbstractBufferable[" + tupleTypeList(cnt) + "] {\n" +
+      "    Bufferable[" + tupleTypeList(cnt) + "] = new AbstractBufferable[" + tupleTypeList(
+      cnt
+    ) + "] {\n" +
       "      def put(bytebuf: ByteBuffer, tup: " + tupleTypeList(cnt) + ") = {\n" +
       "        var nextBb = bytebuf\n" +
       "        " + ((0 until cnt) map { reallocatingPut(_) }).mkString("", "\n        ", "\n") +

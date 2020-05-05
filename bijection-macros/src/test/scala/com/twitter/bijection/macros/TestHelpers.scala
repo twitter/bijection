@@ -58,10 +58,11 @@ class Externalizer[T] extends Externalizable {
 
   // No vals or var's below this line!
 
-  def getOption: Option[T] = item match {
-    case Left(e)  => e.getOption
-    case Right(i) => i
-  }
+  def getOption: Option[T] =
+    item match {
+      case Left(e)  => e.getOption
+      case Right(i) => i
+    }
 
   def get: T = getOption.get // This should never be None when get is called
 

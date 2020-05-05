@@ -32,9 +32,10 @@ object ProtobufCodec {
 class ProtobufCodec[T <: Message](klass: Class[T]) extends Injection[T, Array[Byte]] {
   lazy val parseFrom = klass.getMethod("parseFrom", classOf[Array[Byte]])
   override def apply(item: T) = item.toByteArray
-  override def invert(bytes: Array[Byte]) = attempt(bytes) { bytes =>
-    parseFrom.invoke(null, bytes).asInstanceOf[T]
-  }
+  override def invert(bytes: Array[Byte]) =
+    attempt(bytes) { bytes =>
+      parseFrom.invoke(null, bytes).asInstanceOf[T]
+    }
 }
 
 object ProtobufEnumCodec {

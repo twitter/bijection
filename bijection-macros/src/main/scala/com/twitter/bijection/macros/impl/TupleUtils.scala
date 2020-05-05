@@ -13,10 +13,12 @@ class TupleUtils[C <: Context](val c: C) {
       case m: MethodSymbol if m.isCaseAccessor =>
         m.returnType match {
           case tpe if IsCaseClassImpl.isCaseClassType(c)(tpe) =>
-            tupleCaseClassCache.getOrElseUpdate(tpe, {
-              val equiv = tupleCaseClassEquivalent(tpe)
-              AppliedTypeTree(Ident(newTypeName("Tuple" + equiv.size)), equiv.toList)
-            })
+            tupleCaseClassCache.getOrElseUpdate(
+              tpe, {
+                val equiv = tupleCaseClassEquivalent(tpe)
+                AppliedTypeTree(Ident(newTypeName("Tuple" + equiv.size)), equiv.toList)
+              }
+            )
           case tpe => Ident(tpe.typeSymbol.name.toTypeName)
         }
     }.toSeq

@@ -122,14 +122,14 @@ object Injection extends CollectionInjections with Serializable {
   def connect[A, B](implicit bij: Injection[A, B]): Injection[A, B] = bij
   def connect[A, B, C](implicit bij: Injection[A, B], bij2: Injection[B, C]): Injection[A, C] =
     bij andThen bij2
-  def connect[A, B, C, D](
-      implicit bij: Injection[A, B],
+  def connect[A, B, C, D](implicit
+      bij: Injection[A, B],
       bij2: Injection[B, C],
       bij3: Injection[C, D]
   ): Injection[A, D] =
     connect[A, B, C] andThen bij3
-  def connect[A, B, C, D, E](
-      implicit bij: Injection[A, B],
+  def connect[A, B, C, D, E](implicit
+      bij: Injection[A, B],
       bij2: Injection[B, C],
       bij3: Injection[C, D],
       bij4: Injection[D, E]
@@ -139,10 +139,11 @@ object Injection extends CollectionInjections with Serializable {
   implicit def either1[A, B]: Injection[A, Either[B, A]] =
     new AbstractInjection[A, Either[B, A]] {
       override def apply(a: A) = Right(a)
-      override def invert(e: Either[B, A]) = e match {
-        case Right(a) => Success(a)
-        case _        => InversionFailure.failedAttempt(e)
-      }
+      override def invert(e: Either[B, A]) =
+        e match {
+          case Right(a) => Success(a)
+          case _        => InversionFailure.failedAttempt(e)
+        }
     }
 
   /**

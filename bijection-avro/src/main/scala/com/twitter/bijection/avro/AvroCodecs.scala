@@ -270,13 +270,14 @@ class SpecificAvroCodec[T <: SpecificRecordBase](
     stream.toByteArray
   }
 
-  def invert(bytes: Array[Byte]): Attempt[T] = attempt(bytes) { bytes =>
-    val reader = new SpecificDatumReader[T](klass)
-    val stream = new DataFileStream[T](new ByteArrayInputStream(bytes), reader)
-    val result = stream.next()
-    stream.close()
-    result
-  }
+  def invert(bytes: Array[Byte]): Attempt[T] =
+    attempt(bytes) { bytes =>
+      val reader = new SpecificDatumReader[T](klass)
+      val stream = new DataFileStream[T](new ByteArrayInputStream(bytes), reader)
+      val result = stream.next()
+      stream.close()
+      result
+    }
 }
 
 /**
@@ -302,13 +303,14 @@ class GenericAvroCodec[T <: GenericRecord](
     stream.toByteArray
   }
 
-  def invert(bytes: Array[Byte]): Attempt[T] = attempt(bytes) { bytes =>
-    val reader = new GenericDatumReader[T](schema)
-    val stream = new DataFileStream[T](new ByteArrayInputStream(bytes), reader)
-    val result = stream.next()
-    stream.close()
-    result
-  }
+  def invert(bytes: Array[Byte]): Attempt[T] =
+    attempt(bytes) { bytes =>
+      val reader = new GenericDatumReader[T](schema)
+      val stream = new DataFileStream[T](new ByteArrayInputStream(bytes), reader)
+      val result = stream.next()
+      stream.close()
+      result
+    }
 }
 
 /**
@@ -327,10 +329,11 @@ class BinaryAvroCodec[T](writer: DatumWriter[T], reader: DatumReader[T])
     stream.toByteArray
   }
 
-  def invert(bytes: Array[Byte]): Attempt[T] = attempt(bytes) { bytes =>
-    val binaryDecoder = DecoderFactory.get().binaryDecoder(bytes, null)
-    reader.read(null.asInstanceOf[T], binaryDecoder)
-  }
+  def invert(bytes: Array[Byte]): Attempt[T] =
+    attempt(bytes) { bytes =>
+      val binaryDecoder = DecoderFactory.get().binaryDecoder(bytes, null)
+      reader.read(null.asInstanceOf[T], binaryDecoder)
+    }
 }
 
 /**
@@ -351,10 +354,11 @@ class JsonAvroCodec[T](schema: Schema, writer: DatumWriter[T], reader: DatumRead
     Injection.invert[String, Array[Byte]](stream.toByteArray).get
   }
 
-  def invert(str: String): Attempt[T] = attempt(str) { str =>
-    val decoder = DecoderFactory
-      .get()
-      .jsonDecoder(schema, new ByteArrayInputStream(Injection[String, Array[Byte]](str)))
-    reader.read(null.asInstanceOf[T], decoder)
-  }
+  def invert(str: String): Attempt[T] =
+    attempt(str) { str =>
+      val decoder = DecoderFactory
+        .get()
+        .jsonDecoder(schema, new ByteArrayInputStream(Injection[String, Array[Byte]](str)))
+      reader.read(null.asInstanceOf[T], decoder)
+    }
 }

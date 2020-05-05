@@ -7,8 +7,8 @@ object TypeclassBijection {
   }
 
   object BijectionAndTypeclass {
-    implicit def get[T[_], From, To](
-        implicit bij: ImplicitBijection[To, From],
+    implicit def get[T[_], From, To](implicit
+        bij: ImplicitBijection[To, From],
         typeclass: T[From]
     ) =
       BijectionAndTypeclass(bij, typeclass)
@@ -22,14 +22,14 @@ object TypeclassBijection {
         .typeclassBijection[T, From, To](tc, typeclass, ImplicitBijection.reverse(bij.bijection))
   }
 
-  def typeclassBijection[T[_], A, B](
-      implicit tcBij: TypeclassBijection[T],
+  def typeclassBijection[T[_], A, B](implicit
+      tcBij: TypeclassBijection[T],
       typeclass: T[A],
       bij: ImplicitBijection[A, B]
   ): T[B] =
     tcBij(typeclass, bij.bijection)
-  def deriveFor[T[_], To](
-      implicit tcBij: TypeclassBijection[T],
+  def deriveFor[T[_], To](implicit
+      tcBij: TypeclassBijection[T],
       batc: BijectionAndTypeclass[T, From, To] forSome {
         type From
       }

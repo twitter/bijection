@@ -58,8 +58,10 @@ class StringBijectionLaws extends CheckProperties with BaseProperties {
   }
 
   implicit val uuidArb = Arbitrary {
-    for (l <- choose(-100L, 100L);
-         u <- choose(-100L, 100L)) yield (new UUID(l, u))
+    for (
+      l <- choose(-100L, 100L);
+      u <- choose(-100L, 100L)
+    ) yield (new UUID(l, u))
   }
 
   property("UUID -> String") {

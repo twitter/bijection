@@ -12,13 +12,14 @@ class ScalaFuturePool(context: ExecutionContext) extends FuturePool {
   override def apply[A](f: => A): Future[A] = {
     val p = Promise[A]()
     val runnable = new Runnable() {
-      override def run(): Unit = Try(f) match {
-        case Return(value) => p.setValue(value)
-        case Throw(e) => {
-          context.reportFailure(e)
-          p.setException(e)
+      override def run(): Unit =
+        Try(f) match {
+          case Return(value) => p.setValue(value)
+          case Throw(e) => {
+            context.reportFailure(e)
+            p.setException(e)
+          }
         }
-      }
     }
     context.execute(runnable)
     p

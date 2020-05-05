@@ -22,21 +22,24 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Prop.forAll
 
 trait BaseBufferable {
-  def roundTrips[T: Bufferable: Arbitrary: Equiv] = forAll { (t: T) =>
-    val buf = ByteBuffer.allocateDirect(100)
-    val newBuf = Bufferable.put(buf, t)
-    val newBuf2 = ByteBuffer.wrap(Bufferable.getBytes(newBuf))
-    val pos = newBuf2.position
-    val (newBuf3, rtt) = Bufferable.get[T](newBuf2).get
-    val copyT = Bufferable.deepCopy(t)
-    Equiv[T].equiv(t, rtt) && Equiv[T].equiv(t, copyT) && (newBuf2.position == pos)
-  }
-  implicit protected def aeq[T: Equiv]: Equiv[Array[T]] = Equiv.fromFunction { (a1, a2) =>
-    a1.zip(a2).forall { tup => Equiv[T].equiv(tup._1, tup._2) }
-  }
-  def itereq[C <: Iterable[T], T: Equiv]: Equiv[C] = Equiv.fromFunction { (a1, a2) =>
-    a1.zip(a2).forall { tup => Equiv[T].equiv(tup._1, tup._2) }
-  }
+  def roundTrips[T: Bufferable: Arbitrary: Equiv] =
+    forAll { (t: T) =>
+      val buf = ByteBuffer.allocateDirect(100)
+      val newBuf = Bufferable.put(buf, t)
+      val newBuf2 = ByteBuffer.wrap(Bufferable.getBytes(newBuf))
+      val pos = newBuf2.position
+      val (newBuf3, rtt) = Bufferable.get[T](newBuf2).get
+      val copyT = Bufferable.deepCopy(t)
+      Equiv[T].equiv(t, rtt) && Equiv[T].equiv(t, copyT) && (newBuf2.position == pos)
+    }
+  implicit protected def aeq[T: Equiv]: Equiv[Array[T]] =
+    Equiv.fromFunction { (a1, a2) =>
+      a1.zip(a2).forall { tup => Equiv[T].equiv(tup._1, tup._2) }
+    }
+  def itereq[C <: Iterable[T], T: Equiv]: Equiv[C] =
+    Equiv.fromFunction { (a1, a2) =>
+      a1.zip(a2).forall { tup => Equiv[T].equiv(tup._1, tup._2) }
+    }
 }
 
 class BufferableLaws extends CheckProperties with BaseBufferable {

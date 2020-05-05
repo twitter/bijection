@@ -56,12 +56,13 @@ class ThriftCodec[T <: TBase[_, _], P <: TProtocolFactory](klass: Class[T], fact
     item.write(factory.getProtocol(new TIOStreamTransport(baos)))
     baos.toByteArray
   }
-  override def invert(bytes: Array[Byte]) = attempt(bytes) { bytes =>
-    val obj = prototype.deepCopy.asInstanceOf[T]
-    val stream = new ByteArrayInputStream(bytes)
-    obj.read(factory.getProtocol(new TIOStreamTransport(stream)))
-    obj.asInstanceOf[T]
-  }
+  override def invert(bytes: Array[Byte]) =
+    attempt(bytes) { bytes =>
+      val obj = prototype.deepCopy.asInstanceOf[T]
+      val stream = new ByteArrayInputStream(bytes)
+      obj.read(factory.getProtocol(new TIOStreamTransport(stream)))
+      obj.asInstanceOf[T]
+    }
 }
 
 object BinaryThriftCodec {
@@ -81,11 +82,12 @@ class BinaryThriftCodec[T <: TBase[_, _]](klass: Class[T]) extends Injection[T, 
     item.write(factory.getProtocol(new TIOStreamTransport(baos)))
     baos.toByteArray
   }
-  override def invert(bytes: Array[Byte]) = Macros.fastAttempt(bytes) {
-    val obj = prototype.deepCopy.asInstanceOf[T]
-    obj.read(TArrayBinaryProtocol(TArrayByteTransport(bytes)))
-    obj.asInstanceOf[T]
-  }
+  override def invert(bytes: Array[Byte]) =
+    Macros.fastAttempt(bytes) {
+      val obj = prototype.deepCopy.asInstanceOf[T]
+      obj.read(TArrayBinaryProtocol(TArrayByteTransport(bytes)))
+      obj.asInstanceOf[T]
+    }
 }
 
 object CompactThriftCodec {
@@ -111,9 +113,10 @@ object JsonThriftCodec {
 
 class JsonThriftCodec[T <: TBase[_, _]](klass: Class[T])
     extends ThriftCodec[T, TSimpleJSONProtocol.Factory](klass, new TSimpleJSONProtocol.Factory) {
-  override def invert(bytes: Array[Byte]) = attempt(bytes) { bytes =>
-    new MappingJsonFactory().createJsonParser(bytes).readValueAs(klass).asInstanceOf[T]
-  }
+  override def invert(bytes: Array[Byte]) =
+    attempt(bytes) { bytes =>
+      new MappingJsonFactory().createJsonParser(bytes).readValueAs(klass).asInstanceOf[T]
+    }
 }
 
 object TEnumCodec {

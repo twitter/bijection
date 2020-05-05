@@ -75,7 +75,9 @@ object Generator {
   // Here we put it all together:
   def implicitTuple(cnt: Int): String =
     "  implicit def tuple" + cnt + "[" + typeList(cnt, "1") + "," + typeList(cnt, "2") +
-      "](implicit " + ((0 until cnt) map { bijectionParameter(_, "ImplicitBijection") } mkString (", ")) + "):\n    " +
+      "](implicit " + ((0 until cnt) map {
+      bijectionParameter(_, "ImplicitBijection")
+    } mkString (", ")) + "):\n    " +
       tupleBijectionType(cnt) + " = new Abstract" + tupleBijectionType(cnt) + " {\n" +
       "      " + applyMethod(cnt) + "\n" +
       "      " + invertMethod(cnt) + "\n" +
@@ -89,7 +91,9 @@ object Generator {
   // For the Injections:
   def implicitTupleInj(cnt: Int): String =
     "  implicit def tuple" + cnt + "[" + typeList(cnt, "1") + "," + typeList(cnt, "2") +
-      "](implicit " + ((0 until cnt) map { bijectionParameter(_, "Injection") } mkString (", ")) + "):\n    " +
+      "](implicit " + ((0 until cnt) map {
+      bijectionParameter(_, "Injection")
+    } mkString (", ")) + "):\n    " +
       tupleBijectionType(cnt, "Injection") + " = new Abstract" + tupleBijectionType(
       cnt,
       "Injection"
@@ -125,7 +129,10 @@ object Generator {
 
   def implicitTupleToCollInj(cnt: Int): String = {
     val implicitParams: String = (0 until cnt).map { injectionParameter(_, cnt) }.mkString(", ")
-    "  implicit def tuple" + cnt + "ToList[" + typeList(cnt + 1, "") + "](implicit " + implicitParams + "):\n    " +
+    "  implicit def tuple" + cnt + "ToList[" + typeList(
+      cnt + 1,
+      ""
+    ) + "](implicit " + implicitParams + "):\n    " +
       toListInjectionType(cnt) + " = new Abstract" + toListInjectionType(cnt) + " {\n" +
       "      " + toListMethod(cnt) + "\n" +
       "      " + fromListMethod(cnt) + "\n" +
