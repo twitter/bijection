@@ -5,7 +5,7 @@ import com.typesafe.sbt.osgi.SbtOsgi.autoImport._
 import ReleaseTransformations._ // for sbt-release.
 import bijection._
 
-val twitterLibVersion = "20.4.0"
+val twitterLibVersion = "20.4.1"
 val scalatestVersion = "3.1.1"
 val scalacheckVersion = "1.14.3"
 val scalatestPlusScalacheckVersion = "3.1.0.0-RC2"
@@ -423,7 +423,7 @@ lazy val bijectionJodaTime = {
     .settings(
       osgiExportAll("com.twitter.bijection.jodatime"),
       libraryDependencies ++= Seq(
-        "joda-time" % "joda-time" % "2.10.5",
+        "joda-time" % "joda-time" % "2.10.6",
         "org.joda" % "joda-convert" % "2.2.1"
       )
     )
@@ -438,8 +438,8 @@ lazy val bijectionJson4s = {
       osgiExportAll("com.twitter.bijection.json4s"),
       libraryDependencies ++= Seq(
         "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-        "org.json4s" %% "json4s-native" % "3.6.7",
-        "org.json4s" %% "json4s-ext" % "3.6.7"
+        "org.json4s" %% "json4s-native" % "3.6.8",
+        "org.json4s" %% "json4s-ext" % "3.6.8"
       )
     )
     .dependsOn(
