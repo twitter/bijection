@@ -45,9 +45,10 @@ class BinaryScalaCodec[T <: ThriftStruct](c: ThriftStructCodec[T])
   }
 
   override def apply(item: T) = thriftStructSerializer.toBytes(item)
-  override def invert(bytes: Array[Byte]) = Macros.fastAttempt(bytes) {
-    c.decode(TArrayBinaryProtocol(TArrayByteTransport(bytes)))
-  }
+  override def invert(bytes: Array[Byte]) =
+    Macros.fastAttempt(bytes) {
+      c.decode(TArrayBinaryProtocol(TArrayByteTransport(bytes)))
+    }
 }
 
 object CompactScalaCodec {

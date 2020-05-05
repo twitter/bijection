@@ -46,8 +46,8 @@ trait UtilBijections {
     * Bijection on Twitter Future
     * if the bijection throws, the result will be a Throw.
     */
-  implicit def futureBijection[A, B](
-      implicit bij: ImplicitBijection[A, B]
+  implicit def futureBijection[A, B](implicit
+      bij: ImplicitBijection[A, B]
   ): Bijection[TwitterFuture[A], TwitterFuture[B]] =
     new AbstractBijection[TwitterFuture[A], TwitterFuture[B]] {
       override def apply(fa: TwitterFuture[A]) = fa.map(bij(_))
@@ -58,8 +58,8 @@ trait UtilBijections {
     * Bijection on Scala Future
     * if the bijection throws, the result will be a Throw.
     */
-  implicit def futureScalaBijection[A, B](
-      implicit bij: ImplicitBijection[A, B],
+  implicit def futureScalaBijection[A, B](implicit
+      bij: ImplicitBijection[A, B],
       executor: ExecutionContext
   ): Bijection[ScalaFuture[A], ScalaFuture[B]] =
     new AbstractBijection[ScalaFuture[A], ScalaFuture[B]] {
@@ -70,8 +70,8 @@ trait UtilBijections {
   /**
     * Bijection between twitter and scala style Futures
     */
-  implicit def twitter2ScalaFuture[A](
-      implicit executor: ExecutionContext
+  implicit def twitter2ScalaFuture[A](implicit
+      executor: ExecutionContext
   ): Bijection[TwitterFuture[A], ScalaFuture[A]] = {
     new AbstractBijection[TwitterFuture[A], ScalaFuture[A]] {
       override def apply(f: TwitterFuture[A]): ScalaFuture[A] = {
@@ -121,8 +121,8 @@ trait UtilBijections {
     *   futures to convert and one cares less about the latency induced by
     *   <code>checkFrequency</code>.
     */
-  implicit def twitter2JavaFutureBijection[A](
-      implicit converter: JavaFutureConverter
+  implicit def twitter2JavaFutureBijection[A](implicit
+      converter: JavaFutureConverter
   ): Bijection[TwitterFuture[A], JavaFuture[A]] = {
     new AbstractBijection[TwitterFuture[A], JavaFuture[A]] {
       override def apply(f: TwitterFuture[A]): JavaFuture[A] =
@@ -138,15 +138,17 @@ trait UtilBijections {
     */
   implicit def twitter2ScalaTry[A]: Bijection[TwitterTry[A], ScalaTry[A]] = {
     new AbstractBijection[TwitterTry[A], ScalaTry[A]] {
-      override def apply(t: TwitterTry[A]): ScalaTry[A] = t match {
-        case Return(value)    => Success(value)
-        case Throw(exception) => Failure(exception)
-      }
+      override def apply(t: TwitterTry[A]): ScalaTry[A] =
+        t match {
+          case Return(value)    => Success(value)
+          case Throw(exception) => Failure(exception)
+        }
 
-      override def invert(t: ScalaTry[A]): TwitterTry[A] = t match {
-        case Success(value)     => Return(value)
-        case Failure(exception) => Throw(exception)
-      }
+      override def invert(t: ScalaTry[A]): TwitterTry[A] =
+        t match {
+          case Success(value)     => Return(value)
+          case Failure(exception) => Throw(exception)
+        }
     }
   }
 
@@ -154,8 +156,8 @@ trait UtilBijections {
     * Bijection on Try.
     * If the bijection throws, the result will be a throw
     */
-  implicit def tryBijection[A, B](
-      implicit bij: ImplicitBijection[A, B]
+  implicit def tryBijection[A, B](implicit
+      bij: ImplicitBijection[A, B]
   ): Bijection[TwitterTry[A], TwitterTry[B]] =
     new AbstractBijection[TwitterTry[A], TwitterTry[B]] {
       override def apply(fa: TwitterTry[A]) = fa.map(bij(_))
@@ -166,8 +168,8 @@ trait UtilBijections {
     * Bijection on scala Try.
     * If the bijection throws, the result will be a throw
     */
-  implicit def tryScalaBijection[A, B](
-      implicit bij: ImplicitBijection[A, B]
+  implicit def tryScalaBijection[A, B](implicit
+      bij: ImplicitBijection[A, B]
   ): Bijection[ScalaTry[A], ScalaTry[B]] =
     new AbstractBijection[ScalaTry[A], ScalaTry[B]] {
       override def apply(fa: ScalaTry[A]) = fa.map(bij(_))

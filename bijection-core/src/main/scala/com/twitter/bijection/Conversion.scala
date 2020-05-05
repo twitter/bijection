@@ -44,14 +44,15 @@ trait Conversion[A, B] extends Serializable {
 
 trait CrazyLowPriorityConversion extends Serializable {
   // If you want to an Option[B]
-  implicit def fromInjectionOptInverse[A, B](
-      implicit inj: Injection[B, A]
+  implicit def fromInjectionOptInverse[A, B](implicit
+      inj: Injection[B, A]
   ): Conversion[A, Option[B]] =
     new Conversion[A, Option[B]] {
-      def apply(a: A) = inj.invert(a) match {
-        case Success(value) => Some(value)
-        case _              => None
-      }
+      def apply(a: A) =
+        inj.invert(a) match {
+          case Success(value) => Some(value)
+          case _              => None
+        }
     }
   implicit def fromInjectionInverse[A, B](implicit inj: Injection[B, A]): Conversion[A, Try[B]] =
     new Conversion[A, Try[B]] {
@@ -60,9 +61,10 @@ trait CrazyLowPriorityConversion extends Serializable {
 }
 
 trait SuperLowPriorityConversion extends CrazyLowPriorityConversion {
-  implicit def fromInjection[A, B](implicit fn: Injection[A, B]) = new Conversion[A, B] {
-    def apply(a: A) = fn(a)
-  }
+  implicit def fromInjection[A, B](implicit fn: Injection[A, B]) =
+    new Conversion[A, B] {
+      def apply(a: A) = fn(a)
+    }
 }
 
 trait NotSuperLowPriorityConversion extends SuperLowPriorityConversion {
@@ -73,15 +75,17 @@ trait NotSuperLowPriorityConversion extends SuperLowPriorityConversion {
 }
 
 trait LowPriorityConversion extends NotSuperLowPriorityConversion {
-  implicit def fromBijection[A, B](implicit fn: ImplicitBijection[A, B]) = new Conversion[A, B] {
-    def apply(a: A) = fn.bijection.apply(a)
-  }
+  implicit def fromBijection[A, B](implicit fn: ImplicitBijection[A, B]) =
+    new Conversion[A, B] {
+      def apply(a: A) = fn.bijection.apply(a)
+    }
 }
 
 object Conversion extends LowPriorityConversion {
   implicit def asMethod[A](a: A): Convert[A] = new Convert(a)
   // Both Injection and Bijection subclass (A) => B
-  implicit def fromFunction[A, B](implicit fn: Function1[A, B]) = new Conversion[A, B] {
-    def apply(a: A) = fn(a)
-  }
+  implicit def fromFunction[A, B](implicit fn: Function1[A, B]) =
+    new Conversion[A, B] {
+      def apply(a: A) = fn(a)
+    }
 }

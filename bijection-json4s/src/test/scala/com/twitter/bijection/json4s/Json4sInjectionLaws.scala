@@ -46,15 +46,15 @@ class Json4sInjectionLaws extends CheckProperties with BaseProperties {
         )
     }
 
-  def roundTripCaseClassToJson(
-      implicit inj: Injection[Twit, String],
+  def roundTripCaseClassToJson(implicit
+      inj: Injection[Twit, String],
       tt: TypeTag[Twit],
       ct: ClassTag[Twit]
   ) =
     isLooseInjection[Twit, String]
 
-  def roundTripCaseClassToJValue(
-      implicit inj: Injection[Twit, JValue],
+  def roundTripCaseClassToJValue(implicit
+      inj: Injection[Twit, JValue],
       tt: TypeTag[Twit],
       ct: ClassTag[Twit]
   ) =

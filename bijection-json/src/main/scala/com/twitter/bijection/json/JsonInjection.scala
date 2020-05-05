@@ -38,16 +38,16 @@ trait JsonNodeInjection[T] extends Injection[T, JsonNode]
 abstract class AbstractJsonNodeInjection[T] extends JsonNodeInjection[T]
 
 trait LowPriorityJson {
-  def viaInjection[A, B](
-      implicit inj: Injection[A, B],
+  def viaInjection[A, B](implicit
+      inj: Injection[A, B],
       json: JsonNodeInjection[B]
   ): JsonNodeInjection[A] =
     new AbstractJsonNodeInjection[A] {
       def apply(a: A) = json(inj(a))
       def invert(j: JsonNode) = json.invert(j).flatMap { inj.invert(_) }
     }
-  def viaBijection[A, B](
-      implicit bij: Bijection[A, B],
+  def viaBijection[A, B](implicit
+      bij: Bijection[A, B],
       json: JsonNodeInjection[B]
   ): JsonNodeInjection[A] =
     new AbstractJsonNodeInjection[A] {
@@ -55,8 +55,8 @@ trait LowPriorityJson {
       def invert(j: JsonNode) = json.invert(j).map { bij.invert(_) }
     }
   // To get the tuple conversions, low priority because List[T] <: Product
-  implicit def tuple[T <: Product](
-      implicit inj: Injection[T, List[JsonNode]],
+  implicit def tuple[T <: Product](implicit
+      inj: Injection[T, List[JsonNode]],
       ltoJ: Injection[List[JsonNode], JsonNode]
   ): JsonNodeInjection[T] =
     new AbstractJsonNodeInjection[T] {
@@ -119,10 +119,11 @@ object JsonNodeInjection extends CollectionJson with LowPriorityJson with java.i
   }
   implicit def either[L: JsonNodeInjection, R: JsonNodeInjection] =
     new AbstractJsonNodeInjection[Either[L, R]] {
-      def apply(e: Either[L, R]) = e match {
-        case Left(l)  => toJsonNode(l)
-        case Right(r) => toJsonNode(r)
-      }
+      def apply(e: Either[L, R]) =
+        e match {
+          case Left(l)  => toJsonNode(l)
+          case Right(r) => toJsonNode(r)
+        }
       override def invert(n: JsonNode) =
         fromJsonNode[R](n).map { Right(_) }.recoverWith {
           case NonFatal(_) =>

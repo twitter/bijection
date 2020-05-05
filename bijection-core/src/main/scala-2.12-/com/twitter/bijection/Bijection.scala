@@ -80,19 +80,19 @@ object Bijection extends CollectionBijections with Serializable {
     * val composed = connect[Long, Array[Byte], Base64String]: Bijection[Long, Base64String]
     */
   def connect[A, B](implicit bij: ImplicitBijection[A, B]): Bijection[A, B] = bij.bijection
-  def connect[A, B, C](
-      implicit bij: ImplicitBijection[A, B],
+  def connect[A, B, C](implicit
+      bij: ImplicitBijection[A, B],
       bij2: ImplicitBijection[B, C]
   ): Bijection[A, C] =
     (bij.bijection) andThen (bij2.bijection)
-  def connect[A, B, C, D](
-      implicit bij1: ImplicitBijection[A, B],
+  def connect[A, B, C, D](implicit
+      bij1: ImplicitBijection[A, B],
       bij2: ImplicitBijection[B, C],
       bij3: ImplicitBijection[C, D]
   ): Bijection[A, D] =
     connect[A, B, C] andThen (bij3.bijection)
-  def connect[A, B, C, D, E](
-      implicit bij1: ImplicitBijection[A, B],
+  def connect[A, B, C, D, E](implicit
+      bij1: ImplicitBijection[A, B],
       bij2: ImplicitBijection[B, C],
       bij3: ImplicitBijection[C, D],
       bij4: ImplicitBijection[D, E]
@@ -115,8 +115,8 @@ object Bijection extends CollectionBijections with Serializable {
     * Converts a function that transforms type A into a function that
     * transforms type B.
     */
-  implicit def fnBijection[A, B, C, D](
-      implicit bij1: ImplicitBijection[A, B],
+  implicit def fnBijection[A, B, C, D](implicit
+      bij1: ImplicitBijection[A, B],
       bij2: ImplicitBijection[C, D]
   ): Bijection[A => C, B => D] =
     new AbstractBijection[A => C, B => D] {
@@ -130,8 +130,8 @@ object Bijection extends CollectionBijections with Serializable {
     * input functions to "reduce".
     * TODO: codegen these up to Function22 if they turn out to be useful.
     */
-  implicit def fn2Bijection[A, B, C, D, E, F](
-      implicit bab: ImplicitBijection[A, B],
+  implicit def fn2Bijection[A, B, C, D, E, F](implicit
+      bab: ImplicitBijection[A, B],
       bcd: ImplicitBijection[C, D],
       bef: ImplicitBijection[E, F]
   ): Bijection[(A, C) => E, (B, D) => F] =

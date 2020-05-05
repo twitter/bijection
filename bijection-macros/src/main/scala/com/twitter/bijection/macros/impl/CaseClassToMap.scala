@@ -43,8 +43,8 @@ private[bijection] object CaseClassToMap {
   )(implicit T: c.WeakTypeTag[T]): c.Expr[Injection[T, Map[String, Any]]] =
     caseClassToMapNoProofImplCommon(c, true)(T)
 
-  def caseClassToMapNoProofImplCommon[T](c: Context, recursivelyApply: Boolean)(
-      implicit T: c.WeakTypeTag[T]
+  def caseClassToMapNoProofImplCommon[T](c: Context, recursivelyApply: Boolean)(implicit
+      T: c.WeakTypeTag[T]
   ): c.Expr[Injection[T, Map[String, Any]]] = {
     import c.universe._
     //TODO can make error handling better?

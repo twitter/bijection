@@ -74,8 +74,8 @@ object StringJoinBijection {
     */
   def nonEmptyValues[N, B <: TraversableOnce[N]](
       separator: String = DEFAULT_SEP
-  )(
-      implicit bij: ImplicitBijection[N, String],
+  )(implicit
+      bij: ImplicitBijection[N, String],
       ab: CanBuildFrom[Nothing, N, B]
   ): Bijection[B, String] =
     Bijection
@@ -99,8 +99,8 @@ object StringJoinBijection {
     */
   def viaContainer[A, B <: TraversableOnce[A]](
       separator: String = DEFAULT_SEP
-  )(
-      implicit bij: Bijection[A, String],
+  )(implicit
+      bij: Bijection[A, String],
       ab: CanBuildFrom[Nothing, A, B]
   ): Bijection[B, Option[String]] =
     Bijection.toContainer[A, String, B, Iterable[String]] andThen apply(separator)

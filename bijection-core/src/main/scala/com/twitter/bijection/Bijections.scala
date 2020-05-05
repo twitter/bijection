@@ -74,8 +74,9 @@ abstract class SubclassBijection[A, B <: A](clb: Class[B]) extends Bijection[A, 
   * Bijection that flips the order of items in a Tuple2.
   */
 object SwapBijection {
-  def apply[T, U] = new AbstractBijection[(T, U), (U, T)] {
-    def apply(t: (T, U)) = t.swap
-    override def invert(t: (U, T)) = t.swap
-  }
+  def apply[T, U] =
+    new AbstractBijection[(T, U), (U, T)] {
+      def apply(t: (T, U)) = t.swap
+      override def invert(t: (U, T)) = t.swap
+    }
 }

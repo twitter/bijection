@@ -15,24 +15,33 @@ trait MacroPropTests
   import MacroCaseClasses._
 
   //TODO make a macro to autogenerate arbitraries for case classes
-  implicit def arbA: Arbitrary[SampleClassA] = Arbitrary[SampleClassA] {
-    for (a <- Arbitrary.arbInt.arbitrary;
-         b <- Arbitrary.arbString.arbitrary) yield SampleClassA(a, b)
-  }
+  implicit def arbA: Arbitrary[SampleClassA] =
+    Arbitrary[SampleClassA] {
+      for (
+        a <- Arbitrary.arbInt.arbitrary;
+        b <- Arbitrary.arbString.arbitrary
+      ) yield SampleClassA(a, b)
+    }
 
-  implicit def arbB: Arbitrary[SampleClassB] = Arbitrary[SampleClassB] {
-    for (a1 <- arbA.arbitrary;
-         a2 <- arbA.arbitrary;
-         y <- Arbitrary.arbString.arbitrary) yield SampleClassB(a1, a2, y)
-  }
+  implicit def arbB: Arbitrary[SampleClassB] =
+    Arbitrary[SampleClassB] {
+      for (
+        a1 <- arbA.arbitrary;
+        a2 <- arbA.arbitrary;
+        y <- Arbitrary.arbString.arbitrary
+      ) yield SampleClassB(a1, a2, y)
+    }
 
-  implicit def arbC: Arbitrary[SampleClassC] = Arbitrary[SampleClassC] {
-    for (a <- arbA.arbitrary;
-         b <- arbB.arbitrary;
-         c <- arbA.arbitrary;
-         d <- arbB.arbitrary;
-         e <- arbB.arbitrary) yield SampleClassC(a, b, c, d, e)
-  }
+  implicit def arbC: Arbitrary[SampleClassC] =
+    Arbitrary[SampleClassC] {
+      for (
+        a <- arbA.arbitrary;
+        b <- arbB.arbitrary;
+        c <- arbA.arbitrary;
+        d <- arbB.arbitrary;
+        e <- arbB.arbitrary
+      ) yield SampleClassC(a, b, c, d, e)
+    }
 }
 
 trait CaseClassToTuplePropTests extends MacroPropTests {

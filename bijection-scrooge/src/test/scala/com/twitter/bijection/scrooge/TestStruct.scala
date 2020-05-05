@@ -131,11 +131,12 @@ trait TestStruct extends ThriftStruct with Product2[Int, Option[String]] with ja
   override def canEqual(other: Any): Boolean = other.isInstanceOf[TestStruct]
 
   // from runtime.ScalaRunTime._equals as that has been yanked out in 2.12.0
-  override def equals(other: Any): Boolean = other match {
-    case y: Product if (productArity == y.productArity) =>
-      productIterator sameElements y.productIterator
-    case _ => false
-  }
+  override def equals(other: Any): Boolean =
+    other match {
+      case y: Product if (productArity == y.productArity) =>
+        productIterator sameElements y.productIterator
+      case _ => false
+    }
 
   override def hashCode: Int = MurmurHash3.productHash(this)
 
@@ -143,11 +144,12 @@ trait TestStruct extends ThriftStruct with Product2[Int, Option[String]] with ja
 
   override def productArity: Int = 2
 
-  override def productElement(n: Int): Any = n match {
-    case 0 => someInt
-    case 1 => someString
-    case _ => throw new IndexOutOfBoundsException(n.toString)
-  }
+  override def productElement(n: Int): Any =
+    n match {
+      case 0 => someInt
+      case 1 => someString
+      case _ => throw new IndexOutOfBoundsException(n.toString)
+    }
 
   override def productPrefix: String = "TestStruct"
 }

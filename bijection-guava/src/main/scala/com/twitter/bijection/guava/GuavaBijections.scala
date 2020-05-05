@@ -26,8 +26,8 @@ import Conversion.asMethod
   * Bijections between Scala and Guava.
   */
 object GuavaBijections {
-  implicit def optional2Option[T, U](
-      implicit bij: ImplicitBijection[T, U]
+  implicit def optional2Option[T, U](implicit
+      bij: ImplicitBijection[T, U]
   ): Bijection[Optional[T], Option[U]] =
     Bijection.build[Optional[T], Option[U]] { opt =>
       if (opt.isPresent) Some(bij(opt.get)) else None
@@ -36,8 +36,8 @@ object GuavaBijections {
   /**
     * Converts a scala Function1 into a Guava Function.
     */
-  implicit def fn2GuavaFn[A, B, C, D](
-      implicit bij1: ImplicitBijection[A, B],
+  implicit def fn2GuavaFn[A, B, C, D](implicit
+      bij1: ImplicitBijection[A, B],
       bij2: ImplicitBijection[C, D]
   ): Bijection[A => C, GFn[B, D]] =
     new AbstractBijection[A => C, GFn[B, D]] {
@@ -51,26 +51,28 @@ object GuavaBijections {
   /**
     * Converts a scala Function0 into a Guava Supplier.
     */
-  implicit def fn2Supplier[T, U](
-      implicit bij: ImplicitBijection[T, U]
+  implicit def fn2Supplier[T, U](implicit
+      bij: ImplicitBijection[T, U]
   ): Bijection[() => T, Supplier[U]] =
     new AbstractBijection[() => T, Supplier[U]] {
-      override def apply(fn: () => T) = new Supplier[U] {
-        override def get: U = fn.apply.as[U]
-      }
+      override def apply(fn: () => T) =
+        new Supplier[U] {
+          override def get: U = fn.apply.as[U]
+        }
       override def invert(supplier: Supplier[U]) = { () => supplier.get.as[T] }
     }
 
   /**
     * Converts a scala Function1[T, Boolean] into a Guava Predicate.
     */
-  implicit def fn2Predicate[T, U](
-      implicit bij: ImplicitBijection[T, U]
+  implicit def fn2Predicate[T, U](implicit
+      bij: ImplicitBijection[T, U]
   ): Bijection[T => Boolean, Predicate[U]] =
     new AbstractBijection[T => Boolean, Predicate[U]] {
-      override def apply(fn: T => Boolean) = new Predicate[U] {
-        override def apply(u: U): Boolean = fn(u.as[T])
-      }
+      override def apply(fn: T => Boolean) =
+        new Predicate[U] {
+          override def apply(u: U): Boolean = fn(u.as[T])
+        }
       override def invert(pred: Predicate[U]) = { t: T => pred(t.as[U]) }
     }
 }

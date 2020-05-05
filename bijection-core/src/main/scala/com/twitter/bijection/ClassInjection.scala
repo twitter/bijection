@@ -34,9 +34,10 @@ class ClassInjection[T] extends AbstractInjection[Class[T], String] {
   * the inner items will not be correct. This is intended for experts.
   */
 object CastInjection {
-  def of[A, B >: A](implicit cmf: ClassTag[A]): Injection[A, B] = new AbstractInjection[A, B] {
-    private val cls = cmf.runtimeClass.asInstanceOf[Class[A]]
-    def apply(a: A) = a
-    def invert(b: B) = attempt(b)(cls.cast(_))
-  }
+  def of[A, B >: A](implicit cmf: ClassTag[A]): Injection[A, B] =
+    new AbstractInjection[A, B] {
+      private val cls = cmf.runtimeClass.asInstanceOf[Class[A]]
+      def apply(a: A) = a
+      def invert(b: B) = attempt(b)(cls.cast(_))
+    }
 }

@@ -143,8 +143,8 @@ trait CollectionBijections extends BinaryBijections {
     * Bijection[Iterable[A], Set[B]] is inaccurate, and really makes
     * no sense.
     */
-  def toContainer[A, B, C <: TraversableOnce[A], D <: TraversableOnce[B]](
-      implicit bij: ImplicitBijection[A, B],
+  def toContainer[A, B, C <: TraversableOnce[A], D <: TraversableOnce[B]](implicit
+      bij: ImplicitBijection[A, B],
       cd: CanBuildFrom[Nothing, B, D],
       dc: CanBuildFrom[Nothing, A, C]
   ): Bijection[C, D] =
@@ -161,8 +161,8 @@ trait CollectionBijections extends BinaryBijections {
       }
     }
 
-  implicit def betweenMaps[K1, V1, K2, V2](
-      implicit kBijection: ImplicitBijection[K1, K2],
+  implicit def betweenMaps[K1, V1, K2, V2](implicit
+      kBijection: ImplicitBijection[K1, K2],
       vBijection: ImplicitBijection[V1, V2]
   ) =
     toContainer[(K1, V1), (K2, V2), Map[K1, V1], Map[K2, V2]]
@@ -182,21 +182,21 @@ trait CollectionBijections extends BinaryBijections {
   implicit def betweenLists[T, U](implicit bij: ImplicitBijection[T, U]) =
     toContainer[T, U, List[T], List[U]]
 
-  implicit def option[T, U](
-      implicit bij: ImplicitBijection[T, U]
+  implicit def option[T, U](implicit
+      bij: ImplicitBijection[T, U]
   ): Bijection[Option[T], Option[U]] =
     new AbstractBijection[Option[T], Option[U]] {
       override def apply(optt: Option[T]) = optt.map(bij.bijection)
       override def invert(optu: Option[U]) = optu.map(bij.bijection.inverse)
     }
   // Always requires a copy
-  implicit def vector2List[A, B](
-      implicit bij: ImplicitBijection[A, B]
+  implicit def vector2List[A, B](implicit
+      bij: ImplicitBijection[A, B]
   ): Bijection[Vector[A], List[B]] =
     toContainer[A, B, Vector[A], List[B]]
 
-  implicit def indexedSeq2List[A, B](
-      implicit bij: ImplicitBijection[A, B]
+  implicit def indexedSeq2List[A, B](implicit
+      bij: ImplicitBijection[A, B]
   ): Bijection[IndexedSeq[A], List[B]] =
     toContainer[A, B, IndexedSeq[A], List[B]]
 
