@@ -6,7 +6,7 @@ import ReleaseTransformations._ // for sbt-release.
 import bijection._
 
 val twitterLibVersion = "20.4.1"
-val scalatestVersion = "3.1.1"
+val scalatestVersion = "3.1.2"
 val scalacheckVersion = "1.14.3"
 val scalatestPlusScalacheckVersion = "3.1.0.0-RC2"
 val scalatestPlusJunitVersion = "1.0.0-M2"
