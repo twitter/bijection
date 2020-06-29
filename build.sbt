@@ -5,7 +5,7 @@ import com.typesafe.sbt.osgi.SbtOsgi.autoImport._
 import ReleaseTransformations._ // for sbt-release.
 import bijection._
 
-val twitterLibVersion = "20.4.1"
+val twitterLibVersion = "20.6.0"
 val scalatestVersion = "3.1.1"
 val scalacheckVersion = "1.14.3"
 val scalatestPlusScalacheckVersion = "3.1.0.0-RC2"
