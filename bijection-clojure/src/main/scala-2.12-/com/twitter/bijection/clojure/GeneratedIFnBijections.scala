@@ -55,13 +55,12 @@ trait GeneratedIFnBijections {
         new AFn {
           override def invoke(a: AnyRef, b: AnyRef, c: AnyRef, d: AnyRef, e: AnyRef): AnyRef =
             fn.apply(
-                a.asInstanceOf[A],
-                b.asInstanceOf[B],
-                c.asInstanceOf[C],
-                d.asInstanceOf[D],
-                e.asInstanceOf[E]
-              )
-              .asInstanceOf[AnyRef]
+              a.asInstanceOf[A],
+              b.asInstanceOf[B],
+              c.asInstanceOf[C],
+              d.asInstanceOf[D],
+              e.asInstanceOf[E]
+            ).asInstanceOf[AnyRef]
         }
       override def invert(fn: IFn) = { (a, b, c, d, e) => fn.invoke(a, b, c, d, e).asInstanceOf[F] }
     }
@@ -78,14 +77,13 @@ trait GeneratedIFnBijections {
               f: AnyRef
           ): AnyRef =
             fn.apply(
-                a.asInstanceOf[A],
-                b.asInstanceOf[B],
-                c.asInstanceOf[C],
-                d.asInstanceOf[D],
-                e.asInstanceOf[E],
-                f.asInstanceOf[F]
-              )
-              .asInstanceOf[AnyRef]
+              a.asInstanceOf[A],
+              b.asInstanceOf[B],
+              c.asInstanceOf[C],
+              d.asInstanceOf[D],
+              e.asInstanceOf[E],
+              f.asInstanceOf[F]
+            ).asInstanceOf[AnyRef]
         }
       override def invert(fn: IFn) = { (a, b, c, d, e, f) =>
         fn.invoke(a, b, c, d, e, f).asInstanceOf[G]
@@ -106,15 +104,14 @@ trait GeneratedIFnBijections {
               g: AnyRef
           ): AnyRef =
             fn.apply(
-                a.asInstanceOf[A],
-                b.asInstanceOf[B],
-                c.asInstanceOf[C],
-                d.asInstanceOf[D],
-                e.asInstanceOf[E],
-                f.asInstanceOf[F],
-                g.asInstanceOf[G]
-              )
-              .asInstanceOf[AnyRef]
+              a.asInstanceOf[A],
+              b.asInstanceOf[B],
+              c.asInstanceOf[C],
+              d.asInstanceOf[D],
+              e.asInstanceOf[E],
+              f.asInstanceOf[F],
+              g.asInstanceOf[G]
+            ).asInstanceOf[AnyRef]
         }
       override def invert(fn: IFn) = { (a, b, c, d, e, f, g) =>
         fn.invoke(a, b, c, d, e, f, g).asInstanceOf[H]
@@ -136,16 +133,15 @@ trait GeneratedIFnBijections {
               h: AnyRef
           ): AnyRef =
             fn.apply(
-                a.asInstanceOf[A],
-                b.asInstanceOf[B],
-                c.asInstanceOf[C],
-                d.asInstanceOf[D],
-                e.asInstanceOf[E],
-                f.asInstanceOf[F],
-                g.asInstanceOf[G],
-                h.asInstanceOf[H]
-              )
-              .asInstanceOf[AnyRef]
+              a.asInstanceOf[A],
+              b.asInstanceOf[B],
+              c.asInstanceOf[C],
+              d.asInstanceOf[D],
+              e.asInstanceOf[E],
+              f.asInstanceOf[F],
+              g.asInstanceOf[G],
+              h.asInstanceOf[H]
+            ).asInstanceOf[AnyRef]
         }
       override def invert(fn: IFn) = { (a, b, c, d, e, f, g, h) =>
         fn.invoke(a, b, c, d, e, f, g, h).asInstanceOf[I]
@@ -168,17 +164,16 @@ trait GeneratedIFnBijections {
               i: AnyRef
           ): AnyRef =
             fn.apply(
-                a.asInstanceOf[A],
-                b.asInstanceOf[B],
-                c.asInstanceOf[C],
-                d.asInstanceOf[D],
-                e.asInstanceOf[E],
-                f.asInstanceOf[F],
-                g.asInstanceOf[G],
-                h.asInstanceOf[H],
-                i.asInstanceOf[I]
-              )
-              .asInstanceOf[AnyRef]
+              a.asInstanceOf[A],
+              b.asInstanceOf[B],
+              c.asInstanceOf[C],
+              d.asInstanceOf[D],
+              e.asInstanceOf[E],
+              f.asInstanceOf[F],
+              g.asInstanceOf[G],
+              h.asInstanceOf[H],
+              i.asInstanceOf[I]
+            ).asInstanceOf[AnyRef]
         }
       override def invert(fn: IFn) = { (a, b, c, d, e, f, g, h, i) =>
         fn.invoke(a, b, c, d, e, f, g, h, i).asInstanceOf[J]
@@ -202,18 +197,17 @@ trait GeneratedIFnBijections {
               j: AnyRef
           ): AnyRef =
             fn.apply(
-                a.asInstanceOf[A],
-                b.asInstanceOf[B],
-                c.asInstanceOf[C],
-                d.asInstanceOf[D],
-                e.asInstanceOf[E],
-                f.asInstanceOf[F],
-                g.asInstanceOf[G],
-                h.asInstanceOf[H],
-                i.asInstanceOf[I],
-                j.asInstanceOf[J]
-              )
-              .asInstanceOf[AnyRef]
+              a.asInstanceOf[A],
+              b.asInstanceOf[B],
+              c.asInstanceOf[C],
+              d.asInstanceOf[D],
+              e.asInstanceOf[E],
+              f.asInstanceOf[F],
+              g.asInstanceOf[G],
+              h.asInstanceOf[H],
+              i.asInstanceOf[I],
+              j.asInstanceOf[J]
+            ).asInstanceOf[AnyRef]
         }
       override def invert(fn: IFn) = { (a, b, c, d, e, f, g, h, i, j) =>
         fn.invoke(a, b, c, d, e, f, g, h, i, j).asInstanceOf[K]
@@ -238,19 +232,18 @@ trait GeneratedIFnBijections {
               k: AnyRef
           ): AnyRef =
             fn.apply(
-                a.asInstanceOf[A],
-                b.asInstanceOf[B],
-                c.asInstanceOf[C],
-                d.asInstanceOf[D],
-                e.asInstanceOf[E],
-                f.asInstanceOf[F],
-                g.asInstanceOf[G],
-                h.asInstanceOf[H],
-                i.asInstanceOf[I],
-                j.asInstanceOf[J],
-                k.asInstanceOf[K]
-              )
-              .asInstanceOf[AnyRef]
+              a.asInstanceOf[A],
+              b.asInstanceOf[B],
+              c.asInstanceOf[C],
+              d.asInstanceOf[D],
+              e.asInstanceOf[E],
+              f.asInstanceOf[F],
+              g.asInstanceOf[G],
+              h.asInstanceOf[H],
+              i.asInstanceOf[I],
+              j.asInstanceOf[J],
+              k.asInstanceOf[K]
+            ).asInstanceOf[AnyRef]
         }
       override def invert(fn: IFn) = { (a, b, c, d, e, f, g, h, i, j, k) =>
         fn.invoke(a, b, c, d, e, f, g, h, i, j, k).asInstanceOf[L]
@@ -276,20 +269,19 @@ trait GeneratedIFnBijections {
               l: AnyRef
           ): AnyRef =
             fn.apply(
-                a.asInstanceOf[A],
-                b.asInstanceOf[B],
-                c.asInstanceOf[C],
-                d.asInstanceOf[D],
-                e.asInstanceOf[E],
-                f.asInstanceOf[F],
-                g.asInstanceOf[G],
-                h.asInstanceOf[H],
-                i.asInstanceOf[I],
-                j.asInstanceOf[J],
-                k.asInstanceOf[K],
-                l.asInstanceOf[L]
-              )
-              .asInstanceOf[AnyRef]
+              a.asInstanceOf[A],
+              b.asInstanceOf[B],
+              c.asInstanceOf[C],
+              d.asInstanceOf[D],
+              e.asInstanceOf[E],
+              f.asInstanceOf[F],
+              g.asInstanceOf[G],
+              h.asInstanceOf[H],
+              i.asInstanceOf[I],
+              j.asInstanceOf[J],
+              k.asInstanceOf[K],
+              l.asInstanceOf[L]
+            ).asInstanceOf[AnyRef]
         }
       override def invert(fn: IFn) = { (a, b, c, d, e, f, g, h, i, j, k, l) =>
         fn.invoke(a, b, c, d, e, f, g, h, i, j, k, l).asInstanceOf[M]
@@ -316,21 +308,20 @@ trait GeneratedIFnBijections {
               m: AnyRef
           ): AnyRef =
             fn.apply(
-                a.asInstanceOf[A],
-                b.asInstanceOf[B],
-                c.asInstanceOf[C],
-                d.asInstanceOf[D],
-                e.asInstanceOf[E],
-                f.asInstanceOf[F],
-                g.asInstanceOf[G],
-                h.asInstanceOf[H],
-                i.asInstanceOf[I],
-                j.asInstanceOf[J],
-                k.asInstanceOf[K],
-                l.asInstanceOf[L],
-                m.asInstanceOf[M]
-              )
-              .asInstanceOf[AnyRef]
+              a.asInstanceOf[A],
+              b.asInstanceOf[B],
+              c.asInstanceOf[C],
+              d.asInstanceOf[D],
+              e.asInstanceOf[E],
+              f.asInstanceOf[F],
+              g.asInstanceOf[G],
+              h.asInstanceOf[H],
+              i.asInstanceOf[I],
+              j.asInstanceOf[J],
+              k.asInstanceOf[K],
+              l.asInstanceOf[L],
+              m.asInstanceOf[M]
+            ).asInstanceOf[AnyRef]
         }
       override def invert(fn: IFn) = { (a, b, c, d, e, f, g, h, i, j, k, l, m) =>
         fn.invoke(a, b, c, d, e, f, g, h, i, j, k, l, m).asInstanceOf[N]
@@ -358,22 +349,21 @@ trait GeneratedIFnBijections {
               n: AnyRef
           ): AnyRef =
             fn.apply(
-                a.asInstanceOf[A],
-                b.asInstanceOf[B],
-                c.asInstanceOf[C],
-                d.asInstanceOf[D],
-                e.asInstanceOf[E],
-                f.asInstanceOf[F],
-                g.asInstanceOf[G],
-                h.asInstanceOf[H],
-                i.asInstanceOf[I],
-                j.asInstanceOf[J],
-                k.asInstanceOf[K],
-                l.asInstanceOf[L],
-                m.asInstanceOf[M],
-                n.asInstanceOf[N]
-              )
-              .asInstanceOf[AnyRef]
+              a.asInstanceOf[A],
+              b.asInstanceOf[B],
+              c.asInstanceOf[C],
+              d.asInstanceOf[D],
+              e.asInstanceOf[E],
+              f.asInstanceOf[F],
+              g.asInstanceOf[G],
+              h.asInstanceOf[H],
+              i.asInstanceOf[I],
+              j.asInstanceOf[J],
+              k.asInstanceOf[K],
+              l.asInstanceOf[L],
+              m.asInstanceOf[M],
+              n.asInstanceOf[N]
+            ).asInstanceOf[AnyRef]
         }
       override def invert(fn: IFn) = { (a, b, c, d, e, f, g, h, i, j, k, l, m, n) =>
         fn.invoke(a, b, c, d, e, f, g, h, i, j, k, l, m, n).asInstanceOf[O]
@@ -402,23 +392,22 @@ trait GeneratedIFnBijections {
               o: AnyRef
           ): AnyRef =
             fn.apply(
-                a.asInstanceOf[A],
-                b.asInstanceOf[B],
-                c.asInstanceOf[C],
-                d.asInstanceOf[D],
-                e.asInstanceOf[E],
-                f.asInstanceOf[F],
-                g.asInstanceOf[G],
-                h.asInstanceOf[H],
-                i.asInstanceOf[I],
-                j.asInstanceOf[J],
-                k.asInstanceOf[K],
-                l.asInstanceOf[L],
-                m.asInstanceOf[M],
-                n.asInstanceOf[N],
-                o.asInstanceOf[O]
-              )
-              .asInstanceOf[AnyRef]
+              a.asInstanceOf[A],
+              b.asInstanceOf[B],
+              c.asInstanceOf[C],
+              d.asInstanceOf[D],
+              e.asInstanceOf[E],
+              f.asInstanceOf[F],
+              g.asInstanceOf[G],
+              h.asInstanceOf[H],
+              i.asInstanceOf[I],
+              j.asInstanceOf[J],
+              k.asInstanceOf[K],
+              l.asInstanceOf[L],
+              m.asInstanceOf[M],
+              n.asInstanceOf[N],
+              o.asInstanceOf[O]
+            ).asInstanceOf[AnyRef]
         }
       override def invert(fn: IFn) = { (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o) =>
         fn.invoke(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o).asInstanceOf[P]
@@ -448,24 +437,23 @@ trait GeneratedIFnBijections {
               p: AnyRef
           ): AnyRef =
             fn.apply(
-                a.asInstanceOf[A],
-                b.asInstanceOf[B],
-                c.asInstanceOf[C],
-                d.asInstanceOf[D],
-                e.asInstanceOf[E],
-                f.asInstanceOf[F],
-                g.asInstanceOf[G],
-                h.asInstanceOf[H],
-                i.asInstanceOf[I],
-                j.asInstanceOf[J],
-                k.asInstanceOf[K],
-                l.asInstanceOf[L],
-                m.asInstanceOf[M],
-                n.asInstanceOf[N],
-                o.asInstanceOf[O],
-                p.asInstanceOf[P]
-              )
-              .asInstanceOf[AnyRef]
+              a.asInstanceOf[A],
+              b.asInstanceOf[B],
+              c.asInstanceOf[C],
+              d.asInstanceOf[D],
+              e.asInstanceOf[E],
+              f.asInstanceOf[F],
+              g.asInstanceOf[G],
+              h.asInstanceOf[H],
+              i.asInstanceOf[I],
+              j.asInstanceOf[J],
+              k.asInstanceOf[K],
+              l.asInstanceOf[L],
+              m.asInstanceOf[M],
+              n.asInstanceOf[N],
+              o.asInstanceOf[O],
+              p.asInstanceOf[P]
+            ).asInstanceOf[AnyRef]
         }
       override def invert(fn: IFn) = { (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) =>
         fn.invoke(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p).asInstanceOf[Q]
@@ -496,25 +484,24 @@ trait GeneratedIFnBijections {
               q: AnyRef
           ): AnyRef =
             fn.apply(
-                a.asInstanceOf[A],
-                b.asInstanceOf[B],
-                c.asInstanceOf[C],
-                d.asInstanceOf[D],
-                e.asInstanceOf[E],
-                f.asInstanceOf[F],
-                g.asInstanceOf[G],
-                h.asInstanceOf[H],
-                i.asInstanceOf[I],
-                j.asInstanceOf[J],
-                k.asInstanceOf[K],
-                l.asInstanceOf[L],
-                m.asInstanceOf[M],
-                n.asInstanceOf[N],
-                o.asInstanceOf[O],
-                p.asInstanceOf[P],
-                q.asInstanceOf[Q]
-              )
-              .asInstanceOf[AnyRef]
+              a.asInstanceOf[A],
+              b.asInstanceOf[B],
+              c.asInstanceOf[C],
+              d.asInstanceOf[D],
+              e.asInstanceOf[E],
+              f.asInstanceOf[F],
+              g.asInstanceOf[G],
+              h.asInstanceOf[H],
+              i.asInstanceOf[I],
+              j.asInstanceOf[J],
+              k.asInstanceOf[K],
+              l.asInstanceOf[L],
+              m.asInstanceOf[M],
+              n.asInstanceOf[N],
+              o.asInstanceOf[O],
+              p.asInstanceOf[P],
+              q.asInstanceOf[Q]
+            ).asInstanceOf[AnyRef]
         }
       override def invert(fn: IFn) = { (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q) =>
         fn.invoke(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q).asInstanceOf[R]
@@ -549,26 +536,25 @@ trait GeneratedIFnBijections {
               r: AnyRef
           ): AnyRef =
             fn.apply(
-                a.asInstanceOf[A],
-                b.asInstanceOf[B],
-                c.asInstanceOf[C],
-                d.asInstanceOf[D],
-                e.asInstanceOf[E],
-                f.asInstanceOf[F],
-                g.asInstanceOf[G],
-                h.asInstanceOf[H],
-                i.asInstanceOf[I],
-                j.asInstanceOf[J],
-                k.asInstanceOf[K],
-                l.asInstanceOf[L],
-                m.asInstanceOf[M],
-                n.asInstanceOf[N],
-                o.asInstanceOf[O],
-                p.asInstanceOf[P],
-                q.asInstanceOf[Q],
-                r.asInstanceOf[R]
-              )
-              .asInstanceOf[AnyRef]
+              a.asInstanceOf[A],
+              b.asInstanceOf[B],
+              c.asInstanceOf[C],
+              d.asInstanceOf[D],
+              e.asInstanceOf[E],
+              f.asInstanceOf[F],
+              g.asInstanceOf[G],
+              h.asInstanceOf[H],
+              i.asInstanceOf[I],
+              j.asInstanceOf[J],
+              k.asInstanceOf[K],
+              l.asInstanceOf[L],
+              m.asInstanceOf[M],
+              n.asInstanceOf[N],
+              o.asInstanceOf[O],
+              p.asInstanceOf[P],
+              q.asInstanceOf[Q],
+              r.asInstanceOf[R]
+            ).asInstanceOf[AnyRef]
         }
       override def invert(fn: IFn) = { (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r) =>
         fn.invoke(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r).asInstanceOf[S]
@@ -604,27 +590,26 @@ trait GeneratedIFnBijections {
               s: AnyRef
           ): AnyRef =
             fn.apply(
-                a.asInstanceOf[A],
-                b.asInstanceOf[B],
-                c.asInstanceOf[C],
-                d.asInstanceOf[D],
-                e.asInstanceOf[E],
-                f.asInstanceOf[F],
-                g.asInstanceOf[G],
-                h.asInstanceOf[H],
-                i.asInstanceOf[I],
-                j.asInstanceOf[J],
-                k.asInstanceOf[K],
-                l.asInstanceOf[L],
-                m.asInstanceOf[M],
-                n.asInstanceOf[N],
-                o.asInstanceOf[O],
-                p.asInstanceOf[P],
-                q.asInstanceOf[Q],
-                r.asInstanceOf[R],
-                s.asInstanceOf[S]
-              )
-              .asInstanceOf[AnyRef]
+              a.asInstanceOf[A],
+              b.asInstanceOf[B],
+              c.asInstanceOf[C],
+              d.asInstanceOf[D],
+              e.asInstanceOf[E],
+              f.asInstanceOf[F],
+              g.asInstanceOf[G],
+              h.asInstanceOf[H],
+              i.asInstanceOf[I],
+              j.asInstanceOf[J],
+              k.asInstanceOf[K],
+              l.asInstanceOf[L],
+              m.asInstanceOf[M],
+              n.asInstanceOf[N],
+              o.asInstanceOf[O],
+              p.asInstanceOf[P],
+              q.asInstanceOf[Q],
+              r.asInstanceOf[R],
+              s.asInstanceOf[S]
+            ).asInstanceOf[AnyRef]
         }
       override def invert(fn: IFn) = { (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s) =>
         fn.invoke(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s).asInstanceOf[T]
@@ -661,28 +646,27 @@ trait GeneratedIFnBijections {
               t: AnyRef
           ): AnyRef =
             fn.apply(
-                a.asInstanceOf[A],
-                b.asInstanceOf[B],
-                c.asInstanceOf[C],
-                d.asInstanceOf[D],
-                e.asInstanceOf[E],
-                f.asInstanceOf[F],
-                g.asInstanceOf[G],
-                h.asInstanceOf[H],
-                i.asInstanceOf[I],
-                j.asInstanceOf[J],
-                k.asInstanceOf[K],
-                l.asInstanceOf[L],
-                m.asInstanceOf[M],
-                n.asInstanceOf[N],
-                o.asInstanceOf[O],
-                p.asInstanceOf[P],
-                q.asInstanceOf[Q],
-                r.asInstanceOf[R],
-                s.asInstanceOf[S],
-                t.asInstanceOf[T]
-              )
-              .asInstanceOf[AnyRef]
+              a.asInstanceOf[A],
+              b.asInstanceOf[B],
+              c.asInstanceOf[C],
+              d.asInstanceOf[D],
+              e.asInstanceOf[E],
+              f.asInstanceOf[F],
+              g.asInstanceOf[G],
+              h.asInstanceOf[H],
+              i.asInstanceOf[I],
+              j.asInstanceOf[J],
+              k.asInstanceOf[K],
+              l.asInstanceOf[L],
+              m.asInstanceOf[M],
+              n.asInstanceOf[N],
+              o.asInstanceOf[O],
+              p.asInstanceOf[P],
+              q.asInstanceOf[Q],
+              r.asInstanceOf[R],
+              s.asInstanceOf[S],
+              t.asInstanceOf[T]
+            ).asInstanceOf[AnyRef]
         }
       override def invert(fn: IFn) = {
         (a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t) =>
