@@ -1,6 +1,7 @@
 package com.twitter.bijection.avro
 
-import org.scalatest._
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import com.twitter.bijection.{Injection, BaseProperties}
 import org.apache.avro.Schema
 import avro.{FiscalRecordScala, FiscalRecord}
@@ -9,7 +10,7 @@ import avro.{FiscalRecordScala, FiscalRecord}
   * @author Muhammad Ashraf
   * @since 10/5/13
   */
-class SpecificAvroCodecsSpecification extends WordSpec with Matchers with BaseProperties {
+class SpecificAvroCodecsSpecification extends AnyWordSpec with Matchers with BaseProperties {
   val testSchema = new Schema.Parser().parse("""{
                                                    "type":"record",
                                                    "name":"FiscalRecord",

@@ -1,13 +1,14 @@
 package com.twitter.bijection.macros
 
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.exceptions.TestFailedException
 
 /**
   * This test is intended to ensure that the macros do not require any imported code in scope. This is why all
   * references are via absolute paths.
   */
-class MacroDepHygiene extends WordSpec with Matchers with MacroTestHelper {
+class MacroDepHygiene extends AnyWordSpec with Matchers with MacroTestHelper {
   import com.twitter.bijection.macros.MacroImplicits.isCaseClass
   import MacroCaseClasses._
 

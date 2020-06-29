@@ -20,9 +20,9 @@ import java.nio.ByteBuffer
 
 import com.twitter.bijection.codec.Base64
 import org.scalacheck.Arbitrary
-import org.scalatest.MustMatchers
+import org.scalatest.matchers.must.Matchers
 
-class BinaryBijectionLaws extends CheckProperties with MustMatchers with BaseProperties {
+class BinaryBijectionLaws extends CheckProperties with Matchers with BaseProperties {
   implicit val arbBB = arbitraryViaFn[Array[Byte], ByteBuffer] { ByteBuffer.wrap }
 
   // TODO: These are all bijections,

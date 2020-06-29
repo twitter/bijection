@@ -18,13 +18,13 @@ import scala.util.Success
 import com.twitter.bijection.Injection
 import com.twitter.bijection.hbase.HBaseInjections._
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
-import org.scalatest.WordSpec
+import org.scalatest.wordspec.AnyWordSpec
 
 /**
   * @author Muhammad Ashraf
   * @since 7/10/13
   */
-class HBaseInjectionsSpecifications extends WordSpec {
+class HBaseInjectionsSpecifications extends AnyWordSpec {
   "HBaseInjections" should {
     "respect ImmutableBytesWritable offset and length" in {
       val long: Long = 1

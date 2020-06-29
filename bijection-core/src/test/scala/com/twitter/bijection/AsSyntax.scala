@@ -16,10 +16,11 @@ limitations under the License.
 
 package com.twitter.bijection
 
-import org.scalatest._
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import scala.util.Success
 
-class AsSyntax extends WordSpec with Matchers {
+class AsSyntax extends AnyWordSpec with Matchers {
   import Conversion.asMethod
 
   "As syntax" should {

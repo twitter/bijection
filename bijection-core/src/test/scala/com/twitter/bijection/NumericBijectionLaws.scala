@@ -30,7 +30,7 @@ import java.util.UUID
 
 import org.scalacheck.Gen
 
-import org.scalatest.PropSpec
+import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import org.scalatestplus.scalacheck.Checkers
 
@@ -50,7 +50,7 @@ object JavaNumArbs {
   }
 }
 
-class NumericBijectionLaws extends PropSpec with Checkers with ScalaCheckPropertyChecks {
+class NumericBijectionLaws extends AnyPropSpec with Checkers with ScalaCheckPropertyChecks {
   import StringArbs._
   import JavaNumArbs._
   import BaseProperties._
