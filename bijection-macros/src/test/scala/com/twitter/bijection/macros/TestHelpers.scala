@@ -1,6 +1,6 @@
 package com.twitter.bijection.macros
 
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 
 import _root_.java.io.{
   ByteArrayOutputStream,

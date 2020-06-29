@@ -17,11 +17,11 @@ limitations under the License.
 package com.twitter.bijection
 
 import org.scalacheck.{Prop, Gen}
-import org.scalatest.MustMatchers
+import org.scalatest.matchers.must.Matchers
 
 import Conversion.asMethod // get the .as syntax
 
-class EnglishIntLaws extends CheckProperties with MustMatchers with BaseProperties {
+class EnglishIntLaws extends CheckProperties with Matchers with BaseProperties {
   var ct = 0
 
   def test(x: Gen[Int]) = {

@@ -1,12 +1,13 @@
 package com.twitter.bijection.macros
 
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
 import com.twitter.bijection._
 
 import scala.util.{Failure, Success}
 
-class MacroUnitTests extends WordSpec with Matchers with MacroTestHelper {
+class MacroUnitTests extends AnyWordSpec with Matchers with MacroTestHelper {
   import MacroImplicits._
   import MacroCaseClasses._
 
