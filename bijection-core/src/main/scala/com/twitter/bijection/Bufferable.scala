@@ -75,7 +75,7 @@ object Bufferable
   def getBytes(from: ByteBuffer, start: Int = 0): Array[Byte] = {
     val fromd = from.duplicate
     // read position:
-    val current = fromd.position
+    val current = fromd.position()
     // set the position:
     fromd.position(start)
     val result = Array.ofDim[Byte](current - start)
@@ -111,7 +111,7 @@ object Bufferable
       ByteBuffer.allocate(newCapacity)
     }
     val tmpBb = bb.duplicate
-    val currentPos = tmpBb.position
+    val currentPos = tmpBb.position()
     tmpBb.position(0)
     tmpBb.limit(currentPos)
     newBb.put(tmpBb)

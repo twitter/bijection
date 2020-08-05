@@ -27,10 +27,10 @@ trait BaseBufferable {
       val buf = ByteBuffer.allocateDirect(100)
       val newBuf = Bufferable.put(buf, t)
       val newBuf2 = ByteBuffer.wrap(Bufferable.getBytes(newBuf))
-      val pos = newBuf2.position
+      val pos = newBuf2.position()
       val (newBuf3, rtt) = Bufferable.get[T](newBuf2).get
       val copyT = Bufferable.deepCopy(t)
-      Equiv[T].equiv(t, rtt) && Equiv[T].equiv(t, copyT) && (newBuf2.position == pos)
+      Equiv[T].equiv(t, rtt) && Equiv[T].equiv(t, copyT) && (newBuf2.position() == pos)
     }
   implicit protected def aeq[T: Equiv]: Equiv[Array[T]] =
     Equiv.fromFunction { (a1, a2) =>
@@ -50,7 +50,7 @@ class BufferableLaws extends CheckProperties with BaseBufferable {
       val newBb = Bufferable.reallocate(bb)
       Bufferable.getBytes(bb).toList == Bufferable.getBytes(newBb).toList &&
       newBb.capacity > bb.capacity &&
-      newBb.position == bb.position
+      newBb.position() == bb.position()
     }
   }
 
