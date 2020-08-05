@@ -8,8 +8,8 @@ import bijection._
 val twitterLibVersion = "20.7.0"
 val scalatestVersion = "3.2.0"
 val scalacheckVersion = "1.14.3"
-val scalatestPlusScalacheckVersion = "3.1.0.0-RC2"
-val scalatestPlusJunitVersion = "1.0.0-M2"
+val scalatestPlusScalacheckVersion = "3.2.0.0"
+val scalatestPlusJunitVersion = "3.2.0.0"
 
 def util(mod: String) =
   "com.twitter" %% (s"util-$mod") % twitterLibVersion % "provided"
@@ -41,9 +41,9 @@ val buildLevelSettings = Seq(
     "releases" at "https://oss.sonatype.org/content/repositories/releases"
   ),
   libraryDependencies ++= Seq(
-    "org.scalacheck" %% "scalacheck" % scalacheckVersion % "test",
-    "org.scalatest" %% "scalatest" % scalatestVersion % "test",
-    "org.scalatestplus" %% "scalatestplus-scalacheck" % scalatestPlusScalacheckVersion % "test"
+    "org.scalacheck" %% "scalacheck" % scalacheckVersion % Test,
+    "org.scalatest" %% "scalatest" % scalatestVersion % Test,
+    "org.scalatestplus" %% "scalacheck-1-14" % scalatestPlusScalacheckVersion % Test
   ),
   unmanagedSourceDirectories in Compile += {
     val sourceDir = (sourceDirectory in Compile).value
@@ -246,8 +246,8 @@ lazy val bijectionCore = {
   module("core").settings(
     osgiExportAll("com.twitter.bijection"),
     libraryDependencies ++= Seq(
-      "com.novocode" % "junit-interface" % "0.11" % "test",
-      "org.scalatestplus" %% "scalatestplus-junit" % scalatestPlusJunitVersion % "test"
+      "com.novocode" % "junit-interface" % "0.11" % Test,
+      "org.scalatestplus" %% "junit-4-12" % scalatestPlusJunitVersion % Test
     ),
     sourceGenerators in Compile += Def.task {
       val main = (sourceManaged in Compile).value
