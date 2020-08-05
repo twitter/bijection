@@ -148,7 +148,7 @@ A list of contributors to the project can be found here: [Contributors](https://
 
 ## Maven
 
-Bijection modules are available on maven central. The current groupid and version for all modules is, respectively, `"com.twitter"` and  `0.9.5`.
+Bijection modules are available on maven central. The current groupid and version for all modules is, respectively, `"com.twitter"` and  `0.9.7`.
 
 Current published artifacts are
 
@@ -164,9 +164,9 @@ Current published artifacts are
 * `bijection-avro`
 * `bijection-hbase`
 
-Every artifact is published against Scala `"2.10"`,  `"2.11"` and `"2.12"`. To pull in the jars, make sure to add your desired scala version as a suffix, ie:
+Every artifact is published against Scala `"2.11"`,  `"2.12"` and `"2.13"`. To pull in the jars, make sure to add your desired scala version as a suffix, ie:
 
-`bijection-core_2.10` or `bijection-core_2.11` or `bijection-core_2.12`.
+`bijection-core_2.11` or `bijection-core_2.12` or `bijection-core_2.13`.
 
 ## Chat
 [![Gitter](https://badges.gitter.im/twitter/bijection.svg)](https://gitter.im/twitter/bijection?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
