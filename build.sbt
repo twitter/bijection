@@ -8,7 +8,7 @@ import bijection._
 val twitterLibVersion = "20.7.0"
 val scalatestVersion = "3.2.1"
 val scalacheckVersion = "1.14.3"
-val scalatestPlusScalacheckVersion = "3.2.0.0"
+val scalatestPlusScalacheckVersion = "3.2.1.0"
 val scalatestPlusJunitVersion = "3.2.1.0"
 
 def util(mod: String) =
