@@ -26,10 +26,9 @@ import com.twitter.util.{
   JavaTimer
 }
 import java.lang.{Integer => JInt, Long => JLong}
-import java.util.concurrent.{Future => JavaFuture, Callable, FutureTask}
+import java.util.concurrent.{Future => JavaFuture, Callable, CompletableFuture, FutureTask}
 import org.scalacheck.Arbitrary
 import org.scalatest.BeforeAndAfterAll
-
 import scala.concurrent.{Future => ScalaFuture, Await => ScalaAwait}
 import scala.concurrent.duration.Duration
 import scala.util.{Try => ScalaTry}
@@ -63,6 +62,14 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties with BeforeA
       f.run()
       f
     }
+
+  implicit def completableFutureArb[T: Arbitrary] =
+    arbitraryViaFn[T, CompletableFuture[T]] { t =>
+      val f = new CompletableFuture[T]()
+      f.complete(t)
+      f
+    }
+
   implicit def tryArb[T: Arbitrary] = arbitraryViaFn[T, TwitterTry[T]] { TwitterTry(_) }
   implicit def scalaTryArb[T: Arbitrary] = arbitraryViaFn[T, ScalaTry[T]] { ScalaTry(_) }
 
@@ -77,6 +84,9 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties with BeforeA
     Equiv.fromFunction { (f1, f2) => Equiv[Option[T]].equiv(toOption(f1), toOption(f2)) }
 
   implicit protected def javaFutureEq[T: Equiv]: Equiv[JavaFuture[T]] =
+    Equiv.fromFunction { (f1, f2) => Equiv[Option[T]].equiv(toOption(f1), toOption(f2)) }
+
+  implicit protected def completableFutureEq[T: Equiv]: Equiv[CompletableFuture[T]] =
     Equiv.fromFunction { (f1, f2) => Equiv[Option[T]].equiv(toOption(f1), toOption(f2)) }
 
   type FromMap = Map[Int, Long]
@@ -104,6 +114,10 @@ class UtilBijectionLaws extends CheckProperties with BaseProperties with BeforeA
 
   property("round trips TwitterFuture[Map[JInt, JLong]] <-> ScalaFuture[Map[JInt, JLong]]") {
     isBijection[TwitterFuture[ToMap], ScalaFuture[ToMap]]
+  }
+
+  property("round trips TwitterFuture[Map[JInt, JLong]] <-> CompletableFuture[Map[JInt, JLong]]") {
+    isBijection[TwitterFuture[ToMap], CompletableFuture[ToMap]]
   }
 
   property(
