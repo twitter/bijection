@@ -143,13 +143,12 @@ class JsonInjectionLaws extends CheckProperties with BaseProperties {
   // Handle Mixed values:
   property("Mixed values") {
     forAll { (kv: List[(String, Int, List[String])]) =>
-      val mixedMap = kv.map {
-        case (key, intv, lv) =>
-          if (scala.math.random < 0.5) {
-            (key + "i", toJsonNode(intv))
-          } else {
-            (key + "l", toJsonNode(lv))
-          }
+      val mixedMap = kv.map { case (key, intv, lv) =>
+        if (scala.math.random < 0.5) {
+          (key + "i", toJsonNode(intv))
+        } else {
+          (key + "l", toJsonNode(lv))
+        }
       }.toMap
 
       val jsonMixed = mixedMap.as[UnparsedJson]

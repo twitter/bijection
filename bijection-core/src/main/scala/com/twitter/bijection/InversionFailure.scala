@@ -39,8 +39,8 @@ object InversionFailure {
     * Produces a failed attempt statisfying a partial function defined
     * for any non-fatal Throwable
     */
-  def partialFailure[A, B](b: B): PartialFunction[Throwable, Try[A]] = {
-    case NonFatal(t) => Failure(InversionFailure(b, t))
+  def partialFailure[A, B](b: B): PartialFunction[Throwable, Try[A]] = { case NonFatal(t) =>
+    Failure(InversionFailure(b, t))
   }
 }
 

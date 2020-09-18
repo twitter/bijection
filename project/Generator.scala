@@ -76,8 +76,8 @@ object Generator {
   def implicitTuple(cnt: Int): String =
     "  implicit def tuple" + cnt + "[" + typeList(cnt, "1") + "," + typeList(cnt, "2") +
       "](implicit " + ((0 until cnt) map {
-      bijectionParameter(_, "ImplicitBijection")
-    } mkString (", ")) + "):\n    " +
+        bijectionParameter(_, "ImplicitBijection")
+      } mkString (", ")) + "):\n    " +
       tupleBijectionType(cnt) + " = new Abstract" + tupleBijectionType(cnt) + " {\n" +
       "      " + applyMethod(cnt) + "\n" +
       "      " + invertMethod(cnt) + "\n" +
@@ -92,12 +92,12 @@ object Generator {
   def implicitTupleInj(cnt: Int): String =
     "  implicit def tuple" + cnt + "[" + typeList(cnt, "1") + "," + typeList(cnt, "2") +
       "](implicit " + ((0 until cnt) map {
-      bijectionParameter(_, "Injection")
-    } mkString (", ")) + "):\n    " +
+        bijectionParameter(_, "Injection")
+      } mkString (", ")) + "):\n    " +
       tupleBijectionType(cnt, "Injection") + " = new Abstract" + tupleBijectionType(
-      cnt,
-      "Injection"
-    ) + " {\n" +
+        cnt,
+        "Injection"
+      ) + " {\n" +
       "      " + applyMethod(cnt) + "\n" +
       "      " + invertInj(cnt) + "\n" +
       "    }"

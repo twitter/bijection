@@ -62,24 +62,23 @@ private[bijection] object CaseClassToTuple {
       .zip(tupUtils.tupleCaseClassEquivalent(T.tpe))
       .zip(Tup.tpe.declarations.collect { case m: MethodSymbol if m.isCaseAccessor => m })
       .zipWithIndex
-      .map {
-        case (((tM, treeEquiv), tupM), idx) =>
-          tM.returnType match {
-            case tpe if recursivelyApply && IsCaseClassImpl.isCaseClassType(c)(tpe) =>
-              val needDeclaration = !convCache.contains(tpe)
-              val conv = convCache.getOrElseUpdate(tpe, newTermName("c2t_" + idx))
-              (
-                q"""$conv.invert(tup.$tupM)""",
-                q"""$conv(t.$tM)""",
-                if (needDeclaration)
-                  Some(
-                    q"""val $conv = implicitly[_root_.com.twitter.bijection.Bijection[${tM.returnType}, $treeEquiv]]"""
-                  )
-                else None
-              ) // cache these
-            case tpe =>
-              (q"""tup.$tupM""", q"""t.$tM""", None)
-          }
+      .map { case (((tM, treeEquiv), tupM), idx) =>
+        tM.returnType match {
+          case tpe if recursivelyApply && IsCaseClassImpl.isCaseClassType(c)(tpe) =>
+            val needDeclaration = !convCache.contains(tpe)
+            val conv = convCache.getOrElseUpdate(tpe, newTermName("c2t_" + idx))
+            (
+              q"""$conv.invert(tup.$tupM)""",
+              q"""$conv(t.$tM)""",
+              if (needDeclaration)
+                Some(
+                  q"""val $conv = implicitly[_root_.com.twitter.bijection.Bijection[${tM.returnType}, $treeEquiv]]"""
+                )
+              else None
+            ) // cache these
+          case tpe =>
+            (q"""tup.$tupM""", q"""t.$tM""", None)
+        }
       }
 
     val getters = getPutConv.map(_._1)

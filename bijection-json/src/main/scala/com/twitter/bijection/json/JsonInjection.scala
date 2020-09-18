@@ -125,9 +125,8 @@ object JsonNodeInjection extends CollectionJson with LowPriorityJson with java.i
           case Right(r) => toJsonNode(r)
         }
       override def invert(n: JsonNode) =
-        fromJsonNode[R](n).map { Right(_) }.recoverWith {
-          case NonFatal(_) =>
-            fromJsonNode[L](n).map { Left(_) }.recoverWith(InversionFailure.partialFailure(n))
+        fromJsonNode[R](n).map { Right(_) }.recoverWith { case NonFatal(_) =>
+          fromJsonNode[L](n).map { Left(_) }.recoverWith(InversionFailure.partialFailure(n))
         }
     }
 
@@ -150,9 +149,8 @@ object JsonNodeInjection extends CollectionJson with LowPriorityJson with java.i
     new AbstractJsonNodeInjection[Map[String, V]] {
       def apply(m: Map[String, V]) = {
         val obj = JsonNodeFactory.instance.objectNode
-        m.foreach {
-          case (k, v) =>
-            obj.put(k, toJsonNode(v))
+        m.foreach { case (k, v) =>
+          obj.put(k, toJsonNode(v))
         }
         obj
       }

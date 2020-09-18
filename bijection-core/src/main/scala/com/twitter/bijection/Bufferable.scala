@@ -91,9 +91,8 @@ object Bufferable
   // TODO Bufferable should integrate with injection
   def viaInjection[A, B](implicit buf: Bufferable[B], inj: Injection[A, B]): Bufferable[A] =
     Bufferable.build[A] { (bb, a) => buf.put(bb, inj(a)) } { bb =>
-      buf.get(bb).flatMap {
-        case (rbb, b) =>
-          inj.invert(b).map { a => (rbb, a) }
+      buf.get(bb).flatMap { case (rbb, b) =>
+        inj.invert(b).map { a => (rbb, a) }
       }
     }
 
