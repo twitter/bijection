@@ -43,13 +43,12 @@ class FuturePoolJavaFutureConverter(futurePool: FuturePool, mayInterruptIfRunnin
   override def apply[T](javaFuture: JFuture[T]): Future[T] = {
     val f = futurePool { javaFuture.get() }
     val p = Promise.attached(f)
-    p.setInterruptHandler {
-      case NonFatal(e) =>
-        if (p.detach()) {
-          f.raise(e)
-          javaFuture.cancel(mayInterruptIfRunning)
-          p.setException(e)
-        }
+    p.setInterruptHandler { case NonFatal(e) =>
+      if (p.detach()) {
+        f.raise(e)
+        javaFuture.cancel(mayInterruptIfRunning)
+        p.setException(e)
+      }
     }
     p
   }
@@ -83,11 +82,10 @@ class TimerJavaFutureConverter(
       }
     }
     require(task != null)
-    p.setInterruptHandler {
-      case NonFatal(e) =>
-        task.cancel()
-        p.updateIfEmpty(Throw(e))
-        javaFuture.cancel(mayInterruptIfRunning)
+    p.setInterruptHandler { case NonFatal(e) =>
+      task.cancel()
+      p.updateIfEmpty(Throw(e))
+      javaFuture.cancel(mayInterruptIfRunning)
     }
     p
   }

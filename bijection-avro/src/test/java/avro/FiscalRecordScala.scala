@@ -9,16 +9,19 @@ case class FiscalRecordScala(
   def this() = this("", Some(1), Some(1))
   def get(field: Int): AnyRef = {
     field match {
-      case pos if pos == 0 => {
+      case pos if pos == 0 =>
+        {
           calendarDate
         }.asInstanceOf[AnyRef]
-      case pos if pos == 1 => {
+      case pos if pos == 1 =>
+        {
           fiscalWeek match {
             case Some(x) => x
             case None    => null
           }
         }.asInstanceOf[AnyRef]
-      case pos if pos == 2 => {
+      case pos if pos == 2 =>
+        {
           fiscalYear match {
             case Some(x) => x
             case None    => null

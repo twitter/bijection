@@ -48,8 +48,8 @@ object BufferableGenerator {
     "  implicit def tuple" + cnt + "[" + typeList(cnt) + "](implicit " +
       ((0 until cnt) map { bufferableParam(_) } mkString (", ")) + "):\n" +
       "    Bufferable[" + tupleTypeList(cnt) + "] = new AbstractBufferable[" + tupleTypeList(
-      cnt
-    ) + "] {\n" +
+        cnt
+      ) + "] {\n" +
       "      def put(bytebuf: ByteBuffer, tup: " + tupleTypeList(cnt) + ") = {\n" +
       "        var nextBb = bytebuf\n" +
       "        " + ((0 until cnt) map { reallocatingPut(_) }).mkString("", "\n        ", "\n") +
@@ -58,8 +58,8 @@ object BufferableGenerator {
       "      def get(bytebuf: ByteBuffer) = attempt(bytebuf) { bytebuf =>\n" +
       "        " + ((0 until cnt) map { bufferGet(_) }).mkString("", "\n        ", "\n") +
       "        val res = Tuple" + cnt + (0 until cnt)
-      .map { lowerLetters(_) }
-      .mkString("(", ", ", ")") + "\n" +
+        .map { lowerLetters(_) }
+        .mkString("(", ", ", ")") + "\n" +
       "        (buf" + lowerLetters(cnt - 1) + ", res)\n" +
       "      }\n" +
       "    }"

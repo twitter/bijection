@@ -53,23 +53,22 @@ private[bijection] object CaseClassToMap {
     val getPutConv = T.tpe.declarations
       .collect { case m: MethodSymbol if m.isCaseAccessor => m }
       .zipWithIndex
-      .map {
-        case (m, idx) =>
-          val returnType = m.returnType
-          val accStr = m.name.toTermName.toString
-          returnType match {
-            case tpe if recursivelyApply && IsCaseClassImpl.isCaseClassType(c)(tpe) =>
-              val conv = newTermName("c2m_" + idx)
-              (
-                q"""$conv.invert(m($accStr).asInstanceOf[_root_.scala.collection.immutable.Map[String, Any]]).get""",
-                q"""($accStr, $conv(t.$m))""",
-                Some(
-                  q"""val $conv = implicitly[_root_.com.twitter.bijection.Injection[$tpe, _root_.scala.collection.immutable.Map[String, Any]]]"""
-                )
-              ) //TODO cache these
-            case tpe =>
-              (q"""m($accStr).asInstanceOf[$returnType]""", q"""($accStr, t.$m)""", None)
-          }
+      .map { case (m, idx) =>
+        val returnType = m.returnType
+        val accStr = m.name.toTermName.toString
+        returnType match {
+          case tpe if recursivelyApply && IsCaseClassImpl.isCaseClassType(c)(tpe) =>
+            val conv = newTermName("c2m_" + idx)
+            (
+              q"""$conv.invert(m($accStr).asInstanceOf[_root_.scala.collection.immutable.Map[String, Any]]).get""",
+              q"""($accStr, $conv(t.$m))""",
+              Some(
+                q"""val $conv = implicitly[_root_.com.twitter.bijection.Injection[$tpe, _root_.scala.collection.immutable.Map[String, Any]]]"""
+              )
+            ) //TODO cache these
+          case tpe =>
+            (q"""m($accStr).asInstanceOf[$returnType]""", q"""($accStr, t.$m)""", None)
+        }
       }
 
     val getters = getPutConv.map(_._1)
