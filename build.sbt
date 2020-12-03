@@ -2,7 +2,6 @@ import com.typesafe.tools.mima.plugin.MimaPlugin.mimaDefaultSettings
 import com.typesafe.tools.mima.plugin.MimaKeys.{mimaBinaryIssueFilters, mimaPreviousArtifacts}
 import com.typesafe.sbt.osgi.SbtOsgi
 import com.typesafe.sbt.osgi.SbtOsgi.autoImport._
-import ReleaseTransformations._ // for sbt-release.
 import bijection._
 
 val twitterLibVersion = "20.10.0"
@@ -85,31 +84,6 @@ val buildLevelSettings = Seq(
 )
 
 val sharedSettings = Seq(
-  // Publishing options:
-  publishTo := Some {
-    if (version.value.trim.endsWith("SNAPSHOT")) Opts.resolver.sonatypeSnapshots
-    else Opts.resolver.sonatypeStaging
-  },
-  releaseCrossBuild := true,
-  releasePublishArtifactsAction := (PgpKeys.publishSigned in ThisProject).value,
-  releaseVersionBump := sbtrelease.Version.Bump.Minor, // need to tweak based on mima results
-  publishMavenStyle := true,
-  publishArtifact in Test := false,
-  pomIncludeRepository := { x => false },
-  releaseProcess := Seq[ReleaseStep](
-    checkSnapshotDependencies,
-    inquireVersions,
-    runClean,
-    runTest,
-    setReleaseVersion,
-    commitReleaseVersion,
-    tagRelease,
-    publishArtifacts,
-    setNextVersion,
-    commitNextVersion,
-    ReleaseStep(action = Command.process("sonatypeReleaseAll", _)),
-    pushChanges
-  ),
   OsgiKeys.importPackage ++= Seq(
     s"""scala.*;version="$$<range;[==,=+);${scalaVersion.value}>"""",
     "com.twitter.bijection.*;version=\"[${Bundle-Version}, ${Bundle-Version}]\"",
@@ -207,6 +181,7 @@ lazy val bijection = {
     )
     .settings(
       mimaFailOnNoPrevious := false,
+      crossScalaVersions := Nil,
       test := {},
       publish := {}, // skip publishing for this root project.
       publishLocal := {}
