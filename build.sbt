@@ -4,7 +4,7 @@ import com.typesafe.sbt.osgi.SbtOsgi
 import com.typesafe.sbt.osgi.SbtOsgi.autoImport._
 import bijection._
 
-val twitterLibVersion = "20.10.0"
+val twitterLibVersion = "20.12.0"
 val scalatestVersion = "3.2.3"
 val scalacheckVersion = "1.15.1"
 val scalatestPlusScalacheckVersion = "3.2.3.0"
