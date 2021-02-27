@@ -21,7 +21,7 @@ def scroogeSerializer =
 
 val buildLevelSettings = Seq(
   organization := "com.twitter",
-  crossScalaVersions := Seq("2.11.12", scalaVersion.value, "2.13.1"),
+  crossScalaVersions := Seq("2.13.5", scalaVersion.value, "2.13.1"),
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
   javacOptions in doc := Seq("-source", "1.8", "-Xlint:deprecation", "-Xlint:unchecked"),
   scalaVersion := "2.12.10",
