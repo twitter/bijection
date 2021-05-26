@@ -1,4 +1,4 @@
-addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "0.9.1")
+addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "0.9.2")
 addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.6.3")
 addSbtPlugin("com.typesafe.sbt" % "sbt-osgi" % "0.9.6")
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.8.1")
