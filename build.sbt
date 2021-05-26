@@ -413,8 +413,8 @@ lazy val bijectionJson4s = {
       osgiExportAll("com.twitter.bijection.json4s"),
       libraryDependencies ++= Seq(
         "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-        "org.json4s" %% "json4s-native" % "3.6.11",
-        "org.json4s" %% "json4s-ext" % "3.6.11"
+        "org.json4s" %% "json4s-native" % "4.0.0",
+        "org.json4s" %% "json4s-ext" % "4.0.0"
       )
     )
     .dependsOn(
