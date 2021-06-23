@@ -19,11 +19,11 @@ matrix:
           "++$TRAVIS_SCALA_VERSION test"
 
     - name: scalafmtCheck
-      scala: 2.12.10
+      scala: 2.12.14
       jdk: openjdk8
       script: sbt scalafmtCheckAll scalafmtSbtCheck
 
-    - scala: 2.12.10
+    - scala: 2.12.14
       jdk: openjdk8
       script:
         - >
@@ -38,10 +38,10 @@ matrix:
 
 cache:
   directories:
-  - $HOME/.sbt/boot/scala*
-  - $HOME/.sbt/launchers
-  - $HOME/.ivy2/cache
-  - $HOME/.nvm
+    - $HOME/.sbt/boot/scala*
+    - $HOME/.sbt/launchers
+    - $HOME/.ivy2/cache
+    - $HOME/.nvm
 
 before_cache:
   - du -h -d 1 $HOME/.ivy2/cache
