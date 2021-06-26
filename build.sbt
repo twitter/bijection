@@ -23,7 +23,7 @@ val buildLevelSettings = Seq(
   organization := "com.twitter",
   crossScalaVersions := Seq("2.11.12", scalaVersion.value, "2.13.6"),
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
-  javacOptions in doc := Seq("-source", "1.8", "-Xlint:deprecation", "-Xlint:unchecked"),
+  doc / javacOptions := Seq("-source", "1.8", "-Xlint:deprecation", "-Xlint:unchecked"),
   scalaVersion := "2.12.14",
   scalacOptions ++= Seq(
     "-unchecked",
@@ -35,23 +35,19 @@ val buildLevelSettings = Seq(
     // People using encrypted file-systems can have problems if the names get
     // too long, but this feature is no longer supported.
   ),
-  resolvers ++= Seq(
-    "snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
-    "releases" at "https://oss.sonatype.org/content/repositories/releases"
-  ),
   libraryDependencies ++= Seq(
     "org.scalacheck" %% "scalacheck" % scalacheckVersion % Test,
     "org.scalatest" %% "scalatest" % scalatestVersion % Test,
     "org.scalatestplus" %% "scalacheck-1-15" % scalatestPlusScalacheckVersion % Test
   ),
-  unmanagedSourceDirectories in Compile += {
-    val sourceDir = (sourceDirectory in Compile).value
+  Compile / unmanagedSourceDirectories += {
+    val sourceDir = (Compile / sourceDirectory).value
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, n)) if n >= 13 => sourceDir / "scala-2.13+"
       case _                       => sourceDir / "scala-2.12-"
     }
   },
-  parallelExecution in Test := true,
+  Test / parallelExecution := true,
   homepage := Some(url("https://github.com/twitter/bijection")),
   licenses += "Apache 2" -> url("http://www.apache.org/licenses/LICENSE-2.0.txt"),
   scmInfo := Some(
@@ -224,8 +220,8 @@ lazy val bijectionCore = {
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "org.scalatestplus" %% "junit-4-13" % scalatestPlusJunitVersion % Test
     ),
-    sourceGenerators in Compile += Def.task {
-      val main = (sourceManaged in Compile).value
+    Compile / sourceGenerators += Def.task {
+      val main = (Compile / sourceManaged).value
       val out = streams.value
       val pkg = main / "scala" / "com" / "twitter" / "bijection"
       def genSrc(name: String, gen: => String) = {
