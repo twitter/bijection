@@ -258,7 +258,7 @@ lazy val bijectionThrift = {
     .settings(
       osgiExportAll("com.twitter.bijection.thrift"),
       libraryDependencies ++= Seq(
-        "org.apache.thrift" % "libthrift" % "0.13.0" exclude ("junit", "junit"),
+        "org.apache.thrift" % "libthrift" % "0.14.2" exclude ("junit", "junit"),
         jsonParser
       )
     )
@@ -290,7 +290,7 @@ lazy val bijectionScrooge = {
     .settings(
       osgiExportAll("com.twitter.bijection.scrooge"),
       libraryDependencies ++= Seq(
-        "org.apache.thrift" % "libthrift" % "0.13.0" exclude ("junit", "junit"),
+        "org.apache.thrift" % "libthrift" % "0.14.2" exclude ("junit", "junit"),
         scroogeSerializer,
         util("core"),
         finagle("core")
