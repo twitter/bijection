@@ -1,6 +1,7 @@
 package com.twitter.bijection.thrift
 
 import org.apache.thrift.transport.TTransport
+import org.apache.thrift.TConfiguration
 
 case class TArrayByteTransport(buf: Array[Byte]) extends TTransport {
   private[thrift] final var bufferPos = 0
@@ -35,4 +36,10 @@ case class TArrayByteTransport(buf: Array[Byte]) extends TTransport {
   override final def consumeBuffer(len: Int): Unit = {
     bufferPos = bufferPos + len
   }
+
+  override def getConfiguration(): TConfiguration = null
+
+  override def updateKnownMessageSize(x: Long): Unit = {}
+
+  override def checkReadBytesAvailable(x: Long): Unit = {}
 }

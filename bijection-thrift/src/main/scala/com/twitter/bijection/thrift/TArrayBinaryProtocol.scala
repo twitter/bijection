@@ -24,6 +24,7 @@ import java.nio.ByteBuffer
 
 import org.apache.thrift.protocol._
 import org.apache.thrift.TException
+import org.apache.thrift.transport.TTransportException
 
 /**
   * Binary protocol implementation for thrift.
@@ -151,5 +152,22 @@ case class TArrayBinaryProtocol(transport: TArrayByteTransport) extends TProtoco
     val bb = ByteBuffer.wrap(transport.buf, transport.bufferPos, size)
     advance(size)
     bb
+  }
+
+  override def getMinSerializedSize(t: Byte): Int = t match {
+    case 0  => 0; // Stop
+    case 1  => 0; // Void
+    case 2  => 1; // Bool
+    case 3  => 1; // Byte
+    case 4  => 8; // Double
+    case 6  => 2; // I16
+    case 8  => 4; // I32
+    case 10 => 8; // I64
+    case 11 => 4; // string length
+    case 12 => 0; // empty struct
+    case 13 => 4; // element count Map
+    case 14 => 4; // element count Set
+    case 15 => 4; // element count List
+    case _  => throw new TTransportException(TTransportException.UNKNOWN, "unrecognized type code");
   }
 }
