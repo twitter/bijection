@@ -21,27 +21,24 @@ import scala.util.Try
 /**
   * Bijection trait with numerous implementations.
   *
-  * A Bijection[A, B] is an invertible function from A -> B.
-  * Knowing that two types have this relationship can be very helpful
-  * for serialization (Bijection[T, Array[Byte]]]), communication between
-  * libraries (Bijection[MyTrait, YourTrait]) and many other purposes.
+  * A Bijection[A, B] is an invertible function from A -> B. Knowing that two types have this
+  * relationship can be very helpful for serialization (Bijection[T, Array[Byte]]]), communication
+  * between libraries (Bijection[MyTrait, YourTrait]) and many other purposes.
   */
 package object bijection {
 
   /**
-    * Injections may not be defined for their inverse conversion.
-    * This type represents the attempted conversion. A failure
-    * will result in a scala.util.Failure containing the InversionFailure. A success
-    * will result in a scala.util.Success containing the inverted value.
+    * Injections may not be defined for their inverse conversion. This type represents the attempted
+    * conversion. A failure will result in a scala.util.Failure containing the InversionFailure. A
+    * success will result in a scala.util.Success containing the inverted value.
     *
     * TODO: Remove in 0.6.0.
     */
   type Attempt[T] = Try[T]
 
   /**
-    * Using Injections for serialization is a common pattern. Currying
-    * the byte array parameter makes it easier to write code like
-    * this:
+    * Using Injections for serialization is a common pattern. Currying the byte array parameter
+    * makes it easier to write code like this:
     *
     * {{{
     * def getProducer[T: Codec] = ...
@@ -57,7 +54,7 @@ package object bijection {
   /**
     * Tag a type `T` with `Tag`. The resulting type is a subtype of `T`.
     *
-    *  The resulting type is used to discriminate between type class instances.
+    * The resulting type is used to discriminate between type class instances.
     */
   type @@[T, Tag] = T with Tagged[Tag]
 

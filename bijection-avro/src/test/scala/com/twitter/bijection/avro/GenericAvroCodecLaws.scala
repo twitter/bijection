@@ -18,7 +18,8 @@ import org.apache.avro.Schema
 import org.apache.avro.generic.{GenericData, GenericRecord}
 
 /**
-  * @author Muhammad Ashraf
+  * @author
+  *   Muhammad Ashraf
   * @since 7/5/13
   */
 class GenericAvroCodecLaws extends CheckProperties with BaseProperties {

@@ -23,8 +23,8 @@ import com.twitter.bijection.Inversion.attempt
 import scala.reflect.ClassTag
 
 /**
-  * An Injection[A, B] is a function from A to B, and from some B back to A.
-  * see: http://mathworld.wolfram.com/Injection.html
+  * An Injection[A, B] is a function from A to B, and from some B back to A. see:
+  * http://mathworld.wolfram.com/Injection.html
   */
 @implicitNotFound(msg = "Cannot find Injection type class from ${A} to ${B}")
 trait Injection[A, B] extends Serializable { self =>
@@ -32,8 +32,7 @@ trait Injection[A, B] extends Serializable { self =>
   def invert(b: B): Try[A]
 
   /**
-    * Composes two instances of Injection in a new Injection,
-    * with this one applied first.
+    * Composes two instances of Injection in a new Injection, with this one applied first.
     */
   def andThen[C](g: Injection[B, C]): Injection[A, C] =
     new AbstractInjection[A, C] {
@@ -52,8 +51,7 @@ trait Injection[A, B] extends Serializable { self =>
   def andThen[C](g: (B => C)): (A => C) = g.compose(this.toFunction)
 
   /**
-    * Composes two instances of Injection in a new Injection,
-    * with this one applied last.
+    * Composes two instances of Injection in a new Injection, with this one applied last.
     */
   def compose[T](g: Injection[T, A]): Injection[T, B] = g andThen this
   def compose[T](bij: Bijection[T, A]): Injection[T, B] =
@@ -74,8 +72,8 @@ private[bijection] class InjectionFn[A, B](inj: Injection[A, B])
 }
 
 /**
-  * Abstract class to ease Injection creation from Java (and reduce instance
-  * size in scala). Prefer to subclass this for anonymous instances.
+  * Abstract class to ease Injection creation from Java (and reduce instance size in scala). Prefer
+  * to subclass this for anonymous instances.
   */
 abstract class AbstractInjection[A, B] extends Injection[A, B] {
   override def apply(a: A): B
@@ -104,8 +102,8 @@ object Injection extends CollectionInjections with Serializable {
     }
 
   /**
-    * Like build, but you give a function from B => A which may throw
-    * If you never expect from to throw, use Bijection.build
+    * Like build, but you give a function from B => A which may throw If you never expect from to
+    * throw, use Bijection.build
     */
   def buildCatchInvert[A, B](to: A => B)(from: B => A): Injection[A, B] =
     new AbstractInjection[A, B] {
@@ -114,8 +112,8 @@ object Injection extends CollectionInjections with Serializable {
     }
 
   /**
-    * The "connect" method allows composition of multiple implicit Injections
-    * into a single Injection. For example,
+    * The "connect" method allows composition of multiple implicit Injections into a single
+    * Injection. For example,
     *
     * val composed = connect[Long, Array[Byte], Base64String]: Bijection[Long, Base64String]
     */

@@ -21,8 +21,8 @@ import scala.annotation.implicitNotFound
 import scala.reflect.ClassTag
 
 /**
-  * A Bijection[A, B] is a pair of functions that transform an element between
-  * types A and B isomorphically; that is, for all items,
+  * A Bijection[A, B] is a pair of functions that transform an element between types A and B
+  * isomorphically; that is, for all items,
   *
   * item == someBijection.inverse(someBijection.apply(item))
   */
@@ -39,8 +39,7 @@ trait Bijection[A, B] extends Serializable { self =>
     }
 
   /**
-    * Composes two instances of Bijection in a new Bijection,
-    * with this one applied first.
+    * Composes two instances of Bijection in a new Bijection, with this one applied first.
     */
   def andThen[C](g: Bijection[B, C]): Bijection[A, C] =
     new AbstractBijection[A, C] {
@@ -51,8 +50,7 @@ trait Bijection[A, B] extends Serializable { self =>
   def andThen[C](g: (B => C)): (A => C) = g compose (this.toFunction)
 
   /**
-    * Composes two instances of Bijection in a new Bijection,
-    * with this one applied last.
+    * Composes two instances of Bijection in a new Bijection, with this one applied last.
     */
   def compose[T](g: Bijection[T, A]): Bijection[T, B] = new AbstractBijection[T, B] {
     def apply(t: T): B = self(g(t))
@@ -78,25 +76,25 @@ object Bijection extends CollectionBijections with Serializable {
     }
 
   /**
-    * The "connect" method allows composition of multiple implicit bijections
-    * into a single bijection. For example,
+    * The "connect" method allows composition of multiple implicit bijections into a single
+    * bijection. For example,
     *
     * val composed = connect[Long, Array[Byte], Base64String]: Bijection[Long, Base64String]
     */
   def connect[A, B](implicit bij: ImplicitBijection[A, B]): Bijection[A, B] = bij.bijection
-  def connect[A, B, C](
-      implicit bij: ImplicitBijection[A, B],
+  def connect[A, B, C](implicit
+      bij: ImplicitBijection[A, B],
       bij2: ImplicitBijection[B, C]
   ): Bijection[A, C] =
     (bij.bijection) andThen (bij2.bijection)
-  def connect[A, B, C, D](
-      implicit bij1: ImplicitBijection[A, B],
+  def connect[A, B, C, D](implicit
+      bij1: ImplicitBijection[A, B],
       bij2: ImplicitBijection[B, C],
       bij3: ImplicitBijection[C, D]
   ): Bijection[A, D] =
     connect[A, B, C] andThen (bij3.bijection)
-  def connect[A, B, C, D, E](
-      implicit bij1: ImplicitBijection[A, B],
+  def connect[A, B, C, D, E](implicit
+      bij1: ImplicitBijection[A, B],
       bij2: ImplicitBijection[B, C],
       bij3: ImplicitBijection[C, D],
       bij4: ImplicitBijection[D, E]
@@ -106,8 +104,7 @@ object Bijection extends CollectionBijections with Serializable {
   implicit def identity[A]: Bijection[A, A] = new IdentityBijection[A]
 
   /**
-    * We check for default, and return None, else Some
-    * Note this never returns Some(default)
+    * We check for default, and return None, else Some Note this never returns Some(default)
     */
   def filterDefault[A](default: A): Bijection[A, Option[A]] =
     new AbstractBijection[A, Option[A]] {
@@ -116,11 +113,10 @@ object Bijection extends CollectionBijections with Serializable {
     }
 
   /**
-    * Converts a function that transforms type A into a function that
-    * transforms type B.
+    * Converts a function that transforms type A into a function that transforms type B.
     */
-  implicit def fnBijection[A, B, C, D](
-      implicit bij1: ImplicitBijection[A, B],
+  implicit def fnBijection[A, B, C, D](implicit
+      bij1: ImplicitBijection[A, B],
       bij2: ImplicitBijection[C, D]
   ): Bijection[A => C, B => D] =
     new AbstractBijection[A => C, B => D] {
@@ -133,13 +129,12 @@ object Bijection extends CollectionBijections with Serializable {
     }
 
   /**
-    * Converts a function that combines two arguments of type A into a function that
-    * combines two arguments of type B into a single B. Useful for converting
-    * input functions to "reduce".
-    * TODO: codegen these up to Function22 if they turn out to be useful.
+    * Converts a function that combines two arguments of type A into a function that combines two
+    * arguments of type B into a single B. Useful for converting input functions to "reduce". TODO:
+    * codegen these up to Function22 if they turn out to be useful.
     */
-  implicit def fn2Bijection[A, B, C, D, E, F](
-      implicit bab: ImplicitBijection[A, B],
+  implicit def fn2Bijection[A, B, C, D, E, F](implicit
+      bab: ImplicitBijection[A, B],
       bcd: ImplicitBijection[C, D],
       bef: ImplicitBijection[E, F]
   ): Bijection[(A, C) => E, (B, D) => F] =

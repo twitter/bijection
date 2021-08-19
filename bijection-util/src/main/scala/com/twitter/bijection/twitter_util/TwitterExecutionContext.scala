@@ -6,7 +6,8 @@ import com.twitter.util.FuturePool
 /**
   * ExecutionContext adapter for FuturePool
   *
-  * @author Moses Nakamura
+  * @author
+  *   Moses Nakamura
   */
 class TwitterExecutionContext(pool: FuturePool, report: Throwable => Unit)
     extends ExecutionContext {

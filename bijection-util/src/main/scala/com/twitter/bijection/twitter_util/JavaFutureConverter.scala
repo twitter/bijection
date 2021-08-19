@@ -30,13 +30,14 @@ abstract class JavaFutureConverter {
 }
 
 /**
-  * Converter based on the specified <code>futurePool</code> which will create one thread per
-  * future possibly limited by the maximum size of the pool.
-  * To favor if there aren't too many futures to convert and one cares about latency.
+  * Converter based on the specified <code>futurePool</code> which will create one thread per future
+  * possibly limited by the maximum size of the pool. To favor if there aren't too many futures to
+  * convert and one cares about latency.
   *
-  * @param futurePool future pool used to retrieve the result of every future
-  * @param mayInterruptIfRunning whether or not the initial java future can be interrupted if it's
-  *                              running
+  * @param futurePool
+  *   future pool used to retrieve the result of every future
+  * @param mayInterruptIfRunning
+  *   whether or not the initial java future can be interrupted if it's running
   */
 class FuturePoolJavaFutureConverter(futurePool: FuturePool, mayInterruptIfRunning: Boolean)
     extends JavaFutureConverter {
@@ -56,17 +57,18 @@ class FuturePoolJavaFutureConverter(futurePool: FuturePool, mayInterruptIfRunnin
 
 /**
   * Converter based on a [[Timer]] which will create a task which will check every
-  * <code>checkFrequency</code> if the java future is completed, the threading model is the one
-  * used by the specified <code>timer</code> which is often a thread pool of size 1.
-  * To favor if there are a lot of futures to convert and one cares less about the latency induced
-  * by <code>checkFrequency</code>.
-  * <code>checkFrequency</code> needs to be a multiple of the timer implementation's granularity
-  * which is often 1ms.
+  * <code>checkFrequency</code> if the java future is completed, the threading model is the one used
+  * by the specified <code>timer</code> which is often a thread pool of size 1. To favor if there
+  * are a lot of futures to convert and one cares less about the latency induced by
+  * <code>checkFrequency</code>. <code>checkFrequency</code> needs to be a multiple of the timer
+  * implementation's granularity which is often 1ms.
   *
-  * @param timer timer used to schedule a task which will check if the java future is done
-  * @param checkFrequency frequency at which the java future will be checked for completion
-  * @param mayInterruptIfRunning whether or not the initial java future can be interrupted if it's
-  *                              running
+  * @param timer
+  *   timer used to schedule a task which will check if the java future is done
+  * @param checkFrequency
+  *   frequency at which the java future will be checked for completion
+  * @param mayInterruptIfRunning
+  *   whether or not the initial java future can be interrupted if it's running
   */
 class TimerJavaFutureConverter(
     timer: Timer,

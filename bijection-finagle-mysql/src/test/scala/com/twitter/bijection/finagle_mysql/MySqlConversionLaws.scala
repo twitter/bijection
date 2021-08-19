@@ -97,9 +97,9 @@ class MySqlConversionLaws extends CheckProperties with BaseProperties {
   property("Timestamp") {
 
     /**
-      * Custom equivalence typeclass for RawValue
-      * This is here to compare two RawValues generated from Timestamps.
-      * Because they contain byte arrays, just =='ing them does not work as expected.
+      * Custom equivalence typeclass for RawValue This is here to compare two RawValues generated
+      * from Timestamps. Because they contain byte arrays, just =='ing them does not work as
+      * expected.
       */
     implicit val valueEquiv = new scala.math.Equiv[Value] {
       override def equiv(a: Value, b: Value) =

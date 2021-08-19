@@ -22,7 +22,8 @@ import avro.FiscalRecord
 import org.apache.avro.generic.{GenericData, GenericRecord}
 
 /**
-  * @author Muhammad Ashraf
+  * @author
+  *   Muhammad Ashraf
   * @since 7/6/13
   */
 class GenericAvroCodecsSpecification extends AnyWordSpec with Matchers with BaseProperties {

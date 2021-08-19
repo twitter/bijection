@@ -18,7 +18,8 @@ import com.twitter.bijection.{AbstractBijection, Bijection}
 import com.google.common.io.BaseEncoding
 
 /**
-  * @author Muhammad Ashraf
+  * @author
+  *   Muhammad Ashraf
   * @since 7/7/13
   */
 object GuavaBinaryBijections {

@@ -54,8 +54,8 @@ class IdentityBijection[A] extends Bijection[A, A] {
 }
 
 /**
-  * When you have conversion between A and B where B is a subclass of A, which is often
-  * free, i.e. A is already an instance of A, then this can be faster
+  * When you have conversion between A and B where B is a subclass of A, which is often free, i.e. A
+  * is already an instance of A, then this can be faster
   */
 abstract class SubclassBijection[A, B <: A](clb: Class[B]) extends Bijection[A, B] {
   protected def applyfn(a: A): B

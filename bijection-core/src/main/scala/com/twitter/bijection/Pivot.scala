@@ -21,22 +21,21 @@ import java.io.Serializable
 object Pivot extends Serializable {
 
   /**
-    * Returns a new Pivot[K, K1, K2] using the supplied bijection
-    * to split each input key.
+    * Returns a new Pivot[K, K1, K2] using the supplied bijection to split each input key.
     */
   def apply[K, K1, K2](bijection: Bijection[K, (K1, K2)]): Pivot[K, K1, K2] =
     new PivotImpl(bijection)
 
   /**
-    * Returns a new Pivot[K, K1, K2] using the supplied bijection
-    * to split each input key. Bijection can be supplied as an implicit.
+    * Returns a new Pivot[K, K1, K2] using the supplied bijection to split each input key. Bijection
+    * can be supplied as an implicit.
     */
   def of[K, K1, K2](implicit impbij: ImplicitBijection[K, (K1, K2)]): Pivot[K, K1, K2] =
     new PivotImpl[K, K1, K2](impbij.bijection)
 
   /**
-    * Returns a new Pivot[(K, V), V, K] -- this Pivot can be used to
-    * transform a Map[K,V] -> Map[V,Iterable[K]].
+    * Returns a new Pivot[(K, V), V, K] -- this Pivot can be used to transform a Map[K,V] ->
+    * Map[V,Iterable[K]].
     */
   def swap[K, V]: Pivot[(K, V), V, K] = apply(SwapBijection[K, V])
 
@@ -54,9 +53,8 @@ trait PivotEncoder[K, K1, K2] extends (Iterable[K] => Map[K1, Iterable[K2]]) wit
   def enc: (K) => (K1, K2)
 
   /**
-    * Pivots an Iterable[K] into Map[K1, Iterable[K2]] by
-    * pivoting each K into (K1, K2) and grouping all
-    * instances of K2 for each K1 into an iterable.
+    * Pivots an Iterable[K] into Map[K1, Iterable[K2]] by pivoting each K into (K1, K2) and grouping
+    * all instances of K2 for each K1 into an iterable.
     */
   def apply(pairs: Iterable[K]): Map[K1, Iterable[K2]] =
     pairs
@@ -68,8 +66,7 @@ trait PivotEncoder[K, K1, K2] extends (Iterable[K] => Map[K1, Iterable[K2]]) wit
       .transform { case (_, v) => v.map { case (_, k2s) => k2s }.flatten }
 
   /**
-    * "Uncurries" the supplied nested fn of K1 and K2  into a function
-    * that accepts a single K.
+    * "Uncurries" the supplied nested fn of K1 and K2 into a function that accepts a single K.
     */
   def unsplit[V](fn: K1 => K2 => V): K => V = { k =>
     val (k1, k2) = enc(k)
@@ -81,39 +78,35 @@ trait PivotDecoder[K, K1, K2] extends (Map[K1, Iterable[K2]] => Iterable[K]) wit
   def dec: ((K1, K2)) => K
 
   /**
-    * Expands a Map[K1, Iterable[K2]] into the original
-    * Iterable[K] by joining every instance of K2 in each
-    * Iterable[K2] with its corresponding instance of K1 and
-    * calling `dec` on each pair.
+    * Expands a Map[K1, Iterable[K2]] into the original Iterable[K] by joining every instance of K2
+    * in each Iterable[K2] with its corresponding instance of K1 and calling `dec` on each pair.
     */
   def apply(m: Map[K1, Iterable[K2]]) = for ((k1, k2s) <- m; k2 <- k2s) yield dec((k1, k2))
 
   /**
-    * Curries the supplied fn of K into a nested function
-    * of K1 then K2 using the inversion of `pivot`.
+    * Curries the supplied fn of K into a nested function of K1 then K2 using the inversion of
+    * `pivot`.
     */
   def split[V](fn: K => V): K1 => K2 => V = { k1 => { k2 => fn(dec((k1, k2))) } }
 }
 
 /**
-  * Pivot is useful in moving from a 1D space of K to a 2D mapping
-  * space of K1 x K2. If the elements within the K space have many repeated
-  * elements -- imagine the "time" component of a Key in a timeseries key-value
-  * store -- pivoting the changing component into an inner K2 while leaving
-  * the repeated component in an outer K1 can assist in compressing
-  * a datastore's space requirements.
+  * Pivot is useful in moving from a 1D space of K to a 2D mapping space of K1 x K2. If the elements
+  * within the K space have many repeated elements -- imagine the "time" component of a Key in a
+  * timeseries key-value store -- pivoting the changing component into an inner K2 while leaving the
+  * repeated component in an outer K1 can assist in compressing a datastore's space requirements.
   *
   * Type Parameters:
   *
-  * K: Original Key
-  * K1: Outer Key
-  * K2: Inner Key
+  * K: Original Key K1: Outer Key K2: Inner Key
   *
-  * Trivial: Pivot[(Event, Timestamp), Event, Timestamp] would
-  * pivot the timestamp component out of a compound key.
+  * Trivial: Pivot[(Event, Timestamp), Event, Timestamp] would pivot the timestamp component out of
+  * a compound key.
   *
-  *  @author Oscar Boykin
-  *  @author Sam Ritchie
+  * @author
+  *   Oscar Boykin
+  * @author
+  *   Sam Ritchie
   */
 trait Pivot[K, K1, K2] extends Bijection[Iterable[K], Map[K1, Iterable[K2]]] {
   def pivot: Bijection[K, (K1, K2)]
@@ -134,9 +127,9 @@ trait Pivot[K, K1, K2] extends Bijection[Iterable[K], Map[K1, Iterable[K2]]] {
   def unsplit[V](fn: K1 => K2 => V): K => V = encoder.unsplit(fn)
 
   /**
-    * Returns a new Pivot that converts an Iterable of (K, T) to an Iterable of
-    * ((K1, T), Iterable[K2]). This is useful for applying a new pivoting scheme
-    * on top of this one while maintaining some outer key component.
+    * Returns a new Pivot that converts an Iterable of (K, T) to an Iterable of ((K1, T),
+    * Iterable[K2]). This is useful for applying a new pivoting scheme on top of this one while
+    * maintaining some outer key component.
     */
   def wrapOuter[T]: Pivot[(K, T), (K1, T), K2] =
     withValue[T] andThenPivot (new AbstractBijection[(K1, (K2, T)), ((K1, T), K2)] {
@@ -151,9 +144,8 @@ trait Pivot[K, K1, K2] extends Bijection[Iterable[K], Map[K1, Iterable[K2]]] {
     })
 
   /**
-    * Returns a new pivot that converts an Iterable of (K, V) to an Iterable of
-    * (K1, Iterable[(K2, V)]). This is useful for pivoting multiple (K, V) pairs into
-    * a single key in some KV store.
+    * Returns a new pivot that converts an Iterable of (K, V) to an Iterable of (K1, Iterable[(K2,
+    * V)]). This is useful for pivoting multiple (K, V) pairs into a single key in some KV store.
     */
   def withValue[V]: Pivot[(K, V), K1, (K2, V)] =
     Pivot(new AbstractBijection[(K, V), (K1, (K2, V))] {

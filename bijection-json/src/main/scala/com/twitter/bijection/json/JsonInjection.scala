@@ -27,11 +27,12 @@ import scala.util.{Success, Try}
 import scala.util.control.NonFatal
 
 /**
-  *  @author Oscar Boykin
-  *  @author Sam Ritchie
+  * @author
+  *   Oscar Boykin
+  * @author
+  *   Sam Ritchie
   *
-  * Bijection for converting between Scala basic collections and
-  * types and JSON objects.
+  * Bijection for converting between Scala basic collections and types and JSON objects.
   */
 trait JsonNodeInjection[T] extends Injection[T, JsonNode]
 
@@ -66,8 +67,7 @@ trait LowPriorityJson {
 }
 
 /**
-  * You need to import all the methods of this object to get general
-  * Injection[T,JsonNode] to work
+  * You need to import all the methods of this object to get general Injection[T,JsonNode] to work
   */
 object JsonNodeInjection extends CollectionJson with LowPriorityJson with java.io.Serializable {
 

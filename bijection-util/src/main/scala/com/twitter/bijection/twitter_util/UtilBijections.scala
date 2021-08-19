@@ -34,18 +34,19 @@ import scala.concurrent.{Future => ScalaFuture, Promise => ScalaPromise, Executi
 import scala.util.{Success, Failure, Try => ScalaTry}
 
 /**
-  * Bijection for mapping twitter-util's Future and Try onto
-  * other types.
+  * Bijection for mapping twitter-util's Future and Try onto other types.
   *
-  *  @author Oscar Boykin
-  *  @author Sam Ritchie
-  *  @author Moses Nakamura
+  * @author
+  *   Oscar Boykin
+  * @author
+  *   Sam Ritchie
+  * @author
+  *   Moses Nakamura
   */
 trait UtilBijections {
 
   /**
-    * Bijection on Twitter Future
-    * if the bijection throws, the result will be a Throw.
+    * Bijection on Twitter Future if the bijection throws, the result will be a Throw.
     */
   implicit def futureBijection[A, B](implicit
       bij: ImplicitBijection[A, B]
@@ -56,8 +57,7 @@ trait UtilBijections {
     }
 
   /**
-    * Bijection on Scala Future
-    * if the bijection throws, the result will be a Throw.
+    * Bijection on Scala Future if the bijection throws, the result will be a Throw.
     */
   implicit def futureScalaBijection[A, B](implicit
       bij: ImplicitBijection[A, B],
@@ -96,9 +96,8 @@ trait UtilBijections {
   }
 
   /**
-    * Injection from twitter futures to java futures.
-    * Will throw when inverting back from java future to twitter future if the java future is not
-    * done.
+    * Injection from twitter futures to java futures. Will throw when inverting back from java
+    * future to twitter future if the java future is not done.
     */
   def twitter2JavaFutureInjection[A]: Injection[TwitterFuture[A], JavaFuture[A]] = {
     new AbstractInjection[TwitterFuture[A], JavaFuture[A]] {
@@ -111,16 +110,16 @@ trait UtilBijections {
   }
 
   /**
-    * Bijection between java futures and twitter futures.
-    * An implicit [[JavaFutureConverter]] is needed, two strategies are available out of the box:
-    *   - [[FuturePoolJavaFutureConverter]] which is based on a [[FuturePool]] and which will
-    *   create one thread per future. To favor if there aren't too many futures to convert and one
-    *   cares about latency.
+    * Bijection between java futures and twitter futures. An implicit [[JavaFutureConverter]] is
+    * needed, two strategies are available out of the box:
+    *   - [[FuturePoolJavaFutureConverter]] which is based on a [[FuturePool]] and which will create
+    *     one thread per future. To favor if there aren't too many futures to convert and one cares
+    *     about latency.
     *   - [[TimerJavaFutureConverter]] which is based on a [[com.twitter.util.Timer]] which will
-    *   create a task which will check every <code>checkFrequency</code> if the java future is
-    *   completed, one thread will be used for every conversion. To favor if there are a lot of
-    *   futures to convert and one cares less about the latency induced by
-    *   <code>checkFrequency</code>.
+    *     create a task which will check every <code>checkFrequency</code> if the java future is
+    *     completed, one thread will be used for every conversion. To favor if there are a lot of
+    *     futures to convert and one cares less about the latency induced by
+    *     <code>checkFrequency</code>.
     */
   implicit def twitter2JavaFutureBijection[A](implicit
       converter: JavaFutureConverter
@@ -183,8 +182,7 @@ trait UtilBijections {
   }
 
   /**
-    * Bijection on Try.
-    * If the bijection throws, the result will be a throw
+    * Bijection on Try. If the bijection throws, the result will be a throw
     */
   implicit def tryBijection[A, B](implicit
       bij: ImplicitBijection[A, B]
@@ -195,8 +193,7 @@ trait UtilBijections {
     }
 
   /**
-    * Bijection on scala Try.
-    * If the bijection throws, the result will be a throw
+    * Bijection on scala Try. If the bijection throws, the result will be a throw
     */
   implicit def tryScalaBijection[A, B](implicit
       bij: ImplicitBijection[A, B]
@@ -218,8 +215,8 @@ trait UtilBijections {
   object Owned {
 
     /**
-      * A bijection using Buf's Owned api which minimizes copying of the underlying
-      * array data but places the onus of immutability on the user.
+      * A bijection using Buf's Owned api which minimizes copying of the underlying array data but
+      * places the onus of immutability on the user.
       */
     implicit def byteArrayBufBijection: Bijection[Array[Byte], Buf] =
       new AbstractBijection[Array[Byte], Buf] {
@@ -231,8 +228,8 @@ trait UtilBijections {
   object Shared {
 
     /**
-      * A bijection using Buf's Shared api which avoids sharing state at the cost
-      * added allocations for defensive copies.
+      * A bijection using Buf's Shared api which avoids sharing state at the cost added allocations
+      * for defensive copies.
       */
     implicit def byteArrayBufBijection: Bijection[Array[Byte], Buf] =
       new AbstractBijection[Array[Byte], Buf] {

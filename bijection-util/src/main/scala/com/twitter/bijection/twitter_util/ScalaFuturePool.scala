@@ -6,7 +6,8 @@ import com.twitter.util.{FuturePool, Future, Try, Return, Throw, Promise}
 /**
   * FuturePool adapter for ExecutionContext
   *
-  * @author Moses Nakamura
+  * @author
+  *   Moses Nakamura
   */
 class ScalaFuturePool(context: ExecutionContext) extends FuturePool {
   override def apply[A](f: => A): Future[A] = {

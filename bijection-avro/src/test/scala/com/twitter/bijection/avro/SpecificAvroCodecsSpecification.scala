@@ -7,7 +7,8 @@ import org.apache.avro.Schema
 import avro.{FiscalRecordScala, FiscalRecord}
 
 /**
-  * @author Muhammad Ashraf
+  * @author
+  *   Muhammad Ashraf
   * @since 10/5/13
   */
 class SpecificAvroCodecsSpecification extends AnyWordSpec with Matchers with BaseProperties {

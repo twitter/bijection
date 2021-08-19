@@ -66,8 +66,8 @@ trait BaseProperties {
   def rtInjective[A, B](a: A)(implicit bij: Bijection[A, B]): A = bij.invert(bij(a))
 
   /**
-    * Checks that we can always invert all A
-    * does not requires that all B that return Some[A] return to exact same B
+    * Checks that we can always invert all A does not requires that all B that return Some[A] return
+    * to exact same B
     */
   def isLooseInjection[A, B](implicit arba: Arbitrary[A], inj: Injection[A, B], eqa: Equiv[A]) =
     forAll { (a: A) =>

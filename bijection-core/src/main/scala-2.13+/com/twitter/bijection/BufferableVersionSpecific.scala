@@ -45,8 +45,8 @@ trait BufferableVersionSpecific {
     (bb, builder.result)
   }
 
-  def collection[C <: Iterable[T], T](
-      implicit buf: Bufferable[T],
+  def collection[C <: Iterable[T], T](implicit
+      buf: Bufferable[T],
       fact: Factory[T, C]
   ): Bufferable[C] =
     build[C] { (bb, l) =>
@@ -56,8 +56,8 @@ trait BufferableVersionSpecific {
     }
 
   // TODO we could add IntBuffer/FloatBuffer etc.. to have faster implementations Array[Int]
-  implicit def array[T](
-      implicit buf: Bufferable[T],
+  implicit def array[T](implicit
+      buf: Bufferable[T],
       fact: Factory[T, Array[T]]
   ): Bufferable[Array[T]] =
     build[Array[T]] { (bb, l) =>

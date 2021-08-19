@@ -28,16 +28,19 @@ import scala.reflect._
 
 /**
   * Factory providing various avro injections.
-  * @author Muhammad Ashraf
+  * @author
+  *   Muhammad Ashraf
   * @since 7/4/13
   */
 object SpecificAvroCodecs {
 
   /**
-    * Returns Injection capable of serializing and deserializing a compiled Avro record using SpecificDatumWriter and
-    * SpecificDatumReader
-    * @tparam T compiled Avro record
-    * @return Injection
+    * Returns Injection capable of serializing and deserializing a compiled Avro record using
+    * SpecificDatumWriter and SpecificDatumReader
+    * @tparam T
+    *   compiled Avro record
+    * @return
+    *   Injection
     */
   def apply[T <: SpecificRecordBase: ClassTag]: Injection[T, Array[Byte]] = {
     val klass = classTag[T].runtimeClass.asInstanceOf[Class[T]]
@@ -45,11 +48,14 @@ object SpecificAvroCodecs {
   }
 
   /**
-    * Returns Injection capable of serializing and deserializing a compiled Avro record using SpecificDatumWriter and
-    * SpecificDatumReader.  Data is compressed with the provided codec.
-    * @param codecFactory codec with which the data is being compressed
-    * @tparam T compiled Avro record
-    * @return Injection
+    * Returns Injection capable of serializing and deserializing a compiled Avro record using
+    * SpecificDatumWriter and SpecificDatumReader. Data is compressed with the provided codec.
+    * @param codecFactory
+    *   codec with which the data is being compressed
+    * @tparam T
+    *   compiled Avro record
+    * @return
+    *   Injection
     */
   def withCompression[T <: SpecificRecordBase: ClassTag](
       codecFactory: CodecFactory
@@ -59,21 +65,26 @@ object SpecificAvroCodecs {
   }
 
   /**
-    * Returns Injection capable of serializing and deserializing a compiled Avro record using SpecificDatumWriter and
-    * SpecificDatumReader.  Data is compressed with the Bzip2 codec.
-    * @tparam T compiled Avro record
-    * @return Injection
+    * Returns Injection capable of serializing and deserializing a compiled Avro record using
+    * SpecificDatumWriter and SpecificDatumReader. Data is compressed with the Bzip2 codec.
+    * @tparam T
+    *   compiled Avro record
+    * @return
+    *   Injection
     */
   def withBzip2Compression[T <: SpecificRecordBase: ClassTag]: Injection[T, Array[Byte]] =
     withCompression(CodecFactory.bzip2Codec())
 
   /**
-    * Returns Injection capable of serializing and deserializing a compiled Avro record using SpecificDatumWriter and
-    * SpecificDatumReader.  Data is compressed with the Deflate codec.
-    * @param compressionLevel Compression level should be between 1 and 9, inclusive.  Higher values result in better
-    *                         compression at the expense of encoding speed.
-    * @tparam T compiled Avro record
-    * @return Injection
+    * Returns Injection capable of serializing and deserializing a compiled Avro record using
+    * SpecificDatumWriter and SpecificDatumReader. Data is compressed with the Deflate codec.
+    * @param compressionLevel
+    *   Compression level should be between 1 and 9, inclusive. Higher values result in better
+    *   compression at the expense of encoding speed.
+    * @tparam T
+    *   compiled Avro record
+    * @return
+    *   Injection
     */
   def withDeflateCompression[T <: SpecificRecordBase: ClassTag](
       compressionLevel: Int
@@ -86,10 +97,13 @@ object SpecificAvroCodecs {
   }
 
   /**
-    * Returns Injection capable of serializing and deserializing a compiled Avro record using SpecificDatumWriter and
-    * SpecificDatumReader.  Data is compressed with the Deflate codec and a default compression level of 5.
-    * @tparam T compiled Avro record
-    * @return Injection
+    * Returns Injection capable of serializing and deserializing a compiled Avro record using
+    * SpecificDatumWriter and SpecificDatumReader. Data is compressed with the Deflate codec and a
+    * default compression level of 5.
+    * @tparam T
+    *   compiled Avro record
+    * @return
+    *   Injection
     */
   // Allows to create deflate-compressing Injection's without requiring parentheses similar to `apply`,
   // `withSnappyCompression`, etc. to achieve API consistency.
@@ -97,19 +111,25 @@ object SpecificAvroCodecs {
     withDeflateCompression(5)
 
   /**
-    * Returns Injection capable of serializing and deserializing a compiled Avro record using SpecificDatumWriter and
-    * SpecificDatumReader.  Data is compressed with the Snappy codec.
-    * @tparam T compiled Avro record
-    * @return Injection
+    * Returns Injection capable of serializing and deserializing a compiled Avro record using
+    * SpecificDatumWriter and SpecificDatumReader. Data is compressed with the Snappy codec.
+    * @tparam T
+    *   compiled Avro record
+    * @return
+    *   Injection
     */
   def withSnappyCompression[T <: SpecificRecordBase: ClassTag]: Injection[T, Array[Byte]] =
     withCompression(CodecFactory.snappyCodec())
 
   /**
-    * Returns Injection capable of serializing and deserializing a compiled avro record using org.apache.avro.io.BinaryEncoder.
-    * @tparam T compiled Avro record
-    * @param schema The record's schema
-    * @return Injection
+    * Returns Injection capable of serializing and deserializing a compiled avro record using
+    * org.apache.avro.io.BinaryEncoder.
+    * @tparam T
+    *   compiled Avro record
+    * @param schema
+    *   The record's schema
+    * @return
+    *   Injection
     */
   def toBinary[T <: SpecificRecordBase](schema: Schema): Injection[T, Array[Byte]] = {
     val writer = new SpecificDatumWriter[T](schema)
@@ -118,10 +138,13 @@ object SpecificAvroCodecs {
   }
 
   /**
-    * Returns Injection capable of serializing and deserializing a compiled avro record using org.apache.avro.io.BinaryEncoder.
-    * Fetches the schema from the specified class in order to be compatible with generated Scala classes.
-    * @tparam T compiled Avro record
-    * @return Injection
+    * Returns Injection capable of serializing and deserializing a compiled avro record using
+    * org.apache.avro.io.BinaryEncoder. Fetches the schema from the specified class in order to be
+    * compatible with generated Scala classes.
+    * @tparam T
+    *   compiled Avro record
+    * @return
+    *   Injection
     */
   def toBinary[T <: SpecificRecordBase: ClassTag]: Injection[T, Array[Byte]] = {
     val record = classTag[T].runtimeClass.newInstance().asInstanceOf[T]
@@ -130,12 +153,16 @@ object SpecificAvroCodecs {
   }
 
   /**
-    * Returns Injection capable of serializing and deserializing a generic avro record using org.apache.avro.io.JsonEncoder to a
-    * UTF-8 String
-    * @tparam T compiled Avro record
-    * @param schema The record's schema
-    * @return Injection
-    * @todo Remove ClassTag as soon as a release will break binary compatibility.
+    * Returns Injection capable of serializing and deserializing a generic avro record using
+    * org.apache.avro.io.JsonEncoder to a UTF-8 String
+    * @tparam T
+    *   compiled Avro record
+    * @param schema
+    *   The record's schema
+    * @return
+    *   Injection
+    * @todo
+    *   Remove ClassTag as soon as a release will break binary compatibility.
     */
   def toJson[T <: SpecificRecordBase: ClassTag](schema: Schema): Injection[T, String] = {
     val writer = new SpecificDatumWriter[T](schema)
@@ -144,11 +171,13 @@ object SpecificAvroCodecs {
   }
 
   /**
-    * Returns Injection capable of serializing and deserializing a generic avro record using org.apache.avro.io.JsonEncoder to a
-    * UTF-8 String.
-    * Fetches the schema from the specified class in order to be compatible with generated Scala classes.
-    * @tparam T compiled Avro record
-    * @return Injection
+    * Returns Injection capable of serializing and deserializing a generic avro record using
+    * org.apache.avro.io.JsonEncoder to a UTF-8 String. Fetches the schema from the specified class
+    * in order to be compatible with generated Scala classes.
+    * @tparam T
+    *   compiled Avro record
+    * @return
+    *   Injection
     */
   def toJson[T <: SpecificRecordBase: ClassTag]: Injection[T, String] = {
     val record = classTag[T].runtimeClass.newInstance().asInstanceOf[T]
@@ -160,21 +189,26 @@ object SpecificAvroCodecs {
 object GenericAvroCodecs {
 
   /**
-    * Returns Injection capable of serializing and deserializing a generic record using GenericDatumReader and
-    * GenericDatumReader
-    * @tparam T generic record
-    * @return Injection
+    * Returns Injection capable of serializing and deserializing a generic record using
+    * GenericDatumReader and GenericDatumReader
+    * @tparam T
+    *   generic record
+    * @return
+    *   Injection
     */
   def apply[T <: GenericRecord](schema: Schema): Injection[T, Array[Byte]] = {
     new GenericAvroCodec[T](schema)
   }
 
   /**
-    * Returns Injection capable of serializing and deserializing a compiled Avro record using SpecificDatumWriter and
-    * SpecificDatumReader.  Data is compressed with the provided codec.
-    * @param codecFactory codec with which the data is being compressed
-    * @tparam T generic record
-    * @return Injection
+    * Returns Injection capable of serializing and deserializing a compiled Avro record using
+    * SpecificDatumWriter and SpecificDatumReader. Data is compressed with the provided codec.
+    * @param codecFactory
+    *   codec with which the data is being compressed
+    * @tparam T
+    *   generic record
+    * @return
+    *   Injection
     */
   def withCompression[T <: GenericRecord: ClassTag](
       schema: Schema,
@@ -183,10 +217,12 @@ object GenericAvroCodecs {
     new GenericAvroCodec[T](schema, Some(codecFactory))
 
   /**
-    * Returns Injection capable of serializing and deserializing a compiled Avro record using SpecificDatumWriter and
-    * SpecificDatumReader.  Data is compressed with the Bzip2 codec.
-    * @tparam T generic record
-    * @return Injection
+    * Returns Injection capable of serializing and deserializing a compiled Avro record using
+    * SpecificDatumWriter and SpecificDatumReader. Data is compressed with the Bzip2 codec.
+    * @tparam T
+    *   generic record
+    * @return
+    *   Injection
     */
   def withBzip2Compression[T <: GenericRecord: ClassTag](
       schema: Schema
@@ -194,12 +230,15 @@ object GenericAvroCodecs {
     withCompression(schema, CodecFactory.bzip2Codec())
 
   /**
-    * Returns Injection capable of serializing and deserializing a compiled Avro record using SpecificDatumWriter and
-    * SpecificDatumReader.  Data is compressed with the Deflate codec.
-    * @param compressionLevel Compression level should be between 1 and 9, inclusive.  Higher values result in better
-    *                         compression at the expense of encoding speed.  Default compression level is 5.
-    * @tparam T generic record
-    * @return Injection
+    * Returns Injection capable of serializing and deserializing a compiled Avro record using
+    * SpecificDatumWriter and SpecificDatumReader. Data is compressed with the Deflate codec.
+    * @param compressionLevel
+    *   Compression level should be between 1 and 9, inclusive. Higher values result in better
+    *   compression at the expense of encoding speed. Default compression level is 5.
+    * @tparam T
+    *   generic record
+    * @return
+    *   Injection
     */
   def withDeflateCompression[T <: GenericRecord: ClassTag](
       schema: Schema,
@@ -213,10 +252,12 @@ object GenericAvroCodecs {
   }
 
   /**
-    * Returns Injection capable of serializing and deserializing a compiled Avro record using SpecificDatumWriter and
-    * SpecificDatumReader.  Data is compressed with the Snappy codec.
-    * @tparam T generic record
-    * @return Injection
+    * Returns Injection capable of serializing and deserializing a compiled Avro record using
+    * SpecificDatumWriter and SpecificDatumReader. Data is compressed with the Snappy codec.
+    * @tparam T
+    *   generic record
+    * @return
+    *   Injection
     */
   def withSnappyCompression[T <: GenericRecord: ClassTag](
       schema: Schema
@@ -224,9 +265,12 @@ object GenericAvroCodecs {
     withCompression(schema, CodecFactory.snappyCodec())
 
   /**
-    * Returns Injection capable of serializing and deserializing a generic avro record using org.apache.avro.io.BinaryEncoder
-    * @tparam T GenericRecord
-    * @return Injection
+    * Returns Injection capable of serializing and deserializing a generic avro record using
+    * org.apache.avro.io.BinaryEncoder
+    * @tparam T
+    *   GenericRecord
+    * @return
+    *   Injection
     */
   def toBinary[T <: GenericRecord](schema: Schema): Injection[T, Array[Byte]] = {
     val writer = new GenericDatumWriter[T](schema)
@@ -235,10 +279,12 @@ object GenericAvroCodecs {
   }
 
   /**
-    * Returns Injection capable of serializing and deserializing a generic avro record using org.apache.avro.io.JsonEncoder to a
-    * UTF-8 String
-    * @tparam T compiled Avro record
-    * @return Injection
+    * Returns Injection capable of serializing and deserializing a generic avro record using
+    * org.apache.avro.io.JsonEncoder to a UTF-8 String
+    * @tparam T
+    *   compiled Avro record
+    * @return
+    *   Injection
     */
   def toJson[T <: GenericRecord](schema: Schema): Injection[T, String] = {
     val writer = new GenericDatumWriter[T](schema)
@@ -249,8 +295,10 @@ object GenericAvroCodecs {
 
 /**
   * Provides methods to serialize and deserialize complied avro record.
-  * @param klass class of complied record
-  * @tparam T compiled record
+  * @param klass
+  *   class of complied record
+  * @tparam T
+  *   compiled record
   */
 class SpecificAvroCodec[T <: SpecificRecordBase](
     klass: Class[T],
@@ -282,8 +330,10 @@ class SpecificAvroCodec[T <: SpecificRecordBase](
 
 /**
   * Provides methods to serialize and deserialize generic avro record.
-  * @param schema avro schema
-  * @tparam T generic record
+  * @param schema
+  *   avro schema
+  * @tparam T
+  *   generic record
   */
 class GenericAvroCodec[T <: GenericRecord](
     schema: Schema,
@@ -314,10 +364,14 @@ class GenericAvroCodec[T <: GenericRecord](
 }
 
 /**
-  * Provides methods to serializing and deserializing a generic and compiled avro record using org.apache.avro.io.BinaryEncoder
-  * @param writer Datum writer
-  * @param reader Datum reader
-  * @tparam T avro record
+  * Provides methods to serializing and deserializing a generic and compiled avro record using
+  * org.apache.avro.io.BinaryEncoder
+  * @param writer
+  *   Datum writer
+  * @param reader
+  *   Datum reader
+  * @tparam T
+  *   avro record
   */
 class BinaryAvroCodec[T](writer: DatumWriter[T], reader: DatumReader[T])
     extends Injection[T, Array[Byte]] {
@@ -337,12 +391,16 @@ class BinaryAvroCodec[T](writer: DatumWriter[T], reader: DatumReader[T])
 }
 
 /**
-  * Provides methods to serializing and deserializing a generic and compiled avro record using org.apache.avro.io.JsonEncoder
-  * to a UTF-8 String
-  * @param writer Datum writer
-  * @param reader Datum reader
-  * @tparam T avro record
-  * @throws RuntimeException if Avro Records cannot be converted to a UTF-8 String
+  * Provides methods to serializing and deserializing a generic and compiled avro record using
+  * org.apache.avro.io.JsonEncoder to a UTF-8 String
+  * @param writer
+  *   Datum writer
+  * @param reader
+  *   Datum reader
+  * @tparam T
+  *   avro record
+  * @throws RuntimeException
+  *   if Avro Records cannot be converted to a UTF-8 String
   */
 class JsonAvroCodec[T](schema: Schema, writer: DatumWriter[T], reader: DatumReader[T])
     extends Injection[T, String] {

@@ -24,7 +24,8 @@ import scala.reflect.runtime.universe.TypeTag
 import scala.reflect.ClassTag
 
 /**
-  * @author Mansur Ashraf
+  * @author
+  *   Mansur Ashraf
   * @since 1/10/14
   */
 object Json4sInjections {
@@ -40,8 +41,10 @@ object Json4sInjections {
 
   /**
     * Case Class to Json Injection
-    * @tparam A Case Class
-    * @return Json String
+    * @tparam A
+    *   Case Class
+    * @return
+    *   Json String
     */
   implicit def caseClass2Json[A <: AnyRef](implicit
       tt: TypeTag[A],
@@ -56,8 +59,10 @@ object Json4sInjections {
 
   /**
     * Case Class to JValue Injection
-    * @tparam A Case Class
-    * @return JValue
+    * @tparam A
+    *   Case Class
+    * @return
+    *   JValue
     */
   implicit def caseClass2JValue[A <: AnyRef](implicit
       tt: TypeTag[A],

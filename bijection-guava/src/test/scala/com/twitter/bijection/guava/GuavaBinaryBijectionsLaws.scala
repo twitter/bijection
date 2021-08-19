@@ -21,7 +21,8 @@ import com.twitter.bijection.guava.GuavaBinaryBijections.Base64String
 import com.twitter.bijection.guava.GuavaBinaryBijections.Base64URLString
 
 /**
-  * @author Muhammad Ashraf
+  * @author
+  *   Muhammad Ashraf
   * @since 7/7/13
   */
 class GuavaBinaryBijectionsLaws extends CheckProperties with BaseProperties {

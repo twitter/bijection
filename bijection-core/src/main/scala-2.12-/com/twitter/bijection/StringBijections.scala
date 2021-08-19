@@ -28,9 +28,8 @@ trait StringBijections extends NumericBijections {
 }
 
 /**
-  * Bijection for joining together iterables of strings into a single string
-  * and splitting them back out. Useful for storing sequences of strings
-  * in Config maps.
+  * Bijection for joining together iterables of strings into a single string and splitting them back
+  * out. Useful for storing sequences of strings in Config maps.
   */
 object StringJoinBijection {
   val DEFAULT_SEP = ":"
@@ -66,11 +65,10 @@ object StringJoinBijection {
     }
 
   /**
-    * Convert a collection of numbers to and from a string
-    * It's common to have types which we know have at least 1 character in their string
-    * representation. Knowing that the empty string is not allowed we can map that to the empty
-    * collection:
-    * TODO add a Tag appoach to Say that N has no zero-length representations
+    * Convert a collection of numbers to and from a string It's common to have types which we know
+    * have at least 1 character in their string representation. Knowing that the empty string is not
+    * allowed we can map that to the empty collection: TODO add a Tag appoach to Say that N has no
+    * zero-length representations
     */
   def nonEmptyValues[N, B <: TraversableOnce[N]](
       separator: String = DEFAULT_SEP
@@ -84,18 +82,18 @@ object StringJoinBijection {
       .andThen(Bijection.filterDefault("").inverse)
 
   /**
-    * Converts between any collection of A and and Option[String],
-    * given an implicit Bijection[A,String]. To get the final string out,
-    * compose with the getOrElse bijection if there is no zero length valid A
+    * Converts between any collection of A and and Option[String], given an implicit
+    * Bijection[A,String]. To get the final string out, compose with the getOrElse bijection if
+    * there is no zero length valid A
     *
     * viaContainer[Int,Set[Int]] andThen Bijection.getOrElse(""): Bijection[Set[Int],String]
     *
-    * Note that this can be dangerous with empty collections,
-    * as Bijection will try to convert "" -> Int. It's safer to use
-    * an instance of type A with the "as" notation for a default item
-    * in the collection:
+    * Note that this can be dangerous with empty collections, as Bijection will try to convert "" ->
+    * Int. It's safer to use an instance of type A with the "as" notation for a default item in the
+    * collection:
     *
-    * viaContainer[Int,Set[Int]] andThen Bijection.getOrElse(0.as[String]): Bijection[Set[Int],String]
+    * viaContainer[Int,Set[Int]] andThen Bijection.getOrElse(0.as[String]):
+    * Bijection[Set[Int],String]
     */
   def viaContainer[A, B <: TraversableOnce[A]](
       separator: String = DEFAULT_SEP

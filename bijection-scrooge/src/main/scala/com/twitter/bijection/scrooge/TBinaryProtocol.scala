@@ -29,8 +29,7 @@ import org.apache.thrift.protocol.{
 }
 
 /**
-  * Binary protocol implementation for thrift. Copied from Raghu's fix
-  * in Elephant-Bird.
+  * Binary protocol implementation for thrift. Copied from Raghu's fix in Elephant-Bird.
   */
 object TBinaryProtocol {
 
