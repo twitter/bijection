@@ -1,6 +1,5 @@
 /**
-  * Convert between popular number systems
-  * Author: Krishnan Raman, kraman@twitter.com
+  * Convert between popular number systems Author: Krishnan Raman, kraman@twitter.com
   */
 package com.twitter.bijection
 

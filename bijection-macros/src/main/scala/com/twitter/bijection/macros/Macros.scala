@@ -14,17 +14,15 @@ object Macros {
     macro CaseClassToMap.caseClassToMapImplWithOption[T]
 
   /**
-    * This can be used like Inversion.attempt. For example:
-    * fastAttempt(intString)(intString.toInt)
-    * The reason we don't take a B => A like attempt does is
-    * that would still require calling apply on that function.
-    * In contrast, here, we can inline it directly.
+    * This can be used like Inversion.attempt. For example: fastAttempt(intString)(intString.toInt)
+    * The reason we don't take a B => A like attempt does is that would still require calling apply
+    * on that function. In contrast, here, we can inline it directly.
     */
   def fastAttempt[A, B](b: B)(inv: A): Try[A] = macro TryMacros.fastAttempt[A, B]
 
   /**
-    * This macro expands out to a try block so it is only slower
-    * than a try block in that it allocates Success/Failure wrappers
+    * This macro expands out to a try block so it is only slower than a try block in that it
+    * allocates Success/Failure wrappers
     */
   def fastTry[T](toEval: T): Try[T] = macro TryMacros.fastTry[T]
 }

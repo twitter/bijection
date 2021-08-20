@@ -30,7 +30,8 @@ object HBaseInjectionsLaws {
 }
 
 /**
-  * @author Muhammad Ashraf
+  * @author
+  *   Muhammad Ashraf
   * @since 7/10/13
   */
 class HBaseInjectionsLaws extends CheckProperties with BaseProperties {

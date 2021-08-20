@@ -26,8 +26,8 @@ import scala.util.{Success, Try}
 
 trait CollectionJson {
   // This causes diverging implicits
-  def collectionJson[T, C <: Iterable[T]](
-      implicit fact: Factory[T, C],
+  def collectionJson[T, C <: Iterable[T]](implicit
+      fact: Factory[T, C],
       jbij: JsonNodeInjection[T]
   ): JsonNodeInjection[C] =
     new AbstractJsonNodeInjection[C] {

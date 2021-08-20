@@ -22,10 +22,11 @@ import java.sql.Timestamp
 import scala.util.{Failure, Success}
 
 /**
-  * Bijections and injections for mapping twitter-finagle's MySql datatypes to Scala datatypes
-  * other types.
+  * Bijections and injections for mapping twitter-finagle's MySql datatypes to Scala datatypes other
+  * types.
   *
-  *  @author George Leontiev
+  * @author
+  *   George Leontiev
   */
 trait MySqlBijections {
   implicit val byte: Bijection[ByteValue, Byte] = new AbstractBijection[ByteValue, Byte] {

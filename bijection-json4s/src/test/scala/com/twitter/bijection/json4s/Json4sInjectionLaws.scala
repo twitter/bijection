@@ -21,7 +21,8 @@ import scala.reflect.ClassTag
 import scala.reflect.runtime.universe.TypeTag
 
 /**
-  * @author Mansur Ashraf
+  * @author
+  *   Mansur Ashraf
   * @since 1/10/14
   */
 class Json4sInjectionLaws extends CheckProperties with BaseProperties {

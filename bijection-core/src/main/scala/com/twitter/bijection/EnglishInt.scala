@@ -1,12 +1,9 @@
 /**
-  * Convert integers in the interval [0-1 BILLION] to spoken english & vice versa
-  * examples -
-  * six hundred ninety one million one hundred forty five thousand eight hundred twenty five is 691145825
-  * six hundred ninety one million one hundred fifty eight thousand one hundred seventy is 691158170
-  * six hundred ninety one million one hundred seventy thousand five hundred fifteen is 691170515
-  * 2 is two
-  * 23 is twenty three
-  * 234 is two hundred thirty four
+  * Convert integers in the interval [0-1 BILLION] to spoken english & vice versa examples - six
+  * hundred ninety one million one hundred forty five thousand eight hundred twenty five is
+  * 691145825 six hundred ninety one million one hundred fifty eight thousand one hundred seventy is
+  * 691158170 six hundred ninety one million one hundred seventy thousand five hundred fifteen is
+  * 691170515 2 is two 23 is twenty three 234 is two hundred thirty four
   *
   * Author: Krishnan Raman, kraman@twitter.com
   */

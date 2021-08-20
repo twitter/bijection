@@ -18,8 +18,8 @@ package com.twitter.bijection
 import scala.util.Success
 
 /**
-  * A common injection on numbers: N -> (m = N mod K, (N-m)/K)
-  * The first element in result tuple is always [0, modulus)
+  * A common injection on numbers: N -> (m = N mod K, (N-m)/K) The first element in result tuple is
+  * always [0, modulus)
   */
 class IntModDivInjection(val modulus: Int) extends Injection[Int, (Int, Int)] {
   require(modulus > 0, "Modulus must be positive: " + modulus)
@@ -47,8 +47,8 @@ class IntModDivInjection(val modulus: Int) extends Injection[Int, (Int, Int)] {
 }
 
 /**
-  * A common injection on numbers: N -> (m = N mod K, (N-m)/K)
-  * The first element in result tuple is always [0, modulus)
+  * A common injection on numbers: N -> (m = N mod K, (N-m)/K) The first element in result tuple is
+  * always [0, modulus)
   */
 class LongModDivInjection(val modulus: Long) extends Injection[Long, (Long, Long)] {
   require(modulus > 0, "Modulus must be positive: " + modulus)

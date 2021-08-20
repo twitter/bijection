@@ -17,9 +17,8 @@ limitations under the License.
 package com.twitter.bijection
 
 /**
-  * Deals with the type-system issue around resolving implicit bijections.
-  * Bijection[A,B] or Bijection[B,A], which should
-  * be equivalent. Only use this type as an implicit parameter.
+  * Deals with the type-system issue around resolving implicit bijections. Bijection[A,B] or
+  * Bijection[B,A], which should be equivalent. Only use this type as an implicit parameter.
   */
 import scala.annotation.implicitNotFound
 @implicitNotFound(msg = "Cannot find ImplicitBijection type class from ${A} to ${B}")

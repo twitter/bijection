@@ -5,7 +5,8 @@ import com.twitter.bijection.{BaseProperties, CheckProperties, Injection}
 import org.apache.avro.Schema
 
 /**
-  * @author Muhammad Ashraf
+  * @author
+  *   Muhammad Ashraf
   * @since 10/5/13
   */
 class SpecificAvroCodecLaws extends CheckProperties with BaseProperties {

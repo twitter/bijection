@@ -23,7 +23,8 @@ import scala.util.Try
 
 /**
   * Provides various HBase specific Injections by wrapping org.apache.hadoop.hbase.util.Bytes
-  * @author Mansur Ashraf
+  * @author
+  *   Mansur Ashraf
   * @since 9/10/13
   */
 object HBaseInjections {
@@ -51,8 +52,8 @@ object HBaseInjections {
     }
 
   /**
-    * ImmutableBytesWritable injections avoid copying when possible and use the
-    * slice (offset and length) of the underlying byte array.
+    * ImmutableBytesWritable injections avoid copying when possible and use the slice (offset and
+    * length) of the underlying byte array.
     */
   implicit lazy val string2BytesWritableInj: Injection[String, ImmutableBytesWritable] =
     new ImmutableBytesWritableInjection[String] {

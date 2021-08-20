@@ -136,12 +136,11 @@ trait CollectionBijections extends BinaryBijections {
     trav2Vector[T, IndexedSeq[T]]
 
   /**
-    * Accepts a Bijection[A, B] and returns a bijection that can
-    * transform traversable containers of A into traversable containers of B.
+    * Accepts a Bijection[A, B] and returns a bijection that can transform traversable containers of
+    * A into traversable containers of B.
     *
-    * Do not go from ordered to unordered containers;
-    * Bijection[Iterable[A], Set[B]] is inaccurate, and really makes
-    * no sense.
+    * Do not go from ordered to unordered containers; Bijection[Iterable[A], Set[B]] is inaccurate,
+    * and really makes no sense.
     */
   def toContainer[A, B, C <: TraversableOnce[A], D <: TraversableOnce[B]](implicit
       bij: ImplicitBijection[A, B],

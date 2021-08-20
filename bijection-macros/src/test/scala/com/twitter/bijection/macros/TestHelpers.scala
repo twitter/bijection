@@ -46,8 +46,8 @@ object Externalizer {
 }
 
 /**
-  * This is a simplified version of com.twitter.chill.Externalizer
-  * which only does Java serialization
+  * This is a simplified version of com.twitter.chill.Externalizer which only does Java
+  * serialization
   */
 class Externalizer[T] extends Externalizable {
   // Either points to a result or a delegate Externalizer to fufil that result.
@@ -67,9 +67,8 @@ class Externalizer[T] extends Externalizable {
   def get: T = getOption.get // This should never be None when get is called
 
   /**
-    * Unfortunately, Java serialization requires mutable objects if
-    * you are going to control how the serialization is done.
-    * Use the companion object to creat new instances of this
+    * Unfortunately, Java serialization requires mutable objects if you are going to control how the
+    * serialization is done. Use the companion object to creat new instances of this
     */
   def set(it: T): Unit = {
     item match {

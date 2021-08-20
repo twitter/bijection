@@ -79,16 +79,14 @@ object TestStruct extends ThriftStructCodec3[TestStruct] {
   }
 
   /**
-    * The default read-only implementation of TestStruct.  You typically should not need to
-    * directly reference this class; instead, use the TestStruct.apply method to construct
-    * new instances.
+    * The default read-only implementation of TestStruct. You typically should not need to directly
+    * reference this class; instead, use the TestStruct.apply method to construct new instances.
     */
   class Immutable(val someInt: Int, val someString: Option[String] = None) extends TestStruct
 
   /**
-    * This Proxy trait allows you to extend the TestStruct trait with additional state or
-    * behavior and implement the read-only methods from TestStruct using an underlying
-    * instance.
+    * This Proxy trait allows you to extend the TestStruct trait with additional state or behavior
+    * and implement the read-only methods from TestStruct using an underlying instance.
     */
   trait Proxy extends TestStruct {
     protected def _underlying_TestStruct: TestStruct

@@ -26,8 +26,7 @@ import com.twitter.bijection.Inversion.attempt
 
 /**
   * Bufferable[T] is a typeclass to work with java.nio.ByteBuffer for serialization/injections to
-  * Array[Byte]
-  * Always call .duplicate before using the ByteBuffer so the original is not modified
+  * Array[Byte] Always call .duplicate before using the ByteBuffer so the original is not modified
   * (though obviously the backing array is)
   */
 @implicitNotFound(msg = "Cannot find Bufferable type class for ${T}")
@@ -129,8 +128,8 @@ object Bufferable
   }
 
   /**
-    * remember: putfn and getfn must call duplicate and not change the input ByteBuffer
-    * We are duplicating the ByteBuffer state, not the backing array (which IS mutated)
+    * remember: putfn and getfn must call duplicate and not change the input ByteBuffer We are
+    * duplicating the ByteBuffer state, not the backing array (which IS mutated)
     */
   def build[T](
       putfn: (ByteBuffer, T) => ByteBuffer

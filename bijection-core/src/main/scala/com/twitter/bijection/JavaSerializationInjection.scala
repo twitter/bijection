@@ -32,8 +32,7 @@ object JavaSerializationInjection extends Serializable {
 }
 
 /**
-  * Use Java serialization to write/read bytes.
-  * We avoid manifests here to make it easier from Java
+  * Use Java serialization to write/read bytes. We avoid manifests here to make it easier from Java
   */
 class JavaSerializationInjection[T <: Serializable](klass: Class[T])
     extends Injection[T, Array[Byte]] {

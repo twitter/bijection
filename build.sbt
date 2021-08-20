@@ -99,13 +99,12 @@ def youngestForwardCompatible(subProj: String) = {
 }
 
 /**
-  * Generic AnyVal's were incorrectly reported as the underlying type in
-  * the signature, while they were in fact instantiated AnyVal wrappers.
+  * Generic AnyVal's were incorrectly reported as the underlying type in the signature, while they
+  * were in fact instantiated AnyVal wrappers.
   *
-  * This changed the reported binary signature, but not the actual binary
-  * signature. This is source-breaking against java, but not binary
-  * breaking
-  * see https://github.com/scala/scala/pull/8127 for more details
+  * This changed the reported binary signature, but not the actual binary signature. This is
+  * source-breaking against java, but not binary breaking see
+  * https://github.com/scala/scala/pull/8127 for more details
   */
 val changedSignatures8127 = List(
   "Base64String.unwrap",

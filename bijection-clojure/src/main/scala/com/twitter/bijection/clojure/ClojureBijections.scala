@@ -19,7 +19,8 @@ package com.twitter.bijection.clojure
 /**
   * Bijections between Clojure and Scala's types.
   *
-  *  @author Sam Ritchie
+  * @author
+  *   Sam Ritchie
   */
 trait ClojureBijections extends GeneratedIFnBijections {
   // TODO: Fill in bijections between data structures.

@@ -49,11 +49,11 @@ object Base64String {
 }
 
 /**
-  * A collection of utilities for encoding strings and byte arrays to
-  * and decoding from strings compressed from with gzip.
+  * A collection of utilities for encoding strings and byte arrays to and decoding from strings
+  * compressed from with gzip.
   *
-  * This object is thread-safe because there are no streams shared
-  * outside of method scope, and therefore no contention for shared byte arrays.
+  * This object is thread-safe because there are no streams shared outside of method scope, and
+  * therefore no contention for shared byte arrays.
   */
 trait BinaryBijections extends StringBijections {
 
@@ -110,9 +110,8 @@ trait BinaryBijections extends StringBijections {
   /**
     * Bijection between byte array and Base64 encoded string.
     *
-    * The "trim" here is important, as encodeBase64String sometimes
-    * tags a newline on the end of its encoding. DON'T REMOVE THIS
-    * CALL TO TRIM.
+    * The "trim" here is important, as encodeBase64String sometimes tags a newline on the end of its
+    * encoding. DON'T REMOVE THIS CALL TO TRIM.
     */
   implicit lazy val bytes2Base64: Bijection[Array[Byte], Base64String] =
     new AbstractBijection[Array[Byte], Base64String] {

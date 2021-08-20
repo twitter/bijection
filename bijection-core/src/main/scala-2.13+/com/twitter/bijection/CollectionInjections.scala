@@ -21,8 +21,8 @@ import scala.util.{Success, Try}
 
 trait CollectionInjections extends StringInjections {
 
-  implicit def optionInjection[A, B](
-      implicit inj: Injection[A, B]
+  implicit def optionInjection[A, B](implicit
+      inj: Injection[A, B]
   ): Injection[Option[A], Option[B]] =
     new AbstractInjection[Option[A], Option[B]] {
       def apply(a: Option[A]) = a.map(inj)
@@ -37,8 +37,8 @@ trait CollectionInjections extends StringInjections {
         }
       }
     }
-  implicit def option2List[V1, V2](
-      implicit inj: Injection[V1, V2]
+  implicit def option2List[V1, V2](implicit
+      inj: Injection[V1, V2]
   ): Injection[Option[V1], List[V2]] =
     new AbstractInjection[Option[V1], List[V2]] {
       def apply(opt: Option[V1]) = opt.map(inj).toList
@@ -49,8 +49,8 @@ trait CollectionInjections extends StringInjections {
       }
     }
 
-  implicit def map2Set[K1, V1, V2](
-      implicit inj: Injection[(K1, V1), V2]
+  implicit def map2Set[K1, V1, V2](implicit
+      inj: Injection[(K1, V1), V2]
   ): Injection[Map[K1, V1], Set[V2]] =
     toContainer[(K1, V1), V2, Map[K1, V1], Set[V2]] { _.size == _.size }
 
@@ -75,8 +75,8 @@ trait CollectionInjections extends StringInjections {
   // This is useful for defining injections, but is too general to be implicit
   def toContainer[A, B, C <: IterableOnce[A], D <: IterableOnce[B]](
       goodInv: (D, C) => Boolean
-  )(
-      implicit inj: Injection[A, B],
+  )(implicit
+      inj: Injection[A, B],
       cd: Factory[B, D],
       dc: Factory[A, C]
   ): Injection[C, D] =
