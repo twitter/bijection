@@ -393,7 +393,7 @@ lazy val bijectionJodaTime = {
     .settings(
       osgiExportAll("com.twitter.bijection.jodatime"),
       libraryDependencies ++= Seq(
-        "joda-time" % "joda-time" % "2.10.10",
+        "joda-time" % "joda-time" % "2.10.11",
         "org.joda" % "joda-convert" % "2.2.1"
       )
     )
