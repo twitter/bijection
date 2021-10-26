@@ -216,7 +216,7 @@ lazy val bijectionCore = {
   module("core").settings(
     osgiExportAll("com.twitter.bijection"),
     libraryDependencies ++= Seq(
-      "com.novocode" % "junit-interface" % "0.11" % Test,
+      "com.github.sbt" % "junit-interface" % "0.13.2" % Test,
       "org.scalatestplus" %% "junit-4-13" % scalatestPlusJunitVersion % Test
     ),
     Compile / sourceGenerators += Def.task {
