@@ -44,8 +44,8 @@ trait StringInjections extends NumericInjections {
       override def invert(b: Array[Byte]) =
         // toString on ByteBuffer is nicer, so use it
         attempt(ByteBuffer.wrap(b)) { bb =>
-          //these are mutable, so it can't be shared trivially
-          //avoid GC pressure and (probably) perform better
+          // these are mutable, so it can't be shared trivially
+          // avoid GC pressure and (probably) perform better
           if (null == decRef) {
             decRef = mkSharedState
           }

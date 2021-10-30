@@ -33,7 +33,7 @@ import scala.util.{Success, Try}
 case class Convert[A](a: A) extends AnyVal {
   // Not clear to me why this fails on the String @@ Rep[T] pattern, but it seems to:
   // TODO: fix this?
-  //def as[B](implicit bij: Bijection[A, _ <: B]): B = bij(a)
+  // def as[B](implicit bij: Bijection[A, _ <: B]): B = bij(a)
   def as[B](implicit conv: Conversion[A, B]): B = conv(a)
 }
 

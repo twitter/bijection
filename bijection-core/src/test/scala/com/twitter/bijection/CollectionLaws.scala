@@ -36,10 +36,10 @@ class CollectionLaws extends CheckProperties with BaseProperties {
   property("round trip List[Int] <=> Vector[String @@ Rep[Int]]") {
     type R = String @@ Rep[Int]
     type VR = Vector[R]
-    //having this in scope guides the implicit resolution to success,
-    //but only if we're using a type alias for the right side of isBijection.
-    //that sounds like a scalac bug.
-    //TODO: Should be minimized and reported
+    // having this in scope guides the implicit resolution to success,
+    // but only if we're using a type alias for the right side of isBijection.
+    // that sounds like a scalac bug.
+    // TODO: Should be minimized and reported
     implicit val i1: Bijection[Int, R] = Bijection.fromInjection(Injection.int2String)
     isBijection[List[Int], VR]
   }
