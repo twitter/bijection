@@ -68,7 +68,7 @@ class StringBijectionLaws extends CheckProperties with BaseProperties {
     isSerializableInjection[UUID, String]
   }
 
-  //property("UUID <-> String @@ Rep[UUID]") {
+  // property("UUID <-> String @@ Rep[UUID]") {
   // isBijection[UUID, String @@ Rep[UUID]]()
   // }
 
@@ -92,9 +92,9 @@ class StringBijectionLaws extends CheckProperties with BaseProperties {
     }
   }
 
-  //implicit val listOpt = StringJoinBijection.viaContainer[Int, List[Int]]()
-  //property("viaCollection List[Int] -> Option[String]") =
-  //roundTrips[List[Int], Option[String @@ Rep[List[Int]]]]()
+  // implicit val listOpt = StringJoinBijection.viaContainer[Int, List[Int]]()
+  // property("viaCollection List[Int] -> Option[String]") =
+  // roundTrips[List[Int], Option[String @@ Rep[List[Int]]]]()
   // implicit val listStr = StringJoinBijection.nonEmptyValues[Int, List[Int]]()
   // property("viaCollection List[Int] -> String") {
   // roundTrips[List[Int], String @@ Rep[List[Int]]]()

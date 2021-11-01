@@ -14,7 +14,7 @@ trait MacroPropTests
     with MacroTestHelper {
   import MacroCaseClasses._
 
-  //TODO make a macro to autogenerate arbitraries for case classes
+  // TODO make a macro to autogenerate arbitraries for case classes
   implicit def arbA: Arbitrary[SampleClassA] =
     Arbitrary[SampleClassA] {
       for (

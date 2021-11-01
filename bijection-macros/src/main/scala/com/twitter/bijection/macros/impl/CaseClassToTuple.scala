@@ -53,7 +53,7 @@ private[bijection] object CaseClassToTuple {
     val tupUtils = new TupleUtils[c.type](c)
     val convCache = MMap.empty[Type, TermName]
 
-    //TODO can make error handling better
+    // TODO can make error handling better
     val companion = T.tpe.typeSymbol.companionSymbol
     val tuple = Tup.tpe.typeSymbol.companionSymbol
 

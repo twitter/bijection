@@ -9,7 +9,7 @@ object IsCaseClassImpl {
   def isCaseClassImpl[T](c: Context)(implicit T: c.WeakTypeTag[T]): c.Expr[IsCaseClass[T]] = {
     import c.universe._
     if (isCaseClassType(c)(T.tpe)) {
-      //TOOD we should support this, just need to make sure it is concrete
+      // TOOD we should support this, just need to make sure it is concrete
       if (T.tpe.typeConstructor.takesTypeArgs) {
         c.abort(c.enclosingPosition, "Case class with type parameters currently not supported")
       } else {

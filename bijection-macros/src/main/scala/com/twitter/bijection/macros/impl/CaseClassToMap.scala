@@ -47,7 +47,7 @@ private[bijection] object CaseClassToMap {
       T: c.WeakTypeTag[T]
   ): c.Expr[Injection[T, Map[String, Any]]] = {
     import c.universe._
-    //TODO can make error handling better?
+    // TODO can make error handling better?
     val companion = T.tpe.typeSymbol.companionSymbol
 
     val getPutConv = T.tpe.declarations
@@ -65,7 +65,7 @@ private[bijection] object CaseClassToMap {
               Some(
                 q"""val $conv = implicitly[_root_.com.twitter.bijection.Injection[$tpe, _root_.scala.collection.immutable.Map[String, Any]]]"""
               )
-            ) //TODO cache these
+            ) // TODO cache these
           case tpe =>
             (q"""m($accStr).asInstanceOf[$returnType]""", q"""($accStr, t.$m)""", None)
         }
