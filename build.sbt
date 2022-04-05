@@ -342,7 +342,7 @@ lazy val bijectionClojure = {
   module("clojure")
     .settings(
       osgiExportAll("com.twitter.bijection.clojure"),
-      libraryDependencies += "org.clojure" % "clojure" % "1.11.0"
+      libraryDependencies += "org.clojure" % "clojure" % "1.11.1"
     )
     .dependsOn(
       bijectionCore % "test->test;compile->compile"
