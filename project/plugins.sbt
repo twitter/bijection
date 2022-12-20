@@ -1,4 +1,4 @@
-addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "1.1.0")
+addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "1.1.1")
 addSbtPlugin("com.typesafe.sbt" % "sbt-osgi" % "0.9.6")
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "2.0.2")
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.6")
