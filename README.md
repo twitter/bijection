@@ -8,7 +8,7 @@ A Bijection is an invertible function that converts back and forth between two t
 the contract that a round-trip through the Bijection will bring back the original object. Moreover,
 the inverse has the same property.
 
-See the [current API documentation](http://twitter.github.com/bijection) for more information.
+See the [current API documentation](http://twitter.github.io/bijection) for more information.
 
 ## Examples:
 
