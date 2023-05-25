@@ -8,7 +8,7 @@ val twitterLibVersion = "21.2.0"
 val scalatestVersion = "3.2.13"
 val scalacheckVersion = "1.15.2"
 val scalatestPlusScalacheckVersion = "3.2.3.0"
-val scalatestPlusJunitVersion = "3.2.13.0"
+val scalatestPlusJunitVersion = "3.2.16.0"
 
 def util(mod: String) =
   "com.twitter" %% (s"util-$mod") % twitterLibVersion % "provided"
