@@ -5,10 +5,10 @@ import com.typesafe.sbt.osgi.SbtOsgi.autoImport._
 import bijection._
 
 val twitterLibVersion = "21.2.0"
-val scalatestVersion = "3.2.13"
+val scalatestVersion = "3.2.16"
 val scalacheckVersion = "1.15.2"
 val scalatestPlusScalacheckVersion = "3.2.3.0"
-val scalatestPlusJunitVersion = "3.2.13.0"
+val scalatestPlusJunitVersion = "3.2.16.0"
 
 def util(mod: String) =
   "com.twitter" %% (s"util-$mod") % twitterLibVersion % "provided"
@@ -276,7 +276,7 @@ lazy val bijectionGuava = {
         // runtime annotations even though javac does not as detailed here:
         // http://code.google.com/p/guava-libraries/issues/detail?id=1095
         "com.google.code.findbugs" % "jsr305" % "3.0.2",
-        "com.google.guava" % "guava" % "31.1-jre"
+        "com.google.guava" % "guava" % "32.1.1-jre"
       )
     )
     .dependsOn(
@@ -365,7 +365,7 @@ lazy val bijectionAvro = {
     .settings(
       osgiExportAll("com.twitter.bijection.avro"),
       libraryDependencies ++= Seq(
-        "org.apache.avro" % "avro" % "1.11.1"
+        "org.apache.avro" % "avro" % "1.11.2"
       )
     )
     .dependsOn(
@@ -393,8 +393,8 @@ lazy val bijectionJodaTime = {
     .settings(
       osgiExportAll("com.twitter.bijection.jodatime"),
       libraryDependencies ++= Seq(
-        "joda-time" % "joda-time" % "2.10.14",
-        "org.joda" % "joda-convert" % "2.2.2"
+        "joda-time" % "joda-time" % "2.12.4",
+        "org.joda" % "joda-convert" % "2.2.3"
       )
     )
     .dependsOn(
