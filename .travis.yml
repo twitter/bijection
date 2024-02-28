@@ -10,7 +10,7 @@ matrix:
           "++$TRAVIS_SCALA_VERSION clean"
           "++$TRAVIS_SCALA_VERSION test"
 
-    - scala: 2.13.8
+    - scala: 2.13.13
       jdk: openjdk8
       script:
         - >
