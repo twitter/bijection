@@ -1,5 +1,8 @@
 # Bijection #
 
+### 0.9.8
+* Use TArrayByteTransport for thrift deserialization for both compact and binary protocols
+
 ### 0.9.2
 * Fix issue with `Injection[String, Array[Byte]].invert` for arrays more than `2^(24)` in size: https://github.com/twitter/bijection/pull/243
 

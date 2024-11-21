@@ -5,18 +5,14 @@ import com.twitter.bijection.Inversion.attempt
 import com.twitter.bijection.macros.Macros
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 import org.apache.thrift.{TBase, TEnum}
-import org.apache.thrift.protocol.{
-  TBinaryProtocol,
-  TCompactProtocol,
-  TProtocolFactory,
-  TSimpleJSONProtocol
-}
+import org.apache.thrift.protocol.{TBinaryProtocol, TCompactProtocol, TProtocolFactory, TSimpleJSONProtocol}
 import org.apache.thrift.transport.TIOStreamTransport
 import org.codehaus.jackson.map.MappingJsonFactory
 import java.lang.{Integer => JInt}
 import scala.collection.mutable.{Map => MMap}
 import scala.util.{Failure, Success}
 import scala.reflect._
+import scala.util.Try
 
 /**
   * Codecs for use in serializing and deserializing Thrift structures.
@@ -50,18 +46,17 @@ object ThriftCodec {
 
 class ThriftCodec[T <: TBase[_, _], P <: TProtocolFactory](klass: Class[T], factory: P)
     extends Injection[T, Array[Byte]] {
-  protected lazy val prototype = klass.newInstance
-  override def apply(item: T) = {
+  protected lazy val prototype: T = klass.newInstance
+  override def apply(item: T): Array[Byte] = {
     val baos = new ByteArrayOutputStream
     item.write(factory.getProtocol(new TIOStreamTransport(baos)))
     baos.toByteArray
   }
-  override def invert(bytes: Array[Byte]) =
-    attempt(bytes) { bytes =>
+  override def invert(bytes: Array[Byte]): Try[T] =
+    Macros.fastAttempt(bytes) {
       val obj = prototype.deepCopy.asInstanceOf[T]
-      val stream = new ByteArrayInputStream(bytes)
-      obj.read(factory.getProtocol(new TIOStreamTransport(stream)))
-      obj.asInstanceOf[T]
+      obj.read(factory.getProtocol(TArrayByteTransport.apply(bytes)))
+      obj
     }
 }
 
@@ -72,23 +67,9 @@ object BinaryThriftCodec {
     new BinaryThriftCodec(klass)
 }
 
-class BinaryThriftCodec[T <: TBase[_, _]](klass: Class[T]) extends Injection[T, Array[Byte]] {
-  private[this] val factory = new TBinaryProtocol.Factory
-
-  protected lazy val prototype = klass.newInstance
-
-  override def apply(item: T) = {
-    val baos = new ByteArrayOutputStream
-    item.write(factory.getProtocol(new TIOStreamTransport(baos)))
-    baos.toByteArray
-  }
-  override def invert(bytes: Array[Byte]) =
-    Macros.fastAttempt(bytes) {
-      val obj = prototype.deepCopy.asInstanceOf[T]
-      obj.read(TArrayBinaryProtocol(TArrayByteTransport(bytes)))
-      obj.asInstanceOf[T]
-    }
-}
+class BinaryThriftCodec[T <: TBase[_, _]](klass: Class[T])
+  extends ThriftCodec[T, TBinaryProtocol.Factory](klass, new TBinaryProtocol.Factory) {
+ }
 
 object CompactThriftCodec {
   def apply[T <: TBase[_, _]: ClassTag]: Injection[T, Array[Byte]] =
