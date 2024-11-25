@@ -378,7 +378,7 @@ lazy val bijectionHbase = {
     .settings(
       osgiExportAll("com.twitter.bijection.hbase"),
       libraryDependencies ++= Seq(
-        "org.apache.hbase" % "hbase" % "0.94.27" % "provided->default" exclude ("org.jruby", "jruby-complete"),
+        "org.apache.hbase" % "hbase" % "0.99.2" % "provided->default" exclude ("org.jruby", "jruby-complete"),
         "org.apache.hadoop" % "hadoop-core" % "1.2.1" % "provided->default"
       )
     )
