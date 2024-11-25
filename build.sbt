@@ -24,7 +24,7 @@ val buildLevelSettings = Seq(
   crossScalaVersions := Seq("2.11.12", scalaVersion.value, "2.13.8"),
   javacOptions ++= Seq("-source", "1.8", "-target", "1.8"),
   doc / javacOptions := Seq("-source", "1.8", "-Xlint:deprecation", "-Xlint:unchecked"),
-  scalaVersion := "2.12.15",
+  scalaVersion := "2.12.16",
   scalacOptions ++= Seq(
     "-unchecked",
     "-deprecation",
